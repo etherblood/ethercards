@@ -1,0 +1,13 @@
+{
+    "alias": "minions/satyr.json",
+    "display": {
+        "name": "Satyr",
+        "imagePath": "images/cards/Voyaging Satyr.png",
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 1,
+        "HEALTH": 2,
+        "MANA_POOL": 1
+    }
+}

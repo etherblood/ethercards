@@ -1,0 +1,15 @@
+{
+    "alias": "minions/shyvana.json",
+    "display": {
+        "name": "Shyvana",
+        "imagePath": "images/cards/Shyvana.png",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 0,
+        "HEALTH": 20,
+        "TIRED": 2,
+        "DRAWS_PER_TURN": 1,
+        "MANA_GROWTH": 1
+    }
+}

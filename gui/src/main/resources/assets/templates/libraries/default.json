@@ -1,0 +1,13 @@
+{
+    "alias": "libraries/default.json",
+    "hero": "minions/shyvana.json",
+    "cards": {
+        "cards/goblin.json": 4,
+        "cards/satyr.json": 3,
+        "cards/orc.json": 2,
+        "cards/quickwall.json": 1,
+        "cards/bunch_of_gobbos.json": 1,
+        "cards/omfg_dogs.json": 1,
+        "cards/fireball.json": 1
+    }
+}

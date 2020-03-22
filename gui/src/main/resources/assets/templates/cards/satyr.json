@@ -1,0 +1,18 @@
+{
+    "alias": "cards/satyr.json",
+    "display": {
+        "name": "Satyr",
+        "imagePath": "images/cards/Voyaging Satyr.png",
+        "colors": ["GREEN"],
+        "description": "Summon a 1/2 satyr with 1 mana-pool."
+    },
+    "attackCast": {
+        "manaCost": 2,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/satyr.json"
+            }
+        ]
+    }
+}

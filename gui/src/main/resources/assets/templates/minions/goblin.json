@@ -1,0 +1,12 @@
+{
+    "alias": "minions/goblin.json",
+    "display": {
+        "name": "Goblin",
+        "imagePath": "images/cards/Goblin.png",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 1
+    }
+}

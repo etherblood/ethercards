@@ -1,0 +1,26 @@
+{
+    "alias": "cards/bunch_of_gobbos.json",
+    "display": {
+        "name": "Bunch of gobbos",
+        "imagePath": "images/cards/Goblin.png",
+        "colors": ["RED"],
+        "description": "Summon 3 1/1 gobbos with charge that can't block."
+    },
+    "attackCast": {
+        "manaCost": 4,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/gobbo.json"
+            },
+            {
+                "type": "summon",
+                "minionId": "minions/gobbo.json"
+            },
+            {
+                "type": "summon",
+                "minionId": "minions/gobbo.json"
+            }
+        ]
+    }
+}

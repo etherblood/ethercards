@@ -1,0 +1,19 @@
+{
+    "alias": "cards/fireball.json",
+    "display": {
+        "name": "Fireball",
+        "imagePath": "images/cards/Mountain.png",
+        "colors": ["RED"],
+        "description": "Deal 4 damage to the selected target."
+    },
+    "attackCast": {
+        "manaCost": 4,
+        "targeted": true,
+        "effects": [
+            {
+                "type": "singleTargetDamage",
+                "damage": 4
+            }
+        ]
+    }
+}

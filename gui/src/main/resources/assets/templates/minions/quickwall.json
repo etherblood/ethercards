@@ -1,0 +1,14 @@
+{
+    "alias": "minions/quickwall.json",
+    "display": {
+        "name": "Quickwall",
+        "imagePath": null,
+        "colors": ["BLUE"]
+    },
+    "components": {
+        "ATTACK": 1,
+        "HEALTH": 3,
+        "TIRED": null,
+        "CANNOT_ATTACK": true
+    }
+}
