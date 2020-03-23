@@ -19,6 +19,7 @@ import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.Connectio
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.visualisation.DebugZoneVisualizer;
+import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.gui.prettycards.*;
@@ -477,7 +478,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             visualCards.put(myCard, card);
             objectEntities.put(card, myCard);
 
-            // card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
+            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
         }
         return card;
     }
@@ -490,8 +491,8 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             visualMinions.put(myCard, card);
             objectEntities.put(card, myCard);
 
-            // card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> game.getData().has(myCard, Components.TIRED));
-            // card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
+            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> game.getData().has(myCard, Components.TIRED));
+            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
         }
         return card;
     }
