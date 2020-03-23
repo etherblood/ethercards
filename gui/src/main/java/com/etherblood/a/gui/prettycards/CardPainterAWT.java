@@ -1,8 +1,6 @@
 package com.etherblood.a.gui.prettycards;
 
 import com.etherblood.a.templates.CardColor;
-import com.destrostudios.cardgui.samples.visualisation.PaintableImage;
-import com.destrostudios.cardgui.samples.visualisation.SimpleCardVisualizer;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.DisplayMinionTemplate;
 import java.awt.AlphaComposite;
@@ -18,7 +16,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 
-public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
+public class CardPainterAWT {
 
     private static final Font FONTTITLE = new Font("Tahoma", Font.BOLD, 28);
     private static final Font FONTDESCRIPTION = new Font("Tahoma", Font.PLAIN, 20);
@@ -41,21 +39,10 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
     private int tmpX, tmpY;
 
     public CardPainterAWT(CardImages cardImages) {
-        super(400, 560);
         this.cardImages = cardImages;
     }
 
-    @Override
-    public PaintableImage paintCard(CardModel cardModel) {
-        PaintableImage paintableImage = new PaintableImage(400, 560);
-        BufferedImage bufferedImage = new BufferedImage(paintableImage.getWidth(), paintableImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics = (Graphics2D) bufferedImage.getGraphics();
-        drawCard(graphics, cardModel, bufferedImage.getWidth(), bufferedImage.getHeight());
-        paintableImage.loadImage(bufferedImage, true);
-        return paintableImage;
-    }
-
-    private void drawCard(Graphics2D graphics, CardModel cardModel, int width, int height) {
+    public void drawCard(Graphics2D graphics, CardModel cardModel, int width, int height) {
         DisplayCardTemplate template = cardModel.getTemplate();
         graphics = (Graphics2D) graphics.create();
 //        if (cardModel.isFaceUp()) {
@@ -70,7 +57,7 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
         graphics.drawImage(cardImages.getCachedImage(imageFilePath, 329, 242), 35, 68, null);
         List<CardColor> colors = template.getColors();
-        graphics.drawImage(getCardBackgroundImage(colors, width, height), 0, 0, null);
+        graphics.drawImage(getCardBackgroundImage(colors, width, height, "full"), 0, 0, null);
         graphics.setFont(FONTTITLE);
         graphics.setColor(Color.BLACK);
         String title = template.getName();
@@ -127,21 +114,7 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
             drawStringMultiLine(graphics, flavourText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
             tmpY += 18;
         }
-        tmpY = 514;
-//        int attackDamage = cardModel.getAttack();
-//        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 29, 458, 73, 73, null);
-//        String attackDamageText = ("" + attackDamage);
-//        graphics.setFont(FONTSTATS);
-//        Rectangle2D attackDamageBounds = graphics.getFontMetrics().getStringBounds(attackDamageText, graphics);
-//        tmpX = (int) (65 - (attackDamageBounds.getWidth() / 2));
-//        drawOutlinedText(graphics, attackDamageText, tmpX, tmpY, Color.BLACK, Color.WHITE);
-//        int lifepoints = cardModel.getHealth();
-//        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 298, 458, 73, 73, null);
-//        String lifepointsText = ("" + lifepoints);
-//        graphics.setFont(FONTSTATS);
-//        Rectangle2D lifepointsBounds = graphics.getFontMetrics().getStringBounds(lifepointsText, graphics);
-//        tmpX = (int) (335 - (lifepointsBounds.getWidth() / 2));
-//        drawOutlinedText(graphics, lifepointsText, tmpX, tmpY, Color.BLACK, (cardModel.isDamaged() ? Color.RED : Color.WHITE));
+//        drawStats(graphics, cardModel);
 //            List<String> tribes = cardModel.getTribes();
 //            if (tribes.size() > 0) {
 //                String tribesText = "";
@@ -161,16 +134,7 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
         graphics.dispose();
     }
 
-    public PaintableImage paintMinion(MinionModel cardModel) {
-        PaintableImage paintableImage = new PaintableImage(400, 560);
-        BufferedImage bufferedImage = new BufferedImage(paintableImage.getWidth(), paintableImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics = (Graphics2D) bufferedImage.getGraphics();
-        drawMinion(graphics, cardModel, bufferedImage.getWidth(), bufferedImage.getHeight());
-        paintableImage.loadImage(bufferedImage, true);
-        return paintableImage;
-    }
-
-    private void drawMinion(Graphics2D graphics, MinionModel cardModel, int width, int height) {
+    public void drawMinion_Full(Graphics2D graphics, MinionModel cardModel, int width, int height) {
         DisplayMinionTemplate template = cardModel.getTemplate();
         graphics = (Graphics2D) graphics.create();
 //        if (cardModel.isFaceUp()) {
@@ -185,7 +149,7 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
         graphics.drawImage(cardImages.getCachedImage(imageFilePath, 329, 242), 35, 68, null);
         List<CardColor> colors = template.getColors();
-        graphics.drawImage(getCardBackgroundImage(colors, width, height), 0, 0, null);
+        graphics.drawImage(getCardBackgroundImage(colors, width, height, "full"), 0, 0, null);
         graphics.setFont(FONTTITLE);
         graphics.setColor(Color.BLACK);
         String title = template.getName();
@@ -241,21 +205,7 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
             drawStringMultiLine(graphics, flavourText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
             tmpY += 18;
         }
-        tmpY = 513;
-        int attackDamage = cardModel.getAttack();
-        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 29, 458, 73, 73, null);
-        String attackDamageText = ("" + attackDamage);
-        graphics.setFont(FONTSTATS);
-        Rectangle2D attackDamageBounds = graphics.getFontMetrics().getStringBounds(attackDamageText, graphics);
-        tmpX = (int) (65 - (attackDamageBounds.getWidth() / 2));
-        drawOutlinedText(graphics, attackDamageText, tmpX, tmpY, Color.BLACK, Color.WHITE);
-        int lifepoints = cardModel.getHealth();
-        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 298, 458, 73, 73, null);
-        String lifepointsText = ("" + lifepoints);
-        graphics.setFont(FONTSTATS);
-        Rectangle2D lifepointsBounds = graphics.getFontMetrics().getStringBounds(lifepointsText, graphics);
-        tmpX = (int) (335 - (lifepointsBounds.getWidth() / 2));
-        drawOutlinedText(graphics, lifepointsText, tmpX, tmpY, Color.BLACK, (cardModel.isDamaged() ? Color.RED : Color.WHITE));
+        drawStats(graphics, cardModel);
 //            List<String> tribes = cardModel.getTribes();
 //            if (tribes.size() > 0) {
 //                String tribesText = "";
@@ -275,6 +225,37 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
         graphics.dispose();
     }
 
+    public void drawMinion_Minified(Graphics2D graphics, MinionModel cardModel, int width, int height) {
+        DisplayMinionTemplate template = cardModel.getTemplate();
+        graphics = (Graphics2D) graphics.create();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(36, 36, 328, 488);
+        String imageFilePath = cardImages.getCardImageFilePath(cardModel);
+        graphics.drawImage(cardImages.getCachedImage(imageFilePath, 663, 488), -131, 36, null);
+        List<CardColor> colors = template.getColors();
+        graphics.drawImage(getCardBackgroundImage(colors, width, height, "rect"), 0, 0, null);
+        drawStats(graphics, cardModel);
+        graphics.dispose();
+    }
+
+    private void drawStats(Graphics2D graphics, MinionModel cardModel) {
+        tmpY = 513;
+        int attackDamage = cardModel.getAttack();
+        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 29, 458, 73, 73, null);
+        String attackDamageText = ("" + attackDamage);
+        graphics.setFont(FONTSTATS);
+        Rectangle2D attackDamageBounds = graphics.getFontMetrics().getStringBounds(attackDamageText, graphics);
+        tmpX = (int) (65 - (attackDamageBounds.getWidth() / 2));
+        drawOutlinedText(graphics, attackDamageText, tmpX, tmpY, Color.BLACK, Color.WHITE);
+        int lifepoints = cardModel.getHealth();
+        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 298, 458, 73, 73, null);
+        String lifepointsText = ("" + lifepoints);
+        graphics.setFont(FONTSTATS);
+        Rectangle2D lifepointsBounds = graphics.getFontMetrics().getStringBounds(lifepointsText, graphics);
+        tmpX = (int) (335 - (lifepointsBounds.getWidth() / 2));
+        drawOutlinedText(graphics, lifepointsText, tmpX, tmpY, Color.BLACK, (cardModel.isDamaged() ? Color.RED : Color.WHITE));
+    }
+
     private void drawOutlinedText(Graphics2D graphics, String text, int x, int y, Color outlineColor, Color textColor) {
         graphics.setColor(outlineColor);
         int strength = 2;
@@ -291,8 +272,8 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
         graphics.drawString(text, x, y);
     }
 
-    public BufferedImage getCardBackgroundImage(List<CardColor> colors, int width, int height) {
-        String key = "";
+    public BufferedImage getCardBackgroundImage(List<CardColor> colors, int width, int height, String type) {
+        String key = type + ",";
         for (int i = 0; i < colors.size(); i++) {
             if (i != 0) {
                 key += ",";
@@ -313,7 +294,7 @@ public class CardPainterAWT extends SimpleCardVisualizer<CardModel> {
                         if (lineX >= width) {
                             break;
                         }
-                        Image templateImage = cardImages.getCachedImage("images/templates/template_" + color.ordinal() + ".png");
+                        Image templateImage = cardImages.getCachedImage("images/templates/template_" + type + "_" + color.ordinal() + ".png");
                         float alpha;
                         if (((i < (0.5 * partWidth)) && (lineX < (partWidth / 2))) || (i > (0.5 * partWidth))) {
                             alpha = 1;
