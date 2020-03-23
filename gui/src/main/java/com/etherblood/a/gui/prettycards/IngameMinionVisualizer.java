@@ -20,10 +20,10 @@ public class IngameMinionVisualizer extends CardBoxVisualizer<MinionModel> {
 
     private static final String NAME_GLOW_BOX = "glowBox";
 
-    private final CardPainterAWT cardPainter;
+    private final CardPainterJME cardPainter;
     private final HashMap<Node, Geometry> cachedGlowBoxes = new HashMap<>();
 
-    public IngameMinionVisualizer(CardPainterAWT cardPainter) {
+    public IngameMinionVisualizer(CardPainterJME cardPainter) {
         this.cardPainter = cardPainter;
     }
 
@@ -66,6 +66,6 @@ public class IngameMinionVisualizer extends CardBoxVisualizer<MinionModel> {
 
     @Override
     public PaintableImage paintCard(MinionModel cardModel) {
-        return cardPainter.paintMinion(cardModel);
+        return cardPainter.drawMinion_Minified(cardModel);
     }
 }

@@ -22,19 +22,14 @@ import com.destrostudios.cardgui.samples.visualisation.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
-import com.etherblood.a.gui.prettycards.IngameCardVisualizer;
-import com.etherblood.a.gui.prettycards.CardModel;
+import com.etherblood.a.gui.prettycards.*;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
 import com.etherblood.a.ai.bots.RandomMover;
 import com.etherblood.a.ai.moves.Move;
-import com.etherblood.a.gui.prettycards.IngameMinionVisualizer;
-import com.etherblood.a.gui.prettycards.MinionModel;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.setup.SimpleSetup;
@@ -191,9 +186,9 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 return super.getSize(zone);
             }
         });
-        CardPainterAWT cardPainterAWT = new CardPainterAWT(new CardImages(assetManager));
-        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new IngameCardVisualizer(cardPainterAWT));
-        board.registerVisualizer(card -> card.getModel() instanceof MinionModel, new IngameMinionVisualizer(cardPainterAWT));
+        CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(new CardImages(assetManager)));
+        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new IngameCardVisualizer(cardPainterJME));
+        board.registerVisualizer(card -> card.getModel() instanceof MinionModel, new IngameMinionVisualizer(cardPainterJME));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
                 .color(ColorRGBA.White)
                 .width(0.5f)
@@ -246,7 +241,9 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             playerZones.put(player, new PlayerZones(deckZone, handZone, boardZone));
         }
 
-        stateManager.attach(new BoardAppState(board, rootNode, BoardSettings.builder().build()));
+        stateManager.attach(new BoardAppState(board, rootNode, BoardSettings.builder()
+                .draggedCardProjectionZ(0.9975f)
+                .build()));
     }
 
     private void updateBoard() {

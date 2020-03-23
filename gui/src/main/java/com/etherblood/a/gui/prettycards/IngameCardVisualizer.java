@@ -20,10 +20,10 @@ public class IngameCardVisualizer extends CardBoxVisualizer<CardModel> {
 
     private static final String NAME_GLOW_BOX = "glowBox";
 
-    private final CardPainterAWT cardPainter;
+    private final CardPainterJME cardPainter;
     private final HashMap<Node, Geometry> cachedGlowBoxes = new HashMap<>();
 
-    public IngameCardVisualizer(CardPainterAWT cardPainter) {
+    public IngameCardVisualizer(CardPainterJME cardPainter) {
         this.cardPainter = cardPainter;
     }
 
@@ -66,6 +66,6 @@ public class IngameCardVisualizer extends CardBoxVisualizer<CardModel> {
 
     @Override
     public PaintableImage paintCard(CardModel cardModel) {
-        return cardPainter.paintCard(cardModel);
+        return cardPainter.drawCard(cardModel);
     }
 }
