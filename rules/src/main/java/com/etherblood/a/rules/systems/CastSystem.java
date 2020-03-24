@@ -32,11 +32,11 @@ public class CastSystem extends AbstractSystem {
     @Override
     public void run(EntityData data, Random random) {
         IntList entities = data.list(Components.CAST_TARGET);
-        for (int casting : entities) {
-            int cardTemplateId = data.get(casting, Components.CARD_TEMPLATE);
-            int target = data.get(casting, Components.CAST_TARGET);
+        for (int castSource : entities) {
+            int cardTemplateId = data.get(castSource, Components.CARD_TEMPLATE);
+            int target = data.get(castSource, Components.CAST_TARGET);
             CardTemplate template = cards.apply(cardTemplateId);
-            int owner = data.get(casting, Components.OWNED_BY);
+            int owner = data.get(castSource, Components.OWNED_BY);
             CardCast cast;
             if (data.has(owner, Components.IN_ATTACK_PHASE)) {
                 cast = template.getAttackPhaseCast();
@@ -66,8 +66,8 @@ public class CastSystem extends AbstractSystem {
                     }
                     data.set(entity, Components.IN_BATTLE_ZONE, 1);
                     data.set(entity, Components.OWNED_BY, owner);
-                    LOG.debug("{} summoned {}.",
-                            entityLog(casting),
+                    LOG.info("{} summoned {}.",
+                            entityLog(castSource),
                             entityLog(entity));
                 } else if (effect instanceof SingleTargetDamageEffect) {
                     int damage = ((SingleTargetDamageEffect) effect).damage;
@@ -76,14 +76,12 @@ public class CastSystem extends AbstractSystem {
                     LOG.error("Effect type " + effect.getClass().getSimpleName() + " not supported.");
                 }
             }
-            data.remove(casting, Components.CAST_TARGET);
-            data.remove(casting, Components.IN_HAND_ZONE);
-            data.remove(casting, Components.CARD_TEMPLATE);
-            data.remove(casting, Components.OWNED_BY);
-            LOG.debug("{} removed from {}.",
-                    entityLog(casting),
-                    componentLog(Components.IN_HAND_ZONE, 1));
-            LOG.info("{} cast {}.", entityLog(owner), entityLog(casting));
+            data.remove(castSource, Components.CAST_TARGET);
+            data.remove(castSource, Components.IN_HAND_ZONE);
+            data.remove(castSource, Components.CARD_TEMPLATE);
+            data.remove(castSource, Components.OWNED_BY);
+            LOG.debug("{} removed.", entityLog(castSource));
+            LOG.info("{} cast {}.", entityLog(owner), entityLog(castSource));
         }
     }
 }

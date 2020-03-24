@@ -3,6 +3,7 @@ package com.etherblood.a.rules.systems;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.systems.util.SystemsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ public class EndAttackPhaseSystem extends AbstractSystem {
         for (int player : data.list(Components.END_ATTACK_PHASE)) {
             data.remove(player, Components.END_ATTACK_PHASE);
             data.remove(player, Components.IN_ATTACK_PHASE);
-            LOG.debug("{} ended {} .",
+            LOG.debug("{} ended {}.",
                     entityLog(player),
                     componentLog(Components.IN_ATTACK_PHASE, 1));
 
@@ -28,9 +29,12 @@ public class EndAttackPhaseSystem extends AbstractSystem {
                 LOG.debug("{} is {}.", entityLog(attacker), componentLog(Components.TIRED, 1));
             }
 
-
-            int nextPlayer = data.get(player, Components.NEXT_PLAYER);
-            data.set(nextPlayer, Components.START_BLOCK_PHASE, 1);
+            Integer nextPlayer = SystemsUtil.nextPlayer(data, player);
+            if (nextPlayer != null) {
+                data.set(nextPlayer, Components.START_BLOCK_PHASE, 1);
+            } else {
+                LOG.info("Cannot set 'START_BLOCK_PHASE' for any player.");
+            }
         }
     }
 }

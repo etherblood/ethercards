@@ -7,13 +7,7 @@ import java.util.List;
 
 public class RandomMover {
 
-    private final Game game;
-
-    public RandomMover(Game game) {
-        this.game = game;
-    }
-
-    public Move nextMove() {
+    public Move nextMove(Game game) {
         List<Move> moves = new MoveGenerator().generateMoves(game);
         return moves.get(game.getRandom().nextInt(moves.size()));
     }

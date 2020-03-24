@@ -1,6 +1,9 @@
 package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.SimpleEntityData;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EntityUtil {
 
@@ -13,5 +16,14 @@ public class EntityUtil {
                 destination.set(entity, component, source.get(entity, component));
             }
         }
+        ((SimpleEntityData) destination).getNextId().set(((SimpleEntityData) source).getNextId().get());
+    }
+
+    public static Map<String, Integer> extractEntityComponents(EntityData data, int entity) {
+        Map<String, Integer> map = new HashMap<>();
+        for (ComponentMeta component : Components.getComponents()) {
+            data.getOptional(entity, component.id).ifPresent(value -> map.put(component.name, value));
+        }
+        return map;
     }
 }

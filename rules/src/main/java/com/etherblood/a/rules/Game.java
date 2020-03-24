@@ -2,6 +2,7 @@ package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
+import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.systems.*;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.Random;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
@@ -31,7 +31,7 @@ public class Game {
     private final IntFunction<CardTemplate> cards;
     private final IntFunction<MinionTemplate> minions;
     private final int[] players;
-    private boolean started = false;
+    private boolean started = false, backupsEnabled = true;
 
     public Game(Random random, IntFunction<CardTemplate> cards, IntFunction<MinionTemplate> minions) {
         this.random = random;
@@ -40,26 +40,40 @@ public class Game {
         data = new SimpleEntityData(Components.count());
         endBlockPhaseSystems = Arrays.asList(
                 new EndBlockPhaseSystem(),
-                new DrawSystem(),
                 new DamageSystem(),
                 new DeathSystem(),
-                new StartAttackPhaseSystem()
+                new StartAttackPhaseSystem(),
+                new PlayerStatusSystem(),
+                new StartBlockPhaseSystem(),
+                new DrawSystem()
         );
         endAttackPhaseSystems = Arrays.asList(
                 new EndAttackPhaseSystem(),
-                new StartBlockPhaseSystem()
+                new PlayerStatusSystem(),
+                new StartBlockPhaseSystem(),
+                new DrawSystem()
         );
         blockSystems = Arrays.asList(
                 new BlockSystem(),
                 new DamageSystem(),
-                new DeathSystem()
+                new DeathSystem(),
+                new PlayerStatusSystem(),
+                new StartBlockPhaseSystem(),
+                new DrawSystem()
         );
         castSystems = Arrays.asList(
                 new CastSystem(cards, minions),
                 new DamageSystem(),
-                new DeathSystem()
+                new DeathSystem(),
+                new PlayerStatusSystem(),
+                new StartBlockPhaseSystem(),
+                new DrawSystem()
         );
-        surrenderSystems = Arrays.asList();
+        surrenderSystems = Arrays.asList(
+                new PlayerStatusSystem(),
+                new StartBlockPhaseSystem(),
+                new DrawSystem()
+        );
         int player0 = data.createEntity();
         int player1 = data.createEntity();
         if (random.nextBoolean()) {
@@ -71,8 +85,8 @@ public class Game {
             data.set(player0, Components.DRAW_CARDS, 4);
             data.set(player1, Components.DRAW_CARDS, 3);
         }
-        data.set(player0, Components.NEXT_PLAYER, player1);
-        data.set(player1, Components.NEXT_PLAYER, player0);
+        data.set(player0, Components.PLAYER_INDEX, 0);
+        data.set(player1, Components.PLAYER_INDEX, 1);
         players = new int[]{player0, player1};
     }
 
@@ -113,11 +127,11 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        return hasPlayerWon(getActivePlayer());
+        return IntStream.concat(data.list(Components.IN_ATTACK_PHASE).stream(), data.list(Components.IN_BLOCK_PHASE).stream()).findAny().isEmpty();
     }
 
     public boolean hasPlayerWon(int player) {
-        return data.hasValue(player, Components.NEXT_PLAYER, player);
+        return data.has(player, Components.HAS_WON);
     }
 
     public boolean hasPlayerLost(int player) {
@@ -127,13 +141,9 @@ public class Game {
     public void endAttackPhase(int player) {
         verifyCanEndAttackPhase(player, true);
         runWithBackup(() -> {
-            forceEndAttackPhase(player);
+            data.set(player, Components.END_ATTACK_PHASE, 1);
+            runSystems(endAttackPhaseSystems);
         });
-    }
-
-    private void forceEndAttackPhase(int player) {
-        data.set(player, Components.END_ATTACK_PHASE, 1);
-        runSystems(endAttackPhaseSystems);
     }
 
     public boolean canEndAttackPhase(int player) {
@@ -159,13 +169,9 @@ public class Game {
     public void endBlockPhase(int player) {
         verifyCanEndBlockPhase(player, true);
         runWithBackup(() -> {
-            forceEndBlockPhase(player);
+            data.set(player, Components.END_BLOCK_PHASE, 1);
+            runSystems(endBlockPhaseSystems);
         });
-    }
-
-    private void forceEndBlockPhase(int player) {
-        data.set(player, Components.END_BLOCK_PHASE, 1);
-        runSystems(endBlockPhaseSystems);
     }
 
     public boolean canEndBlockPhase(int player) {
@@ -457,6 +463,10 @@ public class Game {
     }
 
     private void runWithBackup(Runnable runnable) {
+        if (!backupsEnabled) {
+            runnable.run();
+            return;
+        }
         EntityData backup = new SimpleEntityData(Components.count());
         EntityUtil.copy(data, backup);
         LOG.debug("Created backup.");
@@ -473,19 +483,33 @@ public class Game {
         for (AbstractSystem system : systems) {
             system.run(data, random);
         }
-        cleanupDeadPlayersTurn();
+        assert validateStateLegal();
     }
 
-    private void cleanupDeadPlayersTurn() {
-        OptionalInt blockPlayer = data.list(Components.IN_BLOCK_PHASE).stream().findAny();
-        if (blockPlayer.isPresent() && data.has(blockPlayer.getAsInt(), Components.HAS_LOST)) {
-            LOG.info("Player of current block phase is dead, skipping...");
-            forceEndBlockPhase(blockPlayer.getAsInt());
+    private boolean validateStateLegal() {
+        IntList winners = data.list(Components.HAS_WON);
+        if (!winners.isEmpty()) {
+            for (int player : data.list(Components.PLAYER_INDEX)) {
+                if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
+                    continue;
+                }
+                throw new IllegalStateException();
+            }
         }
-        OptionalInt attackPlayer = data.list(Components.IN_ATTACK_PHASE).stream().findAny();
-        if (attackPlayer.isPresent() && data.has(attackPlayer.getAsInt(), Components.HAS_LOST)) {
-            LOG.info("Player of current attack phase is dead, skipping...");
-            forceEndAttackPhase(attackPlayer.getAsInt());
+        for (int player : data.list(Components.IN_ATTACK_PHASE)) {
+            if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
+                throw new IllegalStateException();
+            }
         }
+        for (int player : data.list(Components.IN_BLOCK_PHASE)) {
+            if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
+                throw new IllegalStateException();
+            }
+        }
+        return true;
+    }
+
+    public void setBackupsEnabled(boolean backupsEnabled) {
+        this.backupsEnabled = backupsEnabled;
     }
 }

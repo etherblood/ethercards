@@ -15,34 +15,13 @@ public class DeathSystem extends AbstractSystem {
 
     @Override
     public void run(EntityData data, Random random) {
-        IntList lossCandidates = new IntList();
-        for (int entity : data.list(Components.DIE)) {
+        IntList deaths = data.list(Components.DIE);
+        for (int entity : deaths) {
             LOG.info("{} died.", entityLog(entity));
-            int owner = data.get(entity, Components.OWNED_BY);
-            if (!lossCandidates.contains(owner)) {
-                lossCandidates.add(owner);
-            }
             data.remove(entity, Components.IN_BATTLE_ZONE);
             data.remove(entity, Components.OWNED_BY);
             data.remove(entity, Components.DIE);
         }
-        for (int entity : data.list(Components.IN_BATTLE_ZONE)) {
-            int owner = data.get(entity, Components.OWNED_BY);
-            lossCandidates.swapRemove(owner);
-        }
-        for (int player : lossCandidates) {
-            if (!data.has(player, Components.HAS_LOST)) {
-                data.set(player, Components.HAS_LOST, 1);
-                LOG.info("{} lost.", entityLog(player));
-
-                int next = data.get(player, Components.NEXT_PLAYER);
-                for (int turnPlayer : data.list(Components.NEXT_PLAYER)) {
-                    int turnNext = data.get(turnPlayer, Components.NEXT_PLAYER);
-                    if (turnNext == player) {
-                        data.set(turnPlayer, Components.NEXT_PLAYER, next);
-                    }
-                }
-            }
-        }
     }
+
 }

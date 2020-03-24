@@ -9,7 +9,8 @@ public class Components {
     private static final List<ComponentMeta> COMPONENTS = new ArrayList<>();
 
     public static final int HAS_LOST;
-    public static final int NEXT_PLAYER;
+    public static final int HAS_WON;
+    public static final int PLAYER_INDEX;
     public static final int START_BLOCK_PHASE;
     public static final int IN_BLOCK_PHASE;
     public static final int END_BLOCK_PHASE;
@@ -42,7 +43,8 @@ public class Components {
 
     static {
         HAS_LOST = createMeta("HAS_LOST");
-        NEXT_PLAYER = createMeta("NEXT_PLAYER");
+        HAS_WON = createMeta("HAS_WON");
+        PLAYER_INDEX = createMeta("PLAYER_INDEX");
         START_BLOCK_PHASE = createMeta("START_BLOCK_PHASE");
         IN_BLOCK_PHASE = createMeta("IN_BLOCK_PHASE");
         END_BLOCK_PHASE = createMeta("END_BLOCK_PHASE");

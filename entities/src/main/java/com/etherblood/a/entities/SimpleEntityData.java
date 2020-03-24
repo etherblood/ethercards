@@ -4,7 +4,6 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import java.util.OptionalInt;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntSupplier;
 
 /**
  *
@@ -12,15 +11,10 @@ import java.util.function.IntSupplier;
  */
 public class SimpleEntityData implements EntityData {
 
-    private final IntSupplier idSequence;
+    private final AtomicInteger nextId = new AtomicInteger(1);
     private final IntMap[] map;
-    
-    public SimpleEntityData(int componentCount) {
-        this(componentCount, new AtomicInteger()::incrementAndGet);
-    }
 
-    public SimpleEntityData(int componentCount, IntSupplier idSequence) {
-        this.idSequence = idSequence;
+    public SimpleEntityData(int componentCount) {
         this.map = new IntMap[componentCount];
         for (int component = 0; component < componentCount; component++) {
             map[component] = new IntMap();
@@ -29,7 +23,7 @@ public class SimpleEntityData implements EntityData {
 
     @Override
     public int createEntity() {
-        return idSequence.getAsInt();
+        return nextId.getAndIncrement();
     }
 
     @Override
@@ -72,5 +66,9 @@ public class SimpleEntityData implements EntityData {
         component(component).foreachKey(list::add);
         list.sort();
         return list;
+    }
+
+    public AtomicInteger getNextId() {
+        return nextId;
     }
 }

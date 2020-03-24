@@ -28,7 +28,7 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
-import com.etherblood.a.ai.bots.RandomMover;
+import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
@@ -92,8 +92,6 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         initGame();
         initBoardGui();
         initCamera();
-
-//        updateBoard();
     }
 
     private void initCamera() {
@@ -102,14 +100,16 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             @Override
             public void initialize(AppStateManager stateManager, Application application) {
                 super.initialize(stateManager, application);
-//                updateCamera();
-//dirty workaround (:
+                //dirty workaround (:
                 applyAI();
             }
         });
     }
 
     private void updateCamera() {
+        if (game.isGameOver()) {
+            return;
+        }
         int activePlayer = game.getActivePlayer();
         int player0 = game.getPlayers()[0];
         int player1 = game.getPlayers()[1];
@@ -334,6 +334,9 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 visualMinions.remove(entity);
             }
         }
+        if (game.isGameOver()) {
+            return;
+        }
         int player = game.getActivePlayer();
         int index = 0;
         for (int cardEntity : cards) {
@@ -524,12 +527,16 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void applyAI() {
-        int botPlayer = game.getPlayers()[0];
-        RandomMover randomMover = new RandomMover(game);
-        while (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
-            Move move = randomMover.nextMove();
-            move.apply(game, botPlayer);
-        }
+        //TODO: disabled for now, this does not belong in the gui thread
+        
+//        int botPlayer = game.getPlayers()[0];
+//        Game simulationGame = new Game(game.getRandom(), game.getCards(), game.getMinions());
+//        simulationGame.setBackupsEnabled(false);
+//        MctsBot bot = new MctsBot(simulationGame);
+//        while (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
+//            Move move = bot.nextMove(game);
+//            move.apply(game, game.getActivePlayer());
+//        }
         updateBoard();
         updateCamera();
     }

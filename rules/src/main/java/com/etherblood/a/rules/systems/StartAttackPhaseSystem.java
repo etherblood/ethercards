@@ -25,6 +25,7 @@ public class StartAttackPhaseSystem extends AbstractSystem {
 
             int mana = 0;
             int draws = data.getOptional(player, Components.DRAW_CARDS).orElse(0);
+            draws++;
             for (int entity : data.list(Components.IN_BATTLE_ZONE).stream()
                     .filter(x -> data.hasValue(x, Components.OWNED_BY, player))
                     .toArray()) {

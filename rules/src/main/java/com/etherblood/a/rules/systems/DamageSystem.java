@@ -17,18 +17,22 @@ public class DamageSystem extends AbstractSystem {
     public void run(EntityData data, Random random) {
         IntList entities = data.list(Components.DAMAGE);
         for (int entity : entities) {
-            data.getOptional(entity, Components.HEALTH).ifPresent(health -> {
-                int damage = data.get(entity, Components.DAMAGE);
-                health -= damage;
-                data.set(entity, Components.HEALTH, health);
-                LOG.info("{} took {} and has {} now.",
-                        entityLog(entity),
-                        componentLog(Components.DAMAGE, damage),
-                        componentLog(Components.HEALTH, health));
-                if(health <= 0) {
-                    data.set(entity, Components.DIE, 1);
-                }
-            });
+            if (data.has(entity, Components.IN_BATTLE_ZONE)) {
+                data.getOptional(entity, Components.HEALTH).ifPresent(health -> {
+                    int damage = data.get(entity, Components.DAMAGE);
+                    health -= damage;
+                    data.set(entity, Components.HEALTH, health);
+                    LOG.info("{} took {} and has {} now.",
+                            entityLog(entity),
+                            componentLog(Components.DAMAGE, damage),
+                            componentLog(Components.HEALTH, health));
+                    if (health <= 0) {
+                        data.set(entity, Components.DIE, 1);
+                    }
+                });
+            } else {
+                LOG.info("Discarded damage to {}, it is not in battle zone.", entityLog(entity));
+            }
             data.remove(entity, Components.DAMAGE);
         }
     }

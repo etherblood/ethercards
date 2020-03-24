@@ -44,6 +44,7 @@ public class MoveGenerator {
                 CardCast cast = template.getAttackPhaseCast();
                 addCastMoves(game, handCard, cast, result);
             }
+            result.add(new EndPhase());
         }
         for (int player : data.list(Components.IN_BLOCK_PHASE)) {
             IntList minions = data.list(Components.IN_BATTLE_ZONE);
@@ -66,8 +67,11 @@ public class MoveGenerator {
                 CardCast cast = template.getBlockPhaseCast();
                 addCastMoves(game, handCard, cast, result);
             }
+            result.add(new EndPhase());
         }
-        result.add(new EndPhase());
+        if(result.isEmpty()) {
+            throw new IllegalStateException();
+        }
         // skip generating a surrender move for the AI
         return result;
     }
