@@ -54,3 +54,5 @@ manifest.mf
 **/nbactions.xml
 **/lwjgl64.dll
 **/OpenAL64.dll
+.idea/
+*.iml

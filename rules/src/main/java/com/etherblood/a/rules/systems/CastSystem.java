@@ -11,15 +11,11 @@ import com.etherblood.a.rules.templates.MinionTemplate;
 import com.etherblood.a.rules.templates.casteffects.CastEffect;
 import com.etherblood.a.rules.templates.casteffects.SingleTargetDamageEffect;
 import com.etherblood.a.rules.templates.casteffects.SummonEffect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.function.IntFunction;
 
 public class CastSystem extends AbstractSystem {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CastSystem.class);
 
     private final IntFunction<CardTemplate> cards;
     private final IntFunction<MinionTemplate> minions;
@@ -51,10 +47,6 @@ public class CastSystem extends AbstractSystem {
                     throw new IllegalStateException();
                 }
                 data.set(owner, Components.MANA, mana);
-                LOG.info("{} paid {} mana and has {} now.",
-                        entityLog(owner),
-                        manaCost,
-                        componentLog(Components.MANA, mana));
             }
             for (CastEffect effect : cast.getEffects()) {
                 if (effect instanceof SummonEffect) {
@@ -66,22 +58,17 @@ public class CastSystem extends AbstractSystem {
                     }
                     data.set(entity, Components.IN_BATTLE_ZONE, 1);
                     data.set(entity, Components.OWNED_BY, owner);
-                    LOG.info("{} summoned {}.",
-                            entityLog(castSource),
-                            entityLog(entity));
                 } else if (effect instanceof SingleTargetDamageEffect) {
                     int damage = ((SingleTargetDamageEffect) effect).damage;
                     SystemsUtil.damage(data, target, damage);
                 } else {
-                    LOG.error("Effect type " + effect.getClass().getSimpleName() + " not supported.");
+                    throw new UnsupportedOperationException("Effect type " + effect.getClass().getSimpleName() + " not supported.");
                 }
             }
             data.remove(castSource, Components.CAST_TARGET);
             data.remove(castSource, Components.IN_HAND_ZONE);
             data.remove(castSource, Components.CARD_TEMPLATE);
             data.remove(castSource, Components.OWNED_BY);
-            LOG.debug("{} removed.", entityLog(castSource));
-            LOG.info("{} cast {}.", entityLog(owner), entityLog(castSource));
         }
     }
 }

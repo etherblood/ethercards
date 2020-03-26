@@ -39,4 +39,9 @@ public class DisplayCardTemplate extends CardTemplate {
     public List<CardColor> getColors() {
         return colors;
     }
+
+    @Override
+    public String getTemplateName() {
+        return name;
+    }
 }

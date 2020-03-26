@@ -6,12 +6,8 @@ import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 import java.util.Random;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PlayerStatusSystem extends AbstractSystem {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DeathSystem.class);
 
     @Override
     public void run(EntityData data, Random random) {
@@ -35,8 +31,6 @@ public class PlayerStatusSystem extends AbstractSystem {
         Integer bestPlayer = SystemsUtil.nextPlayer(data, player);
         if (bestPlayer != null) {
             data.set(bestPlayer, Components.START_BLOCK_PHASE, 1);
-        } else {
-            LOG.info("Cannot set 'START_BLOCK_PHASE' for any player.");
         }
     }
 
@@ -61,13 +55,11 @@ public class PlayerStatusSystem extends AbstractSystem {
             int winner = alive.get(0);
             if (!data.has(winner, Components.HAS_WON)) {
                 data.set(winner, Components.HAS_WON, 1);
-                LOG.info("{} won.", entityLog(winner));
             }
         }
         for (int loser : dead) {
             if (!data.has(loser, Components.HAS_LOST)) {
                 data.set(loser, Components.HAS_LOST, 1);
-                LOG.info("{} lost.", entityLog(loser));
             }
         }
     }

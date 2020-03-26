@@ -53,4 +53,9 @@ public class DisplayMinionTemplate extends MinionTemplate {
         DisplayMinionTemplate other = (DisplayMinionTemplate) obj;
         return getId() == other.getId();
     }
+
+    @Override
+    public String getTemplateName() {
+        return name;
+    }
 }

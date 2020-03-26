@@ -4,14 +4,10 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
 public class DrawSystem extends AbstractSystem {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DrawSystem.class);
 
     @Override
     public void run(EntityData data, Random random) {

@@ -6,7 +6,6 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.systems.*;
-import com.etherblood.a.rules.systems.util.SystemsUtil;
 import com.etherblood.a.rules.templates.MinionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,14 @@ public class Game {
     private final IntFunction<CardTemplate> cards;
     private final IntFunction<MinionTemplate> minions;
     private final int[] players;
-    private boolean started = false, backupsEnabled = true;
+    private boolean started = false;
+    private final boolean backupsEnabled;
 
-    public Game(Random random, IntFunction<CardTemplate> cards, IntFunction<MinionTemplate> minions) {
+    public Game(Random random, IntFunction<CardTemplate> cards, IntFunction<MinionTemplate> minions, boolean backupsEnabled) {
         this.random = random;
         this.cards = cards;
         this.minions = minions;
+        this.backupsEnabled = backupsEnabled;
         data = new SimpleEntityData(Components.count());
         endBlockPhaseSystems = Arrays.asList(
                 new EndBlockPhaseSystem(),
@@ -127,7 +128,15 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        return IntStream.concat(data.list(Components.IN_ATTACK_PHASE).stream(), data.list(Components.IN_BLOCK_PHASE).stream()).findAny().isEmpty();
+        boolean result = IntStream.concat(data.list(Components.IN_ATTACK_PHASE).stream(), data.list(Components.IN_BLOCK_PHASE).stream()).findAny().isEmpty();
+
+        IntList winners = data.list(Components.HAS_WON);
+        IntList losers = data.list(Components.HAS_LOST);
+        IntList players = data.list(Components.PLAYER_INDEX);
+        if (result && (winners.size() + losers.size() != players.size())) {
+            throw new IllegalStateException();
+        }
+        return result;
     }
 
     public boolean hasPlayerWon(int player) {
@@ -199,7 +208,6 @@ public class Game {
         runWithBackup(() -> {
             data.set(attacker, Components.ATTACKS_TARGET, target);
             data.set(attacker, Components.TIRED, 1);
-            LOG.info("{} declared attack on {}.", SystemsUtil.entityLog(attacker), SystemsUtil.entityLog(target));
         });
     }
 
@@ -488,8 +496,9 @@ public class Game {
 
     private boolean validateStateLegal() {
         IntList winners = data.list(Components.HAS_WON);
+        IntList players = data.list(Components.PLAYER_INDEX);
         if (!winners.isEmpty()) {
-            for (int player : data.list(Components.PLAYER_INDEX)) {
+            for (int player : players) {
                 if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
                     continue;
                 }
@@ -506,10 +515,14 @@ public class Game {
                 throw new IllegalStateException();
             }
         }
-        return true;
-    }
 
-    public void setBackupsEnabled(boolean backupsEnabled) {
-        this.backupsEnabled = backupsEnabled;
+        if (isGameOver()) {
+            IntList losers = data.list(Components.HAS_LOST);
+            if (winners.size() + losers.size() != players.size()) {
+                throw new IllegalStateException();
+            }
+        }
+
+        return true;
     }
 }

@@ -5,14 +5,10 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.Components;
 import java.util.NoSuchElementException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
 public class SystemsUtil {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SystemsUtil.class);
 
     public static Integer nextPlayer(EntityData data, int player) {
         int playerIndex = data.get(player, Components.PLAYER_INDEX);
@@ -37,7 +33,6 @@ public class SystemsUtil {
     }
 
     public static void fight(EntityData data, int attacker, int blocker) {
-        LOG.info("{} fights {}.", entityLog(attacker), entityLog(blocker));
         damage(data, blocker, data.getOptional(attacker, Components.ATTACK).orElse(0));
         damage(data, attacker, data.getOptional(blocker, Components.ATTACK).orElse(0));
         data.remove(attacker, Components.ATTACKS_TARGET);
@@ -59,18 +54,12 @@ public class SystemsUtil {
             int fatigue = data.getOptional(player, Components.FATIGUE).orElse(0);
             fatigue++;
             data.set(player, Components.FATIGUE, fatigue);
-            LOG.info("{} has no cards to draw, taking fatigue damage.", entityLog(player));
             applyFatigue(data, player, fatigue);
             return;
         }
         int card = library[random.nextInt(library.length)];
         data.remove(card, Components.IN_LIBRARY_ZONE);
         data.set(card, Components.IN_HAND_ZONE, 1);
-        LOG.info("{} drew {}.", entityLog(player), entityLog(card));
-        LOG.debug("{} moved from {} to {}.",
-                entityLog(card),
-                componentLog(Components.IN_LIBRARY_ZONE, 1),
-                componentLog(Components.IN_HAND_ZONE, 1));
     }
 
     private static void applyFatigue(EntityData data, int player, int fatigue) throws NoSuchElementException {
@@ -86,7 +75,6 @@ public class SystemsUtil {
             }
         }
         if (myMinions.isEmpty()) {
-            LOG.info("No minions left, skipping fatigue damage.");
             return;
         }
         IntMap fatigueDamage = new IntMap();
@@ -116,11 +104,4 @@ public class SystemsUtil {
         }
     }
 
-    public static Object componentLog(int component, int value) {
-        return Components.getComponent(component).name + "=" + value;
-    }
-
-    public static Object entityLog(int entity) {
-        return "#" + entity;
-    }
 }

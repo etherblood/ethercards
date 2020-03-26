@@ -27,7 +27,7 @@ public class MoveGenerator {
                 }
                 for (int target : minions) {
                     if (data.hasValue(target, Components.OWNED_BY, player)) {
-                        // technically a valid target, but we prune friendly fire attacks for the AI
+                        // technically a valid target, but we prune friendly fire attacks for the AI (for now)
                         continue;
                     }
                     if (game.canDeclareAttack(player, attacker, target)) {
@@ -68,9 +68,6 @@ public class MoveGenerator {
                 addCastMoves(game, handCard, cast, result);
             }
             result.add(new EndPhase());
-        }
-        if(result.isEmpty()) {
-            throw new IllegalStateException();
         }
         // skip generating a surrender move for the AI
         return result;

@@ -29,4 +29,7 @@ public class MinionTemplate implements Iterable<Integer> {
         return components.iterator();
     }
 
+    public String getTemplateName() {
+        return "#" + id;
+    }
 }

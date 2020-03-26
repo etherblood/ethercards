@@ -1,5 +1,6 @@
 package com.etherblood.a.gui;
 
+import com.etherblood.a.templates.TemplatesLoader;
 import com.destrostudios.cardgui.Board;
 import com.destrostudios.cardgui.BoardAppState;
 import com.destrostudios.cardgui.BoardObject;
@@ -32,6 +33,7 @@ import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.GameBuilder;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
@@ -41,6 +43,7 @@ import com.etherblood.a.templates.LibraryTemplate;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ClasspathLocator;
 import com.jme3.font.BitmapText;
@@ -54,7 +57,6 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -138,10 +140,13 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void initGame() {
-        TemplatesLoader loader = new TemplatesLoader(assetManager);
+        TemplatesLoader loader = new TemplatesLoader(x -> assetManager.loadAsset(new AssetKey<>("templates/" + x)));
         LibraryTemplate lib0 = loader.loadLibrary("libraries/default.json");
         LibraryTemplate lib1 = loader.loadLibrary("libraries/default.json");
-        game = new Game(new SecureRandom(), loader::getCard, loader::getMinion);
+        GameBuilder builder = new GameBuilder();
+        builder.setCards(loader::getCard);
+        builder.setMinions(loader::getMinion);
+        game = builder.build();
         SimpleSetup setup = new SimpleSetup();
         setup.setHero0template(lib0.hero);
         setup.setHero1template(lib1.hero);
@@ -528,15 +533,19 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
     private void applyAI() {
         //TODO: disabled for now, this does not belong in the gui thread
-        
-//        int botPlayer = game.getPlayers()[0];
-//        Game simulationGame = new Game(game.getRandom(), game.getCards(), game.getMinions());
-//        simulationGame.setBackupsEnabled(false);
-//        MctsBot bot = new MctsBot(simulationGame);
-//        while (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
-//            Move move = bot.nextMove(game);
-//            move.apply(game, game.getActivePlayer());
-//        }
+
+        int botPlayer = game.getPlayers()[0];
+        GameBuilder builder = new GameBuilder();
+        builder.setCards(game.getCards());
+        builder.setMinions(game.getMinions());
+        builder.setBackupsEnabled(false);
+        Game simulationGame = builder.build();
+        MctsBot bot = new MctsBot(simulationGame);
+        while (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
+            Move move = bot.nextMove(game);
+            move.apply(game, game.getActivePlayer());
+            game.isGameOver();
+        }
         updateBoard();
         updateCamera();
     }

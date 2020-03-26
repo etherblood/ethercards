@@ -8,6 +8,8 @@
         "cards/quickwall.json": 1,
         "cards/bunch_of_gobbos.json": 1,
         "cards/omfg_dogs.json": 1,
-        "cards/fireball.json": 1
+        "cards/fireball.json": 1,
+        "cards/GOOD.json": 1,
+        "cards/BAD.json": 4
     }
 }

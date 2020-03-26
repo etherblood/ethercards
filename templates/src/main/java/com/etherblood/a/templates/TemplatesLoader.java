@@ -1,23 +1,17 @@
-package com.etherblood.a.gui;
+package com.etherblood.a.templates;
 
-import com.etherblood.a.templates.DisplayCardTemplate;
-import com.etherblood.a.templates.DisplayMinionTemplate;
-import com.etherblood.a.templates.LibraryTemplate;
-import com.etherblood.a.templates.TemplatesParser;
 import com.google.gson.JsonObject;
-import com.jme3.asset.AssetKey;
-import com.jme3.asset.AssetManager;
 import java.util.Set;
+import java.util.function.Function;
 
 public class TemplatesLoader {
     private final TemplatesParser parser = new TemplatesParser();
-    private final AssetManager assets;
-    private final String templatesPath = "templates/";
+    private final Function<String, JsonObject> assetLoader;
 
-    public TemplatesLoader(AssetManager assets) {
-        this.assets = assets;
+    public TemplatesLoader(Function<String, JsonObject> assetLoader) {
+        this.assetLoader = assetLoader;
     }
-    
+
     public LibraryTemplate loadLibrary(String alias) {
         LibraryTemplate library = parser.getLibrary(alias);
         if(library == null) {
@@ -44,10 +38,6 @@ public class TemplatesLoader {
     }
     
     private JsonObject load(String alias) {
-        return assets.loadAsset(new AssetKey<>(aliasToPath(alias)));
-    }
-
-    private String aliasToPath(String alias) {
-        return templatesPath + alias;
+        return assetLoader.apply(alias);
     }
 }
