@@ -4,7 +4,6 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.Components;
-import java.util.NoSuchElementException;
 
 import java.util.Random;
 
@@ -48,21 +47,41 @@ public class SystemsUtil {
         }
     }
 
-    public static void drawCard(EntityData data, Random random, int player) {
-        int[] library = data.list(Components.IN_LIBRARY_ZONE).stream().filter(x -> data.hasValue(x, Components.OWNED_BY, player)).toArray();
-        if (library.length == 0) {
-            int fatigue = data.getOptional(player, Components.FATIGUE).orElse(0);
-            fatigue++;
-            data.set(player, Components.FATIGUE, fatigue);
-            applyFatigue(data, player, fatigue);
-            return;
+    public static void drawCards(EntityData data, int amount, Random random, int player) {
+        IntList allLibraryCards = data.list(Components.IN_LIBRARY_ZONE);
+        IntList myLibraryCards = new IntList();
+        for (int card : allLibraryCards) {
+            if (data.hasValue(card, Components.OWNED_BY, player)) {
+                myLibraryCards.add(card);
+            }
         }
-        int card = library[random.nextInt(library.length)];
-        data.remove(card, Components.IN_LIBRARY_ZONE);
-        data.set(card, Components.IN_HAND_ZONE, 1);
+
+        if (amount >= myLibraryCards.size()) {
+            for (int card : myLibraryCards) {
+                data.remove(card, Components.IN_LIBRARY_ZONE);
+                data.set(card, Components.IN_HAND_ZONE, 1);
+            }
+            amount -= myLibraryCards.size();
+            myLibraryCards.clear();
+        } else {
+            while (amount > 0) {
+                int card = myLibraryCards.swapRemoveAt(random.nextInt(myLibraryCards.size()));
+                data.remove(card, Components.IN_LIBRARY_ZONE);
+                data.set(card, Components.IN_HAND_ZONE, 1);
+                amount--;
+            }
+        }
+
+        int fatigue = data.getOptional(player, Components.FATIGUE).orElse(0);
+        int fatigueDamage = 0;
+        for (int i = 0; i < amount; i++) {
+            fatigueDamage += ++fatigue;
+        }
+        applyFatigue(data, player, fatigueDamage);
+        data.set(player, Components.FATIGUE, fatigue);
     }
 
-    private static void applyFatigue(EntityData data, int player, int fatigue) throws NoSuchElementException {
+    private static void applyFatigue(EntityData data, int player, int fatigue) {
         IntList minions = data.list(Components.IN_BATTLE_ZONE);
         IntMap effectiveHealth = new IntMap();
         IntList myMinions = new IntList();

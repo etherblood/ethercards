@@ -13,9 +13,7 @@ public class DrawSystem extends AbstractSystem {
     public void run(EntityData data, Random random) {
         for (int player : data.list(Components.DRAW_CARDS)) {
             int cards = data.get(player, Components.DRAW_CARDS);
-            for (int i = 0; i < cards; i++) {
-                SystemsUtil.drawCard(data, random, player);
-            }
+            SystemsUtil.drawCards(data, cards, random, player);
             data.remove(player, Components.DRAW_CARDS);
         }
     }

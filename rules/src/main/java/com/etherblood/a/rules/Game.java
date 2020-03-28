@@ -128,15 +128,9 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        boolean result = IntStream.concat(data.list(Components.IN_ATTACK_PHASE).stream(), data.list(Components.IN_BLOCK_PHASE).stream()).findAny().isEmpty();
-
-        IntList winners = data.list(Components.HAS_WON);
-        IntList losers = data.list(Components.HAS_LOST);
-        IntList players = data.list(Components.PLAYER_INDEX);
-        if (result && (winners.size() + losers.size() != players.size())) {
-            throw new IllegalStateException();
+        try ( Stopwatch stopwatch = TimeStats.get().time("isGameOver()")) {
+            return data.list(Components.IN_ATTACK_PHASE).isEmpty() && data.list(Components.IN_BLOCK_PHASE).isEmpty();
         }
-        return result;
     }
 
     public boolean hasPlayerWon(int player) {
@@ -488,8 +482,13 @@ public class Game {
     }
 
     private void runSystems(List<AbstractSystem> systems) {
-        for (AbstractSystem system : systems) {
-            system.run(data, random);
+        TimeStats stats = TimeStats.get();
+        try ( Stopwatch totalStopwatch = stats.time("Systems total")) {
+            for (AbstractSystem system : systems) {
+                try ( Stopwatch systemStopwatch = stats.time(system.getClass().getSimpleName())) {
+                    system.run(data, random);
+                }
+            }
         }
         assert validateStateLegal();
     }

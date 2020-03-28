@@ -4,16 +4,17 @@ import com.etherblood.a.rules.Game;
 
 public class Cast implements Move {
 
-    public final int source, target;
+    public final int player, source, target;
 
-    public Cast(int source, int target) {
+    public Cast(int player, int source, int target) {
+        this.player = player;
         this.source = source;
         this.target = target;
     }
 
     @Override
     public int hashCode() {
-        return 117 * source + target;
+        return 131 * player + 117 * source + target;
     }
 
     @Override
@@ -22,11 +23,11 @@ public class Cast implements Move {
             return false;
         }
         Cast other = (Cast) obj;
-        return source == other.source && target == other.target;
+        return player == other.player && source == other.source && target == other.target;
     }
 
     @Override
-    public void apply(Game game, int player) {
+    public void apply(Game game) {
         game.cast(player, source, target);
     }
 }

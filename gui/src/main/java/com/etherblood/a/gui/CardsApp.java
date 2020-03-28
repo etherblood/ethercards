@@ -30,10 +30,17 @@ import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
+import com.etherblood.a.ai.moves.Block;
+import com.etherblood.a.ai.moves.Cast;
+import com.etherblood.a.ai.moves.DeclareAttack;
+import com.etherblood.a.ai.moves.EndAttackPhase;
+import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameBuilder;
+import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
@@ -63,6 +70,7 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
+import org.slf4j.LoggerFactory;
 
 public class CardsApp extends SimpleApplication implements ActionListener {
 
@@ -400,12 +408,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             public void trigger(BoardObject source, BoardObject target) {
                 int actor = objectEntities.get(source);
                 int dest = objectEntities.get(target);
-                try {
-                    game.declareAttack(player, actor, dest);
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace(System.err);
-                }
-                applyAI();
+                applyMove(new DeclareAttack(player, actor, dest));
             }
         };
     }
@@ -425,12 +428,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             public void trigger(BoardObject source, BoardObject target) {
                 int actor = objectEntities.get(source);
                 int dest = objectEntities.get(target);
-                try {
-                    game.block(player, actor, dest);
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace(System.err);
-                }
-                applyAI();
+                applyMove(new Block(player, actor, dest));
             }
         };
     }
@@ -452,14 +450,8 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
                 @Override
                 public void trigger(BoardObject source, BoardObject target) {
-                    try {
-                        int targetId = objectEntities.get(target);
-                        game.cast(player, castable, targetId);
-                    } catch (IllegalArgumentException e) {
-                        // should not happen, but game has been rolled back to valid state and can be continued.
-                        e.printStackTrace(System.err);
-                    }
-                    applyAI();
+                    int targetId = objectEntities.get(target);
+                    applyMove(new Cast(player, castable, targetId));
                 }
             };
         }
@@ -467,13 +459,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
-                try {
-                    game.cast(player, castable, null);
-                } catch (IllegalArgumentException e) {
-                    // should not happen, but game has been rolled back to valid state and can be continued.
-                    e.printStackTrace(System.err);
-                }
-                applyAI();
+                applyMove(new Cast(player, castable, ~0));
             }
         };
     }
@@ -509,18 +495,13 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     public void onAction(String name, boolean isPressed, float lastTimePerFrame) {
         if ("space".equals(name) && isPressed) {
             EntityData data = game.getData();
-            try {
-                IntList list = data.list(Components.IN_BLOCK_PHASE);
-                if (!list.isEmpty()) {
-                    game.endBlockPhase(list.get(0));
-                } else {
-                    list = data.list(Components.IN_ATTACK_PHASE);
-                    game.endAttackPhase(list.get(0));
-                }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace(System.err);
+            IntList list = data.list(Components.IN_BLOCK_PHASE);
+            if (!list.isEmpty()) {
+                applyMove(new EndBlockPhase(list.get(0)));
+            } else {
+                list = data.list(Components.IN_ATTACK_PHASE);
+                applyMove(new EndAttackPhase(list.get(0)));
             }
-            applyAI();
 //        } else if ("1".equals(name) && isPressed) {
 //            List<Card> cards = playerZones[0].getDeckZone().getCards();
 //            board.playAnimation(new ShuffleAnimation(cards, this));
@@ -531,20 +512,30 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         }
     }
 
-    private void applyAI() {
-        //TODO: disabled for now, this does not belong in the gui thread
+    private void applyMove(Move move) {
+        try {
+            move.apply(game);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace(System.err);
+            return;
+        }
+        applyAI();
+    }
 
+    private void applyAI() {
         int botPlayer = game.getPlayers()[0];
-        GameBuilder builder = new GameBuilder();
-        builder.setCards(game.getCards());
-        builder.setMinions(game.getMinions());
-        builder.setBackupsEnabled(false);
-        Game simulationGame = builder.build();
-        MctsBot bot = new MctsBot(simulationGame);
         while (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
+            GameBuilder builder = new GameBuilder();
+            builder.setCards(game.getCards());
+            builder.setMinions(game.getMinions());
+            builder.setBackupsEnabled(false);
+            Game simulationGame = builder.build();
+            MctsBot bot = new MctsBot(simulationGame);
             Move move = bot.nextMove(game);
-            move.apply(game, game.getActivePlayer());
-            game.isGameOver();
+            move.apply(game);
+        }
+        for (String stat : TimeStats.get().toStatsStrings()) {
+            LoggerFactory.getLogger(CardsApp.class).info(stat);
         }
         updateBoard();
         updateCamera();

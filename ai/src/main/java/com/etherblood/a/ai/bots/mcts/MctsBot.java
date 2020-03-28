@@ -5,7 +5,8 @@ import com.etherblood.a.ai.bots.RandomMover;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
 import com.etherblood.a.ai.moves.DeclareAttack;
-import com.etherblood.a.ai.moves.EndPhase;
+import com.etherblood.a.ai.moves.EndAttackPhase;
+import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -17,8 +18,10 @@ import com.etherblood.a.rules.templates.MinionTemplate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +30,7 @@ public class MctsBot {
     private static final Logger LOG = LoggerFactory.getLogger(MctsBot.class);
     private static final boolean VERBOSE = true;
     private static final float EPSILON = 1e-6f;
-    private static final float SQRT_2 = (float) Math.sqrt(2);
+    private static final float UCT_CONSTANT = 2;
 
     private final Game simulationGame;
     private final MoveGenerator moveGenerator = new MoveGenerator();//TODO: optimize by always casting before attacking/blocking to reduce transpositions?
@@ -45,12 +48,13 @@ public class MctsBot {
         }
         playerCount = game.getData().list(Components.PLAYER_INDEX).size();
         Node rootNode = createNode();
+        Map<Move, RaveScore> raveScores = new HashMap<>();
 
         int iterations = 10_000;
         for (int i = 0; i < iterations; i++) {
             resetSimulation(game);
             initializeOpponentHandCards();
-            iteration(rootNode);
+            iteration(rootNode, raveScores);
         }
         moves.sort(Comparator.comparingDouble(move -> -rootNode.getChild(move).visits()));
         if (VERBOSE) {
@@ -58,17 +62,17 @@ public class MctsBot {
             for (Move move : moves) {
                 LOG.info("{}: {}", (int) rootNode.getChild(move).visits(), toMoveString(game, move));
             }
+            LOG.info("Expected winrate: {}%", (int) (100 * rootNode.score(game.getData().get(game.getActivePlayer(), Components.PLAYER_INDEX)) / rootNode.visits()));
         }
         return moves.get(0);
     }
 
     private String toMoveString(Game game, Move move) {
-        if (move instanceof EndPhase) {
-            if (game.getData().list(Components.IN_ATTACK_PHASE).isEmpty()) {
-                return "End BlockPhase";
-            } else {
-                return "End AttackPhase";
-            }
+        if (move instanceof EndBlockPhase) {
+            return "End BlockPhase";
+        }
+        if (move instanceof EndAttackPhase) {
+            return "End AttackPhase";
         }
         if (move instanceof Cast) {
             Cast cast = (Cast) move;
@@ -137,40 +141,45 @@ public class MctsBot {
         EntityUtil.copy(sourceGame.getData(), simulationGame.getData());
     }
 
-    private void iteration(Node rootNode) {
+    private void iteration(Node rootNode, Map<Move, RaveScore> raveScores) {
         Deque<Node> nodePath = new LinkedList<>();
+        Deque<Move> movePath = new LinkedList<>();
         nodePath.add(rootNode);
-        Move move = select(nodePath);
+        Move selectedMove = select(nodePath, movePath, raveScores);
 
-        if (move != null) {
-            //expand
+        if (selectedMove != null) {
             Node child = createNode();
-            nodePath.getLast().addChild(move, child);
+            nodePath.getLast().addChild(selectedMove, child);
             nodePath.add(child);
-            move.apply(simulationGame, simulationGame.getActivePlayer());
+            movePath.add(selectedMove);
+            selectedMove.apply(simulationGame);
         }
 
-        float[] result = rollout();
+        float[] result = rollout(raveScores);
         for (Node node : nodePath) {
             node.updateScores(result);
         }
+        for (Move move : movePath) {
+            raveScores.computeIfAbsent(move, x -> new RaveScore(playerCount)).updateScores(result);
+        }
     }
 
-    private Move select(Deque<Node> nodePath) {
+    private Move select(Deque<Node> nodePath, Deque<Move> movePath, Map<Move, RaveScore> raveScores) {
         Node node = nodePath.getLast();
-        Move selectedMove = uctSelect(node);
+        Move selectedMove = uctSelect(node, raveScores);
         while ((node = getChild(node, selectedMove)) != null) {
             nodePath.add(node);
-            selectedMove.apply(simulationGame, simulationGame.getActivePlayer());
+            movePath.add(selectedMove);
+            selectedMove.apply(simulationGame);
             if (simulationGame.isGameOver()) {
                 return null;
             }
-            selectedMove = uctSelect(nodePath.getLast());
+            selectedMove = uctSelect(nodePath.getLast(), raveScores);
         }
         return selectedMove;
     }
 
-    private Move uctSelect(Node node) {
+    private Move uctSelect(Node node, Map<Move, RaveScore> raveScores) {
         List<Move> moves = moveGenerator.generateMoves(simulationGame);
         if (moves.size() == 1) {
             return moves.get(0);
@@ -181,18 +190,25 @@ public class MctsBot {
         List<Move> bestMoves = new ArrayList<>();
         float bestValue = Float.NEGATIVE_INFINITY;
         for (Move move : moves) {
-            float uctValue;
+            float score;
             Node child = getChild(node, move);
             if (child == null) {
-                uctValue = calcUtc(node.visits(), 0, 0);
+                score = calcUtc(node.visits(), 0, 0);
             } else {
-                uctValue = calcUtc(node.visits(), child.visits(), child.score(playerIndex));
+                score = calcUtc(node.visits(), child.visits(), child.score(playerIndex));
             }
-            if (uctValue > bestValue) {
+
+            RaveScore raveScore = raveScores.get(move);
+            if (raveScore != null) {
+                float raveValue = raveScore.getScore(playerIndex) / (node.visits() + 1);
+                score += raveValue - 1f / playerCount;
+            }
+
+            if (score > bestValue) {
                 bestMoves.clear();
-                bestValue = uctValue;
+                bestValue = score;
             }
-            if (uctValue == bestValue) {
+            if (score == bestValue) {
                 bestMoves.add(move);
             }
         }
@@ -202,11 +218,9 @@ public class MctsBot {
         return bestMoves.get(simulationGame.getRandom().nextInt(bestMoves.size()));
     }
 
-    private float calcUtc(float parentScore, float childTotal, float childScore) {
-        parentScore += 1;
-        childTotal += EPSILON;
-        float exploitation = childScore / childTotal;
-        float exploration = SQRT_2 * (float) (Math.sqrt(Math.log(parentScore) / childTotal));
+    private float calcUtc(float parentTotal, float childTotal, float childScore) {
+        float exploitation = childScore / (childTotal + EPSILON);
+        float exploration = (float) (Math.sqrt(UCT_CONSTANT * Math.log(parentTotal + 1) / (childTotal + EPSILON)));
         float uctValue = exploitation + exploration;
         return uctValue;
     }
@@ -217,11 +231,12 @@ public class MctsBot {
         return node.getChildOrDefault(move, null);
     }
 
-    private float[] rollout() {
+    private float[] rollout(Map<Move, RaveScore> raveScores) {
+        List<Move> rolloutMoves = new ArrayList<>();
         while (!simulationGame.isGameOver()) {
             Move move = randomMover.nextMove(simulationGame);
-            move.apply(simulationGame, simulationGame.getActivePlayer());
-            simulationGame.isGameOver();
+            move.apply(simulationGame);
+            rolloutMoves.add(move);
         }
         EntityData data = simulationGame.getData();
         IntList winners = data.list(Components.HAS_WON);
@@ -233,6 +248,9 @@ public class MctsBot {
         for (int winner : winners) {
             int index = data.get(winner, Components.PLAYER_INDEX);
             result[index] += 1f / winners.size();
+        }
+        for (Move move : rolloutMoves) {
+            raveScores.computeIfAbsent(move, x -> new RaveScore(playerCount)).updateScores(result);
         }
         return result;
     }

@@ -63,8 +63,10 @@ public class IntList implements Iterable<Integer> {
         data[index] = value;
     }
 
-    public void removeAt(int index) {
+    public int removeAt(int index) {
+        int previous = data[index];
         System.arraycopy(data, index + 1, data, index, --size - index);
+        return previous;
     }
 
     public void swapRemove(int value) {
@@ -74,8 +76,10 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-    public void swapRemoveAt(int index) {
+    public int swapRemoveAt(int index) {
+        int previous = data[index];
         data[index] = data[--size];
+        return previous;
     }
 
     public int indexOf(int value) {

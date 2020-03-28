@@ -5,10 +5,13 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
 import com.etherblood.a.ai.moves.DeclareAttack;
-import com.etherblood.a.ai.moves.EndPhase;
+import com.etherblood.a.ai.moves.EndAttackPhase;
+import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.Stopwatch;
+import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import java.util.ArrayList;
@@ -17,6 +20,12 @@ import java.util.List;
 public class MoveGenerator {
 
     public List<Move> generateMoves(Game game) {
+        try ( Stopwatch stopwatch = TimeStats.get().time("MoveGenerator")) {
+            return moveGen(game);
+        }
+    }
+
+    private List<Move> moveGen(Game game) {
         EntityData data = game.getData();
         List<Move> result = new ArrayList<>();
         for (int player : data.list(Components.IN_ATTACK_PHASE)) {
@@ -31,7 +40,7 @@ public class MoveGenerator {
                         continue;
                     }
                     if (game.canDeclareAttack(player, attacker, target)) {
-                        result.add(new DeclareAttack(attacker, target));
+                        result.add(new DeclareAttack(player, attacker, target));
                     }
                 }
             }
@@ -42,9 +51,9 @@ public class MoveGenerator {
                 }
                 CardTemplate template = game.getCards().apply(data.get(handCard, Components.CARD_TEMPLATE));
                 CardCast cast = template.getAttackPhaseCast();
-                addCastMoves(game, handCard, cast, result);
+                addCastMoves(game, player, handCard, cast, result);
             }
-            result.add(new EndPhase());
+            result.add(new EndAttackPhase(player));
         }
         for (int player : data.list(Components.IN_BLOCK_PHASE)) {
             IntList minions = data.list(Components.IN_BATTLE_ZONE);
@@ -54,7 +63,7 @@ public class MoveGenerator {
                 }
                 for (int target : minions) {
                     if (game.canBlock(player, blocker, target)) {
-                        result.add(new Block(blocker, target));
+                        result.add(new Block(player, blocker, target));
                     }
                 }
             }
@@ -65,21 +74,21 @@ public class MoveGenerator {
                 }
                 CardTemplate template = game.getCards().apply(data.get(handCard, Components.CARD_TEMPLATE));
                 CardCast cast = template.getBlockPhaseCast();
-                addCastMoves(game, handCard, cast, result);
+                addCastMoves(game, player, handCard, cast, result);
             }
-            result.add(new EndPhase());
+            result.add(new EndBlockPhase(player));
         }
         // skip generating a surrender move for the AI
         return result;
     }
 
-    private void addCastMoves(Game game, int handCard, CardCast cast, List<Move> result) {
+    private void addCastMoves(Game game, int player, int handCard, CardCast cast, List<Move> result) {
         if (cast.isTargeted()) {
             for (int target : game.getData().list(Components.IN_BATTLE_ZONE)) {
-                result.add(new Cast(handCard, target));
+                result.add(new Cast(player, handCard, target));
             }
         } else {
-            result.add(new Cast(handCard, ~0));
+            result.add(new Cast(player, handCard, ~0));
         }
     }
 }
