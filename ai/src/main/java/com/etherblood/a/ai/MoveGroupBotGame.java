@@ -27,8 +27,8 @@ import java.util.List;
 
 /**
  * This class splits the actual moves into move groups which are easier to
- * manage by a mcts tree. It reduces the branching factor and avoids some
- * transpositions. Nice side-effect: Generating move groups is much cheaper.
+ * manage by a mcts tree.
+ * It reduces the branching factor and avoids some transpositions.
  */
 public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame> {
 
@@ -238,8 +238,70 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
 
     @Override
     public String toMoveString(MoveGroup move) {
-        // TODO
-        return move.toString();
+        if (move instanceof EndAttackCasting) {
+            EndAttackCasting end = (EndAttackCasting) move;
+            return "EndAttackCasting #" + end.player;
+        }
+        if (move instanceof EndBlockCasting) {
+            EndBlockCasting end = (EndBlockCasting) move;
+            return "EndBlockCasting #" + end.player;
+        }
+        if (move instanceof EndAttackPhase) {
+            EndAttackPhase end = (EndAttackPhase) move;
+            return "EndAttackPhase #" + end.player;
+        }
+        if (move instanceof EndBlockPhase) {
+            EndBlockPhase end = (EndBlockPhase) move;
+            return "EndBlockPhase #" + end.player;
+        }
+
+        if (move instanceof DeclareTargetedAttackCast) {
+            DeclareTargetedAttackCast value = (DeclareTargetedAttackCast) move;
+            return "DeclareTargetedAttackCast " + toCardString(value.card);
+        }
+        if (move instanceof DeclareTargetedBlockCast) {
+            DeclareTargetedBlockCast value = (DeclareTargetedBlockCast) move;
+            return "DeclareTargetedBlockCast " + toCardString(value.card);
+        }
+
+        if (move instanceof TargetedAttackCast) {
+            TargetedAttackCast cast = (TargetedAttackCast) move;
+            return "TargetedAttackCast " + toMinionString(cast.target);
+        }
+        if (move instanceof TargetedBlockCast) {
+            TargetedBlockCast cast = (TargetedBlockCast) move;
+            return "TargetedBlockCast " + toMinionString(cast.target);
+        }
+
+        if (move instanceof UntargetedAttackCast) {
+            UntargetedAttackCast cast = (UntargetedAttackCast) move;
+            return "UntargetedAttackCast " + toCardString(cast.card);
+        }
+
+        if (move instanceof UntargetedBlockCast) {
+            UntargetedBlockCast cast = (UntargetedBlockCast) move;
+            return "UntargetedBlockCast " + toCardString(cast.card);
+        }
+
+        if (move instanceof DeclareAttacker) {
+            DeclareAttacker value = (DeclareAttacker) move;
+            return "DeclareAttacker " + toMinionString(value.attacker);
+        }
+
+        if (move instanceof DeclareBlocker) {
+            DeclareBlocker value = (DeclareBlocker) move;
+            return "DeclareBlocker " + toMinionString(value.blocker);
+        }
+
+        if (move instanceof DeclareAttack) {
+            DeclareAttack attack = (DeclareAttack) move;
+            return "DeclareAttack " + toMinionString(attack.target);
+        }
+        if (move instanceof Block) {
+            Block block = (Block) move;
+            return "Block " + toMinionString(block.target);
+        }
+        return "Unknown Move " + move;
     }
 
 }
