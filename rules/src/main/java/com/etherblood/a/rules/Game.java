@@ -333,6 +333,7 @@ public class Game {
             }
             return false;
         }
+        boolean allAttackersUnblockable = true;
         for (int attacker : data.list(Components.ATTACKS_TARGET)) {
             int target = data.get(attacker, Components.ATTACKS_TARGET);
             if (target == blocker) {
@@ -341,6 +342,15 @@ public class Game {
                 }
                 return false;
             }
+            if (allAttackersUnblockable && !data.has(attacker, Components.CANNOT_BE_BLOCKED)) {
+                allAttackersUnblockable = false;
+            }
+        }
+        if (allAttackersUnblockable) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to block, nobody is attacking.");
+            }
+            return false;
         }
         return true;
     }

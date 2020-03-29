@@ -3,7 +3,6 @@ package com.etherblood.a.entities;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import java.util.OptionalInt;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -11,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SimpleEntityData implements EntityData {
 
-    private final AtomicInteger nextId = new AtomicInteger(1);
+    private int nextId = 1;
     private final IntMap[] map;
 
     public SimpleEntityData(int componentCount) {
@@ -23,7 +22,7 @@ public class SimpleEntityData implements EntityData {
 
     @Override
     public int createEntity() {
-        return nextId.getAndIncrement();
+        return nextId++;
     }
 
     @Override
@@ -68,7 +67,11 @@ public class SimpleEntityData implements EntityData {
         return list;
     }
 
-    public AtomicInteger getNextId() {
+    public int getNextId() {
         return nextId;
+    }
+
+    public void setNextId(int nextId) {
+        this.nextId = nextId;
     }
 }

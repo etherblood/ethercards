@@ -23,6 +23,7 @@ import com.destrostudios.cardgui.samples.visualisation.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
+import com.etherblood.a.ai.MoveGroupBotGame;
 import com.etherblood.a.gui.prettycards.*;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -30,6 +31,7 @@ import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
+import com.etherblood.a.ai.movegroups.MoveGroup;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
 import com.etherblood.a.ai.moves.DeclareAttack;
@@ -37,7 +39,6 @@ import com.etherblood.a.ai.moves.EndAttackPhase;
 import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.Components;
-import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameBuilder;
 import com.etherblood.a.rules.TimeStats;
@@ -68,6 +69,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
+import java.util.Random;
 import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
@@ -523,19 +525,19 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void applyAI() {
-        int botPlayer = game.getPlayers()[0];
-        while (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
+        int botPlayer = game.getPlayers()[1];
+        if (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
             GameBuilder builder = new GameBuilder();
             builder.setCards(game.getCards());
             builder.setMinions(game.getMinions());
             builder.setBackupsEnabled(false);
-            Game simulationGame = builder.build();
-            MctsBot bot = new MctsBot(simulationGame);
-            Move move = bot.nextMove(game);
-            move.apply(game);
-        }
-        for (String stat : TimeStats.get().toStatsStrings()) {
-            LoggerFactory.getLogger(CardsApp.class).info(stat);
+            builder.setRandom(new Random());
+
+            MctsBot<MoveGroup, MoveGroupBotGame> bot = new MctsBot<>(new MoveGroupBotGame(builder.build()), new Random());
+            bot.playTurn(new MoveGroupBotGame(game));
+            for (String stat : TimeStats.get().toStatsStrings()) {
+                LoggerFactory.getLogger(CardsApp.class).info(stat);
+            }
         }
         updateBoard();
         updateCamera();

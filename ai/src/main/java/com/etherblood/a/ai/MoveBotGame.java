@@ -9,23 +9,31 @@ import com.etherblood.a.ai.moves.EndAttackPhase;
 import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.Stopwatch;
 import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.templates.MinionTemplate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class MoveGenerator {
+public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
-    public List<Move> generateMoves(Game game) {
-        try ( Stopwatch stopwatch = TimeStats.get().time("MoveGenerator")) {
-            return moveGen(game);
+    public MoveBotGame(Game game) {
+        super(game);
+    }
+
+    @Override
+    public List<Move> generateMoves() {
+        try ( Stopwatch stopwatch = TimeStats.get().time("MoveGeneratorImpl")) {
+            return moveGen();
         }
     }
 
-    private List<Move> moveGen(Game game) {
+    private List<Move> moveGen() {
         EntityData data = game.getData();
         List<Move> result = new ArrayList<>();
         for (int player : data.list(Components.IN_ATTACK_PHASE)) {
@@ -91,4 +99,38 @@ public class MoveGenerator {
             result.add(new Cast(player, handCard, ~0));
         }
     }
+
+    @Override
+    public String toMoveString(Move move) {
+        if (move instanceof EndBlockPhase) {
+            return "End BlockPhase";
+        }
+        if (move instanceof EndAttackPhase) {
+            return "End AttackPhase";
+        }
+        if (move instanceof Cast) {
+            Cast cast = (Cast) move;
+            return "Cast " + toCardString(cast.source) + " -> " + toMinionString(cast.target);
+        }
+        if (move instanceof Block) {
+            Block block = (Block) move;
+            return "Block " + toMinionString(block.source) + " -> " + toMinionString(block.target);
+        }
+        if (move instanceof DeclareAttack) {
+            DeclareAttack attack = (DeclareAttack) move;
+            return "DeclareAttack " + toMinionString(attack.source) + " -> " + toMinionString(attack.target);
+        }
+        return "Unknown Move " + move;
+    }
+
+    @Override
+    public void applyMove(Move move) {
+        move.apply(game);
+    }
+
+    @Override
+    public void copyStateFrom(MoveBotGame source) {
+        EntityUtil.copy(source.game.getData(), game.getData());
+    }
+
 }

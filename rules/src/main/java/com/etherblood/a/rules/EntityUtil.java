@@ -16,7 +16,7 @@ public class EntityUtil {
                 destination.set(entity, component, source.get(entity, component));
             }
         }
-        ((SimpleEntityData) destination).getNextId().set(((SimpleEntityData) source).getNextId().get());
+        ((SimpleEntityData) destination).setNextId(((SimpleEntityData) source).getNextId());
     }
 
     public static Map<String, Integer> extractEntityComponents(EntityData data, int entity) {

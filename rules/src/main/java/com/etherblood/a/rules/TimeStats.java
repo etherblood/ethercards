@@ -15,10 +15,10 @@ public class TimeStats {
     public Stopwatch time(String key) {
         long start = System.nanoTime();
         return () -> {
-            map.compute(key, (k, prev) -> {
-                long duration = System.nanoTime() - start;
-                return prev == null ? duration : prev + duration;
-            });
+                map.compute(key, (k, prev) -> {
+                    long duration = System.nanoTime() - start;
+                    return prev == null ? duration : prev + duration;
+                });
         };
     }
 
@@ -30,7 +30,7 @@ public class TimeStats {
                 .collect(Collectors.toList());
     }
 
-    private static String humanReadableNanos(long nanos) {
+    public static String humanReadableNanos(long nanos) {
         int count = 0;
         while (nanos > 10000 && count < 3) {
             nanos /= 1000;

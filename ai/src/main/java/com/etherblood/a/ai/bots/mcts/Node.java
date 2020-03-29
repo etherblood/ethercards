@@ -1,10 +1,11 @@
 package com.etherblood.a.ai.bots.mcts;
 
-import com.etherblood.a.ai.moves.Move;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-public class Node {
+public class Node<T> {
 
     private static final Object[] EMPTY = new Object[0];
 
@@ -33,11 +34,11 @@ public class Node {
         }
     }
 
-    public Node getChild(Move move) {
+    public Node getChild(T move) {
         return Objects.requireNonNull(getChildOrDefault(move, null));
     }
 
-    public Node getChildOrDefault(Move move, Node defaultValue) {
+    public Node getChildOrDefault(T move, Node defaultValue) {
         for (int i = 0; i < childs.length; i += 2) {
             if (childs[i].equals(move)) {
                 return (Node) childs[i + 1];
@@ -46,10 +47,18 @@ public class Node {
         return defaultValue;
     }
 
-    public void addChild(Move move, Node node) {
+    public void addChild(T move, Node node) {
         int index = childs.length;
         childs = Arrays.copyOf(childs, childs.length + 2);
         childs[index] = move;
         childs[index + 1] = node;
+    }
+
+    public List<T> getMoves() {
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < childs.length; i += 2) {
+            result.add((T) childs[i]);
+        }
+        return result;
     }
 }
