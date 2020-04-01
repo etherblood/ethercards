@@ -5,7 +5,7 @@ public class CardTemplateBuilder {
     protected final int templateId;
     protected final CardCastBuilder attackPhaseCast = new CardCastBuilder(), blockPhaseCast = new CardCastBuilder();
 
-    protected CardTemplateBuilder(int templateId) {
+    public CardTemplateBuilder(int templateId) {
         this.templateId = templateId;
     }
 

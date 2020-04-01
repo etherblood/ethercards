@@ -23,6 +23,7 @@ import com.destrostudios.cardgui.samples.visualisation.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
+import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.MoveGroupBotGame;
 import com.etherblood.a.gui.prettycards.*;
 import com.etherblood.a.entities.EntityData;
@@ -31,6 +32,8 @@ import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
+import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
+import com.etherblood.a.ai.bots.mcts.RolloutsToSimpleEvaluation;
 import com.etherblood.a.ai.movegroups.MoveGroup;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
@@ -533,8 +536,11 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             builder.setBackupsEnabled(false);
             builder.setRandom(new Random());
 
-            MctsBot<MoveGroup, MoveGroupBotGame> bot = new MctsBot<>(new MoveGroupBotGame(builder.build()), new Random());
-            bot.playTurn(new MoveGroupBotGame(game));
+            RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(new Random(), 10);
+            MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
+            botSettings.evaluation = evaluation::evaluate;
+            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(builder.build()), botSettings);
+            bot.playTurn(new MoveBotGame(game));
             for (String stat : TimeStats.get().toStatsStrings()) {
                 LoggerFactory.getLogger(CardsApp.class).info(stat);
             }

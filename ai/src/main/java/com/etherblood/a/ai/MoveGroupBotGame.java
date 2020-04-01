@@ -27,11 +27,12 @@ import java.util.List;
 
 /**
  * This class splits the actual moves into move groups which are easier to
- * manage by a mcts tree.
- * It reduces the branching factor and avoids some transpositions.
+ * manage by a mcts tree. It reduces the branching factor and avoids some
+ * transpositions.
  */
 public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame> {
 
+    private boolean pruneDuplicateMoves = true;
     private MoveGroup previous;
     private Integer endedCasting;
 
@@ -41,9 +42,6 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
 
     @Override
     public void applyMove(MoveGroup move) {
-        if (!move.equals(move)) {
-            throw new AssertionError(move);
-        }
         try {
             if (move instanceof EndAttackCasting) {
                 EndAttackCasting end = (EndAttackCasting) move;
@@ -138,6 +136,8 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
     }
 
     private List<MoveGroup> moveGen() {
+        //TODO: prune duplicate moves (eg. it doesn't matter which of my identical minions attacks, so we just create moves for the first)
+
         EntityData data = game.getData();
         List<MoveGroup> moves = new ArrayList<>();
 
@@ -194,7 +194,15 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
                 moves.add(new EndAttackPhase(player));
             } else {
                 endedCasting = null;
+                IntList prunedTemplates = new IntList();
                 for (int handCard : data.list(Components.IN_HAND_ZONE)) {
+                    if (pruneDuplicateMoves) {
+                        int template = data.get(handCard, Components.CARD_TEMPLATE);
+                        if (prunedTemplates.contains(template)) {
+                            continue;
+                        }
+                        prunedTemplates.add(template);
+                    }
                     if (game.canCast(player, handCard, null)) {
                         moves.add(new UntargetedAttackCast(player, handCard));
                     } else if (game.canCast(player, handCard)) {
@@ -216,7 +224,15 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
                 moves.add(new EndBlockPhase(player));
             } else {
                 endedCasting = null;
+                IntList prunedTemplates = new IntList();
                 for (int handCard : data.list(Components.IN_HAND_ZONE)) {
+                    if (pruneDuplicateMoves) {
+                        int template = data.get(handCard, Components.CARD_TEMPLATE);
+                        if (prunedTemplates.contains(template)) {
+                            continue;
+                        }
+                        prunedTemplates.add(template);
+                    }
                     if (game.canCast(player, handCard, null)) {
                         moves.add(new UntargetedBlockCast(player, handCard));
                     } else if (game.canCast(player, handCard)) {
@@ -231,6 +247,12 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
 
     @Override
     public void copyStateFrom(MoveGroupBotGame source) {
+        if(game.getCards() != source.game.getCards()) {
+            throw new IllegalArgumentException();
+        }
+        if(game.getMinions() != source.game.getMinions()) {
+            throw new IllegalArgumentException();
+        }
         endedCasting = source.endedCasting;
         previous = source.previous;
         EntityUtil.copy(source.game.getData(), game.getData());

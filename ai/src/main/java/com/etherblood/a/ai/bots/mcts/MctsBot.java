@@ -11,27 +11,34 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MctsBot<Move, Game extends BotGame<Move, Game>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MctsBot.class);
-    private static final boolean VERBOSE = true;
     private static final float EPSILON = 1e-6f;
-    private static final float UCT_CONSTANT = 2;
-    private static final float FIRST_PLAY_URGENCY = 10;
+    private final boolean verbose;
+    private final float uctConstant;
+    private final float firstPlayUrgency;
+    private final Function<Game, float[]> evaluation;
 
     private final Game simulationGame;
     private final Random random;
+    private final int strength;
 
-    public MctsBot(Game simulationGame, Random random) {
+    public MctsBot(Game simulationGame, MctsBotSettings settings) {
         this.simulationGame = simulationGame;
-        this.random = random;
+        this.random = settings.random;
+        this.strength = settings.strength;
+        this.verbose = settings.verbose;
+        this.uctConstant = settings.uctConstant;
+        this.firstPlayUrgency = settings.firstPlayUrgency;
+        this.evaluation = settings.evaluation;
     }
 
     public void playTurn(Game game) {
-        int strength = 10_000;
         int iterations = 0;
         long start = System.nanoTime();
         try ( Stopwatch stopwatch = TimeStats.get().time("MctsBot")) {
@@ -59,10 +66,10 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
 
                     Node node = rootNode;
                     moves.sort(Comparator.comparingDouble(move -> -node.getChild(move).visits()));
-                    if (VERBOSE) {
+                    if (verbose) {
                         LOG.info("Move scores:");
                         for (Move move : moves) {
-                            LOG.info("{}: {}", rootNode.getChild(move).visits(), game.toMoveString(move));
+                            LOG.info("{}: {}", node.getChild(move).visits(), game.toMoveString(move));
                         }
                         LOG.info("Expected winrate: {}%", (int) (100 * rootNode.score(game.activePlayerIndex()) / rootNode.visits()));
                     }
@@ -72,7 +79,9 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                 rootNode = rootNode.getChildOrDefault(move, createNode());
             } while (!game.isGameOver() && player == game.activePlayerIndex());
         }
-        LOG.info("Total of {} iterations for turn in {}.", iterations, TimeStats.humanReadableNanos(System.nanoTime() - start));
+        if (verbose) {
+            LOG.info("Total of {} iterations for turn in {}.", iterations, TimeStats.humanReadableNanos(System.nanoTime() - start));
+        }
     }
 
     private void iteration(Node rootNode, Map<Move, RaveScore> raveScores) {
@@ -90,7 +99,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         }
 
         try ( Stopwatch resetStopwatch = TimeStats.get().time("MctsBot.rollout()")) {
-            float[] result = rollout(raveScores);
+            float[] result = evaluation.apply(simulationGame);
             for (Node node : nodePath) {
                 node.updateScores(result);
             }
@@ -128,7 +137,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             float score;
             Node child = getChild(node, move);
             if (child == null) {
-                score = FIRST_PLAY_URGENCY;
+                score = firstPlayUrgency;
             } else {
                 score = calcUtc(node.visits(), child.visits(), child.score(playerIndex));
             }
@@ -155,30 +164,13 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
 
     private float calcUtc(float parentTotal, float childTotal, float childScore) {
         float exploitation = childScore / (childTotal + EPSILON);
-        float exploration = (float) (Math.sqrt(UCT_CONSTANT * Math.log(parentTotal + 1) / (childTotal + EPSILON)));
+        float exploration = (float) (Math.sqrt(uctConstant * Math.log(parentTotal + 1) / (childTotal + EPSILON)));
         float uctValue = exploitation + exploration;
         return uctValue;
     }
 
     private Node getChild(Node node, Move move) {
-        //TODO: moves should be compared by value equivalence (if card A is identical to card B we can act as if playing either was equivalent)
-        // while this is not technically correct it is worth the tradeoff for an improved branching factor
         return node.getChildOrDefault(move, null);
-    }
-
-    private float[] rollout(Map<Move, RaveScore> raveScores) {
-        List<Move> rolloutMoves = new ArrayList<>();
-        while (!simulationGame.isGameOver()) {
-            List<Move> moves = simulationGame.generateMoves();
-            Move move = moves.get(random.nextInt(moves.size()));
-            simulationGame.applyMove(move);
-            rolloutMoves.add(move);
-        }
-        float[] result = simulationGame.resultPlayerScores();
-        for (Move move : rolloutMoves) {
-            raveScores.computeIfAbsent(move, x -> new RaveScore(simulationGame.playerCount())).updateScores(result);
-        }
-        return result;
     }
 
     private Node<Move> createNode() {

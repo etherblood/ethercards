@@ -85,6 +85,11 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
         }
     }
 
+    @Override
+    public EntityData getData() {
+        return game.getData();
+    }
+
     protected String toMinionString(int minion) {
         if (!game.getData().has(minion, Components.MINION_TEMPLATE)) {
             return "Null";

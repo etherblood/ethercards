@@ -17,7 +17,7 @@ public class MinionTemplateBuilder {
         DEFAULT_COMPONENTS.set(Components.TIRED, 1);
     }
 
-    protected MinionTemplateBuilder(int id) {
+    public MinionTemplateBuilder(int id) {
         this.id = id;
         for (int key : DEFAULT_COMPONENTS) {
             components.set(key, DEFAULT_COMPONENTS.get(key));

@@ -1,5 +1,6 @@
 package com.etherblood.a.ai;
 
+import com.etherblood.a.entities.EntityData;
 import java.util.List;
 import java.util.Random;
 
@@ -24,6 +25,8 @@ public interface BotGame<T, V extends BotGame<T, V>> {
     void copyStateFrom(V source);
 
     void randomizeHiddenInformation(Random random);
+    
+    EntityData getData();
 
     String toMoveString(T move);
 

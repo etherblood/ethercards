@@ -15,10 +15,8 @@ import com.etherblood.a.rules.Stopwatch;
 import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.MinionTemplate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
@@ -130,6 +128,12 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
     @Override
     public void copyStateFrom(MoveBotGame source) {
+        if(game.getCards() != source.game.getCards()) {
+            throw new IllegalArgumentException();
+        }
+        if(game.getMinions() != source.game.getMinions()) {
+            throw new IllegalArgumentException();
+        }
         EntityUtil.copy(source.game.getData(), game.getData());
     }
 

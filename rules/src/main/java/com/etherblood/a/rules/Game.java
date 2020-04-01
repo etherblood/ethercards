@@ -30,7 +30,6 @@ public class Game {
     private final IntFunction<CardTemplate> cards;
     private final IntFunction<MinionTemplate> minions;
     private final int[] players;
-    private boolean started = false;
     private final boolean backupsEnabled;
 
     public Game(Random random, IntFunction<CardTemplate> cards, IntFunction<MinionTemplate> minions, boolean backupsEnabled) {
@@ -92,10 +91,6 @@ public class Game {
     }
 
     public void start() {
-        if (started) {
-            throw new IllegalStateException();
-        }
-        started = true;
         List<AbstractSystem> startSystems = Arrays.asList(
                 new StartAttackPhaseSystem(),
                 new DrawSystem()
