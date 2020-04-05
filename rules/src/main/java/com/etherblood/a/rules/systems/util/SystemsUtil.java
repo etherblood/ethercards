@@ -4,6 +4,8 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.templates.MinionTemplate;
 
 import java.util.Random;
 
@@ -31,10 +33,11 @@ public class SystemsUtil {
         return bestPlayer;
     }
 
-    public static void increase(EntityData data, int entity, int component, int value) {
+    public static int increase(EntityData data, int entity, int component, int value) {
         int total = data.getOptional(entity, component).orElse(0);
         total += value;
         data.set(entity, component, total);
+        return total;
     }
 
     public static void fight(EntityData data, int attacker, int blocker) {
@@ -51,6 +54,17 @@ public class SystemsUtil {
         } else {
             data.remove(target, Components.DAMAGE);
         }
+    }
+
+    public static void summon(Game game, int minionTemplate, int owner) {
+        EntityData data = game.getData();
+        MinionTemplate minion = game.getMinions().apply(minionTemplate);
+        int entity = data.createEntity();
+        for (int component : minion) {
+            data.set(entity, component, minion.get(component));
+        }
+        data.set(entity, Components.IN_BATTLE_ZONE, 1);
+        data.set(entity, Components.OWNED_BY, owner);
     }
 
     public static void drawCards(EntityData data, int amount, Random random, int player) {

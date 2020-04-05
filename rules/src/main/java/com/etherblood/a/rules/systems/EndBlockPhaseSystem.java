@@ -18,7 +18,7 @@ public class EndBlockPhaseSystem extends AbstractSystem {
                 if (data.hasValue(attackTarget, Components.OWNED_BY, player)) {
                     if (data.has(attackTarget, Components.IN_BATTLE_ZONE)) {
                         SystemsUtil.fight(data, attacker, attackTarget);
-                        
+
                         data.getOptional(attackTarget, Components.DRAWS_ON_ATTACKED).ifPresent(draws -> {
                             int owner = data.get(attackTarget, Components.OWNED_BY);
                             SystemsUtil.increase(data, owner, Components.DRAW_CARDS, draws);

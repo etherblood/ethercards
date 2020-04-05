@@ -1,0 +1,15 @@
+{
+    "alias": "minions/grim_patron.json",
+    "display": {
+        "name": "Grim Patron",
+        "imagePath": null,
+        "colors": ["BLACK"]
+    },
+    "components": {
+        "ATTACK": 3,
+        "HEALTH": 3,
+        "SUMMON_ON_SURVIVAL": {
+            "minion": "minions/grim_patron.json"
+        }
+    }
+}

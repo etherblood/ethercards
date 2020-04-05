@@ -13,6 +13,8 @@
         "cards/GOOD.json": 0,
         "cards/river_croc.json": 2,
         "cards/yeti.json": 1,
-        "cards/BAD.json": 0
+        "cards/BAD.json": 0,
+        "cards/grim_patron.json": 1,
+        "cards/nerubian_egg.json": 1
     }
 }

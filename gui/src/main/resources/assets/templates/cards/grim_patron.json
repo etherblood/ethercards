@@ -1,0 +1,18 @@
+{
+    "alias": "cards/grim_patron.json",
+    "display": {
+        "name": "Grim Patron",
+        "imagePath": null,
+        "colors": ["BLACK"],
+        "description": "Summon a 3/3 grim patron which summons a new grim patron whenever it survives damage."
+    },
+    "attackCast": {
+        "manaCost": 5,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/grim_patron.json"
+            }
+        ]
+    }
+}

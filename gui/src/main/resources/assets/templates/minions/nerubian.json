@@ -1,0 +1,12 @@
+{
+    "alias": "minions/nerubian.json",
+    "display": {
+        "name": "Nerubian",
+        "imagePath": null,
+        "colors": ["BLACK"]
+    },
+    "components": {
+        "ATTACK": 4,
+        "HEALTH": 4
+    }
+}

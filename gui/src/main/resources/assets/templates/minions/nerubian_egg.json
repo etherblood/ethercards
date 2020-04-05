@@ -1,0 +1,16 @@
+{
+    "alias": "minions/nerubian_egg.json",
+    "display": {
+        "name": "Nerubian egg",
+        "imagePath": null,
+        "colors": ["BLACK"]
+    },
+    "components": {
+        "ATTACK": 0,
+        "HEALTH": 2,
+        "CANNOT_ATTACK": true,
+        "SUMMON_ON_DEATH": {
+            "minion": "minions/nerubian.json"
+        }
+    }
+}

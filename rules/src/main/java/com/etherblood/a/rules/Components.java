@@ -40,6 +40,8 @@ public class Components {
     public static final int TIRED;
     public static final int CARD_TEMPLATE;
     public static final int MINION_TEMPLATE;
+    public static final int SUMMON_ON_SURVIVAL;
+    public static final int SUMMON_ON_DEATH;
 
     static {
         HAS_LOST = createMeta("HAS_LOST");
@@ -74,6 +76,8 @@ public class Components {
         TIRED = createMeta("TIRED");
         CARD_TEMPLATE = createMeta("CARD_TEMPLATE");
         MINION_TEMPLATE = createMeta("MINION_TEMPLATE");
+        SUMMON_ON_SURVIVAL = createMeta("SUMMON_ON_SURVIVAL");
+        SUMMON_ON_DEATH = createMeta("SUMMON_ON_DEATH");
     }
 
     public static ComponentMeta getComponent(int id) {

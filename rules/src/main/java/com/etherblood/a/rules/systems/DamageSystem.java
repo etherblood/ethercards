@@ -5,6 +5,7 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.systems.util.SystemsUtil;
 
 public class DamageSystem extends AbstractSystem {
 
@@ -19,6 +20,9 @@ public class DamageSystem extends AbstractSystem {
                     data.set(entity, Components.HEALTH, health);
                     if (health <= 0) {
                         data.set(entity, Components.DIE, 1);
+                    } else {
+                        data.getOptional(entity, Components.SUMMON_ON_SURVIVAL)
+                                .ifPresent(template -> SystemsUtil.summon(game, template, data.get(entity, Components.OWNED_BY)));
                     }
                 });
             }

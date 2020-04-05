@@ -1,0 +1,18 @@
+{
+    "alias": "cards/nerubian_egg.json",
+    "display": {
+        "name": "Nerubian egg",
+        "imagePath": null,
+        "colors": ["BLACK"],
+        "description": "Summon a 0/2 nerubian_egg which cannot attack and summons a 4/4 nerubian when it dies."
+    },
+    "attackCast": {
+        "manaCost": 2,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/nerubian_egg.json"
+            }
+        ]
+    }
+}

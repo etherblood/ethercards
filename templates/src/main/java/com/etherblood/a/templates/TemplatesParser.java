@@ -215,6 +215,19 @@ public class TemplatesParser {
                     continue;
                 }
             }
+            if (value.isJsonObject()) {
+                JsonObject obj = value.getAsJsonObject();
+                if (obj.has("minion")) {
+                    int minion = registerIfAbsent(minionAliases, obj.getAsJsonPrimitive("minion").getAsString());
+                    builder.set(component, minion);
+                    continue;
+                }
+                if (obj.has("card")) {
+                    int card = registerIfAbsent(cardAliases, obj.getAsJsonPrimitive("card").getAsString());
+                    builder.set(component, card);
+                    continue;
+                }
+            }
             throw new UnsupportedOperationException(value.toString());
         }
         DisplayMinionTemplate minion = builder.build();
