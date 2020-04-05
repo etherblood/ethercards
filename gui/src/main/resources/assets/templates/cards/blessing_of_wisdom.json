@@ -1,0 +1,22 @@
+{
+    "alias": "cards/blessing_of_wisdom.json",
+    "display": {
+        "name": "Blessing of wisdom",
+        "imagePath": null,
+        "colors": ["WHITE"],
+        "description": "Choose a minion, whenever it blocks or attacks it's owner draws a card."
+    },
+    "attackCast": {
+        "manaCost": 2,
+        "targeted": true,
+        "effects": [
+            {
+                "type": "buff",
+                "components": {
+                    "DRAWS_ON_BLOCK": 1,
+                    "DRAWS_ON_ATTACK": 1
+                }
+            }
+        ]
+    }
+}

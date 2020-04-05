@@ -4,25 +4,20 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
-import java.util.Random;
 
 public class PlayerStatusSystem extends AbstractSystem {
 
     @Override
-    public void run(EntityData data, Random random) {
+    public void run(Game game, EntityData data) {
         updatePlayerDeaths(data);
 
-        for (int player : data.list(Components.IN_ATTACK_PHASE)) {
+        for (int player : data.list(Components.ACTIVE_PLAYER_PHASE)) {
             if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
                 nextTurn(data, player);
-                data.remove(player, Components.IN_ATTACK_PHASE);
-            }
-        }
-        for (int player : data.list(Components.IN_BLOCK_PHASE)) {
-            if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
-                nextTurn(data, player);
-                data.remove(player, Components.IN_BLOCK_PHASE);
+                data.remove(player, Components.ACTIVE_PLAYER_PHASE);
             }
         }
     }
@@ -30,7 +25,7 @@ public class PlayerStatusSystem extends AbstractSystem {
     private void nextTurn(EntityData data, int player) {
         Integer bestPlayer = SystemsUtil.nextPlayer(data, player);
         if (bestPlayer != null) {
-            data.set(bestPlayer, Components.START_BLOCK_PHASE, 1);
+            data.set(bestPlayer, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE);
         }
     }
 

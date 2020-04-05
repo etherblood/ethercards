@@ -31,6 +31,12 @@ public class SystemsUtil {
         return bestPlayer;
     }
 
+    public static void increase(EntityData data, int entity, int component, int value) {
+        int total = data.getOptional(entity, component).orElse(0);
+        total += value;
+        data.set(entity, component, total);
+    }
+
     public static void fight(EntityData data, int attacker, int blocker) {
         damage(data, blocker, data.getOptional(attacker, Components.ATTACK).orElse(0));
         damage(data, attacker, data.getOptional(blocker, Components.ATTACK).orElse(0));

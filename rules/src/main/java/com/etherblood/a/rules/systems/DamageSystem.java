@@ -4,13 +4,12 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.Components;
-
-import java.util.Random;
+import com.etherblood.a.rules.Game;
 
 public class DamageSystem extends AbstractSystem {
 
     @Override
-    public void run(EntityData data, Random random) {
+    public void run(Game game, EntityData data) {
         IntList entities = data.list(Components.DAMAGE);
         for (int entity : entities) {
             if (data.has(entity, Components.IN_BATTLE_ZONE)) {

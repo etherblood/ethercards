@@ -1,0 +1,12 @@
+{
+    "alias": "minions/yeti.json",
+    "display": {
+        "name": "Yeti",
+        "imagePath": null,
+        "colors": ["BLUE"]
+    },
+    "components": {
+        "ATTACK": 4,
+        "HEALTH": 5
+    }
+}

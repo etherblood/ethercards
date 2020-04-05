@@ -24,7 +24,6 @@ import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformat
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.MoveGroupBotGame;
 import com.etherblood.a.gui.prettycards.*;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -34,7 +33,6 @@ import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.ai.bots.mcts.RolloutsToSimpleEvaluation;
-import com.etherblood.a.ai.movegroups.MoveGroup;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
 import com.etherblood.a.ai.moves.DeclareAttack;
@@ -43,7 +41,8 @@ import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.GameBuilder;
+import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.templates.CardCast;
@@ -74,7 +73,6 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Random;
 import java.util.function.IntPredicate;
-import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
 
 public class CardsApp extends SimpleApplication implements ActionListener {
@@ -125,14 +123,11 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         if (game.isGameOver()) {
             return;
         }
-        int activePlayer = game.getActivePlayer();
-        int player0 = game.getPlayers()[0];
-        int player1 = game.getPlayers()[1];
 
         CameraAppState cameraAppState = stateManager.getState(CameraAppState.class);
         Vector3f position = new Vector3f();
         Quaternion rotation = new Quaternion();
-        boolean isPlayer1 = activePlayer == player1;
+        boolean isPlayer1 = game.getActivePlayerIndex() == 1;
         position.set(0, 3.8661501f, 6.470482f);
         if (isPlayer1) {
             position.addLocal(0, 0, -10.339f);
@@ -156,13 +151,13 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         TemplatesLoader loader = new TemplatesLoader(x -> assetManager.loadAsset(new AssetKey<>("templates/" + x)));
         LibraryTemplate lib0 = loader.loadLibrary("libraries/default.json");
         LibraryTemplate lib1 = loader.loadLibrary("libraries/default.json");
-        GameBuilder builder = new GameBuilder();
-        builder.setCards(loader::getCard);
-        builder.setMinions(loader::getMinion);
-        game = builder.build();
-        SimpleSetup setup = new SimpleSetup();
-        setup.setHero0template(lib0.hero);
-        setup.setHero1template(lib1.hero);
+        GameSettings settings = new GameSettings();
+        settings.cards = loader::getCard;
+        settings.minions = loader::getMinion;
+        game = new Game(settings);
+        SimpleSetup setup = new SimpleSetup(2);
+        setup.setHero(0, lib0.hero);
+        setup.setHero(1, lib1.hero);
 
         IntList library0 = new IntList();
         for (int card : lib0.cards) {
@@ -173,8 +168,8 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             library1.add(card);
         }
 
-        setup.setLibrary0template(library0);
-        setup.setLibrary1template(library1);
+        setup.setLibrary(0, library0);
+        setup.setLibrary(1, library1);
 
         setup.apply(game);
         game.start();
@@ -216,7 +211,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 .arcHeight(0.1f)
                 .width(0.25f)
                 .build()));
-        int[] players = game.getPlayers();
+        IntList players = game.getData().list(Components.PLAYER_INDEX);
 
         Vector3f offset = new Vector3f(0, 0, ZONE_HEIGHT);
         float directionX = 1;
@@ -224,7 +219,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         Quaternion zoneRotation = Quaternion.IDENTITY;
 
         for (int player : players) {
-            if (player == players[1]) {
+            if (game.getData().hasValue(player, Components.PLAYER_INDEX, 1)) {
                 directionX *= -1;
                 directionZ *= -1;
                 zoneRotation = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y);
@@ -267,31 +262,24 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
     private void updateBoard() {
         EntityData data = game.getData();
-        int[] players = game.getPlayers();
-
         StringBuilder builder = new StringBuilder();
-        builder.append("Player 1 mana: ");
-        builder.append(data.getOptional(players[0], Components.MANA).orElse(0));
-        if (game.hasPlayerLost(players[0])) {
-            builder.append(" - LOST");
-        } else if (game.hasPlayerWon(players[0])) {
-            builder.append(" - WON");
-        }
-        builder.append(System.lineSeparator());
-        builder.append("Player 2 mana: ");
-        builder.append(data.getOptional(players[1], Components.MANA).orElse(0));
-        if (game.hasPlayerLost(players[1])) {
-            builder.append(" - LOST");
-        } else if (game.hasPlayerWon(players[1])) {
-            builder.append(" - WON");
-        }
-        builder.append(System.lineSeparator());
-        IntList list = data.list(Components.IN_BLOCK_PHASE);
-        if (!list.isEmpty()) {
-            builder.append("BLOCK PHASE: ").append(list.stream().mapToObj(Integer::toUnsignedString).collect(Collectors.joining(", ")));
-        } else {
-            list = data.list(Components.IN_ATTACK_PHASE);
-            builder.append("ATTACK PHASE: ").append(list.stream().mapToObj(Integer::toUnsignedString).collect(Collectors.joining(", ")));
+        IntList players = data.list(Components.PLAYER_INDEX);
+        for (int player : players) {
+            int playerIndex = data.get(player, Components.PLAYER_INDEX);
+            builder.append("Player ");
+            builder.append(playerIndex + 1);
+            builder.append(" mana: ");
+            builder.append(data.getOptional(player, Components.MANA).orElse(0));
+            if (game.hasPlayerLost(player)) {
+                builder.append(" - LOST");
+            } else if (game.hasPlayerWon(player)) {
+                builder.append(" - WON");
+            } else if (data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
+                builder.append(" - ATTACK_PHASE");
+            } else if (data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
+                builder.append(" - BLOCK_PHASE");
+            }
+            builder.append(System.lineSeparator());
         }
         hudText.setText(builder.toString());
 
@@ -501,12 +489,15 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     public void onAction(String name, boolean isPressed, float lastTimePerFrame) {
         if ("space".equals(name) && isPressed) {
             EntityData data = game.getData();
-            IntList list = data.list(Components.IN_BLOCK_PHASE);
+            IntList list = data.list(Components.ACTIVE_PLAYER_PHASE);
             if (!list.isEmpty()) {
-                applyMove(new EndBlockPhase(list.get(0)));
-            } else {
-                list = data.list(Components.IN_ATTACK_PHASE);
-                applyMove(new EndAttackPhase(list.get(0)));
+                int player = list.get(0);
+                int phase = data.get(player, Components.ACTIVE_PLAYER_PHASE);
+                if (phase == PlayerPhase.BLOCK_PHASE) {
+                    applyMove(new EndBlockPhase(player));
+                } else {
+                    applyMove(new EndAttackPhase(player));
+                }
             }
 //        } else if ("1".equals(name) && isPressed) {
 //            List<Card> cards = playerZones[0].getDeckZone().getCards();
@@ -529,18 +520,18 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void applyAI() {
-        int botPlayer = game.getPlayers()[1];
-        if (!game.isGameOver() && game.getActivePlayer() == botPlayer) {
-            GameBuilder builder = new GameBuilder();
-            builder.setCards(game.getCards());
-            builder.setMinions(game.getMinions());
-            builder.setBackupsEnabled(false);
-            builder.setRandom(new Random());
+        int botPlayerIndex = 1;
+        if (!game.isGameOver() && game.getActivePlayerIndex() == botPlayerIndex) {
+            GameSettings settings = new GameSettings();
+            settings.cards = game.getCards();
+            settings.minions = game.getMinions();
+            settings.backupsEnabled = false;
+            settings.random = new Random();
 
             RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(new Random(), 10);
             MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
             botSettings.evaluation = evaluation::evaluate;
-            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(builder.build()), botSettings);
+            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(new Game(settings)), botSettings);
             bot.playTurn(new MoveBotGame(game));
             for (String stat : TimeStats.get().toStatsStrings()) {
                 LoggerFactory.getLogger(CardsApp.class).info(stat);

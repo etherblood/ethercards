@@ -4,6 +4,7 @@ import com.etherblood.a.ai.BotGame;
 import com.etherblood.a.rules.Stopwatch;
 import com.etherblood.a.rules.TimeStats;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     private final Game simulationGame;
     private final Random random;
     private final int strength;
+    private final float raveMultiplier;
 
     public MctsBot(Game simulationGame, MctsBotSettings settings) {
         this.simulationGame = simulationGame;
@@ -36,6 +38,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         this.uctConstant = settings.uctConstant;
         this.firstPlayUrgency = settings.firstPlayUrgency;
         this.evaluation = settings.evaluation;
+        this.raveMultiplier = settings.raveMultiplier;
     }
 
     public void playTurn(Game game) {
@@ -45,6 +48,9 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             int player = game.activePlayerIndex();
             Node rootNode = createNode();
             Map<Move, RaveScore> raveScores = new HashMap<>();
+            RaveScore defaultScore = new RaveScore(simulationGame.playerCount());
+            defaultScore.updateScores(1f / simulationGame.playerCount());
+            raveScores.put(null, defaultScore);
             do {
                 List<Move> moves = new ArrayList<>(game.generateMoves());
                 if (moves.size() > 1) {
@@ -106,6 +112,11 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             for (Move move : movePath) {
                 raveScores.computeIfAbsent(move, x -> new RaveScore(simulationGame.playerCount())).updateScores(result);
             }
+            float[] avgWeights = Arrays.copyOf(result, result.length);
+            for (int i = 0; i < avgWeights.length; i++) {
+                avgWeights[i] *= movePath.size();
+            }
+            raveScores.get(null).updateScores(avgWeights);
         }
     }
 
@@ -143,10 +154,11 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             }
 
             RaveScore raveScore = raveScores.get(move);
-            if (raveScore != null) {
-                float raveValue = raveScore.getScore(playerIndex) / (node.visits() + 1);
-                score += raveValue - 1f / simulationGame.playerCount();
+            if (raveScore == null) {
+                raveScore = raveScores.get(null);
             }
+            float raveValue = raveScore.getScore(playerIndex) / (node.visits() + 1);
+            score += raveMultiplier * raveValue;
 
             if (score > bestValue) {
                 bestMoves.clear();

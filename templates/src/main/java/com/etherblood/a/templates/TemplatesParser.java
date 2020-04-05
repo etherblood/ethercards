@@ -1,9 +1,11 @@
 package com.etherblood.a.templates;
 
 import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.ComponentMeta;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.templates.CardCastBuilder;
+import com.etherblood.a.rules.templates.casteffects.BuffEffect;
 import com.etherblood.a.rules.templates.casteffects.CastEffect;
 import com.etherblood.a.rules.templates.casteffects.SingleTargetDamageEffect;
 import com.etherblood.a.rules.templates.casteffects.SummonEffect;
@@ -32,11 +34,14 @@ public class TemplatesParser {
         Map<String, Class<? extends CastEffect>> classes = new HashMap<>();
         classes.put("summon", SummonEffect.class);
         classes.put("singleTargetDamage", SingleTargetDamageEffect.class);
-        aliasGson = new GsonBuilder().registerTypeAdapter(CastEffect.class, new CastEffectDeserializer(classes, x -> registerIfAbsent(minionAliases, x), x -> registerIfAbsent(cardAliases, x))).create();
-
+        classes.put("buff", BuffEffect.class);
         for (ComponentMeta component : Components.getComponents()) {
             componentAliases.put(component.name, component.id);
         }
+        aliasGson = new GsonBuilder()
+                .registerTypeAdapter(CastEffect.class, new CastEffectDeserializer(classes, x -> registerIfAbsent(minionAliases, x), x -> registerIfAbsent(cardAliases, x)))
+                .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases))
+                .create();
     }
 
     public DisplayCardTemplate getCard(int id) {

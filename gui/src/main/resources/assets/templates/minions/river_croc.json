@@ -1,0 +1,12 @@
+{
+    "alias": "minions/river_croc.json",
+    "display": {
+        "name": "River Crocolisk",
+        "imagePath": null,
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 3
+    }
+}

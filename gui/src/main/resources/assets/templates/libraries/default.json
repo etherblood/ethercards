@@ -2,14 +2,17 @@
     "alias": "libraries/default.json",
     "hero": "minions/shyvana.json",
     "cards": {
-        "cards/goblin.json": 4,
-        "cards/satyr.json": 3,
+        "cards/goblin.json": 2,
+        "cards/satyr.json": 2,
         "cards/orc.json": 2,
         "cards/quickwall.json": 1,
         "cards/bunch_of_gobbos.json": 1,
+        "cards/blessing_of_wisdom.json": 1,
         "cards/omfg_dogs.json": 1,
         "cards/fireball.json": 1,
-        "cards/GOOD.json": 1,
-        "cards/BAD.json": 4
+        "cards/GOOD.json": 0,
+        "cards/river_croc.json": 2,
+        "cards/yeti.json": 1,
+        "cards/BAD.json": 0
     }
 }

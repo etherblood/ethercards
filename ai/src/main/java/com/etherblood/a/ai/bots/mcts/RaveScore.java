@@ -14,6 +14,12 @@ public class RaveScore {
         }
     }
 
+    public void updateScores(float playerScores) {
+        for (int i = 0; i < scores.length; i++) {
+            scores[i] += playerScores;
+        }
+    }
+
     public float getScore(int playerIndex) {
         float sum = 0;
         for (float score : scores) {

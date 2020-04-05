@@ -20,6 +20,7 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.Stopwatch;
 import com.etherblood.a.rules.TimeStats;
 import java.util.ArrayList;
@@ -184,73 +185,75 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
             return moves;
         }
 
-        for (int player : data.list(Components.IN_ATTACK_PHASE)) {
-            if (endedCasting != null && endedCasting == player) {
-                for (int minion : data.list(Components.IN_BATTLE_ZONE)) {
-                    if (game.canDeclareAttack(player, minion)) {
-                        moves.add(new DeclareAttacker(player, minion));
-                    }
-                }
-                moves.add(new EndAttackPhase(player));
-            } else {
-                endedCasting = null;
-                IntList prunedTemplates = new IntList();
-                for (int handCard : data.list(Components.IN_HAND_ZONE)) {
-                    if (pruneDuplicateMoves) {
-                        int template = data.get(handCard, Components.CARD_TEMPLATE);
-                        if (prunedTemplates.contains(template)) {
-                            continue;
+        for (int player : data.list(Components.ACTIVE_PLAYER_PHASE)) {
+            int phase = data.get(player, Components.ACTIVE_PLAYER_PHASE);
+            if (phase == PlayerPhase.ATTACK_PHASE) {
+                if (endedCasting != null && endedCasting == player) {
+                    for (int minion : data.list(Components.IN_BATTLE_ZONE)) {
+                        if (game.canDeclareAttack(player, minion)) {
+                            moves.add(new DeclareAttacker(player, minion));
                         }
-                        prunedTemplates.add(template);
                     }
-                    if (game.canCast(player, handCard, null)) {
-                        moves.add(new UntargetedAttackCast(player, handCard));
-                    } else if (game.canCast(player, handCard)) {
-                        moves.add(new DeclareTargetedAttackCast(player, handCard));
-                    }
-                }
-                moves.add(new EndAttackCasting(player));
-            }
-        }
-
-        for (int player : data.list(Components.IN_BLOCK_PHASE)) {
-            if (endedCasting != null && endedCasting == player) {
-                IntList minions = data.list(Components.IN_BATTLE_ZONE);
-                for (int minion : minions) {
-                    if (game.canBlock(player, minion)) {
-                        moves.add(new DeclareBlocker(player, minion));
-                    }
-                }
-                moves.add(new EndBlockPhase(player));
-            } else {
-                endedCasting = null;
-                IntList prunedTemplates = new IntList();
-                for (int handCard : data.list(Components.IN_HAND_ZONE)) {
-                    if (pruneDuplicateMoves) {
-                        int template = data.get(handCard, Components.CARD_TEMPLATE);
-                        if (prunedTemplates.contains(template)) {
-                            continue;
+                    moves.add(new EndAttackPhase(player));
+                } else {
+                    endedCasting = null;
+                    IntList prunedTemplates = new IntList();
+                    for (int handCard : data.list(Components.IN_HAND_ZONE)) {
+                        if (pruneDuplicateMoves) {
+                            int template = data.get(handCard, Components.CARD_TEMPLATE);
+                            if (prunedTemplates.contains(template)) {
+                                continue;
+                            }
+                            prunedTemplates.add(template);
                         }
-                        prunedTemplates.add(template);
+                        if (game.canCast(player, handCard, null)) {
+                            moves.add(new UntargetedAttackCast(player, handCard));
+                        } else if (game.canCast(player, handCard)) {
+                            moves.add(new DeclareTargetedAttackCast(player, handCard));
+                        }
                     }
-                    if (game.canCast(player, handCard, null)) {
-                        moves.add(new UntargetedBlockCast(player, handCard));
-                    } else if (game.canCast(player, handCard)) {
-                        moves.add(new DeclareTargetedBlockCast(player, handCard));
-                    }
+                    moves.add(new EndAttackCasting(player));
                 }
-                moves.add(new EndBlockCasting(player));
+            } else {
+                if (endedCasting != null && endedCasting == player) {
+                    IntList minions = data.list(Components.IN_BATTLE_ZONE);
+                    for (int minion : minions) {
+                        if (game.canBlock(player, minion)) {
+                            moves.add(new DeclareBlocker(player, minion));
+                        }
+                    }
+                    moves.add(new EndBlockPhase(player));
+                } else {
+                    endedCasting = null;
+                    IntList prunedTemplates = new IntList();
+                    for (int handCard : data.list(Components.IN_HAND_ZONE)) {
+                        if (pruneDuplicateMoves) {
+                            int template = data.get(handCard, Components.CARD_TEMPLATE);
+                            if (prunedTemplates.contains(template)) {
+                                continue;
+                            }
+                            prunedTemplates.add(template);
+                        }
+                        if (game.canCast(player, handCard, null)) {
+                            moves.add(new UntargetedBlockCast(player, handCard));
+                        } else if (game.canCast(player, handCard)) {
+                            moves.add(new DeclareTargetedBlockCast(player, handCard));
+                        }
+                    }
+                    moves.add(new EndBlockCasting(player));
+                }
             }
         }
         return moves;
     }
 
     @Override
-    public void copyStateFrom(MoveGroupBotGame source) {
-        if(game.getCards() != source.game.getCards()) {
+    public void copyStateFrom(MoveGroupBotGame source
+    ) {
+        if (game.getCards() != source.game.getCards()) {
             throw new IllegalArgumentException();
         }
-        if(game.getMinions() != source.game.getMinions()) {
+        if (game.getMinions() != source.game.getMinions()) {
             throw new IllegalArgumentException();
         }
         endedCasting = source.endedCasting;
@@ -259,7 +262,8 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
     }
 
     @Override
-    public String toMoveString(MoveGroup move) {
+    public String toMoveString(MoveGroup move
+    ) {
         if (move instanceof EndAttackCasting) {
             EndAttackCasting end = (EndAttackCasting) move;
             return "EndAttackCasting #" + end.player;

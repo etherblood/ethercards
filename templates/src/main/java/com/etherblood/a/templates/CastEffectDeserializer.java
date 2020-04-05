@@ -1,8 +1,8 @@
 package com.etherblood.a.templates;
 
-import com.etherblood.a.rules.templates.casteffects.CardId;
+import com.etherblood.a.rules.templates.casteffects.filedtypes.CardId;
 import com.etherblood.a.rules.templates.casteffects.CastEffect;
-import com.etherblood.a.rules.templates.casteffects.MinionId;
+import com.etherblood.a.rules.templates.casteffects.filedtypes.MinionId;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-public class CastEffectDeserializer implements JsonDeserializer<CastEffect>{
+public class CastEffectDeserializer implements JsonDeserializer<CastEffect> {
 
     private final Map<String, Class<? extends CastEffect>> classes;
     private final ToIntFunction<String> minionAliases;
@@ -24,7 +24,7 @@ public class CastEffectDeserializer implements JsonDeserializer<CastEffect>{
         this.minionAliases = minionAliases;
         this.cardAliases = cardAliases;
     }
-    
+
     @Override
     public CastEffect deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -32,10 +32,10 @@ public class CastEffectDeserializer implements JsonDeserializer<CastEffect>{
         Class<? extends CastEffect> clazz = classes.get(typeString);
         for (Field field : clazz.getDeclaredFields()) {
             JsonElement fieldJsonValue = jsonObject.get(field.getName());
-            if(field.getType() == int.class) {
-                if(field.getAnnotation(MinionId.class) != null) {
+            if (field.getType() == int.class) {
+                if (field.getAnnotation(MinionId.class) != null) {
                     jsonObject.addProperty(field.getName(), minionAliases.applyAsInt(fieldJsonValue.getAsString()));
-                } else if(field.getAnnotation(CardId.class) != null) {
+                } else if (field.getAnnotation(CardId.class) != null) {
                     jsonObject.addProperty(field.getName(), cardAliases.applyAsInt(fieldJsonValue.getAsString()));
                 }
             }

@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.templates.casteffects;
+package com.etherblood.a.rules.templates.casteffects.filedtypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface MinionId {
+public @interface CardId {
 
 }

@@ -11,11 +11,8 @@ public class Components {
     public static final int HAS_LOST;
     public static final int HAS_WON;
     public static final int PLAYER_INDEX;
-    public static final int START_BLOCK_PHASE;
-    public static final int IN_BLOCK_PHASE;
+    public static final int ACTIVE_PLAYER_PHASE;
     public static final int END_BLOCK_PHASE;
-    public static final int START_ATTACK_PHASE;
-    public static final int IN_ATTACK_PHASE;
     public static final int END_ATTACK_PHASE;
     public static final int HEALTH;
     public static final int ATTACK;
@@ -36,6 +33,9 @@ public class Components {
     public static final int MANA_GROWTH;
     public static final int DRAW_CARDS;
     public static final int DRAWS_PER_TURN;
+    public static final int DRAWS_ON_ATTACK;
+    public static final int DRAWS_ON_BLOCK;
+    public static final int DRAWS_ON_ATTACKED;
     public static final int FATIGUE;
     public static final int TIRED;
     public static final int CARD_TEMPLATE;
@@ -45,11 +45,8 @@ public class Components {
         HAS_LOST = createMeta("HAS_LOST");
         HAS_WON = createMeta("HAS_WON");
         PLAYER_INDEX = createMeta("PLAYER_INDEX");
-        START_BLOCK_PHASE = createMeta("START_BLOCK_PHASE");
-        IN_BLOCK_PHASE = createMeta("IN_BLOCK_PHASE");
+        ACTIVE_PLAYER_PHASE = createMeta("ACTIVE_PLAYER_PHASE");
         END_BLOCK_PHASE = createMeta("END_BLOCK_PHASE");
-        START_ATTACK_PHASE = createMeta("START_ATTACK_PHASE");
-        IN_ATTACK_PHASE = createMeta("IN_ATTACK_PHASE");
         END_ATTACK_PHASE = createMeta("END_ATTACK_PHASE");
         HEALTH = createMeta("HEALTH");
         ATTACK = createMeta("ATTACK");
@@ -68,8 +65,11 @@ public class Components {
         MANA = createMeta("MANA");
         MANA_POOL = createMeta("MANA_POOL");
         MANA_GROWTH = createMeta("MANA_GROWTH");
-        DRAWS_PER_TURN = createMeta("DRAWS_PER_TURN");
         DRAW_CARDS = createMeta("DRAW_CARDS");
+        DRAWS_PER_TURN = createMeta("DRAWS_PER_TURN");
+        DRAWS_ON_ATTACK = createMeta("DRAWS_ON_ATTACK");
+        DRAWS_ON_BLOCK = createMeta("DRAWS_ON_BLOCK");
+        DRAWS_ON_ATTACKED = createMeta("DRAWS_ON_ATTACKED");
         FATIGUE = createMeta("FATIGUE");
         TIRED = createMeta("TIRED");
         CARD_TEMPLATE = createMeta("CARD_TEMPLATE");

@@ -11,6 +11,7 @@ public class MctsBotSettings<Move, Game extends BotGame<Move, Game>> {
     public boolean verbose = false;
     public int strength = 10_000;
     public float uctConstant = 2;
+    public float raveMultiplier = 1;
     public float firstPlayUrgency = 10;
     public Random random = new SecureRandom();
     public Function<Game, float[]> evaluation = this::evaluate;

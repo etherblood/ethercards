@@ -8,7 +8,7 @@ import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.GameBuilder;
+import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.templates.CardCastBuilder;
@@ -32,20 +32,21 @@ public class Sandbox {
     public void testGame() {
         float[] result = new float[2];
         long[] nanos = new long[2];
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             Game game = startGame();
 
+            RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(random, 10);
             MctsBotSettings<Move, MoveBotGame> settings0 = new MctsBotSettings<>();
             settings0.strength = 1000;
+            settings0.evaluation = evaluation::evaluate;
             MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(copySettings(game)), settings0);
-            RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(random, 10);
             MctsBotSettings<Move, MoveBotGame> settings1 = new MctsBotSettings<>();
             settings1.strength = 1000;
             settings1.evaluation = evaluation::evaluate;
             MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(copySettings(game)), settings1);
 
             while (!game.isGameOver()) {
-                if (game.getActivePlayer() == game.getPlayers()[0]) {
+                if (game.getActivePlayerIndex() == 0) {
                     long start = System.nanoTime();
                     bot0.playTurn(new MoveBotGame(game));
                     nanos[0] += System.nanoTime() - start;
@@ -55,9 +56,9 @@ public class Sandbox {
                     nanos[1] += System.nanoTime() - start;
                 }
             }
-            if (game.hasPlayerWon(game.getPlayers()[0])) {
+            if (game.hasPlayerWon(game.findPlayerByIndex(0))) {
                 result[0]++;
-            } else if (game.hasPlayerWon(game.getPlayers()[1])) {
+            } else if (game.hasPlayerWon(game.findPlayerByIndex(1))) {
                 result[1]++;
             } else {
                 result[0] += 0.5f;
@@ -68,12 +69,12 @@ public class Sandbox {
     }
 
     private Game copySettings(Game game) {
-        GameBuilder builder = new GameBuilder();
-        builder.setBackupsEnabled(false);
-        builder.setRandom(random);
-        builder.setCards(game.getCards());
-        builder.setMinions(game.getMinions());
-        return builder.build();
+        GameSettings settings = new GameSettings();
+        settings.backupsEnabled = false;
+        settings.random = random;
+        settings.cards = game.getCards();
+        settings.minions = game.getMinions();
+        return new Game(settings);
     }
 
     private Game startGame() {
@@ -107,22 +108,22 @@ public class Sandbox {
         heroBuilder.set(Components.MANA_GROWTH, 1);
         minions.put(minions.size(), heroBuilder.build());
 
-        SimpleSetup setup = new SimpleSetup();
+        SimpleSetup setup = new SimpleSetup(2);
         IntList library = new IntList();
         for (int i = 0; i < 20; i++) {
             library.add(i % cards.size());
         }
-        setup.setLibrary0template(library);
-        setup.setLibrary1template(library);
-        setup.setHero0template(minions.size() - 1);
-        setup.setHero1template(minions.size() - 1);
+        setup.setLibrary(0, library);
+        setup.setLibrary(1, library);
+        setup.setHero(0, minions.size() - 1);
+        setup.setHero(1, minions.size() - 1);
 
-        GameBuilder builder = new GameBuilder();
-        builder.setBackupsEnabled(false);
-        builder.setRandom(random);
-        builder.setCards(cards::get);
-        builder.setMinions(minions::get);
-        Game game = builder.build();
+        GameSettings settings = new GameSettings();
+        settings.backupsEnabled = false;
+        settings.random = random;
+        settings.cards = cards::get;
+        settings.minions = minions::get;
+        Game game = new Game(settings);
         setup.apply(game);
         game.start();
         return game;
