@@ -64,12 +64,12 @@
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui</artifactId>
-            <version>d1a6585a4e38d59d94d40a2bb8bbdca42f4ec039</version>
+            <version>0ae949fd5ce4718e9c22d960ddb291b37fe3c59a</version>
         </dependency>
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui-samples</artifactId>
-            <version>d1a6585a4e38d59d94d40a2bb8bbdca42f4ec039</version>
+            <version>0ae949fd5ce4718e9c22d960ddb291b37fe3c59a</version>
         </dependency>
         <dependency>
             <groupId>${jm3.group}</groupId>

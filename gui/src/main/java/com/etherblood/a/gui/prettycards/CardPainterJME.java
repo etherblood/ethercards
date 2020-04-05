@@ -1,6 +1,6 @@
 package com.etherblood.a.gui.prettycards;
 
-import com.destrostudios.cardgui.samples.visualisation.PaintableImage;
+import com.destrostudios.cardgui.samples.visualization.PaintableImage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -32,7 +32,7 @@ public class CardPainterJME {
         BufferedImage bufferedImage = new BufferedImage(paintableImage.getWidth(), paintableImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = (Graphics2D) bufferedImage.getGraphics();
         painter.accept(graphics);
-        paintableImage.loadImage(bufferedImage, true);
+        paintableImage.loadImage(bufferedImage, false);
         return paintableImage;
     }
 }

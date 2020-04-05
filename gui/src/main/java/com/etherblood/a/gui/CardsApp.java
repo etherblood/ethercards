@@ -19,7 +19,7 @@ import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.Connectio
 import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.ConnectionMarkerVisualizer;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
-import com.destrostudios.cardgui.samples.visualisation.DebugZoneVisualizer;
+import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
@@ -66,7 +66,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -185,9 +185,10 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         board.registerVisualizer_Class(CardZone.class, new DebugZoneVisualizer() {
 
             @Override
-            public void createVisualisation(Node node, AssetManager assetManager) {
-                super.createVisualisation(node, assetManager);
-                node.setCullHint(Spatial.CullHint.Always);
+            protected Geometry createVisualizationObject(AssetManager assetManager) {
+                Geometry geometry = super.createVisualizationObject(assetManager);
+                geometry.setCullHint(Spatial.CullHint.Always);
+                return geometry;
             }
 
             @Override
@@ -205,8 +206,8 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             }
         });
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(new CardImages(assetManager)));
-        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new IngameCardVisualizer(cardPainterJME));
-        board.registerVisualizer(card -> card.getModel() instanceof MinionModel, new IngameMinionVisualizer(cardPainterJME));
+        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new CardVisualizer_Card(cardPainterJME));
+        board.registerVisualizer(card -> card.getModel() instanceof MinionModel, new CardVisualizer_Minion(cardPainterJME));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
                 .color(ColorRGBA.White)
                 .width(0.5f)
