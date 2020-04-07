@@ -198,7 +198,10 @@ public class TemplatesParser {
 
         JsonObject components = minionJson.getAsJsonObject("components");
         for (Map.Entry<String, JsonElement> entry : components.entrySet()) {
-            int component = componentAliases.get(entry.getKey());
+            Integer component = componentAliases.get(entry.getKey());
+            if (component == null) {
+                throw new NullPointerException("No component found for alias " + alias + ".");
+            }
             JsonElement value = entry.getValue();
             if (value.isJsonNull()) {
                 builder.remove(component);

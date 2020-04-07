@@ -9,6 +9,7 @@
         "ATTACK": 0,
         "HEALTH": 20,
         "TIRED": 2,
-        "MANA_GROWTH": 1
+        "MANA_GROWTH": 1,
+        "HERO": 1
     }
 }

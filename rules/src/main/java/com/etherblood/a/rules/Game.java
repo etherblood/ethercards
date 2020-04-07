@@ -7,6 +7,7 @@ import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.systems.*;
 import com.etherblood.a.rules.templates.MinionTemplate;
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,6 @@ public class Game {
     private final List<AbstractSystem> blockSystems;
     private final List<AbstractSystem> castSystems;
     private final List<AbstractSystem> surrenderSystems;
-    private final List<AbstractSystem> generalSystems;
     private final IntFunction<CardTemplate> cards;
     private final IntFunction<MinionTemplate> minions;
     private final boolean backupsEnabled;
@@ -39,25 +39,33 @@ public class Game {
         this.minions = Objects.requireNonNull(settings.minions);
         this.backupsEnabled = settings.backupsEnabled;
         data = new SimpleEntityData(Components.count());
-        generalSystems = Arrays.asList(
+        List<AbstractSystem> generalSystems = Arrays.asList(
                 new DrawSystem(),
                 new DamageSystem(),
                 new DeathSystem(),
                 new PlayerStatusSystem()
         );
-        endBlockPhaseSystems = Arrays.asList(
-                new EndBlockPhaseSystem()
-        );
-        endAttackPhaseSystems = Arrays.asList(
-                new EndAttackPhaseSystem()
-        );
-        blockSystems = Arrays.asList(
-                new BlockSystem()
-        );
-        castSystems = Arrays.asList(
-                new CastSystem(cards)
-        );
-        surrenderSystems = Arrays.asList();
+        endBlockPhaseSystems = new ArrayList<>();
+        endBlockPhaseSystems.add(new EndBlockPhaseBattleSystem());
+        endBlockPhaseSystems.addAll(generalSystems);
+        endBlockPhaseSystems.add(new UpkeepSystem());
+        endBlockPhaseSystems.addAll(generalSystems);
+
+        endAttackPhaseSystems = new ArrayList<>();
+        endAttackPhaseSystems.add(new EndAttackPhaseSystem());
+        endAttackPhaseSystems.addAll(generalSystems);
+        
+        blockSystems = new ArrayList<>();
+        blockSystems.add(new BlockSystem());
+        blockSystems.addAll(generalSystems);
+        
+        castSystems = new ArrayList<>();
+        castSystems.add(new CastSystem(cards));
+        castSystems.addAll(generalSystems);
+        
+        surrenderSystems = new ArrayList<>();
+        surrenderSystems.addAll(generalSystems);
+        
         int[] players = new int[settings.playerCount];
         int startingPlayerIndex = random.nextInt(players.length);
         for (int i = 0; i < players.length; i++) {
@@ -128,7 +136,6 @@ public class Game {
         runWithBackup(() -> {
             data.set(player, Components.END_ATTACK_PHASE, 1);
             runSystems(endAttackPhaseSystems);
-            runSystems(generalSystems);
         });
     }
 
@@ -157,7 +164,6 @@ public class Game {
         runWithBackup(() -> {
             data.set(player, Components.END_BLOCK_PHASE, 1);
             runSystems(endBlockPhaseSystems);
-            runSystems(generalSystems);
         });
     }
 
@@ -259,7 +265,6 @@ public class Game {
             data.set(blocker, Components.BLOCKS_ATTACKER, attacker);
             data.set(blocker, Components.TIRED, 1);
             runSystems(blockSystems);
-            runSystems(generalSystems);
         });
     }
 
@@ -351,7 +356,6 @@ public class Game {
         runWithBackup(() -> {
             data.set(castable, Components.CAST_TARGET, target != null ? target : ~0);
             runSystems(castSystems);
-            runSystems(generalSystems);
         });
     }
 
@@ -454,7 +458,6 @@ public class Game {
         runWithBackup(() -> {
             data.set(player, Components.HAS_LOST, 1);
             runSystems(surrenderSystems);
-            runSystems(generalSystems);
         });
     }
 

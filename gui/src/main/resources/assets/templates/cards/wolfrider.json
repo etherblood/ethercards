@@ -1,0 +1,18 @@
+{
+    "alias": "cards/wolfrider.json",
+    "display": {
+        "name": "Wolfrider",
+        "imagePath": null,
+        "colors": ["RED"],
+        "description": "Summon a 3/1 wolfrider with charge."
+    },
+    "attackCast": {
+        "manaCost": 3,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/wolfrider.json"
+            }
+        ]
+    }
+}

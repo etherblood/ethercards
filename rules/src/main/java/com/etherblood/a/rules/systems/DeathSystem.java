@@ -24,7 +24,9 @@ public class DeathSystem extends AbstractSystem {
             data.remove(entity, Components.ATTACK);
             data.remove(entity, Components.HEALTH);
             data.remove(entity, Components.TIRED);
+            data.remove(entity, Components.HERO);
             // TODO: full cleanup
+            
             for (int attacker : data.list(Components.ATTACKS_TARGET)) {
                 int target = data.get(attacker, Components.ATTACKS_TARGET);
                 if (target == entity) {

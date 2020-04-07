@@ -5,29 +5,13 @@ import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.systems.util.SystemsUtil;
 
-public class EndBlockPhaseSystem extends AbstractSystem {
+public class UpkeepSystem extends AbstractSystem {
 
     @Override
     public void run(Game game, EntityData data) {
         for (int player : data.list(Components.END_BLOCK_PHASE)) {
             data.remove(player, Components.END_BLOCK_PHASE);
-            for (int attacker : data.list(Components.ATTACKS_TARGET)) {
-                int attackTarget = data.get(attacker, Components.ATTACKS_TARGET);
-                if (data.hasValue(attackTarget, Components.OWNED_BY, player)) {
-                    if (data.has(attackTarget, Components.IN_BATTLE_ZONE)) {
-                        SystemsUtil.fight(data, attacker, attackTarget);
-
-                        data.getOptional(attackTarget, Components.DRAWS_ON_ATTACKED).ifPresent(draws -> {
-                            int owner = data.get(attackTarget, Components.OWNED_BY);
-                            SystemsUtil.increase(data, owner, Components.DRAW_CARDS, draws);
-                        });
-                    }
-                    data.remove(attacker, Components.ATTACKS_TARGET);
-                }
-            }
-
             data.set(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE);
 
             int mana = 0;

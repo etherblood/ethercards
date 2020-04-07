@@ -1,0 +1,12 @@
+{
+    "alias": "minions/ornithopter.json",
+    "display": {
+        "name": "Ornithopter",
+        "imagePath": null,
+        "colors": ["NEUTRAL"]
+    },
+    "components": {
+        "ATTACK": 0,
+        "HEALTH": 2
+    }
+}

@@ -18,6 +18,8 @@ public class PlayerStatusSystem extends AbstractSystem {
             if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
                 nextTurn(data, player);
                 data.remove(player, Components.ACTIVE_PLAYER_PHASE);
+                data.remove(player, Components.END_BLOCK_PHASE);
+                data.remove(player, Components.END_ATTACK_PHASE);
             }
         }
     }
@@ -31,9 +33,9 @@ public class PlayerStatusSystem extends AbstractSystem {
 
     private void updatePlayerDeaths(EntityData data) {
         IntList players = data.list(Components.PLAYER_INDEX);
-        IntList minions = data.list(Components.IN_BATTLE_ZONE);
+        IntList heroes = data.list(Components.HERO);
         IntList alive = new IntList();
-        for (int minion : minions) {
+        for (int minion : heroes) {
             int owner = data.get(minion, Components.OWNED_BY);
             if (!alive.contains(owner)) {
                 alive.add(owner);
