@@ -20,17 +20,21 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MctsBot.class);
     private static final float EPSILON = 1e-6f;
+
     private final boolean verbose;
     private final float uctConstant;
     private final float firstPlayUrgency;
     private final Function<Game, float[]> evaluation;
 
-    private final Game simulationGame;
+    private final Game sourceGame, simulationGame;
     private final Random random;
     private final int strength;
     private final float raveMultiplier;
 
-    public MctsBot(Game simulationGame, MctsBotSettings settings) {
+    private Node<Move> rootNode;
+
+    public MctsBot(Game sourceGame, Game simulationGame, MctsBotSettings settings) {
+        this.sourceGame = sourceGame;
         this.simulationGame = simulationGame;
         this.random = settings.random;
         this.strength = settings.strength;
@@ -39,54 +43,65 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         this.firstPlayUrgency = settings.firstPlayUrgency;
         this.evaluation = settings.evaluation;
         this.raveMultiplier = settings.raveMultiplier;
+
+        rootNode = createNode();
     }
 
-    public void playTurn(Game game) {
-        int iterations = 0;
-        long start = System.nanoTime();
-        try ( Stopwatch stopwatch = TimeStats.get().time("MctsBot")) {
-            int player = game.activePlayerIndex();
-            Node rootNode = createNode();
-            Map<Move, RaveScore> raveScores = new HashMap<>();
-            RaveScore defaultScore = new RaveScore(simulationGame.playerCount());
-            defaultScore.updateScores(1f / simulationGame.playerCount());
-            raveScores.put(null, defaultScore);
-            do {
-                List<Move> moves = new ArrayList<>(game.generateMoves());
-                if (moves.size() > 1) {
-                    while (rootNode.visits() < strength) {
-                        try ( Stopwatch resetStopwatch = TimeStats.get().time("MctsBot.resetSimulation()")) {
-                            simulationGame.copyStateFrom(game);
-                        }
-                        try ( Stopwatch randomizeStopwatch = TimeStats.get().time("MctsBot.initializeOpponentHandCards()")) {
-                            // randomize opponents hand cards
-                            // TODO: use a priori knowlege for better approximation of real hand cards
-                            // TODO: the simulated opponent also only 'knows' our hand...
-                            simulationGame.randomizeHiddenInformation(random);
-                        }
-                        try ( Stopwatch iterateStopwatch = TimeStats.get().time("MctsBot.iteration()")) {
-                            iteration(rootNode, raveScores);
-                        }
-                        iterations++;
-                    }
-
-                    Node node = rootNode;
-                    moves.sort(Comparator.comparingDouble(move -> -node.getChild(move).visits()));
-                    if (verbose) {
-                        LOG.info("Move scores:");
-                        for (Move move : moves) {
-                            LOG.info("{}: {}", node.getChild(move).visits(), game.toMoveString(move));
-                        }
-                        LOG.info("Expected winrate: {}%", (int) (100 * rootNode.score(game.activePlayerIndex()) / rootNode.visits()));
-                    }
+    public Move findBestMove() {
+        List<Move> moves = new ArrayList<>(sourceGame.generateMoves());
+        if (moves.size() > 1) {
+            Map<Move, RaveScore> raveScores = initRaveScores();
+            
+            while (rootNode.visits() < strength) {
+                try ( Stopwatch resetStopwatch = TimeStats.get().time("MctsBot.resetSimulation()")) {
+                    simulationGame.copyStateFrom(sourceGame);
                 }
-                Move move = moves.get(0);
-                game.applyMove(move);
-                rootNode = rootNode.getChildOrDefault(move, createNode());
-            } while (!game.isGameOver() && player == game.activePlayerIndex());
+                try ( Stopwatch randomizeStopwatch = TimeStats.get().time("MctsBot.initializeOpponentHandCards()")) {
+                    // randomize opponents hand cards
+                    // TODO: use a priori knowlege for better approximation of real hand cards
+                    // TODO: the simulated opponent also only 'knows' our hand...
+                    simulationGame.randomizeHiddenInformation(random);
+                }
+                try ( Stopwatch iterateStopwatch = TimeStats.get().time("MctsBot.iteration()")) {
+                    iteration(rootNode, raveScores);
+                }
+            }
+
+            Node node = rootNode;
+            moves.sort(Comparator.comparingDouble(move -> -node.getChild(move).visits()));
+            if (verbose) {
+                LOG.info("Move scores:");
+                for (Move move : moves) {
+                    LOG.info("{}: {}", node.getChild(move).visits(), sourceGame.toMoveString(move));
+                }
+                LOG.info("Expected winrate: {}%", (int) (100 * rootNode.score(sourceGame.activePlayerIndex()) / rootNode.visits()));
+            }
         }
-        if (verbose) {
-            LOG.info("Total of {} iterations for turn in {}.", iterations, TimeStats.humanReadableNanos(System.nanoTime() - start));
+        return moves.get(0);
+    }
+
+    public void onMove(Move move) {
+        //TODO: would be nice if there was a move history which could be used instead, making this method obsolete
+        rootNode = rootNode.getChildOrDefault(move, createNode());
+    }
+
+    private Map<Move, RaveScore> initRaveScores() {
+        Map<Move, RaveScore> raveScores = new HashMap<>();
+        RaveScore defaultScore = new RaveScore(simulationGame.playerCount());
+        defaultScore.updateScores(1f / simulationGame.playerCount());
+        raveScores.put(null, defaultScore);
+        initRaveScores(raveScores, rootNode);
+        return raveScores;
+    }
+    
+    private void initRaveScores(Map<Move, RaveScore> raveScores, Node<Move> node) {
+        for (Move move : node.getMoves()) {
+            Node<Move> child = node.getChildOrDefault(move, null);
+            if(child != null) {
+                raveScores.computeIfAbsent(move, x -> new RaveScore(simulationGame.playerCount())).updateScores(child.getScores());
+                raveScores.get(null).updateScores(child.getScores());
+                initRaveScores(raveScores, child);
+            }
         }
     }
 

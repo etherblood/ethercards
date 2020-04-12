@@ -23,25 +23,17 @@ public class Game {
 
     private static final Logger LOG = LoggerFactory.getLogger(Game.class);
 
-    private final Random random;
+    private final GameSettings settings;
     private final EntityData data;
     private final List<AbstractSystem> endAttackPhaseSystems;
     private final List<AbstractSystem> endBlockPhaseSystems;
     private final List<AbstractSystem> blockSystems;
     private final List<AbstractSystem> castSystems;
     private final List<AbstractSystem> surrenderSystems;
-    private final IntFunction<CardTemplate> cards;
-    private final IntFunction<MinionTemplate> minions;
-    private final boolean backupsEnabled;
-    private final List<AbstractSystem> generalSystems;
 
     public Game(GameSettings settings) {
-        random = Objects.requireNonNull(settings.random, "Random missing.");
-        cards = Objects.requireNonNull(settings.cards, "Card templates missing.");
-        minions = Objects.requireNonNull(settings.minions, "Minion templates missing.");
-        backupsEnabled = settings.backupsEnabled;
+        this.settings = Objects.requireNonNull(settings, "Settings must not be null.");
         data = new SimpleEntityData(Objects.requireNonNull(settings.components, "Components missing."));
-        generalSystems = Collections.unmodifiableList(new ArrayList<>(settings.generalSystems));
         Components components = data.getComponents();
         CoreComponents core = Objects.requireNonNull(components.getModule(CoreComponents.class), "Core component module missing.");
 
@@ -60,14 +52,14 @@ public class Game {
         blockSystems.addAll(settings.generalSystems);
 
         castSystems = new ArrayList<>();
-        castSystems.add(new CastSystem(cards));
+        castSystems.add(new CastSystem(settings.cards));
         castSystems.addAll(settings.generalSystems);
 
         surrenderSystems = new ArrayList<>();
         surrenderSystems.addAll(settings.generalSystems);
 
         int[] players = new int[settings.playerCount];
-        int startingPlayerIndex = random.nextInt(players.length);
+        int startingPlayerIndex = settings.random.nextInt(players.length);
         for (int i = 0; i < players.length; i++) {
             players[i] = data.createEntity();
             data.set(players[i], core.PLAYER_INDEX, i);
@@ -85,7 +77,7 @@ public class Game {
     }
 
     public Random getRandom() {
-        return random;
+        return settings.random;
     }
 
     public EntityData getData() {
@@ -93,11 +85,11 @@ public class Game {
     }
 
     public IntFunction<CardTemplate> getCards() {
-        return cards;
+        return settings.cards;
     }
 
     public IntFunction<MinionTemplate> getMinions() {
-        return minions;
+        return settings.minions;
     }
 
     public int findPlayerByIndex(int playerIndex) {
@@ -391,7 +383,7 @@ public class Game {
             }
             return false;
         }
-        CardTemplate template = cards.apply(data.get(castable, core().CARD_TEMPLATE));
+        CardTemplate template = settings.cards.apply(data.get(castable, core().CARD_TEMPLATE));
         CardCast cast;
         OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
@@ -433,7 +425,7 @@ public class Game {
     }
 
     private boolean validateCanCast(int player, int castable, int target, boolean throwOnFail) {
-        CardTemplate template = cards.apply(data.get(castable, core().CARD_TEMPLATE));
+        CardTemplate template = settings.cards.apply(data.get(castable, core().CARD_TEMPLATE));
         OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
             CardCast cast;
@@ -487,7 +479,7 @@ public class Game {
     }
 
     private void runWithBackup(Runnable runnable) {
-        if (!backupsEnabled) {
+        if (!settings.backupsEnabled) {
             runnable.run();
             return;
         }
@@ -578,8 +570,8 @@ public class Game {
         return true;
     }
 
-    public List<AbstractSystem> getGeneralSystems() {
-        return generalSystems;
+    public GameSettings getSettings() {
+        return settings;
     }
 
     private CoreComponents core() {

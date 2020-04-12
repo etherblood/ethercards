@@ -24,6 +24,10 @@ public class Node<T> {
         return sum;
     }
 
+    public float[] getScores() {
+        return scores;
+    }
+
     public float score(int playerIndex) {
         return scores[playerIndex];
     }

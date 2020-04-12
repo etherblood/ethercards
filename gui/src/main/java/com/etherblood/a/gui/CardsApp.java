@@ -43,6 +43,7 @@ import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.GameSettingsBuilder;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.setup.SimpleSetup;
@@ -150,16 +151,17 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void initGame() {
-        GameSettings settings = new GameSettings();
+        GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
-        settings.components = componentsBuilder.build();
-        TemplatesParser templatesParser = new TemplatesParser(settings.components);
+        settingsBuilder.components = componentsBuilder.build();
+        TemplatesParser templatesParser = new TemplatesParser(settingsBuilder.components);
         TemplatesLoader loader = new TemplatesLoader(x -> assetManager.loadAsset(new AssetKey<>("templates/" + x)), templatesParser);
         LibraryTemplate lib0 = loader.loadLibrary("libraries/default.json");
         LibraryTemplate lib1 = loader.loadLibrary("libraries/default.json");
-        settings.cards = loader::getCard;
-        settings.minions = loader::getMinion;
+        settingsBuilder.cards = loader::getCard;
+        settingsBuilder.minions = loader::getMinion;
+        GameSettings settings = settingsBuilder.build();
         game = new Game(settings);
         SimpleSetup setup = new SimpleSetup(settings.playerCount);
         setup.setHero(0, lib0.hero);
@@ -537,19 +539,16 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     private void applyAI() {
         int botPlayerIndex = 1;
         if (!game.isGameOver() && game.getActivePlayerIndex() == botPlayerIndex) {
-            GameSettings settings = new GameSettings();
-            settings.cards = game.getCards();
-            settings.minions = game.getMinions();
-            settings.backupsEnabled = false;
-            settings.random = new Random();
-            settings.components = game.getData().getComponents();
-            settings.generalSystems = game.getGeneralSystems();
-
             RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(new Random(), 10);
             MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
+            botSettings.verbose = true;
             botSettings.evaluation = evaluation::evaluate;
-            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(new Game(settings)), botSettings);
-            bot.playTurn(new MoveBotGame(game));
+            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(game.getSettings())), botSettings);
+            while (!game.isGameOver() && game.getActivePlayerIndex() == botPlayerIndex) {
+                Move move = bot.findBestMove();
+                move.apply(game);
+                bot.onMove(move);
+            }
             for (String stat : TimeStats.get().toStatsStrings()) {
                 LoggerFactory.getLogger(CardsApp.class).info(stat);
             }

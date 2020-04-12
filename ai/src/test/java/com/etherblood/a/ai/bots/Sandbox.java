@@ -11,6 +11,7 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.GameSettingsBuilder;
 import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.templates.CardCastBuilder;
@@ -70,29 +71,34 @@ public class Sandbox {
     public void testGame() {
         float[] result = new float[2];
         long[] nanos = new long[2];
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             Game game = startGame();
 
             RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(random, 10);
             MctsBotSettings<Move, MoveBotGame> settings0 = new MctsBotSettings<>();
             settings0.strength = 1000;
             settings0.evaluation = evaluation::evaluate;
-            MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(copySettings(game)), settings0);
+            MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(newInstance(game)), settings0);
             MctsBotSettings<Move, MoveBotGame> settings1 = new MctsBotSettings<>();
             settings1.strength = 1000;
             settings1.evaluation = evaluation::evaluate;
-            MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(copySettings(game)), settings1);
+            MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(newInstance(game)), settings1);
 
             while (!game.isGameOver()) {
+                Move move;
                 if (game.getActivePlayerIndex() == 0) {
                     long start = System.nanoTime();
-                    bot0.playTurn(new MoveBotGame(game));
+                    move = bot0.findBestMove();
                     nanos[0] += System.nanoTime() - start;
+
                 } else {
                     long start = System.nanoTime();
-                    bot1.playTurn(new MoveBotGame(game));
+                    move = bot1.findBestMove();
                     nanos[1] += System.nanoTime() - start;
                 }
+                move.apply(game);
+                bot0.onMove(move);
+                bot1.onMove(move);
             }
             if (game.hasPlayerWon(game.findPlayerByIndex(0))) {
                 result[0]++;
@@ -106,19 +112,12 @@ public class Sandbox {
         }
     }
 
-    private Game copySettings(Game game) {
-        GameSettings settings = new GameSettings();
-        settings.backupsEnabled = false;
-        settings.random = random;
-        settings.cards = game.getCards();
-        settings.minions = game.getMinions();
-        settings.components = game.getData().getComponents();
-        settings.generalSystems = game.getGeneralSystems();
-        return new Game(settings);
+    private Game newInstance(Game game) {
+        return new Game(game.getSettings());
     }
 
     private Game startGame() {
-        GameSettings settings = new GameSettings();
+        GameSettingsBuilder settings = new GameSettingsBuilder();
         CoreComponents core = components.getModule(CoreComponents.class);
         settings.backupsEnabled = false;
         settings.random = random;
@@ -134,7 +133,7 @@ public class Sandbox {
         MinionTemplate hero = heroBuilder.build(minions.size());
         minions.put(hero.getId(), hero);
 
-        SimpleSetup setup = new SimpleSetup(2);
+        SimpleSetup setup = new SimpleSetup(settings.playerCount);
         IntList library = new IntList();
         for (int i = 0; i < 20; i++) {
             library.add(i % cards.size());
@@ -144,7 +143,7 @@ public class Sandbox {
         setup.setHero(0, minions.size() - 1);
         setup.setHero(1, minions.size() - 1);
 
-        Game game = new Game(settings);
+        Game game = new Game(settings.build());
         setup.apply(game);
         game.start();
         return game;
