@@ -28,4 +28,6 @@ public interface EntityData {
     void remove(int entity, int component);
 
     IntList list(int component);
+    
+    Components getComponents();
 }

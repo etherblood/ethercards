@@ -1,7 +1,6 @@
 package com.etherblood.a.gui.prettycards;
 
 import com.destrostudios.cardgui.BoardObjectModel;
-import com.etherblood.a.rules.Components;
 import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.jme3.math.ColorRGBA;
 import java.util.Objects;
@@ -10,7 +9,7 @@ public class MinionModel extends BoardObjectModel {
 
     private DisplayMinionTemplate template;
     private int entityId, attack, health;
-    private boolean faceUp;
+    private boolean faceUp, damaged;
     private ColorRGBA glow;
 
     public boolean isFaceUp() {
@@ -54,8 +53,12 @@ public class MinionModel extends BoardObjectModel {
         updateIfNotEquals(this.health, health, () -> this.health = health);
     }
 
+    public void setDamaged(boolean damaged) {
+        updateIfNotEquals(this.damaged, damaged, () -> this.damaged = damaged);
+    }
+
     public boolean isDamaged() {
-        return getHealth() < template.get(Components.HEALTH);
+        return damaged;
     }
 
     public ColorRGBA getGlow() {

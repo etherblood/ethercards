@@ -2,7 +2,7 @@
     "alias": "cards/yeti.json",
     "display": {
         "name": "Yeti",
-        "imagePath": null,
+        "imagePath": "images/cards/Chillwind_Yeti_(art).jpg",
         "colors": ["BLUE"],
         "description": "Summon a 4/5 yeti."
     },

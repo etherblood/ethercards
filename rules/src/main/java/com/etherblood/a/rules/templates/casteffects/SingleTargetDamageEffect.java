@@ -4,7 +4,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 
-public class SingleTargetDamageEffect extends CastEffect {
+public class SingleTargetDamageEffect extends Effect {
 
     public final int damage;
 
@@ -13,7 +13,7 @@ public class SingleTargetDamageEffect extends CastEffect {
     }
 
     @Override
-    public void cast(Game game, EntityData data, int source, int target) {
+    public void apply(Game game, EntityData data, int source, int target) {
         SystemsUtil.damage(data, target, damage);
     }
 }

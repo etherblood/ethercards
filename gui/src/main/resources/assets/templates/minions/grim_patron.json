@@ -2,14 +2,18 @@
     "alias": "minions/grim_patron.json",
     "display": {
         "name": "Grim Patron",
-        "imagePath": null,
-        "colors": ["BLACK"]
+        "imagePath": "images/cards/Grim_Patron_art.jpg",
+        "colors": ["RED"]
     },
+    "onSurvive": [
+        {
+            "type": "summon",
+            "minionId": "minions/grim_patron.json"
+        }
+    ],
     "components": {
         "ATTACK": 3,
         "HEALTH": 3,
-        "SUMMON_ON_SURVIVAL": {
-            "minion": "minions/grim_patron.json"
-        }
+        "SUMMONING_SICKNESS": 1
     }
 }

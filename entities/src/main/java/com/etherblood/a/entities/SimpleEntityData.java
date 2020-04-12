@@ -12,10 +12,12 @@ public class SimpleEntityData implements EntityData {
 
     private int nextId = 1;
     private final IntMap[] map;
+    private final Components components;
 
-    public SimpleEntityData(int componentCount) {
-        this.map = new IntMap[componentCount];
-        for (int component = 0; component < componentCount; component++) {
+    public SimpleEntityData(Components components) {
+        this.components = components;
+        this.map = new IntMap[components.size()];
+        for (int component = 0; component < components.size(); component++) {
             map[component] = new IntMap();
         }
     }
@@ -61,9 +63,15 @@ public class SimpleEntityData implements EntityData {
 
     @Override
     public IntList list(int component) {
+        IntMap componentMaps = component(component);
+        if (componentMaps.isEmpty()) {
+            return new IntList(0);
+        }
         IntList list = new IntList();
-        component(component).foreachKey(list::add);
-        list.sort();
+        componentMaps.foreachKey(list::add);
+        if (list.size() > 1) {
+            list.sort();
+        }
         return list;
     }
 
@@ -73,5 +81,10 @@ public class SimpleEntityData implements EntityData {
 
     public void setNextId(int nextId) {
         this.nextId = nextId;
+    }
+
+    @Override
+    public Components getComponents() {
+        return components;
     }
 }

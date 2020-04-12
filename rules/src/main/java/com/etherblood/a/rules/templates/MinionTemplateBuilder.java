@@ -1,27 +1,31 @@
 package com.etherblood.a.rules.templates;
 
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.templates.casteffects.Effect;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MinionTemplateBuilder {
 
-    private static final IntMap DEFAULT_COMPONENTS;
-
-    protected final int id;
+    protected final CoreComponents core;
     protected final IntMap components = new IntMap();
+    protected final List<Effect> onDeathEffects = new ArrayList<>();
+    protected final List<Effect> onSurviveEffects = new ArrayList<>();
 
-    static {
-        DEFAULT_COMPONENTS = new IntMap();
-        DEFAULT_COMPONENTS.set(Components.ATTACK, 0);
-        DEFAULT_COMPONENTS.set(Components.HEALTH, 0);
-        DEFAULT_COMPONENTS.set(Components.TIRED, 1);
+    public MinionTemplateBuilder(CoreComponents core) {
+        this.core = core;
+        components.set(core.ATTACK, 0);
+        components.set(core.HEALTH, 0);
+        components.set(core.SUMMONING_SICKNESS, 1);
     }
-
-    public MinionTemplateBuilder(int id) {
-        this.id = id;
-        for (int key : DEFAULT_COMPONENTS) {
-            components.set(key, DEFAULT_COMPONENTS.get(key));
-        }
+    
+    public void onDeath(Effect effect) {
+        onDeathEffects.add(effect);
+    }
+    
+    public void onSurvive(Effect effect) {
+        onSurviveEffects.add(effect);
     }
 
     public void set(int component, int value) {
@@ -32,9 +36,9 @@ public class MinionTemplateBuilder {
         components.remove(component);
     }
 
-    public MinionTemplate build() {
-        components.set(Components.MINION_TEMPLATE, id);
-        MinionTemplate minionTemplate = new MinionTemplate(id, components);
+    public MinionTemplate build(int id) {
+        components.set(core.MINION_TEMPLATE, id);
+        MinionTemplate minionTemplate = new MinionTemplate(id, components, onDeathEffects, onSurviveEffects);
         return minionTemplate;
     }
 

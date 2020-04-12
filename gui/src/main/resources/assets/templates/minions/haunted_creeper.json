@@ -1,0 +1,22 @@
+{
+    "alias": "minions/haunted_creeper.json",
+    "display": {
+        "name": "Haunted creeper",
+        "imagePath": "images/cards/Haunted_Creeper_(art).jpg",
+        "colors": ["BLACK"]
+    },
+    "onDeath": [
+        {
+            "type": "summon",
+            "minionId": "minions/spectral_spider.json"
+        }, {
+            "type": "summon",
+            "minionId": "minions/spectral_spider.json"
+        }
+    ],
+    "components": {
+        "ATTACK": 1,
+        "HEALTH": 2,
+        "SUMMONING_SICKNESS": 1
+    }
+}

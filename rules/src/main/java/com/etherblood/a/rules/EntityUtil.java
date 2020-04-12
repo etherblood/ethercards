@@ -1,5 +1,7 @@
 package com.etherblood.a.rules;
 
+import com.etherblood.a.entities.ComponentMeta;
+import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import java.util.HashMap;
@@ -8,7 +10,10 @@ import java.util.Map;
 public class EntityUtil {
 
     public static void copy(EntityData source, EntityData destination) {
-        for (int component = 0; component < Components.count(); component++) {
+        if(destination.getComponents() != source.getComponents()) {
+            throw new IllegalArgumentException();
+        }
+        for (int component = 0; component < source.getComponents().size(); component++) {
             for (int entity : destination.list(component)) {
                 destination.remove(entity, component);
             }
@@ -19,9 +24,9 @@ public class EntityUtil {
         ((SimpleEntityData) destination).setNextId(((SimpleEntityData) source).getNextId());
     }
 
-    public static Map<String, Integer> extractEntityComponents(EntityData data, int entity) {
+    public static Map<String, Integer> extractEntityComponents(EntityData data, Components components, int entity) {
         Map<String, Integer> map = new HashMap<>();
-        for (ComponentMeta component : Components.getComponents()) {
+        for (ComponentMeta component : components.getMetas()) {
             data.getOptional(entity, component.id).ifPresent(value -> map.put(component.name, value));
         }
         return map;

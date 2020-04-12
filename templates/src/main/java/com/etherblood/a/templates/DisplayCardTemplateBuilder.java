@@ -8,10 +8,6 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
     private String name, flavourText, description, imagePath;
     private List<CardColor> colors;
 
-    public DisplayCardTemplateBuilder(int templateId) {
-        super(templateId);
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -33,7 +29,7 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
     }
 
     @Override
-    public DisplayCardTemplate build() {
+    public DisplayCardTemplate build(int templateId) {
         return new DisplayCardTemplate(templateId, attackPhaseCast.build(), blockPhaseCast.build(), name, flavourText, description, imagePath, colors);
     }
 }

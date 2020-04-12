@@ -8,6 +8,7 @@
     "components": {
         "ATTACK": 1,
         "HEALTH": 2,
-        "MANA_POOL": 1
+        "MANA_POOL": 1,
+        "SUMMONING_SICKNESS": 1
     }
 }

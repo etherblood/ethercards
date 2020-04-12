@@ -2,11 +2,11 @@ package com.etherblood.a.rules.templates.casteffects;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.templates.casteffects.filedtypes.ComponentsMap;
 
-public class BuffEffect extends CastEffect {
+public class BuffEffect extends Effect {
 
     @ComponentsMap
     public final IntMap components;
@@ -16,11 +16,12 @@ public class BuffEffect extends CastEffect {
     }
 
     @Override
-    public void cast(Game game, EntityData data, int source, int target) {
-        if (!data.has(target, Components.IN_BATTLE_ZONE)) {
+    public void apply(Game game, EntityData data, int source, int target) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        if (!data.has(target, core.IN_BATTLE_ZONE)) {
             throw new AssertionError();
         }
-        if (!data.has(target, Components.OWNED_BY)) {
+        if (!data.has(target, core.OWNED_BY)) {
             throw new AssertionError();
         }
         for (int component : components) {

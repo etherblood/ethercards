@@ -2,6 +2,7 @@ package com.etherblood.a.templates;
 
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.templates.MinionTemplate;
+import com.etherblood.a.rules.templates.casteffects.Effect;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,8 +12,8 @@ public class DisplayMinionTemplate extends MinionTemplate {
     private final String name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayMinionTemplate(int id, IntMap components, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
-        super(id, components);
+    public DisplayMinionTemplate(int id, IntMap components, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
+        super(id, components, onDeathEffects, onSurviveEffects);
         this.name = name;
         this.flavourText = flavourText;
         this.description = description;

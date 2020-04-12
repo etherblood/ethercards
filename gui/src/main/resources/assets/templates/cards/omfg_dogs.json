@@ -2,7 +2,7 @@
     "alias": "cards/omfg_dogs.json",
     "display": {
         "name": "Omfg dogs",
-        "imagePath": null,
+        "imagePath": "images/cards/omfgdogs.gif",
         "colors": ["WHITE"],
         "description": "Summon 3 1/1 dogs."
     },

@@ -3,7 +3,7 @@ package com.etherblood.a.ai.bots.mcts;
 import com.etherblood.a.ai.BotGame;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.CoreComponents;
 import java.util.List;
 import java.util.Random;
 
@@ -27,35 +27,36 @@ public class RolloutsToSimpleEvaluation<Move, Game extends BotGame<Move, Game>> 
             game.applyMove(move);
         }
         EntityData data = game.getData();
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntMap playerScores = new IntMap();
-        for (int minion : data.list(Components.IN_BATTLE_ZONE)) {
-            int player = data.get(minion, Components.OWNED_BY);
+        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+            int player = data.get(minion, core.OWNED_BY);
             int score = playerScores.getOrElse(player, 0);
-            score += 10 * data.getOptional(minion, Components.ATTACK).orElse(0);
-            score += 10 * data.getOptional(minion, Components.HEALTH).orElse(0);
-            score += 10 * data.getOptional(minion, Components.MANA_POOL).orElse(0);
+            score += 10 * data.getOptional(minion, core.ATTACK).orElse(0);
+            score += 10 * data.getOptional(minion, core.HEALTH).orElse(0);
+            score += 10 * data.getOptional(minion, core.MANA_POOL).orElse(0);
             playerScores.set(player, score);
         }
         IntMap handCards = new IntMap();
-        for (int card : data.list(Components.IN_HAND_ZONE)) {
-            int player = data.get(card, Components.OWNED_BY);
+        for (int card : data.list(core.IN_HAND_ZONE)) {
+            int player = data.get(card, core.OWNED_BY);
             int score = handCards.getOrElse(player, 0);
             score += 1;
             handCards.set(player, score);
         }
         IntMap libraryCards = new IntMap();
-        for (int card : data.list(Components.IN_LIBRARY_ZONE)) {
-            int player = data.get(card, Components.OWNED_BY);
+        for (int card : data.list(core.IN_LIBRARY_ZONE)) {
+            int player = data.get(card, core.OWNED_BY);
             int score = libraryCards.getOrElse(player, 0);
             score += 1;
             libraryCards.set(player, score);
         }
         float[] result = new float[game.playerCount()];
-        for (int player : data.list(Components.PLAYER_INDEX)) {
+        for (int player : data.list(core.PLAYER_INDEX)) {
             float score = playerScores.getOrElse(player, 0);
             score += (float) Math.sqrt(2 * handCards.getOrElse(player, 0));
             score += (float) Math.sqrt(libraryCards.getOrElse(player, 0));
-            result[data.get(player, Components.PLAYER_INDEX)] = score;
+            result[data.get(player, core.PLAYER_INDEX)] = score;
         }
 
         float sum = 0;

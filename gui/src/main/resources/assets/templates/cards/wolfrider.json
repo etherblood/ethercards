@@ -2,7 +2,7 @@
     "alias": "cards/wolfrider.json",
     "display": {
         "name": "Wolfrider",
-        "imagePath": null,
+        "imagePath": "images/cards/Wolfrider_full.jpg",
         "colors": ["RED"],
         "description": "Summon a 3/1 wolfrider with charge."
     },

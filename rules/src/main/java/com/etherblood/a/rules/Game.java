@@ -1,5 +1,6 @@
 package com.etherblood.a.rules;
 
+import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -8,10 +9,10 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.systems.*;
 import com.etherblood.a.rules.templates.MinionTemplate;
 import java.util.ArrayList;
+import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.OptionalInt;
@@ -32,50 +33,49 @@ public class Game {
     private final IntFunction<CardTemplate> cards;
     private final IntFunction<MinionTemplate> minions;
     private final boolean backupsEnabled;
+    private final List<AbstractSystem> generalSystems;
 
     public Game(GameSettings settings) {
-        this.random = Objects.requireNonNull(settings.random);
-        this.cards = Objects.requireNonNull(settings.cards);
-        this.minions = Objects.requireNonNull(settings.minions);
-        this.backupsEnabled = settings.backupsEnabled;
-        data = new SimpleEntityData(Components.count());
-        List<AbstractSystem> generalSystems = Arrays.asList(
-                new DrawSystem(),
-                new DamageSystem(),
-                new DeathSystem(),
-                new PlayerStatusSystem()
-        );
+        random = Objects.requireNonNull(settings.random, "Random missing.");
+        cards = Objects.requireNonNull(settings.cards, "Card templates missing.");
+        minions = Objects.requireNonNull(settings.minions, "Minion templates missing.");
+        backupsEnabled = settings.backupsEnabled;
+        data = new SimpleEntityData(Objects.requireNonNull(settings.components, "Components missing."));
+        generalSystems = Collections.unmodifiableList(new ArrayList<>(settings.generalSystems));
+        Components components = data.getComponents();
+        CoreComponents core = Objects.requireNonNull(components.getModule(CoreComponents.class), "Core component module missing.");
+
         endBlockPhaseSystems = new ArrayList<>();
         endBlockPhaseSystems.add(new EndBlockPhaseBattleSystem());
-        endBlockPhaseSystems.addAll(generalSystems);
+        endBlockPhaseSystems.addAll(settings.generalSystems);
         endBlockPhaseSystems.add(new UpkeepSystem());
-        endBlockPhaseSystems.addAll(generalSystems);
+        endBlockPhaseSystems.addAll(settings.generalSystems);
 
         endAttackPhaseSystems = new ArrayList<>();
         endAttackPhaseSystems.add(new EndAttackPhaseSystem());
-        endAttackPhaseSystems.addAll(generalSystems);
-        
+        endAttackPhaseSystems.addAll(settings.generalSystems);
+
         blockSystems = new ArrayList<>();
         blockSystems.add(new BlockSystem());
-        blockSystems.addAll(generalSystems);
-        
+        blockSystems.addAll(settings.generalSystems);
+
         castSystems = new ArrayList<>();
         castSystems.add(new CastSystem(cards));
-        castSystems.addAll(generalSystems);
-        
+        castSystems.addAll(settings.generalSystems);
+
         surrenderSystems = new ArrayList<>();
-        surrenderSystems.addAll(generalSystems);
-        
+        surrenderSystems.addAll(settings.generalSystems);
+
         int[] players = new int[settings.playerCount];
         int startingPlayerIndex = random.nextInt(players.length);
         for (int i = 0; i < players.length; i++) {
             players[i] = data.createEntity();
-            data.set(players[i], Components.PLAYER_INDEX, i);
+            data.set(players[i], core.PLAYER_INDEX, i);
             if (startingPlayerIndex == i) {
-                data.set(players[i], Components.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE);
-                data.set(players[i], Components.DRAW_CARDS, 3);
+                data.set(players[i], core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE);
+                data.set(players[i], core.DRAW_CARDS, 3);
             } else {
-                data.set(players[i], Components.DRAW_CARDS, 4);
+                data.set(players[i], core.DRAW_CARDS, 4);
             }
         }
     }
@@ -101,8 +101,8 @@ public class Game {
     }
 
     public int findPlayerByIndex(int playerIndex) {
-        for (int player : data.list(Components.PLAYER_INDEX)) {
-            if (data.hasValue(player, Components.PLAYER_INDEX, playerIndex)) {
+        for (int player : data.list(core().PLAYER_INDEX)) {
+            if (data.hasValue(player, core().PLAYER_INDEX, playerIndex)) {
                 return player;
             }
         }
@@ -110,31 +110,31 @@ public class Game {
     }
 
     public int getActivePlayerIndex() {
-        return data.get(getActivePlayer(), Components.PLAYER_INDEX);
+        return data.get(getActivePlayer(), core().PLAYER_INDEX);
     }
 
     public int getActivePlayer() {
-        return data.list(Components.ACTIVE_PLAYER_PHASE).get(0);
+        return data.list(core().ACTIVE_PLAYER_PHASE).get(0);
     }
 
     public boolean isGameOver() {
         try ( Stopwatch stopwatch = TimeStats.get().time("isGameOver()")) {
-            return data.list(Components.ACTIVE_PLAYER_PHASE).isEmpty();
+            return data.list(core().ACTIVE_PLAYER_PHASE).isEmpty();
         }
     }
 
     public boolean hasPlayerWon(int player) {
-        return data.has(player, Components.HAS_WON);
+        return data.has(player, core().HAS_WON);
     }
 
     public boolean hasPlayerLost(int player) {
-        return data.has(player, Components.HAS_LOST);
+        return data.has(player, core().HAS_LOST);
     }
 
     public void endAttackPhase(int player) {
         verifyCanEndAttackPhase(player, true);
         runWithBackup(() -> {
-            data.set(player, Components.END_ATTACK_PHASE, 1);
+            data.set(player, core().END_ATTACK_PHASE, 1);
             runSystems(endAttackPhaseSystems);
         });
     }
@@ -150,7 +150,7 @@ public class Game {
             }
             return false;
         }
-        if (!data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
+        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end attack phase, player #" + player + " is not in attack phase.");
             }
@@ -162,7 +162,7 @@ public class Game {
     public void endBlockPhase(int player) {
         verifyCanEndBlockPhase(player, true);
         runWithBackup(() -> {
-            data.set(player, Components.END_BLOCK_PHASE, 1);
+            data.set(player, core().END_BLOCK_PHASE, 1);
             runSystems(endBlockPhaseSystems);
         });
     }
@@ -178,7 +178,7 @@ public class Game {
             }
             return false;
         }
-        if (!data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
+        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end block phase, player #" + player + " is not in block phase.");
             }
@@ -190,7 +190,7 @@ public class Game {
     public void declareAttack(int player, int attacker, int target) {
         verifyCanDeclareAttack(player, attacker, target, true);
         runWithBackup(() -> {
-            data.set(attacker, Components.ATTACKS_TARGET, target);
+            data.set(attacker, core().ATTACKS_TARGET, target);
             // no systems, attack is only declared, nothing happens yet
         });
     }
@@ -200,7 +200,7 @@ public class Game {
     }
 
     private boolean verifyCanDeclareAttack(int player, int attacker, int target, boolean throwOnFail) {
-        if (!data.has(target, Components.IN_BATTLE_ZONE)) {
+        if (!data.has(target, core().IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is not in battle zone.");
             }
@@ -220,37 +220,43 @@ public class Game {
             }
             return false;
         }
-        if (!data.hasValue(attacker, Components.OWNED_BY, player)) {
+        if (!data.hasValue(attacker, core().OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " does not own attacker #" + attacker + ".");
             }
             return false;
         }
-        if (!data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
+        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " is not in attack phase.");
             }
             return false;
         }
-        if (!data.has(attacker, Components.IN_BATTLE_ZONE)) {
+        if (!data.has(attacker, core().IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is not in battle zone.");
             }
             return false;
         }
-        if (data.has(attacker, Components.CANNOT_ATTACK)) {
+        if (data.has(attacker, core().CANNOT_ATTACK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " can not attack.");
             }
             return false;
         }
-        if (data.has(attacker, Components.TIRED)) {
+        if (data.has(attacker, core().SUMMONING_SICKNESS)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " has summoning sickness.");
+            }
+            return false;
+        }
+        if (data.has(attacker, core().TIRED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is tired.");
             }
             return false;
         }
-        if (data.has(attacker, Components.ATTACKS_TARGET)) {
+        if (data.has(attacker, core().ATTACKS_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is already attacking.");
             }
@@ -262,8 +268,7 @@ public class Game {
     public void block(int player, int blocker, int attacker) {
         verifyCanBlock(player, blocker, attacker, true);
         runWithBackup(() -> {
-            data.set(blocker, Components.BLOCKS_ATTACKER, attacker);
-            data.set(blocker, Components.TIRED, 1);
+            data.set(blocker, core().BLOCKS_ATTACKER, attacker);
             runSystems(blockSystems);
         });
     }
@@ -273,13 +278,13 @@ public class Game {
     }
 
     private boolean verifyCanBlock(int player, int blocker, int attacker, boolean throwOnFail) {
-        if (!data.has(attacker, Components.ATTACKS_TARGET)) {
+        if (!data.has(attacker, core().ATTACKS_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " is not attacking.");
             }
             return false;
         }
-        if (data.has(attacker, Components.CANNOT_BE_BLOCKED)) {
+        if (data.has(attacker, core().CANNOT_BE_BLOCKED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " can not be blocked.");
             }
@@ -299,46 +304,46 @@ public class Game {
             }
             return false;
         }
-        if (!data.hasValue(blocker, Components.OWNED_BY, player)) {
+        if (!data.hasValue(blocker, core().OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " does not own blocker #" + blocker + ".");
             }
             return false;
         }
-        if (!data.has(blocker, Components.IN_BATTLE_ZONE)) {
+        if (!data.has(blocker, core().IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is not in battle zone.");
             }
             return false;
         }
-        if (!data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
+        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " is not in block phase.");
             }
             return false;
         }
-        if (data.has(blocker, Components.TIRED)) {
+        if (data.has(blocker, core().TIRED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is tired.");
             }
             return false;
         }
-        if (data.has(blocker, Components.CANNOT_BLOCK)) {
+        if (data.has(blocker, core().CANNOT_BLOCK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " can not block.");
             }
             return false;
         }
         boolean allAttackersUnblockable = true;
-        for (int attacker : data.list(Components.ATTACKS_TARGET)) {
-            int target = data.get(attacker, Components.ATTACKS_TARGET);
+        for (int attacker : data.list(core().ATTACKS_TARGET)) {
+            int target = data.get(attacker, core().ATTACKS_TARGET);
             if (target == blocker) {
                 if (throwOnFail) {
                     throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is being attacked.");
                 }
                 return false;
             }
-            if (allAttackersUnblockable && !data.has(attacker, Components.CANNOT_BE_BLOCKED)) {
+            if (allAttackersUnblockable && !data.has(attacker, core().CANNOT_BE_BLOCKED)) {
                 allAttackersUnblockable = false;
             }
         }
@@ -354,7 +359,7 @@ public class Game {
     public void cast(int player, int castable, Integer target) {
         validateCanCast(player, castable, target != null ? target : ~0, true);
         runWithBackup(() -> {
-            data.set(castable, Components.CAST_TARGET, target != null ? target : ~0);
+            data.set(castable, core().CAST_TARGET, target != null ? target : ~0);
             runSystems(castSystems);
         });
     }
@@ -374,21 +379,21 @@ public class Game {
             }
             return false;
         }
-        if (!data.hasValue(castable, Components.OWNED_BY, player)) {
+        if (!data.hasValue(castable, core().OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, player #" + player + " does not own castable #" + castable + ".");
             }
             return false;
         }
-        if (!data.has(castable, Components.IN_HAND_ZONE)) {
+        if (!data.has(castable, core().IN_HAND_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, castable #" + castable + " is not in hand zone.");
             }
             return false;
         }
-        CardTemplate template = cards.apply(data.get(castable, Components.CARD_TEMPLATE));
+        CardTemplate template = cards.apply(data.get(castable, core().CARD_TEMPLATE));
         CardCast cast;
-        OptionalInt phase = data.getOptional(player, Components.ACTIVE_PLAYER_PHASE);
+        OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
             switch (phase.getAsInt()) {
                 case PlayerPhase.ATTACK_PHASE:
@@ -418,7 +423,7 @@ public class Game {
             }
             return false;
         }
-        if (cast.getManaCost() > data.getOptional(player, Components.MANA).orElse(0)) {
+        if (cast.getManaCost() > data.getOptional(player, core().MANA).orElse(0)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, castable #" + castable + ", player #" + player + " does not have enough mana.");
             }
@@ -428,13 +433,13 @@ public class Game {
     }
 
     private boolean validateCanCast(int player, int castable, int target, boolean throwOnFail) {
-        CardTemplate template = cards.apply(data.get(castable, Components.CARD_TEMPLATE));
-        OptionalInt phase = data.getOptional(player, Components.ACTIVE_PLAYER_PHASE);
+        CardTemplate template = cards.apply(data.get(castable, core().CARD_TEMPLATE));
+        OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
             CardCast cast;
             if (phase.getAsInt() == PlayerPhase.ATTACK_PHASE) {
                 cast = template.getAttackPhaseCast();
-                if (cast != null && cast.isTargeted() && !data.has(target, Components.IN_BATTLE_ZONE)) {
+                if (cast != null && cast.isTargeted() && !data.has(target, core().IN_BATTLE_ZONE)) {
                     if (throwOnFail) {
                         throw new IllegalArgumentException("Failed to cast, target #" + target + " is not in battle zone.");
                     }
@@ -442,7 +447,7 @@ public class Game {
                 }
             } else if (phase.getAsInt() == PlayerPhase.BLOCK_PHASE) {
                 cast = template.getBlockPhaseCast();
-                if (cast != null && cast.isTargeted() && !data.has(target, Components.IN_BATTLE_ZONE)) {
+                if (cast != null && cast.isTargeted() && !data.has(target, core().IN_BATTLE_ZONE)) {
                     if (throwOnFail) {
                         throw new IllegalArgumentException("Failed to cast, target #" + target + " is not in battle zone.");
                     }
@@ -456,7 +461,7 @@ public class Game {
     public void surrender(int player) {
         validateCanSurrender(player, true);
         runWithBackup(() -> {
-            data.set(player, Components.HAS_LOST, 1);
+            data.set(player, core().HAS_LOST, 1);
             runSystems(surrenderSystems);
         });
     }
@@ -486,7 +491,7 @@ public class Game {
             runnable.run();
             return;
         }
-        EntityData backup = new SimpleEntityData(Components.count());
+        EntityData backup = new SimpleEntityData(data.getComponents());
         EntityUtil.copy(data, backup);
         LOG.debug("Created backup.");
         try {
@@ -511,65 +516,73 @@ public class Game {
     }
 
     private boolean validateStateLegal() {
-        IntList winners = data.list(Components.HAS_WON);
-        IntList players = data.list(Components.PLAYER_INDEX);
+        IntList winners = data.list(core().HAS_WON);
+        IntList players = data.list(core().PLAYER_INDEX);
         if (!winners.isEmpty()) {
             for (int player : players) {
-                if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
+                if (data.has(player, core().HAS_LOST) || data.has(player, core().HAS_WON)) {
                     continue;
                 }
                 throw new IllegalStateException();
             }
         }
-        for (int player : data.list(Components.ACTIVE_PLAYER_PHASE)) {
-            if (data.has(player, Components.HAS_LOST) || data.has(player, Components.HAS_WON)) {
+        for (int player : data.list(core().ACTIVE_PLAYER_PHASE)) {
+            if (data.has(player, core().HAS_LOST) || data.has(player, core().HAS_WON)) {
                 throw new IllegalStateException();
             }
-            if (!data.has(player, Components.PLAYER_INDEX)) {
+            if (!data.has(player, core().PLAYER_INDEX)) {
                 throw new IllegalStateException();
             }
         }
 
-        if (data.list(Components.ACTIVE_PLAYER_PHASE).isEmpty()) {
-            IntList losers = data.list(Components.HAS_LOST);
+        if (data.list(core().ACTIVE_PLAYER_PHASE).isEmpty()) {
+            IntList losers = data.list(core().HAS_LOST);
             if (winners.size() + losers.size() != players.size()) {
                 throw new IllegalStateException();
             }
         }
 
-        for (int minion : data.list(Components.IN_BATTLE_ZONE)) {
-            if (!data.has(minion, Components.OWNED_BY)) {
+        for (int minion : data.list(core().IN_BATTLE_ZONE)) {
+            if (!data.has(minion, core().OWNED_BY)) {
                 throw new IllegalStateException();
             }
-            if (!data.has(minion, Components.MINION_TEMPLATE)) {
-                throw new IllegalStateException();
-            }
-        }
-
-        for (int minion : data.list(Components.IN_HAND_ZONE)) {
-            if (!data.has(minion, Components.OWNED_BY)) {
-                throw new IllegalStateException();
-            }
-            if (!data.has(minion, Components.CARD_TEMPLATE)) {
+            if (!data.has(minion, core().MINION_TEMPLATE)) {
                 throw new IllegalStateException();
             }
         }
 
-        for (int minion : data.list(Components.IN_LIBRARY_ZONE)) {
-            if (!data.has(minion, Components.OWNED_BY)) {
+        for (int minion : data.list(core().IN_HAND_ZONE)) {
+            if (!data.has(minion, core().OWNED_BY)) {
                 throw new IllegalStateException();
             }
-            if (!data.has(minion, Components.CARD_TEMPLATE)) {
+            if (!data.has(minion, core().CARD_TEMPLATE)) {
                 throw new IllegalStateException();
             }
         }
 
-        for (int minion : data.list(Components.ATTACKS_TARGET)) {
-            if (!data.has(minion, Components.IN_BATTLE_ZONE)) {
+        for (int minion : data.list(core().IN_LIBRARY_ZONE)) {
+            if (!data.has(minion, core().OWNED_BY)) {
+                throw new IllegalStateException();
+            }
+            if (!data.has(minion, core().CARD_TEMPLATE)) {
+                throw new IllegalStateException();
+            }
+        }
+
+        for (int minion : data.list(core().ATTACKS_TARGET)) {
+            if (!data.has(minion, core().IN_BATTLE_ZONE)) {
                 throw new IllegalStateException();
             }
         }
 
         return true;
+    }
+
+    public List<AbstractSystem> getGeneralSystems() {
+        return generalSystems;
+    }
+
+    private CoreComponents core() {
+        return data.getComponents().getModule(CoreComponents.class);
     }
 }

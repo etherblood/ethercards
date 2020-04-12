@@ -17,7 +17,6 @@ import com.etherblood.a.ai.movegroups.moves.blockphase.TargetedBlockCast;
 import com.etherblood.a.ai.movegroups.moves.blockphase.UntargetedBlockCast;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
@@ -146,8 +145,8 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
             DeclareAttacker attackerMove = (DeclareAttacker) previous;
             int player = attackerMove.player;
             int attacker = attackerMove.attacker;
-            for (int minion : data.list(Components.IN_BATTLE_ZONE)) {
-                if (data.hasValue(minion, Components.OWNED_BY, player)) {
+            for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+                if (data.hasValue(minion, core.OWNED_BY, player)) {
                     // technically a valid target, but we prune friendly fire attacks for the AI (for now)
                     continue;
                 }
@@ -162,7 +161,7 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
             DeclareBlocker blockerMove = (DeclareBlocker) previous;
             int player = blockerMove.player;
             int blocker = blockerMove.blocker;
-            for (int minion : data.list(Components.ATTACKS_TARGET)) {
+            for (int minion : data.list(core.ATTACKS_TARGET)) {
                 if (game.canBlock(player, blocker, minion)) {
                     moves.add(new Block(player, minion));
                 }
@@ -172,24 +171,24 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
 
         if (previous instanceof DeclareTargetedAttackCast) {
             DeclareTargetedAttackCast cast = (DeclareTargetedAttackCast) previous;
-            for (int target : game.getData().list(Components.IN_BATTLE_ZONE)) {
+            for (int target : game.getData().list(core.IN_BATTLE_ZONE)) {
                 moves.add(new TargetedAttackCast(cast.player, target));
             }
             return moves;
         }
         if (previous instanceof DeclareTargetedBlockCast) {
             DeclareTargetedBlockCast cast = (DeclareTargetedBlockCast) previous;
-            for (int target : game.getData().list(Components.IN_BATTLE_ZONE)) {
+            for (int target : game.getData().list(core.IN_BATTLE_ZONE)) {
                 moves.add(new TargetedBlockCast(cast.player, target));
             }
             return moves;
         }
 
-        for (int player : data.list(Components.ACTIVE_PLAYER_PHASE)) {
-            int phase = data.get(player, Components.ACTIVE_PLAYER_PHASE);
+        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
+            int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
             if (phase == PlayerPhase.ATTACK_PHASE) {
                 if (endedCasting != null && endedCasting == player) {
-                    for (int minion : data.list(Components.IN_BATTLE_ZONE)) {
+                    for (int minion : data.list(core.IN_BATTLE_ZONE)) {
                         if (game.canDeclareAttack(player, minion)) {
                             moves.add(new DeclareAttacker(player, minion));
                         }
@@ -198,9 +197,9 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
                 } else {
                     endedCasting = null;
                     IntList prunedTemplates = new IntList();
-                    for (int handCard : data.list(Components.IN_HAND_ZONE)) {
+                    for (int handCard : data.list(core.IN_HAND_ZONE)) {
                         if (pruneDuplicateMoves) {
-                            int template = data.get(handCard, Components.CARD_TEMPLATE);
+                            int template = data.get(handCard, core.CARD_TEMPLATE);
                             if (prunedTemplates.contains(template)) {
                                 continue;
                             }
@@ -216,7 +215,7 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
                 }
             } else {
                 if (endedCasting != null && endedCasting == player) {
-                    IntList minions = data.list(Components.IN_BATTLE_ZONE);
+                    IntList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int minion : minions) {
                         if (game.canBlock(player, minion)) {
                             moves.add(new DeclareBlocker(player, minion));
@@ -226,9 +225,9 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
                 } else {
                     endedCasting = null;
                     IntList prunedTemplates = new IntList();
-                    for (int handCard : data.list(Components.IN_HAND_ZONE)) {
+                    for (int handCard : data.list(core.IN_HAND_ZONE)) {
                         if (pruneDuplicateMoves) {
-                            int template = data.get(handCard, Components.CARD_TEMPLATE);
+                            int template = data.get(handCard, core.CARD_TEMPLATE);
                             if (prunedTemplates.contains(template)) {
                                 continue;
                             }

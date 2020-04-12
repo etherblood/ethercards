@@ -2,11 +2,12 @@
     "alias": "minions/yeti.json",
     "display": {
         "name": "Yeti",
-        "imagePath": null,
+        "imagePath": "images/cards/Chillwind_Yeti_(art).jpg",
         "colors": ["BLUE"]
     },
     "components": {
         "ATTACK": 4,
-        "HEALTH": 5
+        "HEALTH": 5,
+        "SUMMONING_SICKNESS": 1
     }
 }

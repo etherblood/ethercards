@@ -2,11 +2,12 @@
     "alias": "minions/ornithopter.json",
     "display": {
         "name": "Ornithopter",
-        "imagePath": null,
+        "imagePath": "images/cards/Thopter.jpg",
         "colors": ["NEUTRAL"]
     },
     "components": {
         "ATTACK": 0,
-        "HEALTH": 2
+        "HEALTH": 2,
+        "SUMMONING_SICKNESS": 1
     }
 }

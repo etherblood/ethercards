@@ -2,7 +2,7 @@
     "alias": "cards/river_croc.json",
     "display": {
         "name": "River Crocolisk",
-        "imagePath": null,
+        "imagePath": "images/cards/River_Crocolisk_full.png",
         "colors": ["GREEN"],
         "description": "Summon a 2/3 river crocolisk."
     },

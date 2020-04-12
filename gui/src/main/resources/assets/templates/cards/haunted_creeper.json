@@ -1,0 +1,18 @@
+{
+    "alias": "cards/haunted_creeper.json",
+    "display": {
+        "name": "Haunted creeper",
+        "imagePath": "images/cards/Haunted_Creeper_(art).jpg",
+        "colors": ["BLACK"],
+        "description": "Summon a 1/2 haunted creeper which summons two 1/1 spectral spiders when it dies."
+    },
+    "attackCast": {
+        "manaCost": 2,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/haunted_creeper.json"
+            }
+        ]
+    }
+}

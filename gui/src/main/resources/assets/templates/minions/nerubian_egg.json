@@ -2,15 +2,19 @@
     "alias": "minions/nerubian_egg.json",
     "display": {
         "name": "Nerubian egg",
-        "imagePath": null,
+        "imagePath": "images/cards/Nerubian_Egg_full.jpg",
         "colors": ["BLACK"]
     },
+    "onDeath": [
+        {
+            "type": "summon",
+            "minionId": "minions/nerubian.json"
+        }
+    ],
     "components": {
         "ATTACK": 0,
         "HEALTH": 2,
-        "CANNOT_ATTACK": true,
-        "SUMMON_ON_DEATH": {
-            "minion": "minions/nerubian.json"
-        }
+        "SUMMONING_SICKNESS": 1,
+        "CANNOT_ATTACK": true
     }
 }

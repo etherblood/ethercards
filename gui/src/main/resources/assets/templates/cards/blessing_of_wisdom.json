@@ -2,7 +2,7 @@
     "alias": "cards/blessing_of_wisdom.json",
     "display": {
         "name": "Blessing of wisdom",
-        "imagePath": null,
+        "imagePath": "images/cards/Blessing_of_Wisdom_(art).jpg",
         "colors": ["WHITE"],
         "description": "Choose a minion, whenever it blocks or attacks it's owner draws a card."
     },

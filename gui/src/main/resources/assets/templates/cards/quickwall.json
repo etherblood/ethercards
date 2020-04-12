@@ -2,9 +2,9 @@
     "alias": "cards/quickwall.json",
     "display": {
         "name": "Quickwall",
-        "imagePath": null,
-        "colors": ["BLUE"],
-        "description": "Summon a 1/3 quickwall with charge that can't attack."
+        "imagePath": "images/cards/quickwall.png",
+        "colors": ["WHITE"],
+        "description": "Summon a 0/4 quickwall that can't attack."
     },
     "blockCast": {
         "manaCost": 2,

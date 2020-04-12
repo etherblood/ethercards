@@ -9,12 +9,13 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.ToIntFunction;
 
 public class ComponentsDeserializer implements JsonDeserializer<IntMap> {
 
-    private final Map<String, Integer> componentAliases;
+    private final ToIntFunction<String> componentAliases;
 
-    public ComponentsDeserializer(Map<String, Integer> componentAliases) {
+    public ComponentsDeserializer(ToIntFunction<String> componentAliases) {
         this.componentAliases = componentAliases;
     }
 
@@ -23,7 +24,7 @@ public class ComponentsDeserializer implements JsonDeserializer<IntMap> {
         IntMap result = new IntMap();
         JsonObject components = element.getAsJsonObject();
         for (Map.Entry<String, JsonElement> entry : components.entrySet()) {
-            int component = componentAliases.get(entry.getKey());
+            int component = componentAliases.applyAsInt(entry.getKey());
             JsonElement value = entry.getValue();
             if (value.isJsonNull()) {
                 result.remove(component);

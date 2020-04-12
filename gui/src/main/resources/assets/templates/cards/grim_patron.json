@@ -2,8 +2,8 @@
     "alias": "cards/grim_patron.json",
     "display": {
         "name": "Grim Patron",
-        "imagePath": null,
-        "colors": ["BLACK"],
+        "imagePath": "images/cards/Grim_Patron_art.jpg",
+        "colors": ["RED"],
         "description": "Summon a 3/3 grim patron which summons a new grim patron whenever it survives damage."
     },
     "attackCast": {

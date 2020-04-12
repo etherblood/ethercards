@@ -2,7 +2,7 @@
     "alias": "cards/ornithopter.json",
     "display": {
         "name": "Ornithopter",
-        "imagePath": null,
+        "imagePath": "images/cards/Thopter.jpg",
         "colors": ["NEUTRAL"],
         "description": "Summon a 0/2 ornithopter."
     },

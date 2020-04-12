@@ -2,11 +2,12 @@
     "alias": "minions/nerubian.json",
     "display": {
         "name": "Nerubian",
-        "imagePath": null,
+        "imagePath": "images/cards/Nerubian_full.jpg",
         "colors": ["BLACK"]
     },
     "components": {
         "ATTACK": 4,
-        "HEALTH": 4
+        "HEALTH": 4,
+        "SUMMONING_SICKNESS": 1
     }
 }

@@ -1,6 +1,7 @@
-package com.etherblood.a.rules;
+package com.etherblood.a.entities;
 
 public class ComponentMeta {
+
     public final int id;
     public final String name;
 

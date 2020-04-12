@@ -39,7 +39,8 @@ import com.etherblood.a.ai.moves.DeclareAttack;
 import com.etherblood.a.ai.moves.EndAttackPhase;
 import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
-import com.etherblood.a.rules.Components;
+import com.etherblood.a.entities.ComponentsBuilder;
+import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.PlayerPhase;
@@ -50,6 +51,7 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.etherblood.a.templates.LibraryTemplate;
+import com.etherblood.a.templates.TemplatesParser;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
@@ -148,14 +150,18 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void initGame() {
-        TemplatesLoader loader = new TemplatesLoader(x -> assetManager.loadAsset(new AssetKey<>("templates/" + x)));
+        GameSettings settings = new GameSettings();
+        ComponentsBuilder componentsBuilder = new ComponentsBuilder();
+        componentsBuilder.registerModule(CoreComponents::new);
+        settings.components = componentsBuilder.build();
+        TemplatesParser templatesParser = new TemplatesParser(settings.components);
+        TemplatesLoader loader = new TemplatesLoader(x -> assetManager.loadAsset(new AssetKey<>("templates/" + x)), templatesParser);
         LibraryTemplate lib0 = loader.loadLibrary("libraries/default.json");
         LibraryTemplate lib1 = loader.loadLibrary("libraries/default.json");
-        GameSettings settings = new GameSettings();
         settings.cards = loader::getCard;
         settings.minions = loader::getMinion;
         game = new Game(settings);
-        SimpleSetup setup = new SimpleSetup(2);
+        SimpleSetup setup = new SimpleSetup(settings.playerCount);
         setup.setHero(0, lib0.hero);
         setup.setHero(1, lib1.hero);
 
@@ -176,6 +182,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void initBoardGui() {
+        CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
         board = new Board();
         board.registerVisualizer_Class(CardZone.class, new DebugZoneVisualizer() {
 
@@ -211,7 +218,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 .arcHeight(0.1f)
                 .width(0.25f)
                 .build()));
-        IntList players = game.getData().list(Components.PLAYER_INDEX);
+        IntList players = game.getData().list(core.PLAYER_INDEX);
 
         Vector3f offset = new Vector3f(0, 0, ZONE_HEIGHT);
         float directionX = 1;
@@ -219,7 +226,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         Quaternion zoneRotation = Quaternion.IDENTITY;
 
         for (int player : players) {
-            if (game.getData().hasValue(player, Components.PLAYER_INDEX, 1)) {
+            if (game.getData().hasValue(player, core.PLAYER_INDEX, 1)) {
                 directionX *= -1;
                 directionZ *= -1;
                 zoneRotation = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y);
@@ -262,41 +269,42 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
     private void updateBoard() {
         EntityData data = game.getData();
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         StringBuilder builder = new StringBuilder();
-        IntList players = data.list(Components.PLAYER_INDEX);
+        IntList players = data.list(core.PLAYER_INDEX);
         for (int player : players) {
-            int playerIndex = data.get(player, Components.PLAYER_INDEX);
+            int playerIndex = data.get(player, core.PLAYER_INDEX);
             builder.append("Player ");
             builder.append(playerIndex + 1);
             builder.append(" mana: ");
-            builder.append(data.getOptional(player, Components.MANA).orElse(0));
+            builder.append(data.getOptional(player, core.MANA).orElse(0));
             if (game.hasPlayerLost(player)) {
                 builder.append(" - LOST");
             } else if (game.hasPlayerWon(player)) {
                 builder.append(" - WON");
-            } else if (data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
                 builder.append(" - ATTACK_PHASE");
-            } else if (data.hasValue(player, Components.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
                 builder.append(" - BLOCK_PHASE");
             }
             builder.append(System.lineSeparator());
         }
         hudText.setText(builder.toString());
 
-        IntList handCards = data.list(Components.IN_HAND_ZONE);
-        IntList battleCards = data.list(Components.IN_BATTLE_ZONE);
-        IntList libraryCards = data.list(Components.IN_LIBRARY_ZONE);
+        IntList handCards = data.list(core.IN_HAND_ZONE);
+        IntList battleCards = data.list(core.IN_BATTLE_ZONE);
+        IntList libraryCards = data.list(core.IN_LIBRARY_ZONE);
         for (int player : players) {
             PlayerZones zones = playerZones.get(player);
-            IntPredicate playerFilter = x -> data.hasValue(x, Components.OWNED_BY, player);
+            IntPredicate playerFilter = x -> data.hasValue(x, core.OWNED_BY, player);
             updateZone(libraryCards.stream().filter(playerFilter).toArray(), zones.getDeckZone(), Vector3f.UNIT_Y);
             updateZone(handCards.stream().filter(playerFilter).toArray(), zones.getHandZone(), Vector3f.UNIT_X);
             updateZone(battleCards.stream().filter(playerFilter).toArray(), zones.getBoardZone(), Vector3f.UNIT_X);
         }
 
-        for (int attacker : data.list(Components.ATTACKS_TARGET)) {
+        for (int attacker : data.list(core.ATTACKS_TARGET)) {
             if (!attacks.containsKey(attacker)) {
-                int target = data.get(attacker, Components.ATTACKS_TARGET);
+                int target = data.get(attacker, core.ATTACKS_TARGET);
                 if (visualMinions.containsKey(target)) {
                     ConnectionMarker arrow = new ConnectionMarker() {
                         @Override
@@ -316,7 +324,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         for (Map.Entry<Integer, ConnectionMarker> entry : new ArrayList<>(attacks.entrySet())) {
             ConnectionMarker arrow = entry.getValue();
             int attacker = entry.getKey();
-            OptionalInt target = data.getOptional(attacker, Components.ATTACKS_TARGET);
+            OptionalInt target = data.getOptional(attacker, core.ATTACKS_TARGET);
             if (target.isPresent()) {
                 Card<MinionModel> targetObject = visualMinions.get(target.getAsInt());
                 if (targetObject != null) {
@@ -331,9 +339,10 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
     private void updateZone(int[] cards, CardZone cardZone, Vector3f interval) {
         EntityData data = game.getData();
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (Card card : new ArrayList<>(cardZone.getCards())) {
             int entity = objectEntities.get(card);
-            if (!data.has(entity, Components.IN_LIBRARY_ZONE) && !data.has(entity, Components.IN_HAND_ZONE) && !data.has(entity, Components.IN_BATTLE_ZONE)) {
+            if (!data.has(entity, core.IN_LIBRARY_ZONE) && !data.has(entity, core.IN_HAND_ZONE) && !data.has(entity, core.IN_BATTLE_ZONE)) {
                 cardZone.removeCard(card);
                 board.unregister(card);
                 objectEntities.remove(card);
@@ -347,12 +356,12 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         int player = game.getActivePlayer();
         int index = 0;
         for (int cardEntity : cards) {
-            if (data.has(cardEntity, Components.CARD_TEMPLATE)) {
+            if (data.has(cardEntity, core.CARD_TEMPLATE)) {
                 Card<CardModel> card = getOrCreateCard(cardEntity);
                 CardModel cardModel = card.getModel();
                 cardModel.setEntityId(cardEntity);
-                cardModel.setFaceUp(!data.has(cardEntity, Components.IN_LIBRARY_ZONE));
-                cardModel.setTemplate((DisplayCardTemplate) game.getCards().apply(data.get(cardEntity, Components.CARD_TEMPLATE)));
+                cardModel.setFaceUp(!data.has(cardEntity, core.IN_LIBRARY_ZONE));
+                cardModel.setTemplate((DisplayCardTemplate) game.getCards().apply(data.get(cardEntity, core.CARD_TEMPLATE)));
 
                 if (game.canCast(player, cardEntity)) {
                     card.setInteractivity(castInteractivity(player, cardEntity));
@@ -362,14 +371,16 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                     cardModel.setGlow(null);
                 }
                 board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index)));
-            } else if (data.has(cardEntity, Components.MINION_TEMPLATE)) {
+            } else if (data.has(cardEntity, core.MINION_TEMPLATE)) {
                 Card<MinionModel> card = getOrCreateMinion(cardEntity);
                 MinionModel minionModel = card.getModel();
                 minionModel.setEntityId(cardEntity);
                 minionModel.setFaceUp(true);
-                minionModel.setAttack(data.getOptional(cardEntity, Components.ATTACK).orElse(0));
-                minionModel.setHealth(data.getOptional(cardEntity, Components.HEALTH).orElse(0));
-                minionModel.setTemplate((DisplayMinionTemplate) game.getMinions().apply(data.get(cardEntity, Components.MINION_TEMPLATE)));
+                minionModel.setAttack(data.getOptional(cardEntity, core.ATTACK).orElse(0));
+                minionModel.setHealth(data.getOptional(cardEntity, core.HEALTH).orElse(0));
+                DisplayMinionTemplate template = (DisplayMinionTemplate) game.getMinions().apply(data.get(cardEntity, core.MINION_TEMPLATE));
+                minionModel.setTemplate(template);
+                minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
 
                 if (game.canDeclareAttack(player, cardEntity)) {
                     card.setInteractivity(attackInteractivity(player, cardEntity));
@@ -428,7 +439,8 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private Interactivity castInteractivity(int player, int castable) {
-        int cardTemplate = game.getData().get(castable, Components.CARD_TEMPLATE);
+        CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
+        int cardTemplate = game.getData().get(castable, core.CARD_TEMPLATE);
         CardTemplate template = game.getCards().apply(cardTemplate);
         CardCast cast = template.getAttackPhaseCast() != null ? template.getAttackPhaseCast() : template.getBlockPhaseCast();
         if (cast.isTargeted()) {
@@ -479,7 +491,9 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             visualMinions.put(myCard, card);
             objectEntities.put(card, myCard);
 
-            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> game.getData().has(myCard, Components.TIRED));
+            EntityData data = game.getData();
+            CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> data.has(myCard, core.TIRED));
             card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
         }
         return card;
@@ -489,10 +503,11 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     public void onAction(String name, boolean isPressed, float lastTimePerFrame) {
         if ("space".equals(name) && isPressed) {
             EntityData data = game.getData();
-            IntList list = data.list(Components.ACTIVE_PLAYER_PHASE);
+            CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+            IntList list = data.list(core.ACTIVE_PLAYER_PHASE);
             if (!list.isEmpty()) {
                 int player = list.get(0);
-                int phase = data.get(player, Components.ACTIVE_PLAYER_PHASE);
+                int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
                 if (phase == PlayerPhase.BLOCK_PHASE) {
                     applyMove(new EndBlockPhase(player));
                 } else {
@@ -527,6 +542,8 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             settings.minions = game.getMinions();
             settings.backupsEnabled = false;
             settings.random = new Random();
+            settings.components = game.getData().getComponents();
+            settings.generalSystems = game.getGeneralSystems();
 
             RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(new Random(), 10);
             MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();

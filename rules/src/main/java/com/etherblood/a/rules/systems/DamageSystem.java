@@ -3,30 +3,26 @@ package com.etherblood.a.rules.systems;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
-import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.systems.util.SystemsUtil;
 
 public class DamageSystem extends AbstractSystem {
 
     @Override
     public void run(Game game, EntityData data) {
-        IntList entities = data.list(Components.DAMAGE);
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        IntList entities = data.list(core.DAMAGE);
         for (int entity : entities) {
-            if (data.has(entity, Components.IN_BATTLE_ZONE)) {
-                data.getOptional(entity, Components.HEALTH).ifPresent(health -> {
-                    int damage = data.get(entity, Components.DAMAGE);
+            if (data.has(entity, core.IN_BATTLE_ZONE)) {
+                data.getOptional(entity, core.HEALTH).ifPresent(health -> {
+                    int damage = data.get(entity, core.DAMAGE);
                     health -= damage;
-                    data.set(entity, Components.HEALTH, health);
+                    data.set(entity, core.HEALTH, health);
                     if (health <= 0) {
-                        data.set(entity, Components.DIE, 1);
-                    } else {
-                        data.getOptional(entity, Components.SUMMON_ON_SURVIVAL)
-                                .ifPresent(template -> SystemsUtil.summon(game, template, data.get(entity, Components.OWNED_BY)));
+                        data.set(entity, core.DIE, 1);
                     }
                 });
             }
-            data.remove(entity, Components.DAMAGE);
         }
     }
 }

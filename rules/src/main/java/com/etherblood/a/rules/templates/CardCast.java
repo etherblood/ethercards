@@ -1,6 +1,6 @@
 package com.etherblood.a.rules.templates;
 
-import com.etherblood.a.rules.templates.casteffects.CastEffect;
+import com.etherblood.a.rules.templates.casteffects.Effect;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,9 +9,9 @@ public class CardCast {
 
     private final int manaCost;
     private final boolean targeted;
-    private final List<CastEffect> effects;
+    private final List<Effect> effects;
 
-    CardCast(int manaCost, boolean targeted, List<CastEffect> effects) {
+    CardCast(int manaCost, boolean targeted, List<Effect> effects) {
         this.manaCost = manaCost;
         this.targeted = targeted;
         this.effects = Collections.unmodifiableList(new ArrayList<>(effects));
@@ -21,7 +21,7 @@ public class CardCast {
         return manaCost;
     }
 
-    public List<CastEffect> getEffects() {
+    public List<Effect> getEffects() {
         return effects;
     }
 

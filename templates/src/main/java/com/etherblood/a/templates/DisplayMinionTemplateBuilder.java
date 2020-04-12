@@ -1,6 +1,6 @@
 package com.etherblood.a.templates;
 
-import com.etherblood.a.rules.Components;
+import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.templates.MinionTemplateBuilder;
 import java.util.Collections;
 import java.util.List;
@@ -10,10 +10,10 @@ public class DisplayMinionTemplateBuilder extends MinionTemplateBuilder {
     private String name, flavourText, description, imagePath;
     private List<CardColor> colors = Collections.emptyList();
 
-    public DisplayMinionTemplateBuilder(int templateId) {
-        super(templateId);
+    public DisplayMinionTemplateBuilder(CoreComponents core) {
+        super(core);
     }
-
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -35,8 +35,8 @@ public class DisplayMinionTemplateBuilder extends MinionTemplateBuilder {
     }
 
     @Override
-    public DisplayMinionTemplate build() {
-        components.set(Components.MINION_TEMPLATE, id);
-        return new DisplayMinionTemplate(id, components, name, flavourText, description, imagePath, colors);
+    public DisplayMinionTemplate build(int templateId) {
+        components.set(core.MINION_TEMPLATE, templateId);
+        return new DisplayMinionTemplate(templateId, components, onDeathEffects, onSurviveEffects, name, flavourText, description, imagePath, colors);
     }
 }

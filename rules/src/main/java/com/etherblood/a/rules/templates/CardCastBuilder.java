@@ -1,6 +1,6 @@
 package com.etherblood.a.rules.templates;
 
-import com.etherblood.a.rules.templates.casteffects.CastEffect;
+import com.etherblood.a.rules.templates.casteffects.Effect;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class CardCastBuilder {
 
     private int manaCost;
     private boolean targeted;
-    private final List<CastEffect> effects = new ArrayList();
+    private final List<Effect> effects = new ArrayList();
 
     CardCastBuilder() {
     }
@@ -21,7 +21,7 @@ public class CardCastBuilder {
         this.targeted = targeted;
     }
 
-    public void addEffect(CastEffect effect) {
+    public void addEffect(Effect effect) {
         effects.add(effect);
     }
 

@@ -1,0 +1,13 @@
+{
+    "alias": "minions/spectral_spider.json",
+    "display": {
+        "name": "Spectral spider",
+        "imagePath": "images/cards/Spectral_Spider_full.jpg",
+        "colors": ["BLACK"]
+    },
+    "components": {
+        "ATTACK": 1,
+        "HEALTH": 1,
+        "SUMMONING_SICKNESS": 1
+    }
+}

@@ -2,21 +2,24 @@ package com.etherblood.a.templates;
 
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.ComponentMeta;
-import com.etherblood.a.rules.Components;
+import com.etherblood.a.entities.ComponentMeta;
+import com.etherblood.a.entities.Components;
+import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.casteffects.BuffEffect;
-import com.etherblood.a.rules.templates.casteffects.CastEffect;
+import com.etherblood.a.rules.templates.casteffects.Effect;
 import com.etherblood.a.rules.templates.casteffects.SingleTargetDamageEffect;
 import com.etherblood.a.rules.templates.casteffects.SummonEffect;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,19 +31,21 @@ public class TemplatesParser {
     private final Map<String, Integer> cardAliases = new HashMap<>();
     private final Map<String, Integer> minionAliases = new HashMap<>();
     private final Map<String, Integer> componentAliases = new HashMap<>();
+    private final Components components;
     private final Gson aliasGson;
 
-    public TemplatesParser() {
-        Map<String, Class<? extends CastEffect>> classes = new HashMap<>();
+    public TemplatesParser(Components components) {
+        this.components = components;
+        Map<String, Class<? extends Effect>> classes = new HashMap<>();
         classes.put("summon", SummonEffect.class);
         classes.put("singleTargetDamage", SingleTargetDamageEffect.class);
         classes.put("buff", BuffEffect.class);
-        for (ComponentMeta component : Components.getComponents()) {
+        for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
         aliasGson = new GsonBuilder()
-                .registerTypeAdapter(CastEffect.class, new CastEffectDeserializer(classes, x -> registerIfAbsent(minionAliases, x), x -> registerIfAbsent(cardAliases, x)))
-                .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases))
+                .registerTypeAdapter(Effect.class, new CastEffectDeserializer(classes, x -> registerIfAbsent(minionAliases, x), x -> registerIfAbsent(cardAliases, x)))
+                .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases::get))
                 .create();
     }
 
@@ -97,8 +102,7 @@ public class TemplatesParser {
 
     public DisplayCardTemplate parseCard(JsonObject cardJson) {
         String alias = cardJson.get("alias").getAsString();
-        int id = registerIfAbsent(cardAliases, alias);
-        DisplayCardTemplateBuilder builder = new DisplayCardTemplateBuilder(id);
+        DisplayCardTemplateBuilder builder = new DisplayCardTemplateBuilder();
         JsonObject display = cardJson.getAsJsonObject("display");
         if (display != null) {
             JsonElement colors = display.get("colors");
@@ -123,7 +127,7 @@ public class TemplatesParser {
             }
         } else {
             builder.setColors(Arrays.asList(CardColor.values()));
-            builder.setName("MissingNo #" + id);
+            builder.setName("MissingNo #" + alias);
             builder.setDescription("404");
             builder.setFlavourText("Nothing here.");
             builder.setImagePath(null);
@@ -138,7 +142,7 @@ public class TemplatesParser {
             }
             for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
-                cast.addEffect(aliasGson.fromJson(effectJson, CastEffect.class));
+                cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
             }
         }
 
@@ -151,10 +155,11 @@ public class TemplatesParser {
             }
             for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
-                cast.addEffect(aliasGson.fromJson(effectJson, CastEffect.class));
+                cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
             }
         }
-        DisplayCardTemplate card = builder.build();
+        int id = registerIfAbsent(cardAliases, alias);
+        DisplayCardTemplate card = builder.build(id);
         DisplayCardTemplate previous = cards.put(id, card);
         if (previous != null) {
             throw new IllegalStateException("Multiple cards registered to same alias: " + alias);
@@ -164,8 +169,7 @@ public class TemplatesParser {
 
     public DisplayMinionTemplate parseMinion(JsonObject minionJson) {
         String alias = minionJson.get("alias").getAsString();
-        int id = registerIfAbsent(minionAliases, alias);
-        DisplayMinionTemplateBuilder builder = new DisplayMinionTemplateBuilder(id);
+        DisplayMinionTemplateBuilder builder = new DisplayMinionTemplateBuilder(components.getModule(CoreComponents.class));
         JsonObject display = minionJson.getAsJsonObject("display");
         if (display != null) {
             JsonElement colors = display.get("colors");
@@ -190,10 +194,24 @@ public class TemplatesParser {
             }
         } else {
             builder.setColors(Arrays.asList(CardColor.values()));
-            builder.setName("MissingNo #" + id);
+            builder.setName("MissingNo #" + alias);
             builder.setDescription("404");
             builder.setFlavourText("Nothing here.");
             builder.setImagePath(null);
+        }
+        JsonArray onDeath = minionJson.getAsJsonArray("onDeath");
+        if(onDeath != null) {
+            for (JsonElement jsonElement : onDeath) {
+                JsonObject effectJson = jsonElement.getAsJsonObject();
+                builder.onDeath(aliasGson.fromJson(effectJson, Effect.class));
+            }
+        }
+        JsonArray onSurvive = minionJson.getAsJsonArray("onSurvive");
+        if(onSurvive != null) {
+            for (JsonElement jsonElement : onSurvive) {
+                JsonObject effectJson = jsonElement.getAsJsonObject();
+                builder.onSurvive(aliasGson.fromJson(effectJson, Effect.class));
+            }
         }
 
         JsonObject components = minionJson.getAsJsonObject("components");
@@ -233,7 +251,8 @@ public class TemplatesParser {
             }
             throw new UnsupportedOperationException(value.toString());
         }
-        DisplayMinionTemplate minion = builder.build();
+        int id = registerIfAbsent(minionAliases, alias);
+        DisplayMinionTemplate minion = builder.build(id);
         DisplayMinionTemplate previous = minions.put(id, minion);
         if (previous != null) {
             throw new IllegalStateException("Multiple minions registered to same alias: " + alias);
@@ -253,6 +272,22 @@ public class TemplatesParser {
                 .filter(e -> !minions.containsKey(e.getValue()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
+    }
+    
+    public int resolveMinionAlias(String alias) {
+        return Objects.requireNonNull(minionAliases.get(alias), alias);
+    }
+    
+    public int resolveCardAlias(String alias) {
+        return Objects.requireNonNull(cardAliases.get(alias), alias);
+    }
+    
+    public int registerMinionAlias(String alias) {
+        return registerIfAbsent(minionAliases, alias);
+    }
+    
+    public int registerCardAlias(String alias) {
+        return registerIfAbsent(cardAliases, alias);
     }
 
     private int registerIfAbsent(Map<String, Integer> aliases, String alias) {

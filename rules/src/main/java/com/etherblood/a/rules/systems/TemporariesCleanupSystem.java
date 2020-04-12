@@ -1,0 +1,20 @@
+package com.etherblood.a.rules.systems;
+
+import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.rules.AbstractSystem;
+import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.Game;
+
+public class TemporariesCleanupSystem extends AbstractSystem {
+
+    @Override
+    public void run(Game game, EntityData data) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        for (int entity : data.list(core.DAMAGE)) {
+            data.remove(entity, core.DAMAGE);
+        }
+        for (int entity : data.list(core.DIE)) {
+            data.remove(entity, core.DIE);
+        }
+    }
+}

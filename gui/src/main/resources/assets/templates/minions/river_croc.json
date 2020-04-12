@@ -2,11 +2,12 @@
     "alias": "minions/river_croc.json",
     "display": {
         "name": "River Crocolisk",
-        "imagePath": null,
+        "imagePath": "images/cards/River_Crocolisk_full.png",
         "colors": ["GREEN"]
     },
     "components": {
         "ATTACK": 2,
-        "HEALTH": 3
+        "HEALTH": 3,
+        "SUMMONING_SICKNESS": 1
     }
 }

@@ -8,7 +8,6 @@ import com.etherblood.a.ai.moves.DeclareAttack;
 import com.etherblood.a.ai.moves.EndAttackPhase;
 import com.etherblood.a.ai.moves.EndBlockPhase;
 import com.etherblood.a.ai.moves.Move;
-import com.etherblood.a.rules.Components;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
@@ -35,16 +34,16 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
     private List<Move> moveGen() {
         EntityData data = game.getData();
         List<Move> result = new ArrayList<>();
-        for (int player : data.list(Components.ACTIVE_PLAYER_PHASE)) {
-            int phase = data.get(player, Components.ACTIVE_PLAYER_PHASE);
+        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
+            int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
             if (phase == PlayerPhase.ATTACK_PHASE) {
-                IntList minions = data.list(Components.IN_BATTLE_ZONE);
+                IntList minions = data.list(core.IN_BATTLE_ZONE);
                 for (int attacker : minions) {
                     if (!game.canDeclareAttack(player, attacker)) {
                         continue;
                     }
                     for (int target : minions) {
-                        if (data.hasValue(target, Components.OWNED_BY, player)) {
+                        if (data.hasValue(target, core.OWNED_BY, player)) {
                             // technically a valid target, but we prune friendly fire attacks for the AI (for now)
                             continue;
                         }
@@ -53,18 +52,18 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
                         }
                     }
                 }
-                IntList handCards = data.list(Components.IN_HAND_ZONE);
+                IntList handCards = data.list(core.IN_HAND_ZONE);
                 for (int handCard : handCards) {
                     if (!game.canCast(player, handCard)) {
                         continue;
                     }
-                    CardTemplate template = game.getCards().apply(data.get(handCard, Components.CARD_TEMPLATE));
+                    CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
                     CardCast cast = template.getAttackPhaseCast();
                     addCastMoves(game, player, handCard, cast, result);
                 }
                 result.add(new EndAttackPhase(player));
             } else {
-                IntList minions = data.list(Components.IN_BATTLE_ZONE);
+                IntList minions = data.list(core.IN_BATTLE_ZONE);
                 for (int blocker : minions) {
                     if (!game.canBlock(player, blocker)) {
                         continue;
@@ -75,12 +74,12 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
                         }
                     }
                 }
-                IntList handCards = data.list(Components.IN_HAND_ZONE);
+                IntList handCards = data.list(core.IN_HAND_ZONE);
                 for (int handCard : handCards) {
                     if (!game.canCast(player, handCard)) {
                         continue;
                     }
-                    CardTemplate template = game.getCards().apply(data.get(handCard, Components.CARD_TEMPLATE));
+                    CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
                     CardCast cast = template.getBlockPhaseCast();
                     addCastMoves(game, player, handCard, cast, result);
                 }
@@ -93,7 +92,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
     private void addCastMoves(Game game, int player, int handCard, CardCast cast, List<Move> result) {
         if (cast.isTargeted()) {
-            for (int target : game.getData().list(Components.IN_BATTLE_ZONE)) {
+            for (int target : game.getData().list(core.IN_BATTLE_ZONE)) {
                 result.add(new Cast(player, handCard, target));
             }
         } else {
