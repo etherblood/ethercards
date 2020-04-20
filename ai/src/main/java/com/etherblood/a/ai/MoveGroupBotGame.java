@@ -20,8 +20,6 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.Stopwatch;
-import com.etherblood.a.rules.TimeStats;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,12 +128,6 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
 
     @Override
     public List<MoveGroup> generateMoves() {
-        try ( Stopwatch stopwatch = TimeStats.get().time("MoveGroupGenerator")) {
-            return moveGen();
-        }
-    }
-
-    private List<MoveGroup> moveGen() {
         //TODO: prune duplicate moves (eg. it doesn't matter which of my identical minions attacks, so we just create moves for the first)
 
         EntityData data = game.getData();
@@ -261,8 +253,7 @@ public class MoveGroupBotGame extends BotGameAdapter<MoveGroup, MoveGroupBotGame
     }
 
     @Override
-    public String toMoveString(MoveGroup move
-    ) {
+    public String toMoveString(MoveGroup move) {
         if (move instanceof EndAttackCasting) {
             EndAttackCasting end = (EndAttackCasting) move;
             return "EndAttackCasting #" + end.player;

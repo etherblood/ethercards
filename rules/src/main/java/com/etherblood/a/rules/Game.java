@@ -9,15 +9,14 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.systems.*;
 import com.etherblood.a.rules.templates.MinionTemplate;
 import java.util.ArrayList;
-import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.OptionalInt;
-import java.util.Random;
 import java.util.function.IntFunction;
+import java.util.function.IntUnaryOperator;
 
 public class Game {
 
@@ -59,7 +58,7 @@ public class Game {
         surrenderSystems.addAll(settings.generalSystems);
 
         int[] players = new int[settings.playerCount];
-        int startingPlayerIndex = settings.random.nextInt(players.length);
+        int startingPlayerIndex = settings.random.applyAsInt(players.length);
         for (int i = 0; i < players.length; i++) {
             players[i] = data.createEntity();
             data.set(players[i], core.PLAYER_INDEX, i);
@@ -76,7 +75,7 @@ public class Game {
         endBlockPhase(getActivePlayer());
     }
 
-    public Random getRandom() {
+    public IntUnaryOperator getRandom() {
         return settings.random;
     }
 
@@ -110,9 +109,7 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        try ( Stopwatch stopwatch = TimeStats.get().time("isGameOver()")) {
-            return data.list(core().ACTIVE_PLAYER_PHASE).isEmpty();
-        }
+        return data.list(core().ACTIVE_PLAYER_PHASE).isEmpty();
     }
 
     public boolean hasPlayerWon(int player) {
@@ -124,7 +121,9 @@ public class Game {
     }
 
     public void endAttackPhase(int player) {
-        verifyCanEndAttackPhase(player, true);
+        if (settings.validateMoves) {
+            verifyCanEndAttackPhase(player, true);
+        }
         runWithBackup(() -> {
             data.set(player, core().END_ATTACK_PHASE, 1);
             runSystems(endAttackPhaseSystems);
@@ -152,7 +151,9 @@ public class Game {
     }
 
     public void endBlockPhase(int player) {
-        verifyCanEndBlockPhase(player, true);
+        if (settings.validateMoves) {
+            verifyCanEndBlockPhase(player, true);
+        }
         runWithBackup(() -> {
             data.set(player, core().END_BLOCK_PHASE, 1);
             runSystems(endBlockPhaseSystems);
@@ -180,7 +181,9 @@ public class Game {
     }
 
     public void declareAttack(int player, int attacker, int target) {
-        verifyCanDeclareAttack(player, attacker, target, true);
+        if (settings.validateMoves) {
+            verifyCanDeclareAttack(player, attacker, target, true);
+        }
         runWithBackup(() -> {
             data.set(attacker, core().ATTACKS_TARGET, target);
             // no systems, attack is only declared, nothing happens yet
@@ -258,7 +261,9 @@ public class Game {
     }
 
     public void block(int player, int blocker, int attacker) {
-        verifyCanBlock(player, blocker, attacker, true);
+        if (settings.validateMoves) {
+            verifyCanBlock(player, blocker, attacker, true);
+        }
         runWithBackup(() -> {
             data.set(blocker, core().BLOCKS_ATTACKER, attacker);
             runSystems(blockSystems);
@@ -349,7 +354,9 @@ public class Game {
     }
 
     public void cast(int player, int castable, Integer target) {
-        validateCanCast(player, castable, target != null ? target : ~0, true);
+        if (settings.validateMoves) {
+            validateCanCast(player, castable, target != null ? target : ~0, true);
+        }
         runWithBackup(() -> {
             data.set(castable, core().CAST_TARGET, target != null ? target : ~0);
             runSystems(castSystems);
@@ -451,7 +458,9 @@ public class Game {
     }
 
     public void surrender(int player) {
-        validateCanSurrender(player, true);
+        if (settings.validateMoves) {
+            validateCanSurrender(player, true);
+        }
         runWithBackup(() -> {
             data.set(player, core().HAS_LOST, 1);
             runSystems(surrenderSystems);
@@ -496,15 +505,10 @@ public class Game {
     }
 
     private void runSystems(List<AbstractSystem> systems) {
-        TimeStats stats = TimeStats.get();
-        try ( Stopwatch totalStopwatch = stats.time("Systems total")) {
-            for (AbstractSystem system : systems) {
-                try ( Stopwatch systemStopwatch = stats.time(system.getClass().getSimpleName())) {
-                    system.run(this, data);
-                }
-//                assert validateStateLegal();
-            }
+        for (AbstractSystem system : systems) {
+            system.run(this, data);
         }
+//                assert validateStateLegal();
     }
 
     private boolean validateStateLegal() {

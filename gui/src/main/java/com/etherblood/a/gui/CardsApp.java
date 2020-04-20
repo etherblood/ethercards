@@ -32,7 +32,8 @@ import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
-import com.etherblood.a.ai.bots.mcts.RolloutsToSimpleEvaluation;
+import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
+import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
 import com.etherblood.a.ai.moves.DeclareAttack;
@@ -45,7 +46,6 @@ import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
@@ -75,8 +75,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.function.IntPredicate;
-import org.slf4j.LoggerFactory;
 
 public class CardsApp extends SimpleApplication implements ActionListener {
 
@@ -539,18 +539,17 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     private void applyAI() {
         int botPlayerIndex = 1;
         if (!game.isGameOver() && game.getActivePlayerIndex() == botPlayerIndex) {
-            RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(new Random(), 10);
+            Function<MoveBotGame, float[]> evaluation = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
+            Function<MoveBotGame, float[]> rolloutEvaluation = new RolloutToEvaluation<>(new Random(), 10, evaluation)::evaluate;
             MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
             botSettings.verbose = true;
-            botSettings.evaluation = evaluation::evaluate;
+            botSettings.evaluation = rolloutEvaluation;
+            botSettings.strength = 30_000;
             MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(game.getSettings())), botSettings);
             while (!game.isGameOver() && game.getActivePlayerIndex() == botPlayerIndex) {
                 Move move = bot.findBestMove();
                 move.apply(game);
                 bot.onMove(move);
-            }
-            for (String stat : TimeStats.get().toStatsStrings()) {
-                LoggerFactory.getLogger(CardsApp.class).info(stat);
             }
         }
         updateBoard();

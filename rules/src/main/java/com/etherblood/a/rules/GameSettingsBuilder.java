@@ -13,16 +13,17 @@ import com.etherblood.a.rules.templates.MinionTemplate;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.function.IntFunction;
+import java.util.function.IntUnaryOperator;
 
 public class GameSettingsBuilder {
 
     public int playerCount = 2;
     public IntFunction<CardTemplate> cards;
     public IntFunction<MinionTemplate> minions;
-    public Random random = new SecureRandom();
+    public IntUnaryOperator random = new SecureRandom()::nextInt;
     public boolean backupsEnabled = true;
+    public boolean validateMoves = true;
     public Components components;
     public List<AbstractSystem> generalSystems = Arrays.asList(
             new DrawSystem(),
@@ -34,8 +35,21 @@ public class GameSettingsBuilder {
             new TemporariesCleanupSystem()
     );
 
+    public GameSettingsBuilder() {
+    }
+
+    public GameSettingsBuilder(GameSettings settings) {
+        playerCount = settings.playerCount;
+        cards = settings.cards;
+        minions = settings.minions;
+        random = settings.random;
+        backupsEnabled = settings.backupsEnabled;
+        components = settings.components;
+        generalSystems = settings.generalSystems;
+    }
+
     public GameSettings build() {
-        return new GameSettings(playerCount, cards, minions, random, backupsEnabled, components, generalSystems);
+        return new GameSettings(playerCount, cards, minions, random, backupsEnabled, validateMoves, components, generalSystems);
     }
 
 }

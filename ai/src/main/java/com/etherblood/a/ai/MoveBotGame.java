@@ -11,8 +11,6 @@ import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.Stopwatch;
-import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import java.util.ArrayList;
@@ -20,18 +18,14 @@ import java.util.List;
 
 public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
+    public boolean pruneFriendlyAttacks = true;
+
     public MoveBotGame(Game game) {
         super(game);
     }
 
     @Override
     public List<Move> generateMoves() {
-        try ( Stopwatch stopwatch = TimeStats.get().time("MoveGeneratorImpl")) {
-            return moveGen();
-        }
-    }
-
-    private List<Move> moveGen() {
         EntityData data = game.getData();
         List<Move> result = new ArrayList<>();
         for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
@@ -43,9 +37,11 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
                         continue;
                     }
                     for (int target : minions) {
-                        if (data.hasValue(target, core.OWNED_BY, player)) {
-                            // technically a valid target, but we prune friendly fire attacks for the AI (for now)
-                            continue;
+                        if (pruneFriendlyAttacks) {
+                            if (data.hasValue(target, core.OWNED_BY, player)) {
+                                // technically a valid target, but we prune friendly fire attacks for the AI (for now)
+                                continue;
+                            }
                         }
                         if (game.canDeclareAttack(player, attacker, target)) {
                             result.add(new DeclareAttack(player, attacker, target));

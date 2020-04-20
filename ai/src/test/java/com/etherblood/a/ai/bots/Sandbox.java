@@ -3,16 +3,15 @@ package com.etherblood.a.ai.bots;
 import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
-import com.etherblood.a.ai.bots.mcts.RolloutsToSimpleEvaluation;
+import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
+import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
-import com.etherblood.a.rules.TimeStats;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.CardTemplate;
@@ -25,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
 public class Sandbox {
@@ -74,15 +74,19 @@ public class Sandbox {
         for (int i = 0; i < 100; i++) {
             Game game = startGame();
 
-            RolloutsToSimpleEvaluation<Move, MoveBotGame> evaluation = new RolloutsToSimpleEvaluation<>(random, 10);
+            Function<MoveBotGame, float[]> simple = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
+            
+            Function<MoveBotGame, float[]> rolloutEvaluation0 = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings0 = new MctsBotSettings<>();
             settings0.strength = 1000;
-            settings0.evaluation = evaluation::evaluate;
-            MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(newInstance(game)), settings0);
+            settings0.evaluation = rolloutEvaluation0;
+            MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(game.getSettings())), settings0);
+
+            Function<MoveBotGame, float[]> rolloutEvaluation1 = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings1 = new MctsBotSettings<>();
             settings1.strength = 1000;
-            settings1.evaluation = evaluation::evaluate;
-            MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(newInstance(game)), settings1);
+            settings1.evaluation = rolloutEvaluation1;
+            MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(game.getSettings())), settings1);
 
             while (!game.isGameOver()) {
                 Move move;
@@ -108,19 +112,15 @@ public class Sandbox {
                 result[0] += 0.5f;
                 result[1] += 0.5f;
             }
-            System.out.println("Result: " + Arrays.toString(result) + " in " + Arrays.toString(Arrays.stream(nanos).mapToObj(TimeStats::humanReadableNanos).toArray()));
+            System.out.println("Result: " + Arrays.toString(result));
         }
-    }
-
-    private Game newInstance(Game game) {
-        return new Game(game.getSettings());
     }
 
     private Game startGame() {
         GameSettingsBuilder settings = new GameSettingsBuilder();
         CoreComponents core = components.getModule(CoreComponents.class);
         settings.backupsEnabled = false;
-        settings.random = random;
+        settings.random = random::nextInt;
         settings.cards = cards::get;
         settings.minions = minions::get;
         settings.components = components;

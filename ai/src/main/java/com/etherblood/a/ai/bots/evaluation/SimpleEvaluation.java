@@ -1,30 +1,15 @@
-package com.etherblood.a.ai.bots.mcts;
+package com.etherblood.a.ai.bots.evaluation;
 
 import com.etherblood.a.ai.BotGame;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.CoreComponents;
-import java.util.List;
-import java.util.Random;
 
-public class RolloutsToSimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
-
-    private final Random random;
-    private final int rolloutMoves;
-
-    public RolloutsToSimpleEvaluation(Random random, int rolloutMoves) {
-        this.random = random;
-        this.rolloutMoves = rolloutMoves;
-    }
+public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
 
     public float[] evaluate(Game game) {
-        for (int i = 0; i < rolloutMoves; i++) {
-            if (game.isGameOver()) {
-                return game.resultPlayerScores();
-            }
-            List<Move> moves = game.generateMoves();
-            Move move = moves.get(random.nextInt(moves.size()));
-            game.applyMove(move);
+        if (game.isGameOver()) {
+            return game.resultPlayerScores();
         }
         EntityData data = game.getData();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
@@ -54,9 +39,10 @@ public class RolloutsToSimpleEvaluation<Move, Game extends BotGame<Move, Game>> 
         float[] result = new float[game.playerCount()];
         for (int player : data.list(core.PLAYER_INDEX)) {
             float score = playerScores.getOrElse(player, 0);
-            score += (float) Math.sqrt(2 * handCards.getOrElse(player, 0));
+            score += (float) 15 * handCards.getOrElse(player, 0);
             score += (float) Math.sqrt(libraryCards.getOrElse(player, 0));
-            result[data.get(player, core.PLAYER_INDEX)] = score;
+            score -= 10 * data.getOptional(player, core.FATIGUE).orElse(0);
+            result[data.get(player, core.PLAYER_INDEX)] = Math.max(score, 0);
         }
 
         float sum = 0;

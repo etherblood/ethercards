@@ -7,7 +7,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.templates.MinionTemplate;
 
-import java.util.Random;
+import java.util.function.IntUnaryOperator;
 
 public class SystemsUtil {
 
@@ -77,7 +77,7 @@ public class SystemsUtil {
         data.set(entity, core.OWNED_BY, owner);
     }
 
-    public static void drawCards(EntityData data, int amount, Random random, int player) {
+    public static void drawCards(EntityData data, int amount, IntUnaryOperator random, int player) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
         IntList myLibraryCards = new IntList();
@@ -96,7 +96,7 @@ public class SystemsUtil {
             myLibraryCards.clear();
         } else {
             while (amount > 0) {
-                int card = myLibraryCards.swapRemoveAt(random.nextInt(myLibraryCards.size()));
+                int card = myLibraryCards.swapRemoveAt(random.applyAsInt(myLibraryCards.size()));
                 data.remove(card, core.IN_LIBRARY_ZONE);
                 data.set(card, core.IN_HAND_ZONE, 1);
                 amount--;
