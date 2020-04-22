@@ -4,4 +4,5 @@ public class PlayerPhase {
 
     public static final int BLOCK_PHASE = 1;
     public static final int ATTACK_PHASE = 2;
+    public static final int MULLIGAN_PHASE = 3;
 }

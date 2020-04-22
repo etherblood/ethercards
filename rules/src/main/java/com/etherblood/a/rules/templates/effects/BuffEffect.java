@@ -1,10 +1,10 @@
-package com.etherblood.a.rules.templates.casteffects;
+package com.etherblood.a.rules.templates.effects;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.templates.casteffects.filedtypes.ComponentsMap;
+import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.templates.effects.filedtypes.ComponentsMap;
 
 public class BuffEffect extends Effect {
 
@@ -16,7 +16,7 @@ public class BuffEffect extends Effect {
     }
 
     @Override
-    public void apply(Game game, EntityData data, int source, int target) {
+    public void apply(GameSettings settings, EntityData data, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         if (!data.has(target, core.IN_BATTLE_ZONE)) {
             throw new AssertionError();

@@ -65,4 +65,12 @@ public class Node<T> {
         }
         return result;
     }
+
+    public List<Node<T>> getChilds() {
+        List<Node<T>> result = new ArrayList<>();
+        for (int i = 1; i < childs.length; i += 2) {
+            result.add((Node<T>) childs[i]);
+        }
+        return result;
+    }
 }

@@ -5,8 +5,10 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
 import com.etherblood.a.ai.moves.DeclareAttack;
+import com.etherblood.a.ai.moves.DeclareMulligan;
 import com.etherblood.a.ai.moves.EndAttackPhase;
 import com.etherblood.a.ai.moves.EndBlockPhase;
+import com.etherblood.a.ai.moves.EndMulliganPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
@@ -30,56 +32,72 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
         List<Move> result = new ArrayList<>();
         for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
             int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
-            if (phase == PlayerPhase.ATTACK_PHASE) {
-                IntList minions = data.list(core.IN_BATTLE_ZONE);
-                for (int attacker : minions) {
-                    if (!game.canDeclareAttack(player, attacker)) {
-                        continue;
-                    }
-                    for (int target : minions) {
-                        if (pruneFriendlyAttacks) {
-                            if (data.hasValue(target, core.OWNED_BY, player)) {
-                                // technically a valid target, but we prune friendly fire attacks for the AI (for now)
-                                continue;
+            switch (phase) {
+                case PlayerPhase.ATTACK_PHASE: {
+                    IntList minions = data.list(core.IN_BATTLE_ZONE);
+                    for (int attacker : minions) {
+                        if (!game.getMoves().canDeclareAttack(player, attacker)) {
+                            continue;
+                        }
+                        for (int target : minions) {
+                            if (pruneFriendlyAttacks) {
+                                if (data.hasValue(target, core.OWNED_BY, player)) {
+                                    // technically a valid target, but we prune friendly fire attacks for the AI (for now)
+                                    continue;
+                                }
+                            }
+                            if (game.getMoves().canDeclareAttack(player, attacker, target)) {
+                                result.add(new DeclareAttack(player, attacker, target));
                             }
                         }
-                        if (game.canDeclareAttack(player, attacker, target)) {
-                            result.add(new DeclareAttack(player, attacker, target));
+                    }
+                    IntList handCards = data.list(core.IN_HAND_ZONE);
+                    for (int handCard : handCards) {
+                        if (!game.getMoves().canCast(player, handCard)) {
+                            continue;
+                        }
+                        CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
+                        CardCast cast = template.getAttackPhaseCast();
+                        addCastMoves(game, player, handCard, cast, result);
+                    }
+                    result.add(new EndAttackPhase(player));
+                    break;
+                }
+                case PlayerPhase.BLOCK_PHASE: {
+                    IntList minions = data.list(core.IN_BATTLE_ZONE);
+                    for (int blocker : minions) {
+                        if (!game.getMoves().canBlock(player, blocker)) {
+                            continue;
+                        }
+                        for (int target : minions) {
+                            if (game.getMoves().canBlock(player, blocker, target)) {
+                                result.add(new Block(player, blocker, target));
+                            }
                         }
                     }
-                }
-                IntList handCards = data.list(core.IN_HAND_ZONE);
-                for (int handCard : handCards) {
-                    if (!game.canCast(player, handCard)) {
-                        continue;
+                    IntList handCards = data.list(core.IN_HAND_ZONE);
+                    for (int handCard : handCards) {
+                        if (!game.getMoves().canCast(player, handCard)) {
+                            continue;
+                        }
+                        CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
+                        CardCast cast = template.getBlockPhaseCast();
+                        addCastMoves(game, player, handCard, cast, result);
                     }
-                    CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
-                    CardCast cast = template.getAttackPhaseCast();
-                    addCastMoves(game, player, handCard, cast, result);
+                    result.add(new EndBlockPhase(player));
+                    break;
                 }
-                result.add(new EndAttackPhase(player));
-            } else {
-                IntList minions = data.list(core.IN_BATTLE_ZONE);
-                for (int blocker : minions) {
-                    if (!game.canBlock(player, blocker)) {
-                        continue;
-                    }
-                    for (int target : minions) {
-                        if (game.canBlock(player, blocker, target)) {
-                            result.add(new Block(player, blocker, target));
+                case PlayerPhase.MULLIGAN_PHASE: {
+                    for (int card : data.list(core.IN_HAND_ZONE)) {
+                        if (game.getMoves().canDeclareMulligan(player, card)) {
+                            result.add(new DeclareMulligan(player, card));
                         }
                     }
+                    result.add(new EndMulliganPhase(player));
+                    break;
                 }
-                IntList handCards = data.list(core.IN_HAND_ZONE);
-                for (int handCard : handCards) {
-                    if (!game.canCast(player, handCard)) {
-                        continue;
-                    }
-                    CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
-                    CardCast cast = template.getBlockPhaseCast();
-                    addCastMoves(game, player, handCard, cast, result);
-                }
-                result.add(new EndBlockPhase(player));
+                default:
+                    throw new AssertionError(phase);
             }
         }
         // skip generating a surrender move for the AI
@@ -103,6 +121,13 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
         }
         if (move instanceof EndAttackPhase) {
             return "End AttackPhase";
+        }
+        if (move instanceof EndMulliganPhase) {
+            return "End MulliganPhase";
+        }
+        if (move instanceof DeclareMulligan) {
+            DeclareMulligan mulligan = (DeclareMulligan) move;
+            return "DeclareMulligan " + toCardString(mulligan.card);
         }
         if (move instanceof Cast) {
             Cast cast = (Cast) move;

@@ -1,6 +1,7 @@
 package com.etherblood.a.ai.bots.mcts;
 
 import com.etherblood.a.ai.BotGame;
+import com.etherblood.a.entities.collections.IntList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -41,13 +42,14 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         this.firstPlayUrgency = settings.firstPlayUrgency;
         this.evaluation = settings.evaluation;
         this.raveMultiplier = settings.raveMultiplier;
-
-        rootNode = createNode();
     }
 
-    public Move findBestMove() {
+    public Move findBestMove(int playerIndex) {
         List<Move> moves = new ArrayList<>(sourceGame.generateMoves());
         if (moves.size() > 1) {
+            if (rootNode == null) {
+                rootNode = createNode();
+            }
             Map<Move, RaveScore> raveScores = initRaveScores();
 
             while (rootNode.visits() < strength) {
@@ -55,7 +57,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                 // randomize opponents hand cards
                 // TODO: use a priori knowlege for better approximation of real hand cards
                 // TODO: the simulated opponent also only 'knows' our hand...
-                simulationGame.randomizeHiddenInformation(random);
+                simulationGame.randomizeHiddenInformation(random, playerIndex);
                 iteration(rootNode, raveScores);
             }
 
@@ -64,9 +66,20 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             if (verbose) {
                 LOG.info("Move scores:");
                 for (Move move : moves) {
-                    LOG.info("{}: {}", visits(node, move), sourceGame.toMoveString(move));
+                    LOG.info("{}: {}", Math.round(visits(node, move)), sourceGame.toMoveString(move));
                 }
-                LOG.info("Expected winrate: {}%", (int) (100 * rootNode.score(sourceGame.activePlayerIndex()) / rootNode.visits()));
+                IntList branching = new IntList();
+                List<Node<Move>> nodes = Arrays.asList(rootNode);
+                while (!nodes.isEmpty()) {
+                    branching.add(nodes.size());
+                    List<Node<Move>> nextNodes = new ArrayList<>();
+                    for (Node<Move> n : nodes) {
+                        nextNodes.addAll(n.getChilds());
+                    }
+                    nodes = nextNodes;
+                }
+                LOG.info("Tree dimensions: {} - {}", branching.size(), branching.toArray());
+                LOG.info("Expected winrate: {}%", (int) (100 * rootNode.score(playerIndex) / rootNode.visits()));
             }
         }
         return moves.get(0);
@@ -82,13 +95,15 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
 
     public void onMove(Move move) {
         //TODO: would be nice if there was a move history which could be used instead, making this method obsolete
-        rootNode = rootNode.getChildOrDefault(move, createNode());
+        if (rootNode != null) {
+            rootNode = rootNode.getChildOrDefault(move, null);
+        }
     }
 
     private Map<Move, RaveScore> initRaveScores() {
         Map<Move, RaveScore> raveScores = new HashMap<>();
-        RaveScore defaultScore = new RaveScore(simulationGame.playerCount());
-        defaultScore.updateScores(1f / simulationGame.playerCount());
+        RaveScore defaultScore = new RaveScore(playerCount());
+        defaultScore.updateScores(1f / playerCount());
         raveScores.put(null, defaultScore);
         initRaveScores(raveScores, rootNode);
         return raveScores;
@@ -98,7 +113,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         for (Move move : node.getMoves()) {
             Node<Move> child = node.getChildOrDefault(move, null);
             if (child != null) {
-                raveScores.computeIfAbsent(move, x -> new RaveScore(simulationGame.playerCount())).updateScores(child.getScores());
+                raveScores.computeIfAbsent(move, x -> new RaveScore(playerCount())).updateScores(child.getScores());
                 raveScores.get(null).updateScores(child.getScores());
                 initRaveScores(raveScores, child);
             }
@@ -124,7 +139,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             node.updateScores(result);
         }
         for (Move move : movePath) {
-            raveScores.computeIfAbsent(move, x -> new RaveScore(simulationGame.playerCount())).updateScores(result);
+            raveScores.computeIfAbsent(move, x -> new RaveScore(playerCount())).updateScores(result);
         }
         float[] avgWeights = Arrays.copyOf(result, result.length);
         for (int i = 0; i < avgWeights.length; i++) {
@@ -198,6 +213,10 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     }
 
     private Node<Move> createNode() {
-        return new Node<>(simulationGame.playerCount());
+        return new Node<>(playerCount());
+    }
+
+    private int playerCount() {
+        return sourceGame.playerCount();
     }
 }

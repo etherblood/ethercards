@@ -4,6 +4,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.MinionTemplate;
 import java.util.Random;
@@ -33,8 +34,16 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
     }
 
     @Override
+    public boolean isPlayerIndexActive(int playerIndex) {
+        return game.isPlayerActive(game.findPlayerByIndex(playerIndex));
+    }
+
+    @Override
     public int activePlayerIndex() {
-        return game.getData().get(game.getActivePlayer(), core.PLAYER_INDEX);
+        for (int player : game.getData().list(core.ACTIVE_PLAYER_PHASE)) {
+            return game.getData().get(player, core.PLAYER_INDEX);
+        }
+        throw new AssertionError();
     }
 
     @Override
@@ -57,18 +66,27 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
     }
 
     @Override
-    public void randomizeHiddenInformation(Random random) {
+    public void randomizeHiddenInformation(Random random, int selfIndex) {
         EntityData data = game.getData();
-        int player = game.getActivePlayer();
+        Integer self = null;
+        for (int player : data.list(core.PLAYER_INDEX)) {
+            if (data.hasValue(player, core.PLAYER_INDEX, selfIndex)) {
+                self = player;
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
+                // discard mulligans of opponents, they make no difference since all hand cards will be randomized
+                data.remove(player, core.ACTIVE_PLAYER_PHASE);
+            }
+        }
         IntList allHandCards = data.list(core.IN_HAND_ZONE);
         IntList opponentHandCards = new IntList();
         for (int card : allHandCards) {
-            if (!data.hasValue(card, core.OWNED_BY, player)) {
+            if (!data.hasValue(card, core.OWNED_BY, self)) {
                 opponentHandCards.add(card);
             }
         }
         for (int card : opponentHandCards) {
             data.remove(card, core.IN_HAND_ZONE);
+            data.remove(card, core.MULLIGAN);
             data.set(card, core.IN_LIBRARY_ZONE, 1);
         }
 

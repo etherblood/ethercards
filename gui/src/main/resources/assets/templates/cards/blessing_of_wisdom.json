@@ -7,7 +7,7 @@
         "description": "Choose a minion, whenever it blocks or attacks it's owner draws a card."
     },
     "attackCast": {
-        "manaCost": 2,
+        "manaCost": 1,
         "targeted": true,
         "effects": [
             {

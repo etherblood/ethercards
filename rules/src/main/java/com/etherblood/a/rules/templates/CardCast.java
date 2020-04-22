@@ -1,6 +1,6 @@
 package com.etherblood.a.rules.templates;
 
-import com.etherblood.a.rules.templates.casteffects.Effect;
+import com.etherblood.a.rules.templates.effects.Effect;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

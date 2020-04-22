@@ -9,8 +9,7 @@ public class CoreComponents implements ComponentsModule {
     public final int HAS_WON;
     public final int PLAYER_INDEX;
     public final int ACTIVE_PLAYER_PHASE;
-    public final int END_BLOCK_PHASE;
-    public final int END_ATTACK_PHASE;
+    public final int END_PHASE;
     public final int HEALTH;
     public final int ATTACK;
     public final int DAMAGE;
@@ -39,6 +38,7 @@ public class CoreComponents implements ComponentsModule {
     public final int CARD_TEMPLATE;
     public final int MINION_TEMPLATE;
     public final int HERO;
+    public final int MULLIGAN;
 
 
     public CoreComponents(ToIntFunction<String> register) {
@@ -46,8 +46,7 @@ public class CoreComponents implements ComponentsModule {
         HAS_WON = register.applyAsInt("HAS_WON");
         PLAYER_INDEX = register.applyAsInt("PLAYER_INDEX");
         ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
-        END_BLOCK_PHASE = register.applyAsInt("END_BLOCK_PHASE");
-        END_ATTACK_PHASE = register.applyAsInt("END_ATTACK_PHASE");
+        END_PHASE = register.applyAsInt("END_PHASE");
         HEALTH = register.applyAsInt("HEALTH");
         ATTACK = register.applyAsInt("ATTACK");
         DAMAGE = register.applyAsInt("DAMAGE");
@@ -76,5 +75,6 @@ public class CoreComponents implements ComponentsModule {
         CARD_TEMPLATE = register.applyAsInt("CARD_TEMPLATE");
         MINION_TEMPLATE = register.applyAsInt("MINION_TEMPLATE");
         HERO = register.applyAsInt("HERO");
+        MULLIGAN = register.applyAsInt("MULLIGAN");
     }
 }

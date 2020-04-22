@@ -26,7 +26,7 @@ public class EndBlockPhase implements Move {
 
     @Override
     public void apply(Game game) {
-        game.endBlockPhase(player);
+        game.getMoves().endBlockPhase(player);
     }
 
 }

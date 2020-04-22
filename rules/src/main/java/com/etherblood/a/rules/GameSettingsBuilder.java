@@ -18,7 +18,6 @@ import java.util.function.IntUnaryOperator;
 
 public class GameSettingsBuilder {
 
-    public int playerCount = 2;
     public IntFunction<CardTemplate> cards;
     public IntFunction<MinionTemplate> minions;
     public IntUnaryOperator random = new SecureRandom()::nextInt;
@@ -39,17 +38,17 @@ public class GameSettingsBuilder {
     }
 
     public GameSettingsBuilder(GameSettings settings) {
-        playerCount = settings.playerCount;
         cards = settings.cards;
         minions = settings.minions;
         random = settings.random;
         backupsEnabled = settings.backupsEnabled;
+        validateMoves = settings.validateMoves;
         components = settings.components;
         generalSystems = settings.generalSystems;
     }
 
     public GameSettings build() {
-        return new GameSettings(playerCount, cards, minions, random, backupsEnabled, validateMoves, components, generalSystems);
+        return new GameSettings(cards, minions, random, backupsEnabled, validateMoves, components, generalSystems);
     }
 
 }

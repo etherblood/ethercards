@@ -28,7 +28,7 @@ public class Block implements Move {
 
     @Override
     public void apply(Game game) {
-        game.block(player, source, target);
+        game.getMoves().block(player, source, target);
     }
 
 }

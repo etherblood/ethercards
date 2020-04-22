@@ -23,7 +23,14 @@ public class SimpleSetup {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
 
         for (int i = 0; i < heroes.length; i++) {
-            int player = game.findPlayerByIndex(i);
+            int player = data.createEntity();
+            data.set(player, core.PLAYER_INDEX, i);
+            if (i == 0) {
+                data.set(player, core.DRAW_CARDS, 3);
+            } else {
+                data.set(player, core.DRAW_CARDS, 4);
+            }
+            
             int hero = data.createEntity();
             data.set(hero, core.OWNED_BY, player);
             data.set(hero, core.IN_BATTLE_ZONE, 1);
@@ -39,6 +46,8 @@ public class SimpleSetup {
                 data.set(card, core.CARD_TEMPLATE, cardTemplate);
             }
         }
+        
+        game.getMoves().start();
     }
 
     public void setLibrary(int playerIndex, IntList library) {

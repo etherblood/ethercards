@@ -37,8 +37,10 @@ import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
 import com.etherblood.a.ai.moves.Block;
 import com.etherblood.a.ai.moves.Cast;
 import com.etherblood.a.ai.moves.DeclareAttack;
+import com.etherblood.a.ai.moves.DeclareMulligan;
 import com.etherblood.a.ai.moves.EndAttackPhase;
 import com.etherblood.a.ai.moves.EndBlockPhase;
+import com.etherblood.a.ai.moves.EndMulliganPhase;
 import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.rules.CoreComponents;
@@ -130,7 +132,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         CameraAppState cameraAppState = stateManager.getState(CameraAppState.class);
         Vector3f position = new Vector3f();
         Quaternion rotation = new Quaternion();
-        boolean isPlayer1 = game.getActivePlayerIndex() == 1;
+        boolean isPlayer1 = false;
         position.set(0, 3.8661501f, 6.470482f);
         if (isPlayer1) {
             position.addLocal(0, 0, -10.339f);
@@ -163,7 +165,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         settingsBuilder.minions = loader::getMinion;
         GameSettings settings = settingsBuilder.build();
         game = new Game(settings);
-        SimpleSetup setup = new SimpleSetup(settings.playerCount);
+        SimpleSetup setup = new SimpleSetup(2);
         setup.setHero(0, lib0.hero);
         setup.setHero(1, lib1.hero);
 
@@ -180,7 +182,6 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         setup.setLibrary(1, library1);
 
         setup.apply(game);
-        game.start();
     }
 
     private void initBoardGui() {
@@ -355,7 +356,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         if (game.isGameOver()) {
             return;
         }
-        int player = game.getActivePlayer();
+        int player = game.findPlayerByIndex(0);
         int index = 0;
         for (int cardEntity : cards) {
             if (data.has(cardEntity, core.CARD_TEMPLATE)) {
@@ -365,9 +366,12 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 cardModel.setFaceUp(!data.has(cardEntity, core.IN_LIBRARY_ZONE));
                 cardModel.setTemplate((DisplayCardTemplate) game.getCards().apply(data.get(cardEntity, core.CARD_TEMPLATE)));
 
-                if (game.canCast(player, cardEntity)) {
+                if (game.getMoves().canCast(player, cardEntity)) {
                     card.setInteractivity(castInteractivity(player, cardEntity));
                     cardModel.setGlow(ColorRGBA.Yellow);
+                } else if (game.getMoves().canDeclareMulligan(player, cardEntity)) {
+                    card.setInteractivity(mulliganInteractivity(player, cardEntity));
+                    cardModel.setGlow(ColorRGBA.Red);
                 } else {
                     card.clearInteractivity();
                     cardModel.setGlow(null);
@@ -384,10 +388,10 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 minionModel.setTemplate(template);
                 minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
 
-                if (game.canDeclareAttack(player, cardEntity)) {
+                if (game.getMoves().canDeclareAttack(player, cardEntity)) {
                     card.setInteractivity(attackInteractivity(player, cardEntity));
                     minionModel.setGlow(ColorRGBA.Red);
-                } else if (game.canBlock(player, cardEntity)) {
+                } else if (game.getMoves().canBlock(player, cardEntity)) {
                     card.setInteractivity(blockInteractivity(player, cardEntity));
                     minionModel.setGlow(ColorRGBA.Blue);
                 } else {
@@ -406,7 +410,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             public boolean isValid(BoardObject target) {
                 if (target instanceof Card) {
                     int targetId = objectEntities.get(target);
-                    return game.canDeclareAttack(player, attacker, targetId);
+                    return game.getMoves().canDeclareAttack(player, attacker, targetId);
                 }
                 return false;
             }
@@ -426,7 +430,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             public boolean isValid(BoardObject target) {
                 if (target instanceof Card) {
                     int targetId = objectEntities.get(target);
-                    return game.canBlock(player, blocker, targetId);
+                    return game.getMoves().canBlock(player, blocker, targetId);
                 }
                 return false;
             }
@@ -451,7 +455,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 public boolean isValid(BoardObject target) {
                     if (target instanceof Card) {
                         int targetId = objectEntities.get(target);
-                        return game.canCast(player, castable, targetId);
+                        return game.getMoves().canCast(player, castable, targetId);
                     }
                     return false;
                 }
@@ -468,6 +472,16 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
                 applyMove(new Cast(player, castable, ~0));
+            }
+        };
+    }
+
+    private Interactivity mulliganInteractivity(int player, int card) {
+        return new DragToPlayInteractivity() {
+
+            @Override
+            public void trigger(BoardObject boardObject, BoardObject target) {
+                applyMove(new DeclareMulligan(player, card));
             }
         };
     }
@@ -510,10 +524,16 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             if (!list.isEmpty()) {
                 int player = list.get(0);
                 int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
-                if (phase == PlayerPhase.BLOCK_PHASE) {
-                    applyMove(new EndBlockPhase(player));
-                } else {
-                    applyMove(new EndAttackPhase(player));
+                switch (phase) {
+                    case PlayerPhase.BLOCK_PHASE:
+                        applyMove(new EndBlockPhase(player));
+                        break;
+                    case PlayerPhase.ATTACK_PHASE:
+                        applyMove(new EndAttackPhase(player));
+                        break;
+                    case PlayerPhase.MULLIGAN_PHASE:
+                        applyMove(new EndMulliganPhase(player));
+                        break;
                 }
             }
 //        } else if ("1".equals(name) && isPressed) {
@@ -538,16 +558,17 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
     private void applyAI() {
         int botPlayerIndex = 1;
-        if (!game.isGameOver() && game.getActivePlayerIndex() == botPlayerIndex) {
+        int botPlayer = game.findPlayerByIndex(botPlayerIndex);
+        if (game.isPlayerActive(botPlayer)) {
             Function<MoveBotGame, float[]> evaluation = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
             Function<MoveBotGame, float[]> rolloutEvaluation = new RolloutToEvaluation<>(new Random(), 10, evaluation)::evaluate;
             MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
             botSettings.verbose = true;
             botSettings.evaluation = rolloutEvaluation;
-            botSettings.strength = 30_000;
+            botSettings.strength = 10_000;
             MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(game.getSettings())), botSettings);
-            while (!game.isGameOver() && game.getActivePlayerIndex() == botPlayerIndex) {
-                Move move = bot.findBestMove();
+            while (game.isPlayerActive(botPlayer)) {
+                Move move = bot.findBestMove(botPlayerIndex);
                 move.apply(game);
                 bot.onMove(move);
             }

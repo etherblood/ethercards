@@ -5,5 +5,5 @@ import com.etherblood.a.entities.EntityData;
 
 public abstract class AbstractSystem {
 
-    public abstract void run(Game game, EntityData data);
+    public abstract void run(GameSettings settings, EntityData data);
 }

@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.templates.casteffects.filedtypes;
+package com.etherblood.a.rules.templates.effects.filedtypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

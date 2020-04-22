@@ -11,17 +11,17 @@ import java.util.function.IntUnaryOperator;
 
 public class GameSettings {
 
-    public final int playerCount;
     public final IntFunction<CardTemplate> cards;
     public final IntFunction<MinionTemplate> minions;
     public final IntUnaryOperator random;
-    public final boolean backupsEnabled;
-    public final boolean validateMoves;
     public final Components components;
     public final List<AbstractSystem> generalSystems;
+    
+    //TODO: toggle values below are implementation details and do not belong here
+    public final boolean backupsEnabled;
+    public final boolean validateMoves;
 
-    public GameSettings(int playerCount, IntFunction<CardTemplate> cards, IntFunction<MinionTemplate> minions, IntUnaryOperator random, boolean backupsEnabled, boolean validateMoves, Components components, List<AbstractSystem> generalSystems) {
-        this.playerCount = playerCount;
+    public GameSettings(IntFunction<CardTemplate> cards, IntFunction<MinionTemplate> minions, IntUnaryOperator random, boolean backupsEnabled, boolean validateMoves, Components components, List<AbstractSystem> generalSystems) {
         this.cards = cards;
         this.minions = minions;
         this.random = random;

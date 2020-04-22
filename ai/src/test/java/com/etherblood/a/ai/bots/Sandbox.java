@@ -18,7 +18,7 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.CardTemplateBuilder;
 import com.etherblood.a.rules.templates.MinionTemplate;
 import com.etherblood.a.rules.templates.MinionTemplateBuilder;
-import com.etherblood.a.rules.templates.casteffects.SummonEffect;
+import com.etherblood.a.rules.templates.effects.SummonEffect;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -90,14 +90,14 @@ public class Sandbox {
 
             while (!game.isGameOver()) {
                 Move move;
-                if (game.getActivePlayerIndex() == 0) {
+                if (game.isPlayerActive(game.findPlayerByIndex(0))) {
                     long start = System.nanoTime();
-                    move = bot0.findBestMove();
+                    move = bot0.findBestMove(0);
                     nanos[0] += System.nanoTime() - start;
 
                 } else {
                     long start = System.nanoTime();
-                    move = bot1.findBestMove();
+                    move = bot1.findBestMove(1);
                     nanos[1] += System.nanoTime() - start;
                 }
                 move.apply(game);
@@ -133,7 +133,7 @@ public class Sandbox {
         MinionTemplate hero = heroBuilder.build(minions.size());
         minions.put(hero.getId(), hero);
 
-        SimpleSetup setup = new SimpleSetup(settings.playerCount);
+        SimpleSetup setup = new SimpleSetup(2);
         IntList library = new IntList();
         for (int i = 0; i < 20; i++) {
             library.add(i % cards.size());
@@ -145,7 +145,6 @@ public class Sandbox {
 
         Game game = new Game(settings.build());
         setup.apply(game);
-        game.start();
         return game;
     }
 }

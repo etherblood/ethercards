@@ -4,11 +4,11 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.casteffects.Effect;
+import com.etherblood.a.rules.templates.effects.Effect;
 
 import java.util.function.IntFunction;
 
@@ -21,7 +21,7 @@ public class CastSystem extends AbstractSystem {
     }
 
     @Override
-    public void run(Game game, EntityData data) {
+    public void run(GameSettings settings, EntityData data) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList entities = data.list(core.CAST_TARGET);
         for (int castSource : entities) {
@@ -45,7 +45,7 @@ public class CastSystem extends AbstractSystem {
                 data.set(owner, core.MANA, mana);
             }
             for (Effect effect : cast.getEffects()) {
-                effect.apply(game, data, castSource, target);
+                effect.apply(settings, data, castSource, target);
             }
             data.remove(castSource, core.CAST_TARGET);
             data.remove(castSource, core.IN_HAND_ZONE);

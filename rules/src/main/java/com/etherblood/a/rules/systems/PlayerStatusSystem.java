@@ -4,14 +4,14 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 
 public class PlayerStatusSystem extends AbstractSystem {
 
     @Override
-    public void run(Game game, EntityData data) {
+    public void run(GameSettings settings, EntityData data) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         updatePlayerDeaths(data);
 
@@ -19,8 +19,7 @@ public class PlayerStatusSystem extends AbstractSystem {
             if (data.has(player, core.HAS_LOST) || data.has(player, core.HAS_WON)) {
                 nextTurn(data, player);
                 data.remove(player, core.ACTIVE_PLAYER_PHASE);
-                data.remove(player, core.END_BLOCK_PHASE);
-                data.remove(player, core.END_ATTACK_PHASE);
+                data.remove(player, core.END_PHASE);
             }
         }
     }

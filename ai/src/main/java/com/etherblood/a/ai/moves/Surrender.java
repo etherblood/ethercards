@@ -26,7 +26,7 @@ public class Surrender implements Move {
 
     @Override
     public void apply(Game game) {
-        game.surrender(player);
+        game.getMoves().surrender(player);
     }
 
 }

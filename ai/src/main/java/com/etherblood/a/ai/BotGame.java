@@ -20,12 +20,14 @@ public interface BotGame<T, V extends BotGame<T, V>> {
 
     int activePlayerIndex();
 
+    boolean isPlayerIndexActive(int playerIndex);
+
     float[] resultPlayerScores();
 
     void copyStateFrom(V source);
 
-    void randomizeHiddenInformation(Random random);
-    
+    void randomizeHiddenInformation(Random random, int selfIndex);
+
     EntityData getData();
 
     String toMoveString(T move);

@@ -2,31 +2,31 @@ package com.etherblood.a.ai.moves;
 
 import com.etherblood.a.rules.Game;
 
-public class EndAttackPhase implements Move {
+public class EndMulliganPhase implements Move {
 
     public final int player;
 
-    public EndAttackPhase(int player) {
+    public EndMulliganPhase(int player) {
         this.player = player;
     }
 
     @Override
     public int hashCode() {
-        return 151 * player;
+        return 139 * player;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof EndAttackPhase)) {
+        if (!(obj instanceof EndMulliganPhase)) {
             return false;
         }
-        EndAttackPhase other = (EndAttackPhase) obj;
+        EndMulliganPhase other = (EndMulliganPhase) obj;
         return player == other.player;
     }
 
     @Override
     public void apply(Game game) {
-        game.getMoves().endAttackPhase(player);
+        game.getMoves().endMulliganPhase(player);
     }
 
 }

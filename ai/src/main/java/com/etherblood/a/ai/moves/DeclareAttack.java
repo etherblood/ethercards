@@ -28,7 +28,7 @@ public class DeclareAttack implements Move {
 
     @Override
     public void apply(Game game) {
-        game.declareAttack(player, source, target);
+        game.getMoves().declareAttack(player, source, target);
     }
 
 }

@@ -4,7 +4,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.templates.MinionTemplate;
 
 import java.util.function.IntUnaryOperator;
@@ -44,12 +44,16 @@ public class SystemsUtil {
     public static int decreaseAndRemoveLtZero(EntityData data, int entity, int component, int value) {
         int total = data.getOptional(entity, component).orElse(0);
         total -= value;
-        if (total <= 0) {
+        setAndRemoveLtZero(data, entity, component, total);
+        return total;
+    }
+
+    public static void setAndRemoveLtZero(EntityData data, int entity, int component, int value) {
+        if (value <= 0) {
             data.remove(entity, component);
         } else {
-            data.set(entity, component, total);
+            data.set(entity, component, value);
         }
-        return total;
     }
 
     public static void fight(EntityData data, int attacker, int blocker) {
@@ -65,9 +69,8 @@ public class SystemsUtil {
         increase(data, target, core.DAMAGE, damage);
     }
 
-    public static void summon(Game game, int minionTemplate, int owner) {
-        EntityData data = game.getData();
-        MinionTemplate minion = game.getMinions().apply(minionTemplate);
+    public static void summon(GameSettings settings, EntityData data, int minionTemplate, int owner) {
+        MinionTemplate minion = settings.minions.apply(minionTemplate);
         int entity = data.createEntity();
         for (int component : minion) {
             data.set(entity, component, minion.get(component));

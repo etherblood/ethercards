@@ -28,6 +28,6 @@ public class Cast implements Move {
 
     @Override
     public void apply(Game game) {
-        game.cast(player, source, target);
+        game.getMoves().cast(player, source, target);
     }
 }

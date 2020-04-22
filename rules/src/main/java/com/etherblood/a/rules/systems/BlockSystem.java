@@ -3,13 +3,13 @@ package com.etherblood.a.rules.systems;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 
 public class BlockSystem extends AbstractSystem {
 
     @Override
-    public void run(Game game, EntityData data) {
+    public void run(GameSettings settings, EntityData data) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
             int attacker = data.get(blocker, core.BLOCKS_ATTACKER);

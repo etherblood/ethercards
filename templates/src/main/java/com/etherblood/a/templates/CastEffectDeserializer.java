@@ -1,8 +1,8 @@
 package com.etherblood.a.templates;
 
-import com.etherblood.a.rules.templates.casteffects.filedtypes.CardId;
-import com.etherblood.a.rules.templates.casteffects.Effect;
-import com.etherblood.a.rules.templates.casteffects.filedtypes.MinionId;
+import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
+import com.etherblood.a.rules.templates.effects.Effect;
+import com.etherblood.a.rules.templates.effects.filedtypes.MinionId;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;

@@ -1,7 +1,7 @@
-package com.etherblood.a.rules.templates.casteffects;
+package com.etherblood.a.rules.templates.effects;
 
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 
 public class SingleTargetDamageEffect extends Effect {
@@ -13,7 +13,7 @@ public class SingleTargetDamageEffect extends Effect {
     }
 
     @Override
-    public void apply(Game game, EntityData data, int source, int target) {
+    public void apply(GameSettings settings, EntityData data, int source, int target) {
         SystemsUtil.damage(data, target, damage);
     }
 }
