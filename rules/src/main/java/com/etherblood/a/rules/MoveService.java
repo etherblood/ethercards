@@ -303,6 +303,12 @@ public class MoveService {
             }
             return false;
         }
+        if (data.has(blocker, core().SUMMONING_SICKNESS)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " has summoning sickness.");
+            }
+            return false;
+        }
         if (data.has(blocker, core().TIRED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is tired.");

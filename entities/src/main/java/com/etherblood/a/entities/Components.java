@@ -20,6 +20,7 @@ public class Components {
         return components.get(id);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends ComponentsModule> T getModule(Class<T> clazz) {
         return (T) modules.get(clazz);
     }

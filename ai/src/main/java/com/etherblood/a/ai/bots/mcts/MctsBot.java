@@ -61,7 +61,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                 iteration(rootNode, raveScores);
             }
 
-            Node node = rootNode;
+            Node<Move> node = rootNode;
             moves.sort(Comparator.comparingDouble(move -> -visits(node, move)));
             if (verbose) {
                 LOG.info("Move scores:");
@@ -79,7 +79,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                     nodes = nextNodes;
                 }
                 LOG.info("Tree dimensions: {} - {}", branching.size(), branching.toArray());
-                LOG.info("Expected winrate: {}%", (int) (100 * rootNode.score(playerIndex) / rootNode.visits()));
+                LOG.info("Expected winrate: {}%", Math.round(100 * rootNode.score(playerIndex) / rootNode.visits()));
             }
         }
         return moves.get(0);
@@ -96,6 +96,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     public void onMove(Move move) {
         //TODO: would be nice if there was a move history which could be used instead, making this method obsolete
         if (rootNode != null) {
+            //TODO: ignore mulligan moves of opponent
             rootNode = rootNode.getChildOrDefault(move, null);
         }
     }
@@ -120,14 +121,14 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         }
     }
 
-    private void iteration(Node rootNode, Map<Move, RaveScore> raveScores) {
-        Deque<Node> nodePath = new LinkedList<>();
+    private void iteration(Node<Move> rootNode, Map<Move, RaveScore> raveScores) {
+        Deque<Node<Move>> nodePath = new LinkedList<>();
         Deque<Move> movePath = new LinkedList<>();
         nodePath.add(rootNode);
         Move selectedMove = select(nodePath, movePath, raveScores);
 
         if (selectedMove != null) {
-            Node child = createNode();
+            Node<Move> child = createNode();
             nodePath.getLast().addChild(selectedMove, child);
             nodePath.add(child);
             movePath.add(selectedMove);
@@ -135,7 +136,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         }
 
         float[] result = evaluation.apply(simulationGame);
-        for (Node node : nodePath) {
+        for (Node<Move> node : nodePath) {
             node.updateScores(result);
         }
         for (Move move : movePath) {
@@ -148,8 +149,8 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         raveScores.get(null).updateScores(avgWeights);
     }
 
-    private Move select(Deque<Node> nodePath, Deque<Move> movePath, Map<Move, RaveScore> raveScores) {
-        Node node = nodePath.getLast();
+    private Move select(Deque<Node<Move>> nodePath, Deque<Move> movePath, Map<Move, RaveScore> raveScores) {
+        Node<Move> node = nodePath.getLast();
         Move selectedMove = uctSelect(node, raveScores);
         while ((node = getChild(node, selectedMove)) != null) {
             nodePath.add(node);
@@ -163,7 +164,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         return selectedMove;
     }
 
-    private Move uctSelect(Node node, Map<Move, RaveScore> raveScores) {
+    private Move uctSelect(Node<Move> node, Map<Move, RaveScore> raveScores) {
         List<Move> moves = simulationGame.generateMoves();
         if (moves.size() == 1) {
             return moves.get(0);
@@ -173,7 +174,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         float bestValue = Float.NEGATIVE_INFINITY;
         for (Move move : moves) {
             float score;
-            Node child = getChild(node, move);
+            Node<Move> child = getChild(node, move);
             if (child == null) {
                 score = firstPlayUrgency;
             } else {
@@ -208,7 +209,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         return uctValue;
     }
 
-    private Node getChild(Node node, Move move) {
+    private Node<Move> getChild(Node<Move> node, Move move) {
         return node.getChildOrDefault(move, null);
     }
 

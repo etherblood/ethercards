@@ -1,0 +1,13 @@
+{
+    "alias": "minions/druid_of_the_claw_bear.json",
+    "display": {
+        "name": "Druid of the Claw",
+        "imagePath": "images/cards/Bear_Form_(art).jpg",
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 4,
+        "HEALTH": 6,
+        "SUMMONING_SICKNESS": 1
+    }
+}

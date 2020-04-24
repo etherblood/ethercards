@@ -15,9 +15,6 @@ public class MinionTemplateBuilder {
 
     public MinionTemplateBuilder(CoreComponents core) {
         this.core = core;
-        components.set(core.ATTACK, 0);
-        components.set(core.HEALTH, 0);
-        components.set(core.SUMMONING_SICKNESS, 1);
     }
     
     public void onDeath(Effect effect) {

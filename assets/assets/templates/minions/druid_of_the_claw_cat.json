@@ -1,0 +1,13 @@
+{
+    "alias": "minions/druid_of_the_claw_cat.json",
+    "display": {
+        "name": "Druid of the Claw",
+        "imagePath": "images/cards/Cat_Form_full.png",
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 4,
+        "HEALTH": 4,
+        "SUMMONING_SICKNESS": null
+    }
+}

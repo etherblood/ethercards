@@ -1,0 +1,27 @@
+{
+    "alias": "cards/druid_of_the_claw.json",
+    "display": {
+        "name": "Druid of the Claw",
+        "imagePath": "images/cards/Druid_of_the_Claw_full.jpg",
+        "colors": ["GREEN"],
+        "description": "Attack phase: summon a 4/4 cat with charge.\nBlock phase: summon a 4/6 bear."
+    },
+    "blockCast": {
+        "manaCost": 5,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/druid_of_the_claw_bear.json"
+            }
+        ]
+    },
+    "attackCast": {
+        "manaCost": 5,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/druid_of_the_claw_cat.json"
+            }
+        ]
+    }
+}

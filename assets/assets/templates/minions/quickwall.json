@@ -8,6 +8,7 @@
     "components": {
         "ATTACK": 0,
         "HEALTH": 4,
-        "CANNOT_ATTACK": true
+        "CANNOT_ATTACK": true,
+        "SUMMONING_SICKNESS": null
     }
 }

@@ -42,6 +42,7 @@ public class Node<T> {
         return Objects.requireNonNull(getChildOrDefault(move, null));
     }
 
+    @SuppressWarnings("unchecked")
     public Node getChildOrDefault(T move, Node defaultValue) {
         for (int i = 0; i < childs.length; i += 2) {
             if (childs[i].equals(move)) {
@@ -58,6 +59,7 @@ public class Node<T> {
         childs[index + 1] = node;
     }
 
+    @SuppressWarnings("unchecked")
     public List<T> getMoves() {
         List<T> result = new ArrayList<>();
         for (int i = 0; i < childs.length; i += 2) {
@@ -66,6 +68,7 @@ public class Node<T> {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     public List<Node<T>> getChilds() {
         List<Node<T>> result = new ArrayList<>();
         for (int i = 1; i < childs.length; i += 2) {

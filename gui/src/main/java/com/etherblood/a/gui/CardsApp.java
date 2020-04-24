@@ -61,6 +61,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ClasspathLocator;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -94,7 +95,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleInitApp() {
-        assetManager.registerLocator("assets/", ClasspathLocator.class);
+        assetManager.registerLocator("assets/", FileLocator.class);
         assetManager.registerLoader(GsonLoader.class, "json");
 
         stateManager.attach(new ForestBoardAppstate(0));
@@ -119,7 +120,9 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             public void initialize(AppStateManager stateManager, Application application) {
                 super.initialize(stateManager, application);
                 //dirty workaround (:
-                applyAI();
+//                applyAI();
+                updateBoard();
+                updateCamera();
             }
         });
     }
@@ -243,15 +246,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
 
             x = -0.5f;
             x += 3.75f;
-            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(0.02f, 0, 0)) {
-
-                // TODO: Cleanup
-                @Override
-                public Vector3f getLocalPosition(Vector3f zonePosition) {
-                    Vector3f localPosition = super.getLocalPosition(zonePosition);
-                    return new Vector3f(localPosition.y, localPosition.x, localPosition.z);
-                }
-            };
+            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.02f, 0));
             z += ZONE_HEIGHT / 2;
 
             x = 0;
@@ -566,7 +561,10 @@ public class CardsApp extends SimpleApplication implements ActionListener {
             botSettings.verbose = true;
             botSettings.evaluation = rolloutEvaluation;
             botSettings.strength = 10_000;
-            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(game.getSettings())), botSettings);
+            GameSettingsBuilder settingsBuilder = new GameSettingsBuilder(game.getSettings());
+            settingsBuilder.backupsEnabled = false;
+            settingsBuilder.validateMoves = false;
+            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(settingsBuilder.build())), botSettings);
             while (game.isPlayerActive(botPlayer)) {
                 Move move = bot.findBestMove(botPlayerIndex);
                 move.apply(game);

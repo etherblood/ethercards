@@ -8,10 +8,7 @@ public class CardCastBuilder {
 
     private int manaCost;
     private boolean targeted;
-    private final List<Effect> effects = new ArrayList();
-
-    CardCastBuilder() {
-    }
+    private final List<Effect> effects = new ArrayList<>();
 
     public void setManaCost(int manaCost) {
         this.manaCost = manaCost;
