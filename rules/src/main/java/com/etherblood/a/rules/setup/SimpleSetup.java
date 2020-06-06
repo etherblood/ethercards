@@ -5,7 +5,6 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.templates.MinionTemplate;
-import java.util.function.IntFunction;
 
 public class SimpleSetup {
 
@@ -18,7 +17,6 @@ public class SimpleSetup {
     }
 
     public void apply(Game game) {
-        IntFunction<MinionTemplate> minions = game.getMinions();
         EntityData data = game.getData();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
 
@@ -34,7 +32,7 @@ public class SimpleSetup {
             int hero = data.createEntity();
             data.set(hero, core.OWNED_BY, player);
             data.set(hero, core.IN_BATTLE_ZONE, 1);
-            MinionTemplate heroTemplate = minions.apply(heroes[i]);
+            MinionTemplate heroTemplate = game.getTemplates().getMinion(heroes[i]);
             for (int component : heroTemplate) {
                 data.set(hero, component, heroTemplate.get(component));
             }
@@ -46,8 +44,6 @@ public class SimpleSetup {
                 data.set(card, core.CARD_TEMPLATE, cardTemplate);
             }
         }
-        
-        game.getMoves().start();
     }
 
     public void setLibrary(int playerIndex, IntList library) {

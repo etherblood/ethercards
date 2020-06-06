@@ -115,13 +115,13 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
             return "Null";
         }
         int templateId = game.getData().get(minion, core.MINION_TEMPLATE);
-        MinionTemplate template = game.getMinions().apply(templateId);
+        MinionTemplate template = game.getTemplates().getMinion(templateId);
         return "#" + minion + " " + template.getTemplateName() + " (" + game.getData().getOptional(minion, core.ATTACK).orElse(0) + ", " + game.getData().getOptional(minion, core.HEALTH).orElse(0) + ")";
     }
 
     protected String toCardString(int card) {
         int templateId = game.getData().get(card, core.CARD_TEMPLATE);
-        CardTemplate template = game.getCards().apply(templateId);
+        CardTemplate template = game.getTemplates().getCard(templateId);
         return "#" + card + " " + template.getTemplateName();
     }
 

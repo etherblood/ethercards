@@ -85,6 +85,11 @@
             <version>0.1.0</version>
         </dependency>
         <dependency>
+            <groupId>com.etherblood.a</groupId>
+            <artifactId>client</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui</artifactId>
             <version>0ae949fd5ce4718e9c22d960ddb291b37fe3c59a</version>

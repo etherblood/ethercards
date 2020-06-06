@@ -1,6 +1,4 @@
-package com.etherblood.a.ai.moves;
-
-import com.etherblood.a.rules.Game;
+package com.etherblood.a.rules.moves;
 
 public class Block implements Move {
 
@@ -24,11 +22,6 @@ public class Block implements Move {
         }
         Block other = (Block) obj;
         return player == other.player && source == other.source && target == other.target;
-    }
-
-    @Override
-    public void apply(Game game) {
-        game.getMoves().block(player, source, target);
     }
 
 }

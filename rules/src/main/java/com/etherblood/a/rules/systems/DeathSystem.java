@@ -5,11 +5,12 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
+import java.util.function.IntUnaryOperator;
 
 public class DeathSystem extends AbstractSystem {
 
     @Override
-    public void run(GameSettings settings, EntityData data) {
+    public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList deaths = data.list(core.DIE);
         for (int entity : deaths) {

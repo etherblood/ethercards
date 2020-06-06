@@ -5,29 +5,30 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
-
-import java.util.function.IntFunction;
+import java.util.function.IntUnaryOperator;
 
 public class CastSystem extends AbstractSystem {
 
-    private final IntFunction<CardTemplate> cards;
+    private final GameTemplates templates;
 
-    public CastSystem(IntFunction<CardTemplate> cards) {
-        this.cards = cards;
+    public CastSystem(GameTemplates templates) {
+        this.templates = templates;
     }
 
+
     @Override
-    public void run(GameSettings settings, EntityData data) {
+    public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList entities = data.list(core.CAST_TARGET);
         for (int castSource : entities) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
-            CardTemplate template = cards.apply(cardTemplateId);
+            CardTemplate template = templates.getCard(cardTemplateId);
             int owner = data.get(castSource, core.OWNED_BY);
             CardCast cast;
             if (data.get(owner, core.ACTIVE_PLAYER_PHASE) == PlayerPhase.ATTACK_PHASE) {

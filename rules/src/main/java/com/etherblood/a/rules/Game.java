@@ -2,15 +2,10 @@ package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.SimpleEntityData;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.MinionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
-import java.util.function.IntFunction;
-import java.util.function.IntUnaryOperator;
 
 public class Game {
 
@@ -20,28 +15,20 @@ public class Game {
     private final EntityData data;
     private final MoveService moves;
 
-    public Game(GameSettings settings) {
+    public Game(GameSettings settings, EntityData data, MoveService moves) {
         this.settings = Objects.requireNonNull(settings, "Settings must not be null.");
-        data = new SimpleEntityData(Objects.requireNonNull(settings.components, "Components missing."));
-        moves = new MoveService(settings, data);
+        this.data = Objects.requireNonNull(data);
+        this.moves = Objects.requireNonNull(moves);
         Components components = data.getComponents();
         Objects.requireNonNull(components.getModule(CoreComponents.class), "Core component module missing.");
-    }
-
-    public IntUnaryOperator getRandom() {
-        return settings.random;
     }
 
     public EntityData getData() {
         return data;
     }
-
-    public IntFunction<CardTemplate> getCards() {
-        return settings.cards;
-    }
-
-    public IntFunction<MinionTemplate> getMinions() {
-        return settings.minions;
+    
+    public GameTemplates getTemplates() {
+        return settings.templates;
     }
 
     public MoveService getMoves() {

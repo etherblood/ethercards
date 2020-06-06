@@ -31,6 +31,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     private final float raveMultiplier;
 
     private Node<Move> rootNode;
+    private int rootNodeHistoryPointer = 0;
 
     public MctsBot(Game sourceGame, Game simulationGame, MctsBotSettings settings) {
         this.sourceGame = sourceGame;
@@ -45,6 +46,18 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     }
 
     public Move findBestMove(int playerIndex) {
+        if (sourceGame.getMoveHistory() == null) {
+            rootNode = null;
+        } else {
+            while (rootNodeHistoryPointer < sourceGame.getMoveHistory().size()) {
+                Move move = sourceGame.getMoveHistory().get(rootNodeHistoryPointer);
+                if (rootNode != null) {
+                    rootNode = getChild(rootNode, move);
+                }
+                rootNodeHistoryPointer++;
+            }
+        }
+        
         List<Move> moves = new ArrayList<>(sourceGame.generateMoves());
         if (moves.size() > 1) {
             if (rootNode == null) {
@@ -91,14 +104,6 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             return 0;
         }
         return child.visits();
-    }
-
-    public void onMove(Move move) {
-        //TODO: would be nice if there was a move history which could be used instead, making this method obsolete
-        if (rootNode != null) {
-            //TODO: ignore mulligan moves of opponent
-            rootNode = rootNode.getChildOrDefault(move, null);
-        }
     }
 
     private Map<Move, RaveScore> initRaveScores() {

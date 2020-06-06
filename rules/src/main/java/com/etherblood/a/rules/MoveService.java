@@ -3,15 +3,34 @@ package com.etherblood.a.rules;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.a.rules.moves.Block;
+import com.etherblood.a.rules.moves.Cast;
+import com.etherblood.a.rules.moves.DeclareAttack;
+import com.etherblood.a.rules.moves.DeclareMulligan;
+import com.etherblood.a.rules.moves.EndAttackPhase;
+import com.etherblood.a.rules.moves.EndBlockPhase;
+import com.etherblood.a.rules.moves.EndMulliganPhase;
+import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.rules.moves.Start;
+import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.systems.BlockSystem;
 import com.etherblood.a.rules.systems.CastSystem;
+import com.etherblood.a.rules.systems.DamageSystem;
+import com.etherblood.a.rules.systems.DeathSystem;
+import com.etherblood.a.rules.systems.DrawSystem;
 import com.etherblood.a.rules.systems.EndAttackPhaseSystem;
 import com.etherblood.a.rules.systems.EndBlockPhaseBattleSystem;
 import com.etherblood.a.rules.systems.EndMulliganPhaseSystem;
+import com.etherblood.a.rules.systems.OnDeathSystem;
+import com.etherblood.a.rules.systems.OnSurvivalSystem;
+import com.etherblood.a.rules.systems.PlayerStatusSystem;
+import com.etherblood.a.rules.systems.TemporariesCleanupSystem;
 import com.etherblood.a.rules.systems.UpkeepSystem;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.OptionalInt;
 import org.slf4j.Logger;
@@ -23,6 +42,11 @@ public class MoveService {
 
     private final GameSettings settings;
     private final EntityData data;
+    private final HistoryRandom random;
+    private final List<MoveReplay> history;
+
+    private final boolean backupsEnabled;
+    private final boolean validateMoves;
 
     private final List<AbstractSystem> endAttackPhaseSystems;
     private final List<AbstractSystem> endBlockPhaseSystems;
@@ -32,50 +56,119 @@ public class MoveService {
     private final List<AbstractSystem> surrenderSystems;
     private final List<AbstractSystem> startSystems;
 
-    public MoveService(GameSettings settings, EntityData data) {
+    public MoveService(GameSettings settings, EntityData data, HistoryRandom random) {
+        this(settings, data, random, Collections.emptyList(), true, true);
+    }
+
+    public MoveService(GameSettings settings, EntityData data, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves) {
         this.settings = settings;
         this.data = data;
+        this.random = random;
+        this.backupsEnabled = backupsEnabled;
+        this.validateMoves = validateMoves;
+        List<AbstractSystem> generalSystems = Arrays.asList(
+                new DrawSystem(),
+                new DamageSystem(),
+                new OnDeathSystem(),
+                new OnSurvivalSystem(),
+                new DeathSystem(),
+                new PlayerStatusSystem(),
+                new TemporariesCleanupSystem()
+        );
+
         endBlockPhaseSystems = new ArrayList<>();
         endBlockPhaseSystems.add(new EndBlockPhaseBattleSystem());
-        endBlockPhaseSystems.addAll(settings.generalSystems);
+        endBlockPhaseSystems.addAll(generalSystems);
         endBlockPhaseSystems.add(new UpkeepSystem());
-        endBlockPhaseSystems.addAll(settings.generalSystems);
+        endBlockPhaseSystems.addAll(generalSystems);
 
         endAttackPhaseSystems = new ArrayList<>();
         endAttackPhaseSystems.add(new EndAttackPhaseSystem());
-        endAttackPhaseSystems.addAll(settings.generalSystems);
+        endAttackPhaseSystems.addAll(generalSystems);
 
         endMulliganPhaseSystems = new ArrayList<>();
         endMulliganPhaseSystems.add(new EndMulliganPhaseSystem());
-        endMulliganPhaseSystems.addAll(settings.generalSystems);
+        endMulliganPhaseSystems.addAll(generalSystems);
         endMulliganPhaseSystems.add(new UpkeepSystem());
-        endMulliganPhaseSystems.addAll(settings.generalSystems);
+        endMulliganPhaseSystems.addAll(generalSystems);
 
         blockSystems = new ArrayList<>();
         blockSystems.add(new BlockSystem());
-        blockSystems.addAll(settings.generalSystems);
+        blockSystems.addAll(generalSystems);
 
         castSystems = new ArrayList<>();
-        castSystems.add(new CastSystem(settings.cards));
-        castSystems.addAll(settings.generalSystems);
+        castSystems.add(new CastSystem(settings.templates));
+        castSystems.addAll(generalSystems);
 
         surrenderSystems = new ArrayList<>();
-        surrenderSystems.addAll(settings.generalSystems);
+        surrenderSystems.addAll(generalSystems);
 
         startSystems = new ArrayList<>();
-        startSystems.addAll(settings.generalSystems);
+        startSystems.addAll(generalSystems);
+
+        if (history != null) {
+            this.history = new ArrayList<>(history);
+        } else {
+            this.history = null;
+        }
     }
 
-    public void start() {
-        if (settings.validateMoves) {
+    public List<MoveReplay> getHistory() {
+        return Collections.unmodifiableList(history);
+    }
+
+    public void move(Move move) {
+        Runnable runnable;
+        if (move instanceof Block) {
+            Block block = (Block) move;
+            runnable = () -> block(block.player, block.source, block.target);
+        } else if (move instanceof Cast) {
+            Cast cast = (Cast) move;
+            runnable = () -> cast(cast.player, cast.source, cast.target);
+        } else if (move instanceof DeclareAttack) {
+            DeclareAttack declareAttack = (DeclareAttack) move;
+            runnable = () -> declareAttack(declareAttack.player, declareAttack.source, declareAttack.target);
+        } else if (move instanceof DeclareMulligan) {
+            DeclareMulligan declareMulligan = (DeclareMulligan) move;
+            runnable = () -> declareMulligan(declareMulligan.player, declareMulligan.card);
+        } else if (move instanceof EndAttackPhase) {
+            EndAttackPhase endAttackPhase = (EndAttackPhase) move;
+            runnable = () -> endAttackPhase(endAttackPhase.player);
+        } else if (move instanceof EndBlockPhase) {
+            EndBlockPhase endBlockPhase = (EndBlockPhase) move;
+            runnable = () -> endBlockPhase(endBlockPhase.player);
+        } else if (move instanceof EndMulliganPhase) {
+            EndMulliganPhase endMulliganPhase = (EndMulliganPhase) move;
+            runnable = () -> endMulliganPhase(endMulliganPhase.player);
+        } else if (move instanceof Surrender) {
+            Surrender surrender = (Surrender) move;
+            runnable = () -> surrender(surrender.player);
+        } else if (move instanceof Start) {
+            runnable = this::start;
+        } else {
+            throw new AssertionError(move);
+        }
+        int randomSize = random.getHistory().size();
+        runWithBackup(() -> {
+            runnable.run();
+        });
+        if (history != null) {
+            int[] randomResults = random.getHistory().stream().skip(randomSize).toArray();
+            MoveReplay replay = new MoveReplay();
+            replay.move = move;
+            replay.randomResults = randomResults;
+            history.add(replay);
+        }
+    }
+
+    private void start() {
+        if (validateMoves) {
             verifyCanStart(true);
         }
-        runWithBackup(() -> {
-            for (int player : data.list(core().PLAYER_INDEX)) {
-                data.set(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE);
-            }
-            runSystems(startSystems);
-        });
+        for (int player : data.list(core().PLAYER_INDEX)) {
+            data.set(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE);
+        }
+        runSystems(startSystems);
     }
 
     public boolean canStart() {
@@ -104,14 +197,12 @@ public class MoveService {
         return true;
     }
 
-    public void endAttackPhase(int player) {
-        if (settings.validateMoves) {
+    private void endAttackPhase(int player) {
+        if (validateMoves) {
             verifyCanEndAttackPhase(player, true);
         }
-        runWithBackup(() -> {
-            data.set(player, core().END_PHASE, 1);
-            runSystems(endAttackPhaseSystems);
-        });
+        data.set(player, core().END_PHASE, 1);
+        runSystems(endAttackPhaseSystems);
     }
 
     public boolean canEndAttackPhase(int player) {
@@ -128,14 +219,12 @@ public class MoveService {
         return true;
     }
 
-    public void endBlockPhase(int player) {
-        if (settings.validateMoves) {
+    private void endBlockPhase(int player) {
+        if (validateMoves) {
             verifyCanEndBlockPhase(player, true);
         }
-        runWithBackup(() -> {
-            data.set(player, core().END_PHASE, 1);
-            runSystems(endBlockPhaseSystems);
-        });
+        data.set(player, core().END_PHASE, 1);
+        runSystems(endBlockPhaseSystems);
     }
 
     public boolean canEndBlockPhase(int player) {
@@ -152,14 +241,12 @@ public class MoveService {
         return true;
     }
 
-    public void endMulliganPhase(int player) {
-        if (settings.validateMoves) {
+    private void endMulliganPhase(int player) {
+        if (validateMoves) {
             verifyCanEndMulliganPhase(player, true);
         }
-        runWithBackup(() -> {
-            data.set(player, core().END_PHASE, 1);
-            runSystems(endMulliganPhaseSystems);
-        });
+        data.set(player, core().END_PHASE, 1);
+        runSystems(endMulliganPhaseSystems);
     }
 
     public boolean canEndMulliganPhase(int player) {
@@ -176,14 +263,12 @@ public class MoveService {
         return true;
     }
 
-    public void declareAttack(int player, int attacker, int target) {
-        if (settings.validateMoves) {
+    private void declareAttack(int player, int attacker, int target) {
+        if (validateMoves) {
             verifyCanDeclareAttack(player, attacker, target, true);
         }
-        runWithBackup(() -> {
-            data.set(attacker, core().ATTACKS_TARGET, target);
-            // no systems, attack is only declared, nothing happens yet
-        });
+        data.set(attacker, core().ATTACKS_TARGET, target);
+        // no systems, attack is only declared, nothing happens yet
     }
 
     public boolean canDeclareAttack(int player, int attacker, int target) {
@@ -250,14 +335,12 @@ public class MoveService {
         return true;
     }
 
-    public void block(int player, int blocker, int attacker) {
-        if (settings.validateMoves) {
+    private void block(int player, int blocker, int attacker) {
+        if (validateMoves) {
             verifyCanBlock(player, blocker, attacker, true);
         }
-        runWithBackup(() -> {
-            data.set(blocker, core().BLOCKS_ATTACKER, attacker);
-            runSystems(blockSystems);
-        });
+        data.set(blocker, core().BLOCKS_ATTACKER, attacker);
+        runSystems(blockSystems);
     }
 
     public boolean canBlock(int player, int blocker, int attacker) {
@@ -343,14 +426,12 @@ public class MoveService {
         return true;
     }
 
-    public void cast(int player, int castable, Integer target) {
-        if (settings.validateMoves) {
+    private void cast(int player, int castable, Integer target) {
+        if (validateMoves) {
             validateCanCast(player, castable, target != null ? target : ~0, true);
         }
-        runWithBackup(() -> {
-            data.set(castable, core().CAST_TARGET, target != null ? target : ~0);
-            runSystems(castSystems);
-        });
+        data.set(castable, core().CAST_TARGET, target != null ? target : ~0);
+        runSystems(castSystems);
     }
 
     public boolean canCast(int player, int castable) {
@@ -374,7 +455,7 @@ public class MoveService {
             }
             return false;
         }
-        CardTemplate template = settings.cards.apply(data.get(castable, core().CARD_TEMPLATE));
+        CardTemplate template = settings.templates.getCard(data.get(castable, core().CARD_TEMPLATE));
         CardCast cast;
         OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
@@ -419,7 +500,7 @@ public class MoveService {
     }
 
     private boolean validateCanCast(int player, int castable, int target, boolean throwOnFail) {
-        CardTemplate template = settings.cards.apply(data.get(castable, core().CARD_TEMPLATE));
+        CardTemplate template = settings.templates.getCard(data.get(castable, core().CARD_TEMPLATE));
         OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
             CardCast cast;
@@ -444,14 +525,12 @@ public class MoveService {
         return validateCanCast(player, castable, throwOnFail);
     }
 
-    public void declareMulligan(int player, int card) {
-        if (settings.validateMoves) {
+    private void declareMulligan(int player, int card) {
+        if (validateMoves) {
             verifyCanDeclareMulligan(player, card, true);
         }
-        runWithBackup(() -> {
-            data.set(card, core().MULLIGAN, card);
-            // no systems, mulligan is only declared, nothing happens yet
-        });
+        data.set(card, core().MULLIGAN, card);
+        // no systems, mulligan is only declared, nothing happens yet
     }
 
     public boolean canDeclareMulligan(int player, int card) {
@@ -486,14 +565,12 @@ public class MoveService {
         return true;
     }
 
-    public void surrender(int player) {
-        if (settings.validateMoves) {
+    private void surrender(int player) {
+        if (validateMoves) {
             validateCanSurrender(player, true);
         }
-        runWithBackup(() -> {
-            data.set(player, core().HAS_LOST, 1);
-            runSystems(surrenderSystems);
-        });
+        data.set(player, core().HAS_LOST, 1);
+        runSystems(surrenderSystems);
     }
 
     public boolean canSurrender(int player) {
@@ -517,16 +594,20 @@ public class MoveService {
     }
 
     private void runWithBackup(Runnable runnable) {
-        if (!settings.backupsEnabled) {
+        if (!backupsEnabled) {
             runnable.run();
             return;
         }
+        int randomHistorySize = random.getHistory().size();
         EntityData backup = new SimpleEntityData(data.getComponents());
         EntityUtil.copy(data, backup);
         LOG.debug("Created backup.");
         try {
             runnable.run();
         } catch (Throwable t) {
+            while (random.getHistory().size() > randomHistorySize) {
+                random.getHistory().removeLast();
+            }
             EntityUtil.copy(backup, data);
             LOG.warn("Rolled back due to exception.");
             throw t;
@@ -535,9 +616,9 @@ public class MoveService {
 
     private void runSystems(List<AbstractSystem> systems) {
         for (AbstractSystem system : systems) {
-            system.run(settings, data);
+            system.run(settings, data, random);
         }
-//                assert validateStateLegal();
+        assert validateStateLegal();
     }
 
     private boolean validateStateLegal() {
@@ -613,5 +694,9 @@ public class MoveService {
 
     private boolean hasPlayerLost(int player) {
         return data.has(player, core().HAS_LOST);
+    }
+
+    public HistoryRandom getRandom() {
+        return random;
     }
 }

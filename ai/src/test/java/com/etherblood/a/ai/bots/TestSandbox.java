@@ -5,15 +5,21 @@ import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
 import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
-import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.entities.ComponentsBuilder;
+import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
+import com.etherblood.a.rules.HistoryRandom;
+import com.etherblood.a.rules.MoveService;
+import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.templates.LibraryTemplate;
+import com.etherblood.a.templates.RawLibraryTemplate;
 import com.etherblood.a.templates.TemplatesLoader;
 import com.etherblood.a.templates.TemplatesParser;
 import com.google.gson.Gson;
@@ -34,9 +40,6 @@ public class TestSandbox {
         long[] nanos = new long[2];
         for (int i = 0; i < 1; i++) {
             Game game = startGame();
-            GameSettingsBuilder settingsBuilder = new GameSettingsBuilder(game.getSettings());
-            settingsBuilder.backupsEnabled = false;
-            settingsBuilder.validateMoves = false;
 
             Function<MoveBotGame, float[]> simple = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
             
@@ -44,13 +47,13 @@ public class TestSandbox {
             MctsBotSettings<Move, MoveBotGame> settings0 = new MctsBotSettings<>();
             settings0.strength = 100;
             settings0.evaluation = rolloutEvaluation0;
-            MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(settingsBuilder.build())), settings0);
+            MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(simulationGame(game)), settings0);
 
             Function<MoveBotGame, float[]> rolloutEvaluation1 = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings1 = new MctsBotSettings<>();
             settings1.strength = 100;
             settings1.evaluation = rolloutEvaluation1;
-            MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(settingsBuilder.build())), settings1);
+            MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(simulationGame(game)), settings1);
 
             while (!game.isGameOver()) {
                 Move move;
@@ -64,9 +67,7 @@ public class TestSandbox {
                     move = bot1.findBestMove(1);
                     nanos[1] += System.nanoTime() - start;
                 }
-                move.apply(game);
-                bot0.onMove(move);
-                bot1.onMove(move);
+                game.getMoves().move(move);
             }
             if (game.hasPlayerWon(game.findPlayerByIndex(0))) {
                 result[0]++;
@@ -79,24 +80,29 @@ public class TestSandbox {
             System.out.println("Result: " + Arrays.toString(result));
         }
     }
+    
+    private Game simulationGame(Game game) {
+        EntityData data = new SimpleEntityData(game.getSettings().components);
+        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false);
+        return new Game(game.getSettings(), data, moves);
+    }
 
     private Game startGame() {
         GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        TemplatesParser templatesParser = new TemplatesParser(settingsBuilder.components);
-        TemplatesLoader loader = new TemplatesLoader(x -> {
+        Function<String, JsonObject> assetLoader = x -> {
             try {
-                return new Gson().fromJson(Files.newBufferedReader(Paths.get("../assets/assets/templates/" + x)), JsonObject.class);
+                return new Gson().fromJson(Files.newBufferedReader(Paths.get("../assets/templates/" + x)), JsonObject.class);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        }, templatesParser);
-        LibraryTemplate lib0 = loader.loadLibrary("libraries/default.json");
-        LibraryTemplate lib1 = loader.loadLibrary("libraries/default.json");
-        settingsBuilder.cards = loader::getCard;
-        settingsBuilder.minions = loader::getMinion;
+        };
+        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components));
+        LibraryTemplate lib0 = loader.parseLibrary(new Gson().fromJson(assetLoader.apply("libraries/default.json"), RawLibraryTemplate.class));
+        LibraryTemplate lib1 = lib0;
+        settingsBuilder.templates = loader.buildGameTemplates();
         GameSettings settings = settingsBuilder.build();
         
         
@@ -115,8 +121,11 @@ public class TestSandbox {
         setup.setHero(0, lib0.hero);
         setup.setHero(1, lib1.hero);
 
-        Game game = new Game(settings);
+        EntityData data = new SimpleEntityData(settings.components);
+        MoveService moves = new MoveService(settings, data, HistoryRandom.producer());
+        Game game = new Game(settings, data, moves);
         setup.apply(game);
+        moves.move(new Start());
         return game;
     }
 }

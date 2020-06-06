@@ -65,12 +65,15 @@ public class SystemsUtil {
     }
 
     public static void damage(EntityData data, int target, int damage) {
+        if (damage == 0) {
+            return;
+        }
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         increase(data, target, core.DAMAGE, damage);
     }
 
     public static void summon(GameSettings settings, EntityData data, int minionTemplate, int owner) {
-        MinionTemplate minion = settings.minions.apply(minionTemplate);
+        MinionTemplate minion = settings.templates.getMinion(minionTemplate);
         int entity = data.createEntity();
         for (int component : minion) {
             data.set(entity, component, minion.get(component));

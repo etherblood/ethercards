@@ -5,7 +5,7 @@ import com.jme3.system.AppSettings;
 public class Main {
 
     public static void main(String... args) {
-        CardsApp app = new CardsApp();
+        GameApplication app = new GameApplication();
         AppSettings settings = new AppSettings(true);
         settings.setWidth(1600);
         settings.setHeight(900);

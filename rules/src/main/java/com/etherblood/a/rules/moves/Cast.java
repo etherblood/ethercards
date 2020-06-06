@@ -1,6 +1,4 @@
-package com.etherblood.a.ai.moves;
-
-import com.etherblood.a.rules.Game;
+package com.etherblood.a.rules.moves;
 
 public class Cast implements Move {
 
@@ -24,10 +22,5 @@ public class Cast implements Move {
         }
         Cast other = (Cast) obj;
         return player == other.player && source == other.source && target == other.target;
-    }
-
-    @Override
-    public void apply(Game game) {
-        game.getMoves().cast(player, source, target);
     }
 }

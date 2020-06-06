@@ -1,5 +1,6 @@
 package com.etherblood.a.templates;
 
+import com.etherblood.a.rules.GameTemplates;
 import com.google.gson.JsonObject;
 import java.util.Set;
 import java.util.function.Function;
@@ -14,11 +15,16 @@ public class TemplatesLoader {
         this.parser = parser;
     }
 
-    public LibraryTemplate loadLibrary(String alias) {
-        LibraryTemplate library = parser.getLibrary(alias);
-        if (library == null) {
-            library = parser.parseLibrary(load(alias));
-        }
+    public GameTemplates buildGameTemplates() {
+        resolveReferences();
+        return parser.buildGameTemplates();
+    }
+    
+    public LibraryTemplate parseLibrary(RawLibraryTemplate raw) {
+        return parser.parseLibrary(raw);
+    }
+
+    private void resolveReferences() {
         Set<String> cards, minions;
         while (!(cards = parser.unresolvedCards()).isEmpty() | !(minions = parser.unresolvedMinions()).isEmpty()) {
             for (String minion : minions) {
@@ -28,7 +34,6 @@ public class TemplatesLoader {
                 parser.parseCard(load(card));
             }
         }
-        return library;
     }
 
     public DisplayCardTemplate getCard(int id) {

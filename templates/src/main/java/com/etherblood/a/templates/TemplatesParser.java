@@ -5,6 +5,7 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 
 public class TemplatesParser {
 
-    private final Map<String, LibraryTemplate> libraries = new HashMap<>();
     private final Map<Integer, DisplayCardTemplate> cards = new HashMap<>();
     private final Map<Integer, DisplayMinionTemplate> minions = new HashMap<>();
     private final Map<String, Integer> cardAliases = new HashMap<>();
@@ -47,6 +47,13 @@ public class TemplatesParser {
                 .registerTypeAdapter(Effect.class, new CastEffectDeserializer(classes, x -> registerIfAbsent(minionAliases, x), x -> registerIfAbsent(cardAliases, x)))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases::get))
                 .create();
+    }
+
+    public GameTemplates buildGameTemplates() {
+        if (unresolvedCards().isEmpty() && unresolvedMinions().isEmpty()) {
+            return new GameTemplates(cards, minions);
+        }
+        throw new AssertionError();
     }
 
     public DisplayCardTemplate getCard(int id) {
@@ -75,28 +82,19 @@ public class TemplatesParser {
         return minion;
     }
 
-    public LibraryTemplate getLibrary(String alias) {
-        return libraries.get(alias);
-    }
-
-    public LibraryTemplate parseLibrary(JsonObject json) {
+    public LibraryTemplate parseLibrary(RawLibraryTemplate raw) {
         LibraryTemplate library = new LibraryTemplate();
-        library.hero = registerIfAbsent(minionAliases, json.get("hero").getAsString());
+        library.hero = registerIfAbsent(minionAliases, raw.hero);
         IntList libraryCards = new IntList();
-        JsonObject cardsObject = json.getAsJsonObject("cards");
-        for (Map.Entry<String, JsonElement> entry : cardsObject.entrySet()) {
-            int count = entry.getValue().getAsInt();
+        Map<String, Integer> cardsObject = raw.cards;
+        for (Map.Entry<String, Integer> entry : cardsObject.entrySet()) {
+            int count = entry.getValue();
             int cardId = registerIfAbsent(cardAliases, entry.getKey());
             for (int i = 0; i < count; i++) {
                 libraryCards.add(cardId);
             }
         }
         library.cards = libraryCards.toArray();
-        String alias = json.getAsJsonPrimitive("alias").getAsString();
-        LibraryTemplate previous = libraries.put(alias, library);
-        if (previous != null) {
-            throw new IllegalStateException("Multiple libraries registered to same alias: " + alias);
-        }
         return library;
     }
 
@@ -200,14 +198,14 @@ public class TemplatesParser {
             builder.setImagePath(null);
         }
         JsonArray onDeath = minionJson.getAsJsonArray("onDeath");
-        if(onDeath != null) {
+        if (onDeath != null) {
             for (JsonElement jsonElement : onDeath) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
                 builder.onDeath(aliasGson.fromJson(effectJson, Effect.class));
             }
         }
         JsonArray onSurvive = minionJson.getAsJsonArray("onSurvive");
-        if(onSurvive != null) {
+        if (onSurvive != null) {
             for (JsonElement jsonElement : onSurvive) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
                 builder.onSurvive(aliasGson.fromJson(effectJson, Effect.class));
@@ -273,19 +271,19 @@ public class TemplatesParser {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
-    
+
     public int resolveMinionAlias(String alias) {
         return Objects.requireNonNull(minionAliases.get(alias), alias);
     }
-    
+
     public int resolveCardAlias(String alias) {
         return Objects.requireNonNull(cardAliases.get(alias), alias);
     }
-    
+
     public int registerMinionAlias(String alias) {
         return registerIfAbsent(minionAliases, alias);
     }
-    
+
     public int registerCardAlias(String alias) {
         return registerIfAbsent(cardAliases, alias);
     }
@@ -296,6 +294,7 @@ public class TemplatesParser {
         if (previousId != null) {
             return previousId;
         }
+
         return nextId;
     }
 

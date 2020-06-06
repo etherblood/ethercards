@@ -1,6 +1,4 @@
-package com.etherblood.a.ai.moves;
-
-import com.etherblood.a.rules.Game;
+package com.etherblood.a.rules.moves;
 
 public class EndMulliganPhase implements Move {
 
@@ -22,11 +20,6 @@ public class EndMulliganPhase implements Move {
         }
         EndMulliganPhase other = (EndMulliganPhase) obj;
         return player == other.player;
-    }
-
-    @Override
-    public void apply(Game game) {
-        game.getMoves().endMulliganPhase(player);
     }
 
 }

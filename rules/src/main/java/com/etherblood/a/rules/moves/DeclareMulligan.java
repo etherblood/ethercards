@@ -1,6 +1,4 @@
-package com.etherblood.a.ai.moves;
-
-import com.etherblood.a.rules.Game;
+package com.etherblood.a.rules.moves;
 
 public class DeclareMulligan implements Move {
 
@@ -23,11 +21,6 @@ public class DeclareMulligan implements Move {
         }
         DeclareMulligan other = (DeclareMulligan) obj;
         return player == other.player && card == other.card;
-    }
-
-    @Override
-    public void apply(Game game) {
-        game.getMoves().declareMulligan(player, card);
     }
 
 }

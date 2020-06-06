@@ -1,6 +1,4 @@
-package com.etherblood.a.ai.moves;
-
-import com.etherblood.a.rules.Game;
+package com.etherblood.a.rules.moves;
 
 public class Surrender implements Move {
 
@@ -22,11 +20,6 @@ public class Surrender implements Move {
         }
         Surrender other = (Surrender) obj;
         return player == other.player;
-    }
-
-    @Override
-    public void apply(Game game) {
-        game.getMoves().surrender(player);
     }
 
 }

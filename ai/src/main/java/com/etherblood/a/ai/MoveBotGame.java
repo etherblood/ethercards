@@ -2,21 +2,23 @@ package com.etherblood.a.ai;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.ai.moves.Block;
-import com.etherblood.a.ai.moves.Cast;
-import com.etherblood.a.ai.moves.DeclareAttack;
-import com.etherblood.a.ai.moves.DeclareMulligan;
-import com.etherblood.a.ai.moves.EndAttackPhase;
-import com.etherblood.a.ai.moves.EndBlockPhase;
-import com.etherblood.a.ai.moves.EndMulliganPhase;
-import com.etherblood.a.ai.moves.Move;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
+import com.etherblood.a.rules.moves.Block;
+import com.etherblood.a.rules.moves.Cast;
+import com.etherblood.a.rules.moves.DeclareAttack;
+import com.etherblood.a.rules.moves.DeclareMulligan;
+import com.etherblood.a.rules.moves.EndAttackPhase;
+import com.etherblood.a.rules.moves.EndBlockPhase;
+import com.etherblood.a.rules.moves.EndMulliganPhase;
+import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
@@ -56,7 +58,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
                         if (!game.getMoves().canCast(player, handCard)) {
                             continue;
                         }
-                        CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
+                        CardTemplate template = game.getTemplates().getCard(data.get(handCard, core.CARD_TEMPLATE));
                         CardCast cast = template.getAttackPhaseCast();
                         addCastMoves(game, player, handCard, cast, result);
                     }
@@ -80,7 +82,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
                         if (!game.getMoves().canCast(player, handCard)) {
                             continue;
                         }
-                        CardTemplate template = game.getCards().apply(data.get(handCard, core.CARD_TEMPLATE));
+                        CardTemplate template = game.getTemplates().getCard(data.get(handCard, core.CARD_TEMPLATE));
                         CardCast cast = template.getBlockPhaseCast();
                         addCastMoves(game, player, handCard, cast, result);
                     }
@@ -141,23 +143,28 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
             DeclareAttack attack = (DeclareAttack) move;
             return "DeclareAttack " + toMinionString(attack.source) + " -> " + toMinionString(attack.target);
         }
+        if (move instanceof Start) {
+            return "Start";
+        }
         return "Unknown Move " + move;
     }
 
     @Override
     public void applyMove(Move move) {
-        move.apply(game);
+        game.getMoves().move(move);
     }
 
     @Override
     public void copyStateFrom(MoveBotGame source) {
-        if (game.getCards() != source.game.getCards()) {
-            throw new IllegalArgumentException();
-        }
-        if (game.getMinions() != source.game.getMinions()) {
+        if (!game.getTemplates().equals(source.game.getTemplates())) {
             throw new IllegalArgumentException();
         }
         EntityUtil.copy(source.game.getData(), game.getData());
+    }
+
+    @Override
+    public List<Move> getMoveHistory() {
+        return game.getMoves().getHistory().stream().map(x -> x.move).collect(Collectors.toList());
     }
 
 }

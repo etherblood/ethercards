@@ -1,6 +1,5 @@
 package com.etherblood.a.gui;
 
-import com.etherblood.a.templates.TemplatesLoader;
 import com.destrostudios.cardgui.Board;
 import com.destrostudios.cardgui.BoardAppState;
 import com.destrostudios.cardgui.BoardObject;
@@ -24,43 +23,50 @@ import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformat
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.gui.prettycards.*;
+import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
+import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
+import com.etherblood.a.ai.bots.mcts.MctsBot;
+import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
-import com.etherblood.a.ai.bots.mcts.MctsBot;
-import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
-import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
-import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
-import com.etherblood.a.ai.moves.Block;
-import com.etherblood.a.ai.moves.Cast;
-import com.etherblood.a.ai.moves.DeclareAttack;
-import com.etherblood.a.ai.moves.DeclareMulligan;
-import com.etherblood.a.ai.moves.EndAttackPhase;
-import com.etherblood.a.ai.moves.EndBlockPhase;
-import com.etherblood.a.ai.moves.EndMulliganPhase;
-import com.etherblood.a.ai.moves.Move;
-import com.etherblood.a.entities.ComponentsBuilder;
+import com.etherblood.a.entities.SimpleEntityData;
+import com.etherblood.a.gui.prettycards.CardImages;
+import com.etherblood.a.gui.prettycards.CardModel;
+import com.etherblood.a.gui.prettycards.CardPainterAWT;
+import com.etherblood.a.gui.prettycards.CardPainterJME;
+import com.etherblood.a.gui.prettycards.CardVisualizer_Card;
+import com.etherblood.a.gui.prettycards.CardVisualizer_Minion;
+import com.etherblood.a.gui.prettycards.MinionModel;
+import com.etherblood.a.network.api.GameReplayService;
+import com.etherblood.a.network.api.game.GameSetup;
+import com.etherblood.a.network.api.game.PlayerSetup;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.GameSettings;
-import com.etherblood.a.rules.GameSettingsBuilder;
+import com.etherblood.a.rules.HistoryRandom;
+import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.setup.SimpleSetup;
+import com.etherblood.a.rules.moves.Block;
+import com.etherblood.a.rules.moves.Cast;
+import com.etherblood.a.rules.moves.DeclareAttack;
+import com.etherblood.a.rules.moves.DeclareMulligan;
+import com.etherblood.a.rules.moves.EndAttackPhase;
+import com.etherblood.a.rules.moves.EndBlockPhase;
+import com.etherblood.a.rules.moves.EndMulliganPhase;
+import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.DisplayMinionTemplate;
-import com.etherblood.a.templates.LibraryTemplate;
-import com.etherblood.a.templates.TemplatesParser;
-import com.jme3.app.Application;
+import com.etherblood.a.templates.RawLibraryTemplate;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.ClasspathLocator;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
@@ -74,16 +80,19 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.function.IntPredicate;
 
-public class CardsApp extends SimpleApplication implements ActionListener {
+public class GameApplication extends SimpleApplication implements ActionListener {
 
     private static final float ZONE_HEIGHT = 1.3f;
+    private GameReplayService gameReplayService;
     private Game game;
     private Board board;
     private final Map<Integer, PlayerZones> playerZones = new HashMap<>();
@@ -92,10 +101,11 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     private final Map<BoardObject<?>, Integer> objectEntities = new HashMap<>();
     private final Map<Integer, ConnectionMarker> attacks = new HashMap<>();
     private BitmapText hudText;
+    private final AtomicBoolean botIsComputing = new AtomicBoolean(false);
 
     @Override
     public void simpleInitApp() {
-        assetManager.registerLocator("assets/", FileLocator.class);
+        assetManager.registerLocator("../assets/", FileLocator.class);
         assetManager.registerLoader(GsonLoader.class, "json");
 
         stateManager.attach(new ForestBoardAppstate(0));
@@ -107,24 +117,22 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         hudText.setLocalTranslation(0, getCamera().getHeight(), 0);
         guiNode.attachChild(hudText);
 
-        initListeners();
         initGame();
+        initListeners();
         initBoardGui();
         initCamera();
     }
 
-    private void initCamera() {
-        stateManager.attach(new CameraAppState() {
+    @Override
+    public void simpleUpdate(float tpf) {
+        gameReplayService.updateInstance(game);
+        applyAI();
+        updateBoard();
+        updateCamera();
+    }
 
-            @Override
-            public void initialize(AppStateManager stateManager, Application application) {
-                super.initialize(stateManager, application);
-                //dirty workaround (:
-//                applyAI();
-                updateBoard();
-                updateCamera();
-            }
-        });
+    private void initCamera() {
+        stateManager.attach(new CameraAppState());
     }
 
     private void updateCamera() {
@@ -135,7 +143,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
         CameraAppState cameraAppState = stateManager.getState(CameraAppState.class);
         Vector3f position = new Vector3f();
         Quaternion rotation = new Quaternion();
-        boolean isPlayer1 = false;
+        boolean isPlayer1 = game.isPlayerActive(game.findPlayerByIndex(1));
         position.set(0, 3.8661501f, 6.470482f);
         if (isPlayer1) {
             position.addLocal(0, 0, -10.339f);
@@ -156,35 +164,20 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void initGame() {
-        GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
-        ComponentsBuilder componentsBuilder = new ComponentsBuilder();
-        componentsBuilder.registerModule(CoreComponents::new);
-        settingsBuilder.components = componentsBuilder.build();
-        TemplatesParser templatesParser = new TemplatesParser(settingsBuilder.components);
-        TemplatesLoader loader = new TemplatesLoader(x -> assetManager.loadAsset(new AssetKey<>("templates/" + x)), templatesParser);
-        LibraryTemplate lib0 = loader.loadLibrary("libraries/default.json");
-        LibraryTemplate lib1 = loader.loadLibrary("libraries/default.json");
-        settingsBuilder.cards = loader::getCard;
-        settingsBuilder.minions = loader::getMinion;
-        GameSettings settings = settingsBuilder.build();
-        game = new Game(settings);
-        SimpleSetup setup = new SimpleSetup(2);
-        setup.setHero(0, lib0.hero);
-        setup.setHero(1, lib1.hero);
+        Function<String, JsonObject> assetLoader = x -> assetManager.loadAsset(new AssetKey<>("templates/" + x));
+        GameSetup setup = new GameSetup();
+        PlayerSetup player0 = new PlayerSetup();
+        player0.id = 0;
+        player0.library = new Gson().fromJson(assetLoader.apply("libraries/default.json"), RawLibraryTemplate.class);
+        PlayerSetup player1 = new PlayerSetup();
+        player1.id = 1;
+        player1.library = new Gson().fromJson(assetLoader.apply("libraries/default.json"), RawLibraryTemplate.class);
+        setup.players = new PlayerSetup[]{player0, player1};
+        gameReplayService = new GameReplayService(setup, assetLoader);
 
-        IntList library0 = new IntList();
-        for (int card : lib0.cards) {
-            library0.add(card);
-        }
-        IntList library1 = new IntList();
-        for (int card : lib1.cards) {
-            library1.add(card);
-        }
-
-        setup.setLibrary(0, library0);
-        setup.setLibrary(1, library1);
-
-        setup.apply(game);
+        game = gameReplayService.createInstance();
+        gameReplayService.apply(new Start());
+        gameReplayService.updateInstance(game);
     }
 
     private void initBoardGui() {
@@ -359,7 +352,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 CardModel cardModel = card.getModel();
                 cardModel.setEntityId(cardEntity);
                 cardModel.setFaceUp(!data.has(cardEntity, core.IN_LIBRARY_ZONE));
-                cardModel.setTemplate((DisplayCardTemplate) game.getCards().apply(data.get(cardEntity, core.CARD_TEMPLATE)));
+                cardModel.setTemplate((DisplayCardTemplate) game.getTemplates().getCard(data.get(cardEntity, core.CARD_TEMPLATE)));
 
                 if (game.getMoves().canCast(player, cardEntity)) {
                     card.setInteractivity(castInteractivity(player, cardEntity));
@@ -379,7 +372,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
                 minionModel.setFaceUp(true);
                 minionModel.setAttack(data.getOptional(cardEntity, core.ATTACK).orElse(0));
                 minionModel.setHealth(data.getOptional(cardEntity, core.HEALTH).orElse(0));
-                DisplayMinionTemplate template = (DisplayMinionTemplate) game.getMinions().apply(data.get(cardEntity, core.MINION_TEMPLATE));
+                DisplayMinionTemplate template = (DisplayMinionTemplate) game.getTemplates().getMinion(data.get(cardEntity, core.MINION_TEMPLATE));
                 minionModel.setTemplate(template);
                 minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
 
@@ -442,7 +435,7 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     private Interactivity castInteractivity(int player, int castable) {
         CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
         int cardTemplate = game.getData().get(castable, core.CARD_TEMPLATE);
-        CardTemplate template = game.getCards().apply(cardTemplate);
+        CardTemplate template = game.getTemplates().getCard(cardTemplate);
         CardCast cast = template.getAttackPhaseCast() != null ? template.getAttackPhaseCast() : template.getBlockPhaseCast();
         if (cast.isTargeted()) {
             return new AimToTargetInteractivity(TargetSnapMode.VALID) {
@@ -542,36 +535,46 @@ public class CardsApp extends SimpleApplication implements ActionListener {
     }
 
     private void applyMove(Move move) {
-        try {
-            move.apply(game);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace(System.err);
+        if (botIsComputing.get()) {
+            System.out.println("User action discarded, bot is still working: " + move);
             return;
         }
-        applyAI();
+        gameReplayService.apply(move);
     }
 
     private void applyAI() {
+        if (!botIsComputing.compareAndSet(false, true)) {
+            return;
+        }
+        Game game = gameReplayService.createInstance();
         int botPlayerIndex = 1;
         int botPlayer = game.findPlayerByIndex(botPlayerIndex);
         if (game.isPlayerActive(botPlayer)) {
-            Function<MoveBotGame, float[]> evaluation = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
-            Function<MoveBotGame, float[]> rolloutEvaluation = new RolloutToEvaluation<>(new Random(), 10, evaluation)::evaluate;
-            MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
-            botSettings.verbose = true;
-            botSettings.evaluation = rolloutEvaluation;
-            botSettings.strength = 10_000;
-            GameSettingsBuilder settingsBuilder = new GameSettingsBuilder(game.getSettings());
-            settingsBuilder.backupsEnabled = false;
-            settingsBuilder.validateMoves = false;
-            MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(new Game(settingsBuilder.build())), botSettings);
-            while (game.isPlayerActive(botPlayer)) {
+            Thread botThread = new Thread(() -> {
+                System.out.println("computing...");
+                Function<MoveBotGame, float[]> evaluation = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
+                Function<MoveBotGame, float[]> rolloutEvaluation = new RolloutToEvaluation<>(new Random(), 10, evaluation)::evaluate;
+                MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
+                botSettings.verbose = true;
+                botSettings.evaluation = rolloutEvaluation;
+                botSettings.strength = 10_000;
+                MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(simulationGame(game)), botSettings);
                 Move move = bot.findBestMove(botPlayerIndex);
-                move.apply(game);
-                bot.onMove(move);
-            }
+                game.getMoves().move(move);
+                System.out.println("Eval: " + Arrays.toString(evaluation.apply(new MoveBotGame(game))));
+                botIsComputing.set(false);
+                applyMove(move);
+                System.out.println("Bot is done.");
+            });
+            botThread.start();
+        } else {
+            botIsComputing.set(false);
         }
-        updateBoard();
-        updateCamera();
+    }
+
+    private Game simulationGame(Game game) {
+        EntityData data = new SimpleEntityData(game.getSettings().components);
+        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false);
+        return new Game(game.getSettings(), data, moves);
     }
 }

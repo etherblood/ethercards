@@ -14,6 +14,8 @@ public interface BotGame<T, V extends BotGame<T, V>> {
 
     List<T> generateMoves();
 
+    List<T> getMoveHistory();
+
     boolean isGameOver();
 
     int playerCount();

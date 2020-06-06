@@ -1,0 +1,13 @@
+{
+    "alias": "minions/baby_dragon.json",
+    "display": {
+        "name": "Baby Dragon",
+        "imagePath": "images/cards/2785.jpg",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 1200,
+        "HEALTH": 700,
+        "SUMMONING_SICKNESS": 1
+    }
+}
