@@ -7,17 +7,17 @@ import com.jme3.post.*;
 
 public class PostFilterAppstate extends MyBaseAppState {
 
-    public PostFilterAppstate(){
+    public PostFilterAppstate() {
 
     }
     private FilterPostProcessor filterPostProcessor;
     private LinkedList<Filter> queuedFilters = new LinkedList<>();
 
     @Override
-    public void initialize(AppStateManager stateManager, Application application){
+    public void initialize(AppStateManager stateManager, Application application) {
         super.initialize(stateManager, application);
         filterPostProcessor = new FilterPostProcessor(application.getAssetManager());
-        for (Filter filter : queuedFilters){
+        for (Filter filter : queuedFilters) {
             filterPostProcessor.addFilter(filter);
         }
         queuedFilters.clear();
@@ -25,36 +25,33 @@ public class PostFilterAppstate extends MyBaseAppState {
     }
 
     @Override
-    public void setEnabled(boolean enabled){
+    public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         if (enabled) {
             mainApplication.getViewPort().addProcessor(filterPostProcessor);
-        }
-        else{
+        } else {
             mainApplication.getViewPort().removeProcessor(filterPostProcessor);
         }
     }
 
     @Override
-    public void cleanup(){
+    public void cleanup() {
         super.cleanup();
         mainApplication.getViewPort().removeProcessor(filterPostProcessor);
     }
 
-    public void addFilter(final Filter filter){
+    public void addFilter(final Filter filter) {
         if (isInitialized()) {
             mainApplication.enqueue(() -> filterPostProcessor.addFilter(filter));
-        }
-        else{
+        } else {
             queuedFilters.add(filter);
         }
     }
 
-    public void removeFilter(final Filter filter){
+    public void removeFilter(final Filter filter) {
         if (isInitialized()) {
             mainApplication.enqueue(() -> filterPostProcessor.removeFilter(filter));
-        }
-        else{
+        } else {
             queuedFilters.remove(filter);
         }
     }
