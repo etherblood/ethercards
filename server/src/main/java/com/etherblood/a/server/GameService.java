@@ -159,10 +159,12 @@ public class GameService {
                     PlayerSetup human = new PlayerSetup();
                     Token jwt = JwtUtils.verify(request.jwt);
                     human.id = jwt.user.id;
+                    human.name = jwt.user.login;
                     human.library = request.library;
 
                     PlayerSetup bot = new PlayerSetup();
                     bot.id = botId;
+                    bot.name = "Bot";
                     bot.library = botLibrary;
 
                     GameSetup setup = new GameSetup();
@@ -203,12 +205,14 @@ public class GameService {
             PlayerSetup player0 = new PlayerSetup();
             Token jwt0 = JwtUtils.verify(request0.jwt);
             player0.id = jwt0.user.id;
+            player0.name = jwt0.user.login;
             player0.library = request0.library;
 
             GameRequest request1 = entry1.getValue();
             PlayerSetup player1 = new PlayerSetup();
             Token jwt1 = JwtUtils.verify(request1.jwt);
             player1.id = jwt1.user.id;
+            player1.name = jwt1.user.login;
             player1.library = request1.library;
 
             GameSetup setup = new GameSetup();

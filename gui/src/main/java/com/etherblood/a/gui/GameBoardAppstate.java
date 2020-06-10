@@ -144,19 +144,23 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         IntList players = data.list(core.PLAYER_INDEX);
         for (int player : players) {
             int playerIndex = data.get(player, core.PLAYER_INDEX);
-            builder.append("Player ");
-            builder.append(playerIndex + 1);
+            builder.append(app.getPlayerName(playerIndex));
+            builder.append(System.lineSeparator());
             builder.append(" mana: ");
             builder.append(data.getOptional(player, core.MANA).orElse(0));
+            builder.append(System.lineSeparator());
             if (game.hasPlayerLost(player)) {
-                builder.append(" - LOST");
+                builder.append(" LOST");
             } else if (game.hasPlayerWon(player)) {
-                builder.append(" - WON");
+                builder.append(" WON");
             } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
-                builder.append(" - ATTACK_PHASE");
+                builder.append(" ATTACK_PHASE");
             } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
-                builder.append(" - BLOCK_PHASE");
+                builder.append(" BLOCK_PHASE");
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
+                builder.append(" MULLIGAN_PHASE");
             }
+            builder.append(System.lineSeparator());
             builder.append(System.lineSeparator());
         }
         hudText.setText(builder.toString());

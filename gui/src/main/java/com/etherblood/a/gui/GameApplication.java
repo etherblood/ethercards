@@ -10,12 +10,14 @@ import java.util.function.Consumer;
 
 public class GameApplication extends SimpleApplication {
 
+    private final String assetsPath;
     private final GameReplayService gameReplayService;
     private final Consumer<Move> moveApplier;
     private final int playerIndex;
     private Game game;
 
-    public GameApplication(GameReplayService gameReplayService, Consumer<Move> moveApplier, int playerIndex) {
+    public GameApplication(String assetsPath, GameReplayService gameReplayService, Consumer<Move> moveApplier, int playerIndex) {
+        this.assetsPath = assetsPath;
         this.gameReplayService = gameReplayService;
         this.moveApplier = moveApplier;
         this.playerIndex = playerIndex;
@@ -23,7 +25,7 @@ public class GameApplication extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        assetManager.registerLocator("../assets/", FileLocator.class);
+        assetManager.registerLocator(assetsPath, FileLocator.class);
         assetManager.registerLoader(GsonLoader.class, "json");
 
         initGame();
@@ -49,5 +51,9 @@ public class GameApplication extends SimpleApplication {
 
     public Game getGame() {
         return game;
+    }
+
+    public String getPlayerName(int playerIndex) {
+        return gameReplayService.getPlayerName(playerIndex);
     }
 }

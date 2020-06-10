@@ -12,50 +12,45 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.time.Instant;
+import java.util.concurrent.atomic.AtomicReference;
 import org.bouncycastle.openssl.PEMReader;
 
 public class JwtUtils {
 
-    private static final boolean DEBUG_MODE = false;
+    private static final AtomicReference<JWTVerifier> VERIFIER_REF = new AtomicReference<>(null);
+    private static final AtomicReference<URL> VERIFY_URL = new AtomicReference<>(null);
 
-    public static Token randomToken() {
-        if (!DEBUG_MODE) {
-            throw new AssertionError();
-        }
-        Token result = new Token();
-        result.iat = Instant.now();
-        result.user = new TokenUser();
-        result.user.id = new SecureRandom().nextLong();
-        result.user.login = Long.toUnsignedString(result.user.id, 16);
-        return result;
+    public static void setPublicKeyFilePath(String path) {
+        Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) readPublicKey(path), null);
+        VERIFIER_REF.set(JWT.require(algorithm).build());
     }
 
-    public static String randomJwt() {
-        return new Gson().toJson(randomToken());
+    public static void setVerifyUrl(String url) {
+        try {
+            VERIFY_URL.set(new URL(url));
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static Token verify(String jwt) {
-        if (DEBUG_MODE) {
-            return new Gson().fromJson(jwt, Token.class);
+        JWTVerifier verifier = VERIFIER_REF.get();
+        if (verifier != null) {
+            return fileVerify(verifier, jwt);
         }
-        return fileVerify(jwt);
+        return webVerify(jwt);
     }
 
-    private static Token fileVerify(String jwt) {
-        Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) readPublicKey("../assets/public.pem"), null);
-        JWTVerifier verifier = JWT.require(algorithm).build();
-
+    private static Token fileVerify(JWTVerifier verifier, String jwt) {
         DecodedJWT decodedJWT = verifier.verify(jwt);
         Token result = new Token();
         result.iat = decodedJWT.getIssuedAt().toInstant();
@@ -75,7 +70,7 @@ public class JwtUtils {
 
     private static Token webVerify(String jwt) {
         try {
-            URL url = URI.create("https://destrostudios.com:8080/authToken/verify").toURL();
+            URL url = VERIFY_URL.get();
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("authToken", jwt);

@@ -11,12 +11,25 @@ import com.jme3.system.AppSettings;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.function.Function;
 
 public class Main {
 
     public static void main(String... args) throws Exception {
+        Properties props = new Properties();
+        props.load(Files.newBufferedReader(Paths.get("config.properties")));
+        String jwtPubKeyPath = props.getProperty("jwtPubKeyPath");
+        String jwtUrl = props.getProperty("jwtUrl");
+
+        if (jwtPubKeyPath != null) {
+            JwtUtils.setPublicKeyFilePath(jwtPubKeyPath);
+        }
+        if (jwtUrl != null) {
+            JwtUtils.setVerifyUrl(jwtUrl);
+        }
+
         String jwt = args[0];
         Token token = JwtUtils.verify(jwt);
         System.out.println("Logged in as " + token.user.login);
@@ -25,7 +38,7 @@ public class Main {
 
         Function<String, JsonObject> assetLoader = x -> {
             try {
-                return new Gson().fromJson(Files.newBufferedReader(Paths.get("../assets/templates/" + x)), JsonObject.class);
+                return new Gson().fromJson(Files.newBufferedReader(Paths.get(props.getProperty("assets") + "templates/" + x)), JsonObject.class);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -33,7 +46,7 @@ public class Main {
         RawLibraryTemplate library = new Gson().fromJson(assetLoader.apply("libraries/default.json"), RawLibraryTemplate.class);
 
         GameClient client = new GameClient(assetLoader);
-        client.start("localhost");
+        client.start(props.getProperty("hostUrl"));
         GameReplayService game;
         if (strength == 0) {
             game = client.requestGame(jwt, library).get();
@@ -43,7 +56,7 @@ public class Main {
             throw new AssertionError(strength);
         }
 
-        GameApplication app = new GameApplication(game, client::requestMove, game.getPlayerIndex(token.user.id));
+        GameApplication app = new GameApplication(props.getProperty("assets"), game, client::requestMove, game.getPlayerIndex(token.user.id));
         AppSettings settings = new AppSettings(true);
         settings.setWidth(1600);
         settings.setHeight(900);

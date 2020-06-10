@@ -116,4 +116,8 @@ public class GameReplayService {
             updateInstance(cachedGame);
         }
     }
+
+    public synchronized  String getPlayerName(int playerIndex) {
+        return replay.setup.players[playerIndex].name;
+    }
 }
