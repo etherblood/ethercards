@@ -75,19 +75,44 @@ public class GameReplayService {
         }
     }
 
-    public synchronized void apply(Move move) {
-        if (cachedGame == null) {
-            cachedGame = createInstance();
-        }
+    public synchronized MoveReplay apply(Move move) {
+        updateCachedGame();
         MoveService moves = cachedGame.getMoves();
         moves.move(move);
         MoveReplay moveReplay = moves.getHistory().get(moves.getHistory().size() - 1);
+        assert move == moveReplay.move;
         replay.moves.add(moveReplay);
+        return moveReplay;
     }
 
     public synchronized void apply(MoveReplay moveReplay) {
         replay.moves.add(moveReplay);
-        if (cachedGame != null) {
+    }
+
+    public synchronized boolean isGameOver() {
+        updateCachedGame();
+        return cachedGame.isGameOver();
+    }
+
+    public synchronized int getPlayerIndex(long playerId) {
+        PlayerSetup[] players = replay.setup.players;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].id == playerId) {
+                return i;
+            }
+        }
+        throw new NullPointerException();
+    }
+
+    public synchronized int getPlayerEntity(int playerIndex) {
+        updateCachedGame();
+        return cachedGame.findPlayerByIndex(playerIndex);
+    }
+
+    private void updateCachedGame() {
+        if (cachedGame == null) {
+            cachedGame = createInstance();
+        } else {
             updateInstance(cachedGame);
         }
     }

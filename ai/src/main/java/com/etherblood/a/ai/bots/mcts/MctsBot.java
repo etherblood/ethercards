@@ -225,4 +225,8 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     private int playerCount() {
         return sourceGame.playerCount();
     }
+
+    public Game getSourceGame() {
+        return sourceGame;
+    }
 }

@@ -78,11 +78,12 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
     private final Map<BoardObject<?>, Integer> objectEntities = new HashMap<>();
     private final Map<Integer, ConnectionMarker> attacks = new HashMap<>();
     private BitmapText hudText;
-
+    private final int userControlledPlayer;
     private final GameApplication app;
 
-    public GameBoardAppstate(GameApplication app) {
+    public GameBoardAppstate(GameApplication app, int userControlledPlayer) {
         this.app = app;
+        this.userControlledPlayer = userControlledPlayer;
     }
 
     @Override
@@ -222,7 +223,6 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         if (game.isGameOver()) {
             return;
         }
-        int player = game.findPlayerByIndex(0);
         int index = 0;
         for (int cardEntity : cards) {
             if (data.has(cardEntity, core.CARD_TEMPLATE)) {
@@ -232,11 +232,11 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                 cardModel.setFaceUp(!data.has(cardEntity, core.IN_LIBRARY_ZONE));
                 cardModel.setTemplate((DisplayCardTemplate) game.getTemplates().getCard(data.get(cardEntity, core.CARD_TEMPLATE)));
 
-                if (game.getMoves().canCast(player, cardEntity)) {
-                    card.setInteractivity(castInteractivity(player, cardEntity));
+                if (game.getMoves().canCast(userControlledPlayer, cardEntity)) {
+                    card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
                     cardModel.setGlow(ColorRGBA.Yellow);
-                } else if (game.getMoves().canDeclareMulligan(player, cardEntity)) {
-                    card.setInteractivity(mulliganInteractivity(player, cardEntity));
+                } else if (game.getMoves().canDeclareMulligan(userControlledPlayer, cardEntity)) {
+                    card.setInteractivity(mulliganInteractivity(userControlledPlayer, cardEntity));
                     cardModel.setGlow(ColorRGBA.Red);
                 } else {
                     card.clearInteractivity();
@@ -254,11 +254,11 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                 minionModel.setTemplate(template);
                 minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
 
-                if (game.getMoves().canDeclareAttack(player, cardEntity)) {
-                    card.setInteractivity(attackInteractivity(player, cardEntity));
+                if (game.getMoves().canDeclareAttack(userControlledPlayer, cardEntity)) {
+                    card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));
                     minionModel.setGlow(ColorRGBA.Red);
-                } else if (game.getMoves().canBlock(player, cardEntity)) {
-                    card.setInteractivity(blockInteractivity(player, cardEntity));
+                } else if (game.getMoves().canBlock(userControlledPlayer, cardEntity)) {
+                    card.setInteractivity(blockInteractivity(userControlledPlayer, cardEntity));
                     minionModel.setGlow(ColorRGBA.Blue);
                 } else {
                     card.clearInteractivity();
@@ -389,7 +389,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         CameraAppState cameraAppState = app.getStateManager().getState(CameraAppState.class);
         Vector3f position = new Vector3f();
         Quaternion rotation = new Quaternion();
-        boolean isPlayer1 = game.isPlayerActive(game.findPlayerByIndex(1));
+        boolean isPlayer1 = userControlledPlayer == game.findPlayerByIndex(1);
         position.set(0, 3.8661501f, 6.470482f);
         if (isPlayer1) {
             position.addLocal(0, 0, -10.339f);
@@ -486,22 +486,19 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         if ("space".equals(name) && isPressed) {
             EntityData data = game.getData();
             CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-            IntList list = data.list(core.ACTIVE_PLAYER_PHASE);
-            if (!list.isEmpty()) {
-                int player = list.get(0);
-                int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
+            data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
                 switch (phase) {
                     case PlayerPhase.BLOCK_PHASE:
-                        app.applyMove(new EndBlockPhase(player));
+                        app.applyMove(new EndBlockPhase(userControlledPlayer));
                         break;
                     case PlayerPhase.ATTACK_PHASE:
-                        app.applyMove(new EndAttackPhase(player));
+                        app.applyMove(new EndAttackPhase(userControlledPlayer));
                         break;
                     case PlayerPhase.MULLIGAN_PHASE:
-                        app.applyMove(new EndMulliganPhase(player));
+                        app.applyMove(new EndMulliganPhase(userControlledPlayer));
                         break;
                 }
-            }
+            });
         }
     }
 

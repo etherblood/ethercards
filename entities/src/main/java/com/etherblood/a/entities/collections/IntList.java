@@ -18,7 +18,7 @@ public class IntList implements Iterable<Integer> {
     private int size = 0;
     private int[] data;
 
-    public IntList(int[] data) {
+    public IntList(int... data) {
         this.data = Arrays.copyOf(data, Math.max(data.length, DEFAULT_CAPACITY));
         size = data.length;
     }

@@ -294,7 +294,6 @@ public class TemplatesParser {
         if (previousId != null) {
             return previousId;
         }
-
         return nextId;
     }
 

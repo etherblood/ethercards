@@ -125,4 +125,8 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
         return "#" + card + " " + template.getTemplateName();
     }
 
+    public Game getGame() {
+        return game;
+    }
+
 }

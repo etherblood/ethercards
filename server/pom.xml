@@ -8,10 +8,16 @@
     </parent>
     <artifactId>server</artifactId>
     <packaging>jar</packaging>
+    
     <dependencies>
         <dependency>
             <groupId>com.etherblood.a</groupId>
             <artifactId>network-api</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.etherblood.a</groupId>
+            <artifactId>ai</artifactId>
             <version>0.1.0</version>
         </dependency>
     </dependencies>

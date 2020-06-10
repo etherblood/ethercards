@@ -156,7 +156,8 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
     @Override
     public void copyStateFrom(MoveBotGame source) {
-        if (!game.getTemplates().equals(source.game.getTemplates())) {
+        if (game.getTemplates() != source.game.getTemplates()) {
+            // equals() would be slow, require reference identity for performance
             throw new IllegalArgumentException();
         }
         EntityUtil.copy(source.game.getData(), game.getData());

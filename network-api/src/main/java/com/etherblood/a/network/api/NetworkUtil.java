@@ -3,6 +3,16 @@ package com.etherblood.a.network.api;
 import com.esotericsoftware.kryo.Kryo;
 import com.etherblood.a.network.api.game.GameSetup;
 import com.etherblood.a.network.api.game.PlayerSetup;
+import com.etherblood.a.network.api.matchmaking.GameRequest;
+import com.etherblood.a.network.api.matchmaking.OpponentType;
+import com.etherblood.a.network.api.serializers.moves.BlockSerializer;
+import com.etherblood.a.network.api.serializers.moves.CastSerializer;
+import com.etherblood.a.network.api.serializers.moves.DeclareAttackSerializer;
+import com.etherblood.a.network.api.serializers.moves.DeclareMulliganSerializer;
+import com.etherblood.a.network.api.serializers.moves.EndAttackPhaseSerializer;
+import com.etherblood.a.network.api.serializers.moves.EndBlockPhaseSerializer;
+import com.etherblood.a.network.api.serializers.moves.EndMulliganPhaseSerializer;
+import com.etherblood.a.network.api.serializers.moves.SurrenderSerializer;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.moves.Block;
 import com.etherblood.a.rules.moves.Cast;
@@ -14,6 +24,7 @@ import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.templates.RawLibraryTemplate;
+import com.google.gson.internal.LinkedTreeMap;
 import java.util.HashMap;
 
 public class NetworkUtil {
@@ -24,21 +35,25 @@ public class NetworkUtil {
         kryo.register(Identify.class);
 //        kryo.register(UUID.class, new UuidSerializer());
         
+        kryo.register(GameRequest.class);
+        kryo.register(OpponentType.class);
         kryo.register(GameSetup.class);
+        kryo.register(PlayerSetup[].class);
         kryo.register(PlayerSetup.class);
         kryo.register(RawLibraryTemplate.class);
         kryo.register(MoveReplay.class);
         kryo.register(int[].class);
         kryo.register(HashMap.class);
+        kryo.register(LinkedTreeMap.class);
 
         kryo.register(Start.class);
-        kryo.register(Block.class);
-        kryo.register(Cast.class);
-        kryo.register(DeclareAttack.class);
-        kryo.register(DeclareMulligan.class);
-        kryo.register(EndAttackPhase.class);
-        kryo.register(EndBlockPhase.class);
-        kryo.register(EndMulliganPhase.class);
-        kryo.register(Surrender.class);
+        kryo.register(Block.class, new BlockSerializer());
+        kryo.register(Cast.class, new CastSerializer());
+        kryo.register(DeclareAttack.class, new DeclareAttackSerializer());
+        kryo.register(DeclareMulligan.class, new DeclareMulliganSerializer());
+        kryo.register(EndAttackPhase.class, new EndAttackPhaseSerializer());
+        kryo.register(EndBlockPhase.class, new EndBlockPhaseSerializer());
+        kryo.register(EndMulliganPhase.class, new EndMulliganPhaseSerializer());
+        kryo.register(Surrender.class, new SurrenderSerializer());
     }
 }
