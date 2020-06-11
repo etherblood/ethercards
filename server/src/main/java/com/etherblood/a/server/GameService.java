@@ -3,6 +3,8 @@ package com.etherblood.a.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.ai.MoveBotGame;
+import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
+import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.EntityData;
@@ -30,6 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -182,9 +185,12 @@ public class GameService {
 
                     players.add(new GamePlayerMapping(gameId, human.id, 0, connection.getID()));
 
+                    Function<MoveBotGame, float[]> simple = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
+                    Function<MoveBotGame, float[]> rolloutEvaluation = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
+
                     MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
                     settings.strength = request.strength;
-                    settings.verbose = true;
+                    settings.evaluation = rolloutEvaluation;
                     Game gameInstance = game.createInstance();
                     MctsBot<Move, MoveBotGame> mcts = new MctsBot<>(new MoveBotGame(gameInstance), new MoveBotGame(simulationGame(gameInstance)), settings);
                     bots.add(new GameBotMapping(gameId, 1, mcts));
