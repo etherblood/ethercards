@@ -101,10 +101,13 @@ public class GameService {
                 other.sendTCP(moveReplay);
             }
         }
+        Future<Move> botMove = botMoves.remove(gameId);
+        if (botMove != null) {
+            botMove.cancel(true);
+        }
         if (gameReplayService.isGameOver()) {
             LOG.info("Game {} ended.", gameId);
             games.remove(gameId);
-            botMoves.remove(gameId);
             for (GamePlayerMapping player : getPlayersByGameId(gameId)) {
                 players.remove(player);
             }
@@ -138,6 +141,9 @@ public class GameService {
             GameReplayService game = games.get(bot.gameId);
             MoveBotGame botGame = bot.bot.getSourceGame();
             game.updateInstance(botGame.getGame());
+            if (botGame.isGameOver()) {
+                throw new AssertionError();
+            }
             if (botGame.isPlayerIndexActive(bot.playerIndex)) {
                 LOG.info("Start computing move for game {}.", bot.gameId);
                 botMoves.put(bot.gameId, executor.submit(() -> bot.bot.findBestMove(bot.playerIndex)));

@@ -45,7 +45,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
         this.raveMultiplier = settings.raveMultiplier;
     }
 
-    public Move findBestMove(int playerIndex) {
+    public Move findBestMove(int playerIndex) throws InterruptedException {
         if (sourceGame.getMoveHistory() == null) {
             rootNode = null;
         } else {
@@ -57,7 +57,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                 rootNodeHistoryPointer++;
             }
         }
-        
+
         List<Move> moves = new ArrayList<>(sourceGame.generateMoves());
         if (moves.size() > 1) {
             if (rootNode == null) {
@@ -72,6 +72,9 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                 // TODO: the simulated opponent also only 'knows' our hand...
                 simulationGame.randomizeHiddenInformation(random, playerIndex);
                 iteration(rootNode, raveScores);
+                if (Thread.interrupted()) {
+                    throw new InterruptedException();
+                }
             }
 
             Node<Move> node = rootNode;

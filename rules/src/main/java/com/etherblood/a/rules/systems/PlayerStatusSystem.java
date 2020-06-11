@@ -40,7 +40,7 @@ public class PlayerStatusSystem extends AbstractSystem {
         IntList alive = new IntList();
         for (int minion : heroes) {
             int owner = data.get(minion, core.OWNED_BY);
-            if (!alive.contains(owner)) {
+            if (!alive.contains(owner) && !data.has(owner, core.HAS_LOST)) {
                 alive.add(owner);
             }
         }
