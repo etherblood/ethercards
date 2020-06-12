@@ -83,7 +83,10 @@ public class GameApplication extends SimpleApplication {
         GameTemplates templates = templatesLoader.buildGameTemplates();
         List<DisplayCardTemplate> cards = cardAliasToId.values().stream().map(x -> (DisplayCardTemplate) templates.getCard(x)).collect(Collectors.toList());
 
-        RawLibraryTemplate presetLibrary = load("templates/libraries/default.json", RawLibraryTemplate.class);
+        RawLibraryTemplate presetLibrary = LibraryIO.load("library.json");
+        if (presetLibrary == null) {
+            presetLibrary = load("templates/libraries/default.json", RawLibraryTemplate.class);
+        }
         deckBuilderAppstate = new MyDeckBuilderAppstate(cards, null, cardImages, rootNode, presetLibrary);
         stateManager.attach(deckBuilderAppstate);
     }
@@ -106,7 +109,9 @@ public class GameApplication extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         if (deckBuilderAppstate != null && deckBuilderAppstate.getResult().isDone()) {
             try {
-                requestGame(deckBuilderAppstate.getResult().get());
+                RawLibraryTemplate library = deckBuilderAppstate.getResult().get();
+                LibraryIO.store("library.json", library);
+                requestGame(library);
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }

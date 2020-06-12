@@ -137,10 +137,6 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         stateManager.detach(stateManager.getState(BoardAppState.class));
         guiNode.detachChild(hudText);
 
-        for (BoardObject<?> boardObject : objectEntities.keySet()) {
-            board.unregister(boardObject);
-        }
-
         playerZones.clear();
         visualCards.clear();
         visualMinions.clear();

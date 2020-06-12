@@ -1,5 +1,4 @@
 {
-    "alias": "libraries/default.json",
     "hero": "minions/shyvana.json",
     "cards": {
         "cards/goblin.json": 1,

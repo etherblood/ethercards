@@ -104,7 +104,15 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .collectionCardsPerRow(16)
                 .collectionRowsPerPage(7)
                 .build();
+        
+        
+        HashMap<CardModel, Integer> deck = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : presetLibrary.cards.entrySet()) {
+            CardModel model = allCardModels.stream().filter(x -> x.getTemplate().getAlias().equals(entry.getKey())).findAny().get();
+            deck.put(model, entry.getValue());
+        }
         deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
+        deckBuilderAppState.setDeck(deck);
         stateManager.attach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
         spaceListener = new ActionListener() {
@@ -116,12 +124,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         stateManager.getState(CameraAppState.class).moveTo(new Vector3f(-0.25036395f, 15.04817f, -0.44388884f), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
         stateManager.attach(new ForestBoardAppstate(0));
 
-//        HashMap<CardModel, Integer> deck = new HashMap<>();
-//        for (Map.Entry<String, Integer> entry : presetLibrary.cards.entrySet()) {
-//            CardModel model = allCardModels.stream().filter(x -> x.getTemplate().getAlias().equals(entry.getKey())).findAny().get();
-//            deck.put(model, entry.getValue());
-//        }
-//        deckBuilderAppState.setDeck(deck);
     }
 
     @Override
