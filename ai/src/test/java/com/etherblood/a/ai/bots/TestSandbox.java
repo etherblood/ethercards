@@ -23,7 +23,7 @@ import com.etherblood.a.templates.RawLibraryTemplate;
 import com.etherblood.a.templates.TemplatesLoader;
 import com.etherblood.a.templates.TemplatesParser;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -92,9 +92,9 @@ public class TestSandbox {
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        Function<String, JsonObject> assetLoader = x -> {
+        Function<String, JsonElement> assetLoader = x -> {
             try {
-                return new Gson().fromJson(Files.newBufferedReader(Paths.get("../assets/templates/" + x)), JsonObject.class);
+                return new Gson().fromJson(Files.newBufferedReader(Paths.get("../assets/templates/" + x)), JsonElement.class);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

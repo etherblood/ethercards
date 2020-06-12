@@ -4,11 +4,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.network.api.NetworkUtil;
+import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.templates.RawLibraryTemplate;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -22,13 +23,13 @@ public class GameServer {
 
     private final Server server;
 
-    public GameServer(Function<String, JsonObject> assetLoader) {
+    public GameServer(JwtParser jwtParser, Function<String, JsonElement> assetLoader) {
         RawLibraryTemplate botLibrary = new Gson().fromJson(assetLoader.apply("libraries/default.json"), RawLibraryTemplate.class);
 
         server = new Server();
         NetworkUtil.init(server.getKryo());
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
-        GameService gameService = new GameService(server, assetLoader, -1, botLibrary, scheduledThreadPoolExecutor);
+        GameService gameService = new GameService(server, jwtParser, assetLoader, -1, botLibrary, scheduledThreadPoolExecutor);
         server.addListener(new Listener() {
 
             @Override
@@ -47,7 +48,11 @@ public class GameServer {
             @Override
             public void disconnected(Connection connection) {
                 LOG.info("Connection {} disconnected.", connection.getID());
-                gameService.onDisconnect(connection);
+                try {
+                    gameService.onDisconnect(connection);
+                } catch (Throwable t) {
+                    LOG.error("Error when handling disconnect for connection {}.", connection.getID(), t);
+                }
             }
 
             @Override

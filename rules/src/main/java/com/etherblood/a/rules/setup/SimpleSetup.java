@@ -4,6 +4,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.systems.util.SystemsUtil;
 import com.etherblood.a.rules.templates.MinionTemplate;
 
 public class SimpleSetup {
@@ -31,7 +32,10 @@ public class SimpleSetup {
             
             int hero = data.createEntity();
             data.set(hero, core.OWNED_BY, player);
+            data.set(hero, core.HERO, 1);
             data.set(hero, core.IN_BATTLE_ZONE, 1);
+            //TODO: mana growth should be somehow added to the player, not their hero
+            SystemsUtil.increase(data, hero, core.MANA_GROWTH, 1);
             MinionTemplate heroTemplate = game.getTemplates().getMinion(heroes[i]);
             for (int component : heroTemplate) {
                 data.set(hero, component, heroTemplate.get(component));

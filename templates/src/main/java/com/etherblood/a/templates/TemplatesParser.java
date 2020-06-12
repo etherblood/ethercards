@@ -101,6 +101,7 @@ public class TemplatesParser {
     public DisplayCardTemplate parseCard(JsonObject cardJson) {
         String alias = cardJson.get("alias").getAsString();
         DisplayCardTemplateBuilder builder = new DisplayCardTemplateBuilder();
+        builder.setAlias(alias);
         JsonObject display = cardJson.getAsJsonObject("display");
         if (display != null) {
             JsonElement colors = display.get("colors");
@@ -168,6 +169,7 @@ public class TemplatesParser {
     public DisplayMinionTemplate parseMinion(JsonObject minionJson) {
         String alias = minionJson.get("alias").getAsString();
         DisplayMinionTemplateBuilder builder = new DisplayMinionTemplateBuilder(components.getModule(CoreComponents.class));
+        builder.setAlias(alias);
         JsonObject display = minionJson.getAsJsonObject("display");
         if (display != null) {
             JsonElement colors = display.get("colors");

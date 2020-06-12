@@ -19,7 +19,7 @@ import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.templates.LibraryTemplate;
 import com.etherblood.a.templates.TemplatesLoader;
 import com.etherblood.a.templates.TemplatesParser;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
@@ -27,11 +27,11 @@ import java.util.function.Function;
 public class GameReplayService {
 
     private final GameReplay replay;
-    private final Function<String, JsonObject> assetLoader;
+    private final Function<String, JsonElement> assetLoader;
 
     private Game cachedGame = null;
 
-    public GameReplayService(GameSetup setup, Function<String, JsonObject> assetLoader) {
+    public GameReplayService(GameSetup setup, Function<String, JsonElement> assetLoader) {
         this.assetLoader = assetLoader;
         replay = new GameReplay();
         replay.setup = setup;

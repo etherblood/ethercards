@@ -1,9 +1,9 @@
 package com.etherblood.a.server;
 
 import com.esotericsoftware.minlog.Log;
-import com.etherblood.a.network.api.jwt.JwtUtils;
+import com.etherblood.a.network.api.jwt.JwtParser;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,21 +18,23 @@ public class Main {
         String jwtPubKeyPath = props.getProperty("jwtPubKeyPath");
         String jwtUrl = props.getProperty("jwtUrl");
 
+        JwtParser jwtParser;
         if (jwtPubKeyPath != null) {
-            JwtUtils.setPublicKeyFilePath(jwtPubKeyPath);
-        }
-        if (jwtUrl != null) {
-            JwtUtils.setVerifyUrl(jwtUrl);
+            jwtParser = JwtParser.withPublicKeyFile(jwtPubKeyPath);
+        } else if (jwtUrl != null) {
+            jwtParser = JwtParser.withVerifyUrl(jwtUrl);
+        } else {
+            throw new IllegalStateException("Jwt verification not initialized.");
         }
 
-        Function<String, JsonObject> assetLoader = x -> {
+        Function<String, JsonElement> assetLoader = x -> {
             try {
-                return new Gson().fromJson(Files.newBufferedReader(Paths.get(props.getProperty("assets") + "templates/" + x)), JsonObject.class);
+                return new Gson().fromJson(Files.newBufferedReader(Paths.get(props.getProperty("assets") + "templates/" + x)), JsonElement.class);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         };
         Log.set(Log.LEVEL_INFO);
-        new GameServer(assetLoader).start();
+        new GameServer(jwtParser, assetLoader).start();
     }
 }

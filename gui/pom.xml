@@ -90,11 +90,6 @@
         </dependency>
         <dependency>
             <groupId>com.etherblood.a</groupId>
-            <artifactId>ai</artifactId>
-            <version>0.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.etherblood.a</groupId>
             <artifactId>templates</artifactId>
             <version>0.1.0</version>
         </dependency>
@@ -106,12 +101,12 @@
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui</artifactId>
-            <version>2c09d8cd7790b0756e40465cd7270275e56feaff</version>
+            <version>f82a2dd7de9ef07764ef1fbd57cc1d8ad285be83</version>
         </dependency>
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui-samples</artifactId>
-            <version>2c09d8cd7790b0756e40465cd7270275e56feaff</version>
+            <version>f82a2dd7de9ef07764ef1fbd57cc1d8ad285be83</version>
         </dependency>
         <dependency>
             <groupId>${jm3.group}</groupId>

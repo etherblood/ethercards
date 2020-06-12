@@ -1,6 +1,7 @@
 package com.etherblood.a.templates;
 
 import com.etherblood.a.rules.GameTemplates;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.Set;
 import java.util.function.Function;
@@ -8,9 +9,9 @@ import java.util.function.Function;
 public class TemplatesLoader {
 
     private final TemplatesParser parser;
-    private final Function<String, JsonObject> assetLoader;
+    private final Function<String, JsonElement> assetLoader;
 
-    public TemplatesLoader(Function<String, JsonObject> assetLoader, TemplatesParser parser) {
+    public TemplatesLoader(Function<String, JsonElement> assetLoader, TemplatesParser parser) {
         this.assetLoader = assetLoader;
         this.parser = parser;
     }
@@ -35,6 +36,14 @@ public class TemplatesLoader {
             }
         }
     }
+    
+    public int registerCardAlias(String alias) {
+        return parser.registerCardAlias(alias);
+    }
+    
+    public int registerMinionAlias(String alias) {
+        return parser.registerMinionAlias(alias);
+    }
 
     public DisplayCardTemplate getCard(int id) {
         return parser.getCard(id);
@@ -45,6 +54,6 @@ public class TemplatesLoader {
     }
 
     private JsonObject load(String alias) {
-        return assetLoader.apply(alias);
+        return assetLoader.apply(alias).getAsJsonObject();
     }
 }

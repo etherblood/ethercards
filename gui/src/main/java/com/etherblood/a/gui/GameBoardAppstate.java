@@ -30,8 +30,8 @@ import com.etherblood.a.gui.prettycards.CardVisualizer_Card;
 import com.etherblood.a.gui.prettycards.CardVisualizer_Minion;
 import com.etherblood.a.gui.prettycards.MinionModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
-import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
-import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
+import com.etherblood.a.network.api.GameReplayService;
+import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
@@ -42,6 +42,7 @@ import com.etherblood.a.rules.moves.DeclareMulligan;
 import com.etherblood.a.rules.moves.EndAttackPhase;
 import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
+import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.templates.DisplayCardTemplate;
@@ -50,6 +51,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -60,16 +62,20 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
+import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 
 public class GameBoardAppstate extends AbstractAppState implements ActionListener {
 
     private static final float ZONE_HEIGHT = 1.3f;
+    private final Consumer<Move> moveRequester;
+    private final GameReplayService gameReplayService;
     private Game game;
     private Board board;
     private final Map<Integer, PlayerZones> playerZones = new HashMap<>();
@@ -79,11 +85,22 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
     private final Map<Integer, ConnectionMarker> attacks = new HashMap<>();
     private BitmapText hudText;
     private final int userControlledPlayer;
-    private final GameApplication app;
+    private final CardImages cardImages;
 
-    public GameBoardAppstate(GameApplication app, int userControlledPlayer) {
-        this.app = app;
-        this.userControlledPlayer = userControlledPlayer;
+    private final Node rootNode, guiNode;
+    private final BitmapFont guiFont;
+
+    private CameraAppState cameraAppstate;
+
+    public GameBoardAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, int strength, CardImages cardImages, Node rootNode, Node guiNode, BitmapFont guiFont) {
+        this.moveRequester = moveRequester;
+        this.gameReplayService = gameReplayService;
+        this.game = gameReplayService.createInstance();
+        this.userControlledPlayer = game.findPlayerByIndex(gameReplayService.getPlayerIndex(authentication.user.id));
+        this.cardImages = cardImages;
+        this.rootNode = rootNode;
+        this.guiNode = guiNode;
+        this.guiFont = guiFont;
     }
 
     @Override
@@ -92,37 +109,33 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
 
         app.getInputManager().addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
         app.getInputManager().addListener(this, "space");
+
     }
 
     @Override
     public void update(float tpf) {
+        gameReplayService.updateInstance(game);
         updateBoard();
         updateCamera();
     }
 
     @Override
     public void stateAttached(AppStateManager stateManager) {
-        game = app.getGame();
+        cameraAppstate = stateManager.getState(CameraAppState.class);
         board = new Board();
-        stateManager.attach(new ForestBoardAppstate(0));
-        stateManager.attach(new PostFilterAppstate());
-        stateManager.attach(new CameraAppState());
         stateManager.attach(initBoardGui());
 
-        hudText = new BitmapText(app.getGuiFont(), false);
-        hudText.setSize(app.getGuiFont().getCharSet().getRenderedSize());
+        hudText = new BitmapText(guiFont, false);
+        hudText.setSize(guiFont.getCharSet().getRenderedSize());
         hudText.setColor(ColorRGBA.White);
-        hudText.setLocalTranslation(0, app.getCamera().getHeight(), 0);
-        app.getGuiNode().attachChild(hudText);
+        hudText.setLocalTranslation(0, cameraAppstate.getCamera().getHeight(), 0);
+        guiNode.attachChild(hudText);
     }
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
-        stateManager.detach(stateManager.getState(ForestBoardAppstate.class));
-        stateManager.detach(stateManager.getState(PostFilterAppstate.class));
-        stateManager.detach(stateManager.getState(CameraAppState.class));
         stateManager.detach(stateManager.getState(BoardAppState.class));
-        app.getGuiNode().detachChild(hudText);
+        guiNode.detachChild(hudText);
 
         for (BoardObject<?> boardObject : objectEntities.keySet()) {
             board.unregister(boardObject);
@@ -144,7 +157,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         IntList players = data.list(core.PLAYER_INDEX);
         for (int player : players) {
             int playerIndex = data.get(player, core.PLAYER_INDEX);
-            builder.append(app.getPlayerName(playerIndex));
+            builder.append(gameReplayService.getPlayerName(playerIndex));
             builder.append(System.lineSeparator());
             builder.append(" mana: ");
             builder.append(data.getOptional(player, core.MANA).orElse(0));
@@ -289,7 +302,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             public void trigger(BoardObject source, BoardObject target) {
                 int actor = objectEntities.get(source);
                 int dest = objectEntities.get(target);
-                app.applyMove(new DeclareAttack(player, actor, dest));
+                requestMove(new DeclareAttack(player, actor, dest));
             }
         };
     }
@@ -309,7 +322,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             public void trigger(BoardObject source, BoardObject target) {
                 int actor = objectEntities.get(source);
                 int dest = objectEntities.get(target);
-                app.applyMove(new Block(player, actor, dest));
+                requestMove(new Block(player, actor, dest));
             }
         };
     }
@@ -333,7 +346,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                 @Override
                 public void trigger(BoardObject source, BoardObject target) {
                     int targetId = objectEntities.get(target);
-                    app.applyMove(new Cast(player, castable, targetId));
+                    requestMove(new Cast(player, castable, targetId));
                 }
             };
         }
@@ -341,7 +354,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
-                app.applyMove(new Cast(player, castable, ~0));
+                requestMove(new Cast(player, castable, ~0));
             }
         };
     }
@@ -351,7 +364,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
-                app.applyMove(new DeclareMulligan(player, card));
+                requestMove(new DeclareMulligan(player, card));
             }
         };
     }
@@ -390,7 +403,6 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             return;
         }
 
-        CameraAppState cameraAppState = app.getStateManager().getState(CameraAppState.class);
         Vector3f position = new Vector3f();
         Quaternion rotation = new Quaternion();
         boolean isPlayer1 = userControlledPlayer == game.findPlayerByIndex(1);
@@ -402,7 +414,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         if (isPlayer1) {
             rotation = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y).multLocal(rotation);
         }
-        cameraAppState.moveTo(position, rotation, 0.3f);
+        cameraAppstate.moveTo(position, rotation, 0.3f);
     }
 
     private BoardAppState initBoardGui() {
@@ -430,7 +442,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                 return super.getSize(zone);
             }
         });
-        CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(new CardImages(app.getAssetManager())));
+        CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
         board.registerVisualizer(card -> card.getModel() instanceof CardModel, new CardVisualizer_Card(cardPainterJME));
         board.registerVisualizer(card -> card.getModel() instanceof MinionModel, new CardVisualizer_Minion(cardPainterJME));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
@@ -476,7 +488,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             board.addZone(boardZone);
             playerZones.put(player, new PlayerZones(deckZone, handZone, boardZone));
         }
-        BoardAppState boardAppState = new BoardAppState(board, app.getRootNode(), BoardSettings.builder()
+        BoardAppState boardAppState = new BoardAppState(board, rootNode, BoardSettings.builder()
                 .draggedCardProjectionZ(0.9975f)
                 .build());
         return boardAppState;
@@ -493,17 +505,21 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
                 switch (phase) {
                     case PlayerPhase.BLOCK_PHASE:
-                        app.applyMove(new EndBlockPhase(userControlledPlayer));
+                        requestMove(new EndBlockPhase(userControlledPlayer));
                         break;
                     case PlayerPhase.ATTACK_PHASE:
-                        app.applyMove(new EndAttackPhase(userControlledPlayer));
+                        requestMove(new EndAttackPhase(userControlledPlayer));
                         break;
                     case PlayerPhase.MULLIGAN_PHASE:
-                        app.applyMove(new EndMulliganPhase(userControlledPlayer));
+                        requestMove(new EndMulliganPhase(userControlledPlayer));
                         break;
                 }
             });
         }
+    }
+
+    private void requestMove(Move move) {
+        moveRequester.accept(move);
     }
 
 }

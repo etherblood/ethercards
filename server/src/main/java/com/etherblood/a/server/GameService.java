@@ -12,8 +12,8 @@ import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.game.GameSetup;
 import com.etherblood.a.network.api.game.PlayerSetup;
-import com.etherblood.a.network.api.jwt.Token;
-import com.etherblood.a.network.api.jwt.JwtUtils;
+import com.etherblood.a.network.api.jwt.JwtAuthentication;
+import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.HistoryRandom;
@@ -23,7 +23,7 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.templates.RawLibraryTemplate;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,7 +46,8 @@ public class GameService {
     private static final Logger LOG = LoggerFactory.getLogger(GameService.class);
 
     private final Server server;
-    private final Function<String, JsonObject> assetLoader;
+    private final JwtParser jwtParser;
+    private final Function<String, JsonElement> assetLoader;
     private final long botId;
     private final RawLibraryTemplate botLibrary;
 
@@ -59,8 +60,9 @@ public class GameService {
 
     private final Map<Integer, GameRequest> connectionGameRequests = new LinkedHashMap<>();
 
-    public GameService(Server server, Function<String, JsonObject> assetLoader, long botId, RawLibraryTemplate botLibrary, ExecutorService executor) {
+    public GameService(Server server, JwtParser jwtParser, Function<String, JsonElement> assetLoader, long botId, RawLibraryTemplate botLibrary, ExecutorService executor) {
         this.server = server;
+        this.jwtParser = jwtParser;
         this.assetLoader = assetLoader;
         this.botId = botId;
         this.botLibrary = botLibrary;
@@ -72,12 +74,13 @@ public class GameService {
         if (gameRequest != null) {
             LOG.info("Removed game request of connection {} due to disconnect.", connection.getID());
         }
-        for (int i = 0; i < players.size(); i++) {
-            GamePlayerMapping player = players.get(i);
+        for (GamePlayerMapping player : players) {
             if (player.connectionId == connection.getID()) {
                 LOG.info("Surrendering game {} for player {} due to disconnect.", player.gameId, player.playerId);
                 GameReplayService game = games.get(player.gameId);
                 makeMove(player.gameId, new Surrender(game.getPlayerEntity(player.playerIndex)));
+                assert game.isGameOver();
+                assert !games.containsKey(player.gameId);
                 return;
             }
         }
@@ -166,7 +169,7 @@ public class GameService {
                 case BOT:
                     Connection connection = Objects.requireNonNull(getConnection(entry.getKey()));
                     PlayerSetup human = new PlayerSetup();
-                    Token jwt = JwtUtils.verify(request.jwt);
+                    JwtAuthentication jwt = jwtParser.verify(request.jwt);
                     human.id = jwt.user.id;
                     human.name = jwt.user.login;
                     human.library = request.library;
@@ -185,12 +188,8 @@ public class GameService {
 
                     players.add(new GamePlayerMapping(gameId, human.id, 0, connection.getID()));
 
-                    Function<MoveBotGame, float[]> simple = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
-                    Function<MoveBotGame, float[]> rolloutEvaluation = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
-
                     MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
                     settings.strength = request.strength;
-                    settings.evaluation = rolloutEvaluation;
                     Game gameInstance = game.createInstance();
                     MctsBot<Move, MoveBotGame> mcts = new MctsBot<>(new MoveBotGame(gameInstance), new MoveBotGame(simulationGame(gameInstance)), settings);
                     bots.add(new GameBotMapping(gameId, 1, mcts));
@@ -215,14 +214,14 @@ public class GameService {
 
             GameRequest request0 = entry0.getValue();
             PlayerSetup player0 = new PlayerSetup();
-            Token jwt0 = JwtUtils.verify(request0.jwt);
+            JwtAuthentication jwt0 = jwtParser.verify(request0.jwt);
             player0.id = jwt0.user.id;
             player0.name = jwt0.user.login;
             player0.library = request0.library;
 
             GameRequest request1 = entry1.getValue();
             PlayerSetup player1 = new PlayerSetup();
-            Token jwt1 = JwtUtils.verify(request1.jwt);
+            JwtAuthentication jwt1 = jwtParser.verify(request1.jwt);
             player1.id = jwt1.user.id;
             player1.name = jwt1.user.login;
             player1.library = request1.library;

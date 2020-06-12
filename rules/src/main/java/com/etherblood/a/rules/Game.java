@@ -26,7 +26,7 @@ public class Game {
     public EntityData getData() {
         return data;
     }
-    
+
     public GameTemplates getTemplates() {
         return settings.templates;
     }
@@ -53,7 +53,8 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        return data.list(core().ACTIVE_PLAYER_PHASE).isEmpty();
+        //TODO: called very often, can performance be improved?
+        return data.list(core().PLAYER_INDEX).size() == data.list(core().HAS_WON).size() + data.list(core().HAS_LOST).size();
     }
 
     public boolean hasPlayerWon(int player) {

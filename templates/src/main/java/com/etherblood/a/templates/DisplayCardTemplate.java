@@ -8,16 +8,21 @@ import java.util.List;
 
 public class DisplayCardTemplate extends CardTemplate {
 
-    private final String name, flavourText, description, imagePath;
+    private final String alias, name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayCardTemplate(int templateId, CardCast attackPhaseCast, CardCast blockPhaseCast, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
+    public DisplayCardTemplate(int templateId, CardCast attackPhaseCast, CardCast blockPhaseCast, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
         super(templateId, attackPhaseCast, blockPhaseCast);
+        this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;
         this.description = description;
         this.imagePath = imagePath;
         this.colors = Collections.unmodifiableList(new ArrayList<>(colors));
+    }
+
+    public String getAlias() {
+        return alias;
     }
 
     public String getName() {

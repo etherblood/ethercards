@@ -8,8 +8,7 @@
     "components": {
         "ATTACK": 0,
         "HEALTH": 20,
-        "SUMMONING_SICKNESS": 2,
-        "MANA_GROWTH": 1,
-        "HERO": 1
+        "SUMMONING_SICKNESS": 1,
+        "CANNOT_ATTACK": true
     }
 }

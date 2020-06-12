@@ -6,7 +6,7 @@ import com.destrostudios.cardgui.transformations.SimpleTargetPositionTransformat
 import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedPositionTransformationSpeed3f;
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedRotationTransformationSpeed;
-import com.jme3.app.Application;
+import com.etherblood.a.gui.GameApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.FlyByCamera;
 import com.jme3.math.Quaternion;
@@ -21,14 +21,16 @@ public class CameraAppState extends MyBaseAppState {
     private Quaternion tmpRotation = new Quaternion();
 
     @Override
-    public void initialize(AppStateManager stateManager, Application application) {
-        super.initialize(stateManager, application);
+    public void stateAttached(AppStateManager stateManager) {
+        mainApplication = (GameApplication) stateManager.getApplication();
         Camera camera = mainApplication.getCamera();
         camera.setFrustumPerspective(45, (float) camera.getWidth() / camera.getHeight(), 0.01f, 1000);
         FlyByCamera flyByCamera = mainApplication.getFlyByCamera();
         flyByCamera.setMoveSpeed(30);
         flyByCamera.setEnabled(false);
-        moveTo(camera.getLocation(), camera.getRotation());
+        if (positionTransformation == null) {
+            moveTo(camera.getLocation(), camera.getRotation());
+        }
     }
 
     public void moveTo(Vector3f position, Quaternion rotation) {
@@ -62,13 +64,16 @@ public class CameraAppState extends MyBaseAppState {
         if (enabled) {
             tmpPosition.set(mainApplication.getCamera().getLocation());
             tmpRotation.set(mainApplication.getCamera().getRotation());
-        }
-        else {
+        } else {
             moveTo(tmpPosition, tmpRotation, 0.25f);
         }
     }
 
     public boolean isFreeCameraEnabled() {
         return mainApplication.getFlyByCamera().isEnabled();
+    }
+
+    public Camera getCamera() {
+        return mainApplication.getCamera();
     }
 }

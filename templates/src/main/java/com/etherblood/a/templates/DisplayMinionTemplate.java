@@ -9,16 +9,21 @@ import java.util.List;
 
 public class DisplayMinionTemplate extends MinionTemplate {
 
-    private final String name, flavourText, description, imagePath;
+    private final String alias, name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayMinionTemplate(int id, IntMap components, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
+    public DisplayMinionTemplate(int id, IntMap components, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
         super(id, components, onDeathEffects, onSurviveEffects);
+        this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;
         this.description = description;
         this.imagePath = imagePath;
         this.colors = Collections.unmodifiableList(new ArrayList<>(colors));
+    }
+
+    public String getAlias() {
+        return alias;
     }
 
     public String getName() {

@@ -32,7 +32,6 @@ public class NetworkUtil {
     public static final int TCP_PORT = 17239;
 
     public static void init(Kryo kryo) {
-        kryo.register(Identify.class);
 //        kryo.register(UUID.class, new UuidSerializer());
         
         kryo.register(GameRequest.class);

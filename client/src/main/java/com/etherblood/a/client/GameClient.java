@@ -11,7 +11,7 @@ import com.etherblood.a.network.api.matchmaking.OpponentType;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.templates.RawLibraryTemplate;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -24,7 +24,7 @@ public class GameClient {
     private final Client client;
     private final AtomicReference<CompletableFuture<GameReplayService>> gameRequest = new AtomicReference<>(null);
 
-    public GameClient(Function<String, JsonObject> assetLoader) {
+    public GameClient(Function<String, JsonElement> assetLoader) {
         client = new Client();
         NetworkUtil.init(client.getKryo());
         client.addListener(new Listener() {

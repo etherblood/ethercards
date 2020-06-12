@@ -5,8 +5,12 @@ import java.util.List;
 
 public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
 
-    private String name, flavourText, description, imagePath;
+    private String alias, name, flavourText, description, imagePath;
     private List<CardColor> colors;
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -30,6 +34,6 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
 
     @Override
     public DisplayCardTemplate build(int templateId) {
-        return new DisplayCardTemplate(templateId, attackPhaseCast.build(), blockPhaseCast.build(), name, flavourText, description, imagePath, colors);
+        return new DisplayCardTemplate(templateId, attackPhaseCast.build(), blockPhaseCast.build(), alias, name, flavourText, description, imagePath, colors);
     }
 }
