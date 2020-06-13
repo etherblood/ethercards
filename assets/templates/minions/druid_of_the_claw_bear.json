@@ -8,6 +8,6 @@
     "components": {
         "ATTACK": 4,
         "HEALTH": 6,
-        "SUMMONING_SICKNESS": 1
+        "SUMMONING_SICKNESS": null
     }
 }

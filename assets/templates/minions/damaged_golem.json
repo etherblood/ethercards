@@ -1,0 +1,13 @@
+{
+    "alias": "minions/damaged_golem.json",
+    "display": {
+        "name": "Damaged Golem",
+        "imagePath": "images/cards/Damaged_Golem_full.png",
+        "colors": ["BLACK"]
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 1,
+        "SUMMONING_SICKNESS": 1
+    }
+}

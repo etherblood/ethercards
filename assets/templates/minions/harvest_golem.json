@@ -1,0 +1,19 @@
+{
+    "alias": "minions/harvest_golem.json",
+    "display": {
+        "name": "Harvest Golem",
+        "imagePath": "images/cards/Harvest_Golem_full.jpg",
+        "colors": ["BLACK"]
+    },
+    "onDeath": [
+        {
+            "type": "summon",
+            "minionId": "minions/damaged_golem.json"
+        }
+    ],
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 3,
+        "SUMMONING_SICKNESS": 1
+    }
+}
