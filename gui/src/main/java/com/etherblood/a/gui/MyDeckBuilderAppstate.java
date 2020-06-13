@@ -8,6 +8,7 @@ import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderDeckCardMo
 import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderSettings;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
+import com.etherblood.a.gui.buttons.ButtonAppstate;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;
@@ -23,41 +24,39 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Quad;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
-    private final CompletableFuture<RawLibraryTemplate> result = new CompletableFuture<>();
-    private final List<DisplayCardTemplate> cards;
-    private final List<DisplayMinionTemplate> minions;
-    private final CardImages cardImages;
-    private final Node rootNode;
+    private RawLibraryTemplate result = null;
     private final RawLibraryTemplate presetLibrary;
 
-    private DeckBuilderAppState<CardModel> deckBuilderAppState;
-    private ActionListener spaceListener;
+    private final DeckBuilderAppState<CardModel> deckBuilderAppState;
+    private final ActionListener saveLibraryListener = new ActionListener() {
+        public void onAction(String name, boolean isPressed, float tpf) {
+            completeResult();
+        }
+    };
+    private final Geometry saveLibraryButton;
+    private final Node rootNode;
 
     public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, List<DisplayMinionTemplate> minions, CardImages cardImages, Node rootNode, RawLibraryTemplate presetLibrary) {
-        this.cards = cards;
-        this.minions = minions;
-        this.cardImages = cardImages;
-        this.rootNode = rootNode;
         this.presetLibrary = presetLibrary;
-    }
+        this.rootNode = rootNode;
 
-    @Override
-    public void stateAttached(AppStateManager stateManager) {
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
             CardModel cardModel = new CardModel();
@@ -104,8 +103,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .collectionCardsPerRow(16)
                 .collectionRowsPerPage(7)
                 .build();
-        
-        
+
         HashMap<CardModel, Integer> deck = new HashMap<>();
         for (Map.Entry<String, Integer> entry : presetLibrary.cards.entrySet()) {
             CardModel model = allCardModels.stream().filter(x -> x.getTemplate().getAlias().equals(entry.getKey())).findAny().get();
@@ -113,26 +111,38 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         }
         deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
         deckBuilderAppState.setDeck(deck);
+
+        Quad quad = new Quad(1, 1);
+        saveLibraryButton = new Geometry("saveLibraryButton", quad);
+    }
+
+    @Override
+    public void stateAttached(AppStateManager stateManager) {
         stateManager.attach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
-        spaceListener = new ActionListener() {
-            public void onAction(String name, boolean isPressed, float tpf) {
-                completeResult();
-            }
-        };
-        inputManager.addListener(spaceListener, "space");
-        stateManager.getState(CameraAppState.class).moveTo(new Vector3f(-0.25036395f, 15.04817f, -0.44388884f), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
+        inputManager.addListener(saveLibraryListener, "space");
+        stateManager.getState(CameraAppState.class).moveTo(new Vector3f(-0.25036395f, 15.04817f, 1), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
         stateManager.attach(new ForestBoardAppstate(0));
 
+        Material mat = new Material(stateManager.getApplication().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setTexture("ColorMap", stateManager.getApplication().getAssetManager().loadTexture("textures/buttons/save.png"));
+        saveLibraryButton.setMaterial(mat);
+        rootNode.attachChild(saveLibraryButton);
+        saveLibraryButton.setLocalRotation(new Quaternion().fromAngles(-FastMath.HALF_PI, 0, 0));
+        saveLibraryButton.setLocalTranslation(6, 2, 5.7f);
+        saveLibraryButton.setLocalScale(2, 1, 1);
+        stateManager.getState(ButtonAppstate.class).registerButton(saveLibraryButton, this::completeResult, ColorRGBA.Gray, ColorRGBA.LightGray, ColorRGBA.White);
     }
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
-        result.cancel(true);
         stateManager.detach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
-        inputManager.removeListener(spaceListener);
+        inputManager.removeListener(saveLibraryListener);
         stateManager.detach(stateManager.getState(ForestBoardAppstate.class));
+
+        stateManager.getState(ButtonAppstate.class).unregisterButton(saveLibraryButton);
+        rootNode.detachChild(saveLibraryButton);
     }
 
     private void completeResult() {
@@ -143,10 +153,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             resultLibrary.cards.put(entry.getKey().getTemplate().getAlias(), entry.getValue());
         }
         System.out.println("library selected");
-        result.complete(resultLibrary);
+        result = resultLibrary;
     }
 
-    public Future<RawLibraryTemplate> getResult() {
+    public RawLibraryTemplate getResult() {
         return result;
     }
 

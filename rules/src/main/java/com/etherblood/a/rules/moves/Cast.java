@@ -23,4 +23,9 @@ public class Cast implements Move {
         Cast other = (Cast) obj;
         return player == other.player && source == other.source && target == other.target;
     }
+
+    @Override
+    public String toString() {
+        return "Cast{" + "player=" + player + ", source=" + source + ", target=" + target + '}';
+    }
 }

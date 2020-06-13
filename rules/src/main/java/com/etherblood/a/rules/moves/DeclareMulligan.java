@@ -23,4 +23,9 @@ public class DeclareMulligan implements Move {
         return player == other.player && card == other.card;
     }
 
+    @Override
+    public String toString() {
+        return "DeclareMulligan{" + "player=" + player + ", card=" + card + '}';
+    }
+
 }

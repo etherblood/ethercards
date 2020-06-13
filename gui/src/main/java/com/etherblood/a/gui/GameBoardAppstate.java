@@ -51,8 +51,6 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.font.BitmapFont;
-import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -83,24 +81,21 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
     private final Map<Integer, Card<MinionModel>> visualMinions = new HashMap<>();
     private final Map<BoardObject<?>, Integer> objectEntities = new HashMap<>();
     private final Map<Integer, ConnectionMarker> attacks = new HashMap<>();
-    private BitmapText hudText;
     private final int userControlledPlayer;
     private final CardImages cardImages;
 
-    private final Node rootNode, guiNode;
-    private final BitmapFont guiFont;
+    private final Node rootNode;
 
     private CameraAppState cameraAppstate;
+    private HudTextAppstate hudAppstate;
 
-    public GameBoardAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, int strength, CardImages cardImages, Node rootNode, Node guiNode, BitmapFont guiFont) {
+    public GameBoardAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
         this.game = gameReplayService.createInstance();
         this.userControlledPlayer = game.findPlayerByIndex(gameReplayService.getPlayerIndex(authentication.user.id));
         this.cardImages = cardImages;
         this.rootNode = rootNode;
-        this.guiNode = guiNode;
-        this.guiFont = guiFont;
     }
 
     @Override
@@ -122,20 +117,14 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
     @Override
     public void stateAttached(AppStateManager stateManager) {
         cameraAppstate = stateManager.getState(CameraAppState.class);
+        hudAppstate = stateManager.getState(HudTextAppstate.class);
         board = new Board();
         stateManager.attach(initBoardGui());
-
-        hudText = new BitmapText(guiFont, false);
-        hudText.setSize(guiFont.getCharSet().getRenderedSize());
-        hudText.setColor(ColorRGBA.White);
-        hudText.setLocalTranslation(0, cameraAppstate.getCamera().getHeight(), 0);
-        guiNode.attachChild(hudText);
     }
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
         stateManager.detach(stateManager.getState(BoardAppState.class));
-        guiNode.detachChild(hudText);
 
         playerZones.clear();
         visualCards.clear();
@@ -172,7 +161,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             builder.append(System.lineSeparator());
             builder.append(System.lineSeparator());
         }
-        hudText.setText(builder.toString());
+        hudAppstate.setText(builder.toString());
 
         IntList handCards = data.list(core.IN_HAND_ZONE);
         IntList battleCards = data.list(core.IN_BATTLE_ZONE);

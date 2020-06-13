@@ -12,4 +12,9 @@ public class Start implements Move {
         return obj instanceof Start;
     }
 
+    @Override
+    public String toString() {
+        return "Start{" + '}';
+    }
+
 }

@@ -24,4 +24,9 @@ public class DeclareAttack implements Move {
         return player == other.player && source == other.source && target == other.target;
     }
 
+    @Override
+    public String toString() {
+        return "DeclareAttack{" + "player=" + player + ", source=" + source + ", target=" + target + '}';
+    }
+
 }

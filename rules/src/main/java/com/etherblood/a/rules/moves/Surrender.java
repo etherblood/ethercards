@@ -22,4 +22,9 @@ public class Surrender implements Move {
         return player == other.player;
     }
 
+    @Override
+    public String toString() {
+        return "Surrender{" + "player=" + player + '}';
+    }
+
 }

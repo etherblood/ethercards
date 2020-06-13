@@ -24,4 +24,9 @@ public class Block implements Move {
         return player == other.player && source == other.source && target == other.target;
     }
 
+    @Override
+    public String toString() {
+        return "Block{" + "player=" + player + ", source=" + source + ", target=" + target + '}';
+    }
+
 }

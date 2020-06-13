@@ -22,4 +22,9 @@ public class EndMulliganPhase implements Move {
         return player == other.player;
     }
 
+    @Override
+    public String toString() {
+        return "EndMulliganPhase{" + "player=" + player + '}';
+    }
+
 }

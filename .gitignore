@@ -56,3 +56,6 @@ manifest.mf
 **/OpenAL64.dll
 .idea/
 *.iml
+
+
+gui/library.json

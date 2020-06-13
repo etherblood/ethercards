@@ -22,4 +22,9 @@ public class EndBlockPhase implements Move {
         return player == other.player;
     }
 
+    @Override
+    public String toString() {
+        return "EndBlockPhase{" + "player=" + player + '}';
+    }
+
 }

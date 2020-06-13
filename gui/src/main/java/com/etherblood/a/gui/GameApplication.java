@@ -2,6 +2,7 @@ package com.etherblood.a.gui;
 
 import com.etherblood.a.client.GameClient;
 import com.etherblood.a.entities.ComponentsBuilder;
+import com.etherblood.a.gui.buttons.ButtonAppstate;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
@@ -25,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.function.Function;
@@ -37,31 +37,32 @@ public class GameApplication extends SimpleApplication {
     private final String assetsPath;
     private final String hostUrl;
     private CardImages cardImages;
-    private final int strength;
     private MyDeckBuilderAppstate deckBuilderAppstate;
     private Future<GameReplayService> futureGameReplayService;
     private GameClient client;
+
+    private Integer selectedStrength;
+    private RawLibraryTemplate selectedLibrary;
 
     public GameApplication(Properties properties, JwtAuthentication authentication) throws Exception {
         this.authentication = authentication;
         this.assetsPath = properties.getProperty("assets");
         this.hostUrl = properties.getProperty("hostUrl");
-        System.out.println("Please enter 0 for a human opponent or select bot strength (1-10)");
-        strength = Integer.parseInt(new Scanner(System.in).nextLine());
     }
 
-    private void requestGame(RawLibraryTemplate library) {
+    private void requestGame() {
         Function<String, JsonElement> assetLoader = x -> load("templates/" + x, JsonElement.class);
 
         client = new GameClient(assetLoader);
         try {
             client.start(hostUrl);
-            if (strength == 0) {
-                futureGameReplayService = client.requestGame(authentication.rawJwt, library);
-            } else if (strength > 0) {
-                futureGameReplayService = client.requestBotgame(authentication.rawJwt, library, strength * 10_000);
+            if (selectedStrength == 0) {
+                futureGameReplayService = client.requestGame(authentication.rawJwt, selectedLibrary);
+                stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
+            } else if (selectedStrength > 0) {
+                futureGameReplayService = client.requestBotgame(authentication.rawJwt, selectedLibrary, selectedStrength * 10_000);
             } else {
-                throw new IllegalArgumentException(Integer.toString(strength));
+                throw new IllegalArgumentException(Integer.toString(selectedStrength));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -70,6 +71,7 @@ public class GameApplication extends SimpleApplication {
     }
 
     private void startDeckbuilder() {
+        stateManager.getState(HudTextAppstate.class).setText("Select your library.");
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
 
@@ -98,6 +100,8 @@ public class GameApplication extends SimpleApplication {
 
         stateManager.attach(new PostFilterAppstate());
         stateManager.attach(new CameraAppState());
+        stateManager.attach(new ButtonAppstate());
+        stateManager.attach(new HudTextAppstate(guiNode, guiFont));
 
         cardImages = new CardImages(assetManager);
 
@@ -107,26 +111,48 @@ public class GameApplication extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        if (deckBuilderAppstate != null && deckBuilderAppstate.getResult().isDone()) {
-            try {
-                RawLibraryTemplate library = deckBuilderAppstate.getResult().get();
-                LibraryIO.store("library.json", library);
-                requestGame(library);
-            } catch (InterruptedException | ExecutionException ex) {
-                throw new RuntimeException(ex);
+        if (stateManager.getState(GameBoardAppstate.class) != null) {
+            return;
+        }
+        if (selectedLibrary == null) {
+            if (deckBuilderAppstate == null) {
+                startDeckbuilder();
+            } else if (deckBuilderAppstate.getResult() != null) {
+                selectedLibrary = deckBuilderAppstate.getResult();
+                LibraryIO.store("library.json", selectedLibrary);
+                stateManager.detach(deckBuilderAppstate);
+                deckBuilderAppstate = null;
             }
-            stateManager.detach(deckBuilderAppstate);
-            deckBuilderAppstate = null;
+        }
+        if (selectedLibrary == null) {
+            return;
         }
 
-        if (futureGameReplayService != null && futureGameReplayService.isDone()) {
+        if (selectedStrength == null) {
+            SelectOpponentAppstate selectOpponentAppstate = stateManager.getState(SelectOpponentAppstate.class);
+            if (selectOpponentAppstate == null) {
+                stateManager.attach(new SelectOpponentAppstate(rootNode, assetManager));
+            } else if (selectOpponentAppstate.getSelectedStrength() != null) {
+                selectedStrength = selectOpponentAppstate.getSelectedStrength();
+                stateManager.detach(selectOpponentAppstate);
+            }
+        }
+        if (selectedStrength == null) {
+            return;
+        }
+        if (futureGameReplayService == null) {
+            requestGame();
+        }
+
+        if (futureGameReplayService.isDone()) {
+            stateManager.getState(HudTextAppstate.class).setText("");
             GameReplayService gameReplayService;
             try {
                 gameReplayService = futureGameReplayService.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
-            stateManager.attach(new GameBoardAppstate(client::requestMove, gameReplayService, authentication, strength, cardImages, rootNode, guiNode, guiFont));
+            stateManager.attach(new GameBoardAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode));
             futureGameReplayService = null;
         }
     }
