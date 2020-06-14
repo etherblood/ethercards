@@ -6,6 +6,7 @@ import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.PlayerPhase;
+import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
@@ -17,7 +18,7 @@ public class PlayerStatusSystem extends AbstractSystem {
         updatePlayerDeaths(data);
 
         for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
-            if (data.has(player, core.HAS_LOST) || data.has(player, core.HAS_WON)) {
+            if (data.has(player, core.PLAYER_RESULT)) {
                 nextTurn(data, player);
                 data.remove(player, core.ACTIVE_PLAYER_PHASE);
                 data.remove(player, core.END_PHASE);
@@ -40,7 +41,7 @@ public class PlayerStatusSystem extends AbstractSystem {
         IntList alive = new IntList();
         for (int minion : heroes) {
             int owner = data.get(minion, core.OWNED_BY);
-            if (!alive.contains(owner) && !data.has(owner, core.HAS_LOST)) {
+            if (!alive.contains(owner) && !data.hasValue(owner, core.PLAYER_RESULT, PlayerResult.LOSS)) {
                 alive.add(owner);
             }
         }
@@ -53,13 +54,13 @@ public class PlayerStatusSystem extends AbstractSystem {
 
         if (alive.size() == 1) {
             int winner = alive.get(0);
-            if (!data.has(winner, core.HAS_WON)) {
-                data.set(winner, core.HAS_WON, 1);
+            if (!data.hasValue(winner, core.PLAYER_RESULT, PlayerResult.VICTORY)) {
+                data.set(winner, core.PLAYER_RESULT, PlayerResult.VICTORY);
             }
         }
         for (int loser : dead) {
-            if (!data.has(loser, core.HAS_LOST)) {
-                data.set(loser, core.HAS_LOST, 1);
+            if (!data.hasValue(loser, core.PLAYER_RESULT, PlayerResult.LOSS)) {
+                data.set(loser, core.PLAYER_RESULT, PlayerResult.LOSS);
             }
         }
     }

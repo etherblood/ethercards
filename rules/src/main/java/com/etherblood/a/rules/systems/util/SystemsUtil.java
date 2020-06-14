@@ -21,7 +21,7 @@ public class SystemsUtil {
             if (current == player) {
                 continue;
             }
-            if (data.has(current, core.HAS_LOST) || data.has(current, core.HAS_WON)) {
+            if (data.has(current, core.PLAYER_RESULT)) {
                 continue;
             }
             int currentIndex = data.get(current, core.PLAYER_INDEX);

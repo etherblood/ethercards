@@ -5,8 +5,7 @@ import java.util.function.ToIntFunction;
 
 public class CoreComponents implements ComponentsModule {
 
-    public final int HAS_LOST;
-    public final int HAS_WON;
+    public final int PLAYER_RESULT;
     public final int PLAYER_INDEX;
     public final int ACTIVE_PLAYER_PHASE;
     public final int END_PHASE;
@@ -42,8 +41,7 @@ public class CoreComponents implements ComponentsModule {
 
 
     public CoreComponents(ToIntFunction<String> register) {
-        HAS_LOST = register.applyAsInt("HAS_LOST");
-        HAS_WON = register.applyAsInt("HAS_WON");
+        PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
         PLAYER_INDEX = register.applyAsInt("PLAYER_INDEX");
         ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
         END_PHASE = register.applyAsInt("END_PHASE");

@@ -5,6 +5,7 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
+import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.MinionTemplate;
 import java.util.Random;
@@ -52,8 +53,16 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
             throw new IllegalStateException();
         }
         EntityData data = game.getData();
-        IntList winners = data.list(core.HAS_WON);
-        IntList losers = data.list(core.HAS_LOST);
+        IntList playerResults = data.list(core.PLAYER_RESULT);
+        IntList winners = new IntList();
+        IntList losers = new IntList();
+        for (int player : playerResults) {
+            if (data.get(player, core.PLAYER_RESULT) == PlayerResult.VICTORY) {
+                winners.add(player);
+            } else {
+                losers.add(player);
+            }
+        }
         float[] result = new float[playerCount()];
         if (winners.isEmpty()) {
             winners = losers;

@@ -182,15 +182,9 @@ public class MoveService {
             }
             return false;
         }
-        if (!data.list(core().HAS_LOST).isEmpty()) {
+        if (!data.list(core().PLAYER_RESULT).isEmpty()) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to start game, at least one player already lost.");
-            }
-            return false;
-        }
-        if (!data.list(core().HAS_WON).isEmpty()) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to start game, at least one player already won.");
+                throw new IllegalArgumentException("Failed to start game, at least one player already won or lost.");
             }
             return false;
         }
@@ -569,7 +563,7 @@ public class MoveService {
         if (validateMoves) {
             validateCanSurrender(player, true);
         }
-        data.set(player, core().HAS_LOST, 1);
+        data.set(player, core().PLAYER_RESULT, PlayerResult.LOSS);
         runSystems(surrenderSystems);
     }
 
@@ -622,18 +616,27 @@ public class MoveService {
     }
 
     private boolean validateStateLegal() {
-        IntList winners = data.list(core().HAS_WON);
+        IntList playerResults = data.list(core().PLAYER_RESULT);
+        IntList winners = new IntList();
+        IntList losers = new IntList();
+        for (int player : playerResults) {
+            if (data.get(player, core().PLAYER_RESULT) == PlayerResult.VICTORY) {
+                winners.add(player);
+            } else {
+                losers.add(player);
+            }
+        }
         IntList players = data.list(core().PLAYER_INDEX);
         if (!winners.isEmpty()) {
             for (int player : players) {
-                if (data.has(player, core().HAS_LOST) || data.has(player, core().HAS_WON)) {
+                if (data.has(player, core().PLAYER_RESULT)) {
                     continue;
                 }
                 throw new IllegalStateException();
             }
         }
         for (int player : data.list(core().ACTIVE_PLAYER_PHASE)) {
-            if (data.has(player, core().HAS_LOST) || data.has(player, core().HAS_WON)) {
+            if (data.has(player, core().PLAYER_RESULT)) {
                 throw new IllegalStateException();
             }
             if (!data.has(player, core().PLAYER_INDEX)) {
@@ -642,7 +645,6 @@ public class MoveService {
         }
 
         if (data.list(core().ACTIVE_PLAYER_PHASE).isEmpty()) {
-            IntList losers = data.list(core().HAS_LOST);
             if (winners.size() + losers.size() != players.size()) {
                 throw new IllegalStateException();
             }
@@ -689,11 +691,11 @@ public class MoveService {
     }
 
     private boolean hasPlayerWon(int player) {
-        return data.has(player, core().HAS_WON);
+        return data.hasValue(player, core().PLAYER_RESULT, PlayerResult.VICTORY);
     }
 
     private boolean hasPlayerLost(int player) {
-        return data.has(player, core().HAS_LOST);
+        return data.hasValue(player, core().PLAYER_RESULT, PlayerResult.LOSS);
     }
 
     public HistoryRandom getRandom() {

@@ -54,15 +54,15 @@ public class Game {
 
     public boolean isGameOver() {
         //TODO: called very often, can performance be improved?
-        return data.list(core().PLAYER_INDEX).size() == data.list(core().HAS_WON).size() + data.list(core().HAS_LOST).size();
+        return data.list(core().PLAYER_INDEX).size() == data.list(core().PLAYER_RESULT).size();
     }
 
     public boolean hasPlayerWon(int player) {
-        return data.has(player, core().HAS_WON);
+        return data.hasValue(player, core().PLAYER_RESULT, PlayerResult.VICTORY);
     }
 
     public boolean hasPlayerLost(int player) {
-        return data.has(player, core().HAS_LOST);
+        return data.hasValue(player, core().PLAYER_RESULT, PlayerResult.LOSS);
     }
 
     public GameSettings getSettings() {
