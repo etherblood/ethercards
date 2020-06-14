@@ -45,14 +45,6 @@ public class TemplatesLoader {
         return parser.registerMinionAlias(alias);
     }
 
-    public DisplayCardTemplate getCard(int id) {
-        return parser.getCard(id);
-    }
-
-    public DisplayMinionTemplate getMinion(int id) {
-        return parser.getMinion(id);
-    }
-
     private JsonObject load(String alias) {
         return assetLoader.apply(alias).getAsJsonObject();
     }

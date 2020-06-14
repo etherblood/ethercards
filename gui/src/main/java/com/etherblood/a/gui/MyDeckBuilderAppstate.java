@@ -8,7 +8,6 @@ import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderDeckCardMo
 import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderSettings;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
-import com.etherblood.a.gui.buttons.ButtonAppstate;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;

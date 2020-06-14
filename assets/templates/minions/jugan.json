@@ -1,0 +1,76 @@
+{
+    "alias": "minions/jugan.json",
+    "display": {
+        "name": "Jugan, the Rising Star",
+        "imagePath": "images/cards/jugan.jpg",
+        "colors": ["GREEN"]
+    },
+    "onDeath": [
+        {
+            "type": "randomTarget",
+            "targets": ["OWN_MINION"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "ATTACK": 1,
+                        "HEALTH": 1
+                    }
+                }
+            ]
+        }, {
+            "type": "randomTarget",
+            "targets": ["OWN_MINION"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "ATTACK": 1,
+                        "HEALTH": 1
+                    }
+                }
+            ]
+        }, {
+            "type": "randomTarget",
+            "targets": ["OWN_MINION"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "ATTACK": 1,
+                        "HEALTH": 1
+                    }
+                }
+            ]
+        }, {
+            "type": "randomTarget",
+            "targets": ["OWN_MINION"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "ATTACK": 1,
+                        "HEALTH": 1
+                    }
+                }
+            ]
+        }, {
+            "type": "randomTarget",
+            "targets": ["OWN_MINION"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "ATTACK": 1,
+                        "HEALTH": 1
+                    }
+                }
+            ]
+        }
+    ],
+    "components": {
+        "ATTACK": 5,
+        "HEALTH": 5,
+        "SUMMONING_SICKNESS": 1
+    }
+}

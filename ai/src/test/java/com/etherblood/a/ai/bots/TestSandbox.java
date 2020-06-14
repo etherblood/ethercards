@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 public class TestSandbox {
@@ -42,7 +43,7 @@ public class TestSandbox {
             Game game = startGame();
 
             Function<MoveBotGame, float[]> simple = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
-            
+
             Function<MoveBotGame, float[]> rolloutEvaluation0 = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings0 = new MctsBotSettings<>();
             settings0.strength = 100;
@@ -80,7 +81,7 @@ public class TestSandbox {
             System.out.println("Result: " + Arrays.toString(result));
         }
     }
-    
+
     private Game simulationGame(Game game) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
         MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false);
@@ -100,12 +101,16 @@ public class TestSandbox {
             }
         };
         TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components));
-        LibraryTemplate lib0 = loader.parseLibrary(new Gson().fromJson(assetLoader.apply("libraries/default.json"), RawLibraryTemplate.class));
+        
+        RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
+        rawLibrary.hero = "minions/lots_of_health.json";
+        rawLibrary.cards = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_list.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
+        
+        LibraryTemplate lib0 = loader.parseLibrary(rawLibrary);
         LibraryTemplate lib1 = lib0;
         settingsBuilder.templates = loader.buildGameTemplates();
         GameSettings settings = settingsBuilder.build();
-        
-        
+
         IntList library0 = new IntList();
         for (int card : lib0.cards) {
             library0.add(card);

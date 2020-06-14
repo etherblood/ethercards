@@ -5,6 +5,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
+import java.util.function.IntUnaryOperator;
 
 public class SummonEffect extends Effect {
 
@@ -16,7 +17,7 @@ public class SummonEffect extends Effect {
     }
 
     @Override
-    public void apply(GameSettings settings, EntityData data, int source, int target) {
+    public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, int source, int target) {
         SystemsUtil.summon(settings, data, minionId, data.get(source, data.getComponents().getModule(CoreComponents.class).OWNED_BY));
     }
 }

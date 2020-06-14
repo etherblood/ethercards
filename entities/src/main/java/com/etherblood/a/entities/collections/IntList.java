@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.Random;
 import java.util.function.IntConsumer;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -104,10 +105,14 @@ public class IntList implements Iterable<Integer> {
         Arrays.sort(data, 0, size);
     }
 
-    public void shuffle(Random random) {
+    public void shuffle(IntUnaryOperator random) {
         for (int i = 0; i < size; i++) {
-            swap(i, i + random.nextInt(size - i));
+            swap(i, i + random.applyAsInt(size - i));
         }
+    }
+
+    public int getRandomItem(IntUnaryOperator random) {
+        return get(random.applyAsInt(size));
     }
 
     public IntStream stream() {

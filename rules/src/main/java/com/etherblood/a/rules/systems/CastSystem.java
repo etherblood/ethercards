@@ -46,7 +46,7 @@ public class CastSystem extends AbstractSystem {
                 data.set(owner, core.MANA, mana);
             }
             for (Effect effect : cast.getEffects()) {
-                effect.apply(settings, data, castSource, target);
+                effect.apply(settings, data, random, castSource, target);
             }
             data.remove(castSource, core.CAST_TARGET);
             data.remove(castSource, core.IN_HAND_ZONE);

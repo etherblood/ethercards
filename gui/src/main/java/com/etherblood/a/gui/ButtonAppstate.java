@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.buttons;
+package com.etherblood.a.gui;
 
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;

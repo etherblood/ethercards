@@ -1,0 +1,14 @@
+{
+    "alias": "minions/lots_of_health.json",
+    "display": {
+        "name": "Tanky Shyvana",
+        "imagePath": "images/cards/Shyvana.png",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 0,
+        "HEALTH": 1000,
+        "SUMMONING_SICKNESS": 1,
+        "CANNOT_ATTACK": true
+    }
+}

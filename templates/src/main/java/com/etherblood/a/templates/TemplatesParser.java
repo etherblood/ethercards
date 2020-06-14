@@ -11,6 +11,7 @@ import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.SingleTargetDamageEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
+import com.etherblood.a.rules.templates.effects.targeting.RandomlyTargetedEffects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -40,6 +41,7 @@ public class TemplatesParser {
         classes.put("summon", SummonEffect.class);
         classes.put("singleTargetDamage", SingleTargetDamageEffect.class);
         classes.put("buff", BuffEffect.class);
+        classes.put("randomTarget", RandomlyTargetedEffects.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
@@ -54,32 +56,6 @@ public class TemplatesParser {
             return new GameTemplates(cards, minions);
         }
         throw new AssertionError();
-    }
-
-    public DisplayCardTemplate getCard(int id) {
-        DisplayCardTemplate card = cards.get(id);
-        if (card == null) {
-            for (Map.Entry<String, Integer> entry : cardAliases.entrySet()) {
-                if (entry.getValue() == id) {
-                    throw new NullPointerException("No card template registered for alias '" + entry.getKey() + "'.");
-                }
-            }
-            throw new NullPointerException("No card template or alias found for id '" + id + "'.");
-        }
-        return card;
-    }
-
-    public DisplayMinionTemplate getMinion(int id) {
-        DisplayMinionTemplate minion = minions.get(id);
-        if (minion == null) {
-            for (Map.Entry<String, Integer> entry : minionAliases.entrySet()) {
-                if (entry.getValue() == id) {
-                    throw new NullPointerException("No minion template registered for alias '" + entry.getKey() + "'.");
-                }
-            }
-            throw new NullPointerException("No minion template or alias found for id '" + id + "'.");
-        }
-        return minion;
     }
 
     public LibraryTemplate parseLibrary(RawLibraryTemplate raw) {

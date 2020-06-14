@@ -19,7 +19,7 @@ public class OnDeathSystem extends AbstractSystem {
             int sourceTemplateId = data.get(entity, core.MINION_TEMPLATE);
             MinionTemplate sourceTemplate = settings.templates.getMinion(sourceTemplateId);
             for (Effect effect : sourceTemplate.getOnDeathEffects()) {
-                effect.apply(settings, data, entity, ~0);
+                effect.apply(settings, data, random, entity, ~0);
             }
         }
     }

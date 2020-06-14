@@ -1,6 +1,5 @@
 package com.etherblood.a.gui;
 
-import com.etherblood.a.gui.buttons.ButtonAppstate;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
