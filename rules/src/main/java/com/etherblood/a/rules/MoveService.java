@@ -44,6 +44,7 @@ public class MoveService {
     private final EntityData data;
     private final HistoryRandom random;
     private final List<MoveReplay> history;
+    private final CoreComponents core;
 
     private final boolean backupsEnabled;
     private final boolean validateMoves;
@@ -64,6 +65,7 @@ public class MoveService {
         this.settings = settings;
         this.data = data;
         this.random = random;
+        this.core = data.getComponents().getModule(CoreComponents.class);
         this.backupsEnabled = backupsEnabled;
         this.validateMoves = validateMoves;
         List<AbstractSystem> generalSystems = Arrays.asList(
@@ -165,8 +167,8 @@ public class MoveService {
         if (validateMoves) {
             verifyCanStart(true);
         }
-        for (int player : data.list(core().PLAYER_INDEX)) {
-            data.set(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE);
+        for (int player : data.list(core.PLAYER_INDEX)) {
+            data.set(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE);
         }
         runSystems(startSystems);
     }
@@ -176,13 +178,13 @@ public class MoveService {
     }
 
     private boolean verifyCanStart(boolean throwOnFail) {
-        if (!data.list(core().ACTIVE_PLAYER_PHASE).isEmpty()) {
+        if (!data.list(core.ACTIVE_PLAYER_PHASE).isEmpty()) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to start game, there are already active players.");
             }
             return false;
         }
-        if (!data.list(core().PLAYER_RESULT).isEmpty()) {
+        if (!data.list(core.PLAYER_RESULT).isEmpty()) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to start game, at least one player already won or lost.");
             }
@@ -195,7 +197,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanEndAttackPhase(player, true);
         }
-        data.set(player, core().END_PHASE, 1);
+        data.set(player, core.END_PHASE, 1);
         runSystems(endAttackPhaseSystems);
     }
 
@@ -204,7 +206,7 @@ public class MoveService {
     }
 
     private boolean verifyCanEndAttackPhase(int player, boolean throwOnFail) {
-        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
+        if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end attack phase, player #" + player + " is not in attack phase.");
             }
@@ -217,7 +219,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanEndBlockPhase(player, true);
         }
-        data.set(player, core().END_PHASE, 1);
+        data.set(player, core.END_PHASE, 1);
         runSystems(endBlockPhaseSystems);
     }
 
@@ -226,7 +228,7 @@ public class MoveService {
     }
 
     private boolean verifyCanEndBlockPhase(int player, boolean throwOnFail) {
-        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
+        if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end block phase, player #" + player + " is not in block phase.");
             }
@@ -239,7 +241,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanEndMulliganPhase(player, true);
         }
-        data.set(player, core().END_PHASE, 1);
+        data.set(player, core.END_PHASE, 1);
         runSystems(endMulliganPhaseSystems);
     }
 
@@ -248,7 +250,7 @@ public class MoveService {
     }
 
     private boolean verifyCanEndMulliganPhase(int player, boolean throwOnFail) {
-        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
+        if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end mulligan phase, player #" + player + " is not in mulligan phase.");
             }
@@ -261,7 +263,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanDeclareAttack(player, attacker, target, true);
         }
-        data.set(attacker, core().ATTACKS_TARGET, target);
+        data.set(attacker, core.ATTACKS_TARGET, target);
         // no systems, attack is only declared, nothing happens yet
     }
 
@@ -270,7 +272,7 @@ public class MoveService {
     }
 
     private boolean verifyCanDeclareAttack(int player, int attacker, int target, boolean throwOnFail) {
-        if (!data.has(target, core().IN_BATTLE_ZONE)) {
+        if (!data.has(target, core.IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is not in battle zone.");
             }
@@ -284,43 +286,43 @@ public class MoveService {
     }
 
     private boolean verifyCanDeclareAttack(int player, int attacker, boolean throwOnFail) {
-        if (!data.hasValue(attacker, core().OWNED_BY, player)) {
+        if (!data.hasValue(attacker, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " does not own attacker #" + attacker + ".");
             }
             return false;
         }
-        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
+        if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " is not in attack phase.");
             }
             return false;
         }
-        if (!data.has(attacker, core().IN_BATTLE_ZONE)) {
+        if (!data.has(attacker, core.IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is not in battle zone.");
             }
             return false;
         }
-        if (data.has(attacker, core().CANNOT_ATTACK)) {
+        if (data.has(attacker, core.CANNOT_ATTACK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " can not attack.");
             }
             return false;
         }
-        if (data.has(attacker, core().SUMMONING_SICKNESS)) {
+        if (data.has(attacker, core.SUMMONING_SICKNESS)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " has summoning sickness.");
             }
             return false;
         }
-        if (data.has(attacker, core().TIRED)) {
+        if (data.has(attacker, core.TIRED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is tired.");
             }
             return false;
         }
-        if (data.has(attacker, core().ATTACKS_TARGET)) {
+        if (data.has(attacker, core.ATTACKS_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is already attacking.");
             }
@@ -333,7 +335,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanBlock(player, blocker, attacker, true);
         }
-        data.set(blocker, core().BLOCKS_ATTACKER, attacker);
+        data.set(blocker, core.BLOCKS_ATTACKER, attacker);
         runSystems(blockSystems);
     }
 
@@ -342,13 +344,13 @@ public class MoveService {
     }
 
     private boolean verifyCanBlock(int player, int blocker, int attacker, boolean throwOnFail) {
-        if (!data.has(attacker, core().ATTACKS_TARGET)) {
+        if (!data.has(attacker, core.ATTACKS_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " is not attacking.");
             }
             return false;
         }
-        if (data.has(attacker, core().CANNOT_BE_BLOCKED)) {
+        if (data.has(attacker, core.CANNOT_BE_BLOCKED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " can not be blocked.");
             }
@@ -362,52 +364,52 @@ public class MoveService {
     }
 
     private boolean verifyCanBlock(int player, int blocker, boolean throwOnFail) {
-        if (!data.hasValue(blocker, core().OWNED_BY, player)) {
+        if (!data.hasValue(blocker, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " does not own blocker #" + blocker + ".");
             }
             return false;
         }
-        if (!data.has(blocker, core().IN_BATTLE_ZONE)) {
+        if (!data.has(blocker, core.IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is not in battle zone.");
             }
             return false;
         }
-        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
+        if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " is not in block phase.");
             }
             return false;
         }
-        if (data.has(blocker, core().SUMMONING_SICKNESS)) {
+        if (data.has(blocker, core.SUMMONING_SICKNESS)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " has summoning sickness.");
             }
             return false;
         }
-        if (data.has(blocker, core().TIRED)) {
+        if (data.has(blocker, core.TIRED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is tired.");
             }
             return false;
         }
-        if (data.has(blocker, core().CANNOT_BLOCK)) {
+        if (data.has(blocker, core.CANNOT_BLOCK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " can not block.");
             }
             return false;
         }
         boolean allAttackersUnblockable = true;
-        for (int attacker : data.list(core().ATTACKS_TARGET)) {
-            int target = data.get(attacker, core().ATTACKS_TARGET);
+        for (int attacker : data.list(core.ATTACKS_TARGET)) {
+            int target = data.get(attacker, core.ATTACKS_TARGET);
             if (target == blocker) {
                 if (throwOnFail) {
                     throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is being attacked.");
                 }
                 return false;
             }
-            if (allAttackersUnblockable && !data.has(attacker, core().CANNOT_BE_BLOCKED)) {
+            if (allAttackersUnblockable && !data.has(attacker, core.CANNOT_BE_BLOCKED)) {
                 allAttackersUnblockable = false;
             }
         }
@@ -424,7 +426,7 @@ public class MoveService {
         if (validateMoves) {
             validateCanCast(player, castable, target != null ? target : ~0, true);
         }
-        data.set(castable, core().CAST_TARGET, target != null ? target : ~0);
+        data.set(castable, core.CAST_TARGET, target != null ? target : ~0);
         runSystems(castSystems);
     }
 
@@ -437,21 +439,21 @@ public class MoveService {
     }
 
     private boolean validateCanCast(int player, int castable, boolean throwOnFail) {
-        if (!data.hasValue(castable, core().OWNED_BY, player)) {
+        if (!data.hasValue(castable, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, player #" + player + " does not own castable #" + castable + ".");
             }
             return false;
         }
-        if (!data.has(castable, core().IN_HAND_ZONE)) {
+        if (!data.has(castable, core.IN_HAND_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, castable #" + castable + " is not in hand zone.");
             }
             return false;
         }
-        CardTemplate template = settings.templates.getCard(data.get(castable, core().CARD_TEMPLATE));
+        CardTemplate template = settings.templates.getCard(data.get(castable, core.CARD_TEMPLATE));
         CardCast cast;
-        OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
+        OptionalInt phase = data.getOptional(player, core.ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
             switch (phase.getAsInt()) {
                 case PlayerPhase.ATTACK_PHASE:
@@ -484,7 +486,7 @@ public class MoveService {
             }
             return false;
         }
-        if (cast.getManaCost() > data.getOptional(player, core().MANA).orElse(0)) {
+        if (cast.getManaCost() > data.getOptional(player, core.MANA).orElse(0)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, castable #" + castable + ", player #" + player + " does not have enough mana.");
             }
@@ -494,13 +496,13 @@ public class MoveService {
     }
 
     private boolean validateCanCast(int player, int castable, int target, boolean throwOnFail) {
-        CardTemplate template = settings.templates.getCard(data.get(castable, core().CARD_TEMPLATE));
-        OptionalInt phase = data.getOptional(player, core().ACTIVE_PLAYER_PHASE);
+        CardTemplate template = settings.templates.getCard(data.get(castable, core.CARD_TEMPLATE));
+        OptionalInt phase = data.getOptional(player, core.ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
             CardCast cast;
             if (phase.getAsInt() == PlayerPhase.ATTACK_PHASE) {
                 cast = template.getAttackPhaseCast();
-                if (cast != null && cast.isTargeted() && !data.has(target, core().IN_BATTLE_ZONE)) {
+                if (cast != null && cast.isTargeted() && !data.has(target, core.IN_BATTLE_ZONE)) {
                     if (throwOnFail) {
                         throw new IllegalArgumentException("Failed to cast, target #" + target + " is not in battle zone.");
                     }
@@ -508,7 +510,7 @@ public class MoveService {
                 }
             } else if (phase.getAsInt() == PlayerPhase.BLOCK_PHASE) {
                 cast = template.getBlockPhaseCast();
-                if (cast != null && cast.isTargeted() && !data.has(target, core().IN_BATTLE_ZONE)) {
+                if (cast != null && cast.isTargeted() && !data.has(target, core.IN_BATTLE_ZONE)) {
                     if (throwOnFail) {
                         throw new IllegalArgumentException("Failed to cast, target #" + target + " is not in battle zone.");
                     }
@@ -523,7 +525,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanDeclareMulligan(player, card, true);
         }
-        data.set(card, core().MULLIGAN, card);
+        data.set(card, core.MULLIGAN, card);
         // no systems, mulligan is only declared, nothing happens yet
     }
 
@@ -532,25 +534,25 @@ public class MoveService {
     }
 
     private boolean verifyCanDeclareMulligan(int player, int card, boolean throwOnFail) {
-        if (!data.hasValue(card, core().OWNED_BY, player)) {
+        if (!data.hasValue(card, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare mulligan, player #" + player + " does not own card #" + card + ".");
             }
             return false;
         }
-        if (!data.hasValue(player, core().ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
+        if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare mulligan, player #" + player + " is not in mulligan phase.");
             }
             return false;
         }
-        if (!data.has(card, core().IN_HAND_ZONE)) {
+        if (!data.has(card, core.IN_HAND_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare mulligan, card #" + card + " is not in hand zone.");
             }
             return false;
         }
-        if (data.has(card, core().MULLIGAN)) {
+        if (data.has(card, core.MULLIGAN)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare mulligan, card #" + card + " is already mulliganed.");
             }
@@ -563,7 +565,7 @@ public class MoveService {
         if (validateMoves) {
             validateCanSurrender(player, true);
         }
-        data.set(player, core().PLAYER_RESULT, PlayerResult.LOSS);
+        data.set(player, core.PLAYER_RESULT, PlayerResult.LOSS);
         runSystems(surrenderSystems);
     }
 
@@ -616,69 +618,69 @@ public class MoveService {
     }
 
     private boolean validateStateLegal() {
-        IntList playerResults = data.list(core().PLAYER_RESULT);
+        IntList playerResults = data.list(core.PLAYER_RESULT);
         IntList winners = new IntList();
         IntList losers = new IntList();
         for (int player : playerResults) {
-            if (data.get(player, core().PLAYER_RESULT) == PlayerResult.VICTORY) {
+            if (data.get(player, core.PLAYER_RESULT) == PlayerResult.VICTORY) {
                 winners.add(player);
             } else {
                 losers.add(player);
             }
         }
-        IntList players = data.list(core().PLAYER_INDEX);
+        IntList players = data.list(core.PLAYER_INDEX);
         if (!winners.isEmpty()) {
             for (int player : players) {
-                if (data.has(player, core().PLAYER_RESULT)) {
+                if (data.has(player, core.PLAYER_RESULT)) {
                     continue;
                 }
                 throw new IllegalStateException();
             }
         }
-        for (int player : data.list(core().ACTIVE_PLAYER_PHASE)) {
-            if (data.has(player, core().PLAYER_RESULT)) {
+        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
+            if (data.has(player, core.PLAYER_RESULT)) {
                 throw new IllegalStateException();
             }
-            if (!data.has(player, core().PLAYER_INDEX)) {
+            if (!data.has(player, core.PLAYER_INDEX)) {
                 throw new IllegalStateException();
             }
         }
 
-        if (data.list(core().ACTIVE_PLAYER_PHASE).isEmpty()) {
+        if (data.list(core.ACTIVE_PLAYER_PHASE).isEmpty()) {
             if (winners.size() + losers.size() != players.size()) {
                 throw new IllegalStateException();
             }
         }
 
-        for (int minion : data.list(core().IN_BATTLE_ZONE)) {
-            if (!data.has(minion, core().OWNED_BY)) {
+        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+            if (!data.has(minion, core.OWNED_BY)) {
                 throw new IllegalStateException();
             }
-            if (!data.has(minion, core().MINION_TEMPLATE)) {
-                throw new IllegalStateException();
-            }
-        }
-
-        for (int minion : data.list(core().IN_HAND_ZONE)) {
-            if (!data.has(minion, core().OWNED_BY)) {
-                throw new IllegalStateException();
-            }
-            if (!data.has(minion, core().CARD_TEMPLATE)) {
+            if (!data.has(minion, core.MINION_TEMPLATE)) {
                 throw new IllegalStateException();
             }
         }
 
-        for (int minion : data.list(core().IN_LIBRARY_ZONE)) {
-            if (!data.has(minion, core().OWNED_BY)) {
+        for (int minion : data.list(core.IN_HAND_ZONE)) {
+            if (!data.has(minion, core.OWNED_BY)) {
                 throw new IllegalStateException();
             }
-            if (!data.has(minion, core().CARD_TEMPLATE)) {
+            if (!data.has(minion, core.CARD_TEMPLATE)) {
                 throw new IllegalStateException();
             }
         }
 
-        for (int minion : data.list(core().ATTACKS_TARGET)) {
-            if (!data.has(minion, core().IN_BATTLE_ZONE)) {
+        for (int minion : data.list(core.IN_LIBRARY_ZONE)) {
+            if (!data.has(minion, core.OWNED_BY)) {
+                throw new IllegalStateException();
+            }
+            if (!data.has(minion, core.CARD_TEMPLATE)) {
+                throw new IllegalStateException();
+            }
+        }
+
+        for (int minion : data.list(core.ATTACKS_TARGET)) {
+            if (!data.has(minion, core.IN_BATTLE_ZONE)) {
                 throw new IllegalStateException();
             }
         }
@@ -686,16 +688,12 @@ public class MoveService {
         return true;
     }
 
-    private CoreComponents core() {
-        return data.getComponents().getModule(CoreComponents.class);
-    }
-
     private boolean hasPlayerWon(int player) {
-        return data.hasValue(player, core().PLAYER_RESULT, PlayerResult.VICTORY);
+        return data.hasValue(player, core.PLAYER_RESULT, PlayerResult.VICTORY);
     }
 
     private boolean hasPlayerLost(int player) {
-        return data.hasValue(player, core().PLAYER_RESULT, PlayerResult.LOSS);
+        return data.hasValue(player, core.PLAYER_RESULT, PlayerResult.LOSS);
     }
 
     public HistoryRandom getRandom() {
