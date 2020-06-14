@@ -187,7 +187,9 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         }
 
         hudAppstate.setText(builder.toString());
-        data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE).ifPresentOrElse(phase -> {
+        OptionalInt optionalPhase = data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE);
+        if (optionalPhase.isPresent()) {
+            int phase = optionalPhase.getAsInt();
             endPhaseButton.setCullHint(Spatial.CullHint.Dynamic);
             switch (phase) {
                 case PlayerPhase.ATTACK_PHASE:
@@ -202,9 +204,9 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                 default:
                     throw new AssertionError();
             }
-        }, () -> {
+        } else {
             endPhaseButton.setCullHint(Spatial.CullHint.Always);
-        });
+        }
 
         IntList handCards = data.list(core.IN_HAND_ZONE);
         IntList battleCards = data.list(core.IN_BATTLE_ZONE);
