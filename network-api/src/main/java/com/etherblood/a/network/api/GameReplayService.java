@@ -109,6 +109,16 @@ public class GameReplayService {
         return cachedGame.findPlayerByIndex(playerIndex);
     }
 
+    public synchronized boolean hasPlayerWon(int player) {
+        updateCachedGame();
+        return cachedGame.hasPlayerWon(player);
+    }
+
+    public synchronized boolean hasPlayerLost(int player) {
+        updateCachedGame();
+        return cachedGame.hasPlayerLost(player);
+    }
+
     private void updateCachedGame() {
         if (cachedGame == null) {
             cachedGame = createInstance();
@@ -117,7 +127,7 @@ public class GameReplayService {
         }
     }
 
-    public synchronized  String getPlayerName(int playerIndex) {
+    public synchronized String getPlayerName(int playerIndex) {
         return replay.setup.players[playerIndex].name;
     }
 }

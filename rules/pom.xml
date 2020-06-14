@@ -10,12 +10,6 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <!-- TODO: remove logger binding -->
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.30</version>
-        </dependency>
-        <dependency>
             <groupId>com.etherblood.a</groupId>
             <artifactId>entities</artifactId>
             <version>0.1.0</version>

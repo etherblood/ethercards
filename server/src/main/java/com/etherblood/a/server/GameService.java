@@ -113,11 +113,15 @@ public class GameService {
         }
         if (gameReplayService.isGameOver()) {
             LOG.info("Game {} ended.", gameId);
-            games.remove(gameId);
+            GameReplayService game = games.remove(gameId);
             for (GamePlayerMapping player : getPlayersByGameId(gameId)) {
+                int playerEntity = game.getPlayerEntity(player.playerIndex);
+                LOG.info("{} {}.", game.getPlayerName(player.playerIndex), game.hasPlayerWon(playerEntity) ? "won" : (game.hasPlayerLost(playerEntity) ? "lost" : " has no result"));
                 players.remove(player);
             }
             for (GameBotMapping bot : getBotsByGameId(gameId)) {
+                int playerEntity = game.getPlayerEntity(bot.playerIndex);
+                LOG.info("{} {}.", game.getPlayerName(bot.playerIndex), game.hasPlayerWon(playerEntity) ? "won" : (game.hasPlayerLost(playerEntity) ? "lost" : " has no result"));
                 bots.remove(bot);
             }
         }

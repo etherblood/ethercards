@@ -1,6 +1,5 @@
 package com.etherblood.a.server;
 
-import com.esotericsoftware.minlog.Log;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -34,7 +33,6 @@ public class Main {
                 throw new RuntimeException(ex);
             }
         };
-        Log.set(Log.LEVEL_INFO);
         new GameServer(jwtParser, assetLoader).start();
     }
 }
