@@ -186,13 +186,13 @@ public class GameService {
                     MoveReplay moveReplay = game.apply(new Start());
                     games.put(gameId, game);
 
-                    players.add(new GamePlayerMapping(gameId, human.id, 0, connection.getID()));
+                    players.add(new GamePlayerMapping(gameId, human.id, Arrays.asList(setup.players).indexOf(human), connection.getID()));
 
                     MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
                     settings.strength = request.strength;
                     Game gameInstance = game.createInstance();
                     MctsBot<Move, MoveBotGame> mcts = new MctsBot<>(new MoveBotGame(gameInstance), new MoveBotGame(simulationGame(gameInstance)), settings);
-                    bots.add(new GameBotMapping(gameId, 1, mcts));
+                    bots.add(new GameBotMapping(gameId, Arrays.asList(setup.players).indexOf(bot), mcts));
 
                     connection.sendTCP(setup);
                     connection.sendTCP(moveReplay);
@@ -233,8 +233,8 @@ public class GameService {
             UUID gameId = UUID.randomUUID();
             games.put(gameId, game);
 
-            players.add(new GamePlayerMapping(gameId, player0.id, 0, connection0.getID()));
-            players.add(new GamePlayerMapping(gameId, player1.id, 1, connection1.getID()));
+            players.add(new GamePlayerMapping(gameId, player0.id, Arrays.asList(setup.players).indexOf(player0), connection0.getID()));
+            players.add(new GamePlayerMapping(gameId, player1.id, Arrays.asList(setup.players).indexOf(player1), connection1.getID()));
 
             connection0.sendTCP(setup);
             connection1.sendTCP(setup);

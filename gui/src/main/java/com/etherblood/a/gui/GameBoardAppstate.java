@@ -54,6 +54,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -62,6 +63,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Quad;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,6 +90,9 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
 
     private CameraAppState cameraAppstate;
     private HudTextAppstate hudAppstate;
+    private AssetManager assetManager;
+    private Geometry endPhaseButton;
+    private final Node endPhaseButtonNode = new Node();
 
     public GameBoardAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode) {
         this.moveRequester = moveRequester;
@@ -104,7 +109,6 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
 
         app.getInputManager().addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
         app.getInputManager().addListener(this, "space");
-
     }
 
     @Override
@@ -120,6 +124,19 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         hudAppstate = stateManager.getState(HudTextAppstate.class);
         board = new Board();
         stateManager.attach(initBoardGui());
+
+        assetManager = stateManager.getApplication().getAssetManager();
+        endPhaseButton = createButton(assetManager);
+
+        if (game.findPlayerByIndex(0) != userControlledPlayer) {
+            endPhaseButtonNode.setLocalRotation(new Quaternion().fromAngles(0, FastMath.PI, 0));
+            endPhaseButtonNode.setLocalTranslation(1, 0.8f, 1);
+        }
+        endPhaseButtonNode.attachChild(endPhaseButton);
+        rootNode.attachChild(endPhaseButtonNode);
+
+        ButtonAppstate buttonAppstate = stateManager.getState(ButtonAppstate.class);
+        buttonAppstate.registerButton(endPhaseButton, () -> onAction("space", true, 0), ColorRGBA.Gray, ColorRGBA.LightGray, ColorRGBA.White);
     }
 
     @Override
@@ -133,6 +150,13 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         attacks.clear();
         board = null;
         game = null;
+
+        ButtonAppstate buttonAppstate = stateManager.getState(ButtonAppstate.class);
+        buttonAppstate.unregisterButton(endPhaseButton);
+        rootNode.detachChild(endPhaseButtonNode);
+        endPhaseButtonNode.detachChild(endPhaseButton);
+        endPhaseButton = null;
+        assetManager = null;
     }
 
     private void updateBoard() {
@@ -161,7 +185,26 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             builder.append(System.lineSeparator());
             builder.append(System.lineSeparator());
         }
+
         hudAppstate.setText(builder.toString());
+        data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE).ifPresentOrElse(phase -> {
+            endPhaseButton.setCullHint(Spatial.CullHint.Dynamic);
+            switch (phase) {
+                case PlayerPhase.ATTACK_PHASE:
+                    endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_turn.png"));
+                    break;
+                case PlayerPhase.BLOCK_PHASE:
+                    endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_phase.png"));
+                    break;
+                case PlayerPhase.MULLIGAN_PHASE:
+                    endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_mulligan.png"));
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }, () -> {
+            endPhaseButton.setCullHint(Spatial.CullHint.Always);
+        });
 
         IntList handCards = data.list(core.IN_HAND_ZONE);
         IntList battleCards = data.list(core.IN_BATTLE_ZONE);
@@ -505,6 +548,18 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
 
     private void requestMove(Move move) {
         moveRequester.accept(move);
+    }
+
+    private Geometry createButton(AssetManager assetManager) {
+        Quad quad = new Quad(2, 1);
+        Geometry button = new Geometry("button", quad);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        button.setMaterial(mat);
+
+        button.setLocalScale(0.8f);
+        button.setLocalTranslation(2.6f, 0.5f, 1);
+        button.setLocalRotation(new Quaternion().fromAngles(-FastMath.QUARTER_PI, 0, 0));
+        return button;
     }
 
 }
