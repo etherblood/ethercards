@@ -15,6 +15,7 @@ import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.CardVisualizer_Card;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
+import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.etherblood.a.templates.RawLibraryTemplate;
@@ -89,7 +90,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
         BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new CardVisualizer_Card(cardPainterJME);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
-        Comparator<CardModel> deckCardOrder = Comparator.comparing(x -> x.getTemplate().getName());
+        Comparator<CardModel> deckCardOrder = Comparator.comparing(x -> getManaCost(x));
         DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
                 .allCardModels(allCardModels)
                 .collectionZone(collectionZone)
@@ -113,6 +114,18 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
         Quad quad = new Quad(1, 1);
         saveLibraryButton = new Geometry("saveLibraryButton", quad);
+    }
+
+    private int getManaCost(CardModel card) {
+        CardCast attackPhaseCast = card.getTemplate().getAttackPhaseCast();
+        CardCast blockPhaseCast = card.getTemplate().getBlockPhaseCast();
+        if (attackPhaseCast != null) {
+            if (blockPhaseCast != null) {
+                return Math.min(attackPhaseCast.getManaCost(), blockPhaseCast.getManaCost());
+            }
+            return attackPhaseCast.getManaCost();
+        }
+        return blockPhaseCast.getManaCost();
     }
 
     @Override
