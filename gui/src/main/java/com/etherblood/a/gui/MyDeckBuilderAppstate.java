@@ -91,6 +91,8 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new CardVisualizer_Card(cardPainterJME);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
         Comparator<CardModel> deckCardOrder = Comparator.comparing(x -> getManaCost(x));
+        deckCardOrder = deckCardOrder.thenComparing(x -> x.getTemplate().getName());
+        deckCardOrder = deckCardOrder.thenComparing(x -> x.getTemplate().getId());
         DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
                 .allCardModels(allCardModels)
                 .collectionZone(collectionZone)

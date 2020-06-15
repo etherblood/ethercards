@@ -1,0 +1,14 @@
+{
+    "alias": "minions/ysera.json",
+    "display": {
+        "name": "Ysera",
+        "imagePath": "images/cards/ysera.jpg",
+        "colors": ["BLUE"]
+    },
+    "components": {
+        "ATTACK": 4,
+        "HEALTH": 12,
+        "DRAWS_PER_TURN": 1,
+        "SUMMONING_SICKNESS": 1
+    }
+}

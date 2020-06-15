@@ -1,0 +1,18 @@
+{
+    "alias": "cards/ysera.json",
+    "display": {
+        "name": "Ysera",
+        "imagePath": "images/cards/ysera.jpg",
+        "colors": ["BLUE"],
+        "description": "Summon a 4/12 Ysera with 1 draw per turn."
+    },
+    "attackCast": {
+        "manaCost": 9,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/ysera.json"
+            }
+        ]
+    }
+}
