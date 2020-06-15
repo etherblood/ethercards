@@ -38,7 +38,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.etherblood.a.gui.Main</mainClass>
+                            <mainClass>com.etherblood.a.library.builder.ai.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
