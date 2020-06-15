@@ -21,6 +21,7 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,12 +71,12 @@ public class GameApplication extends SimpleApplication {
     }
 
     private void startDeckbuilder() {
-        stateManager.getState(HudTextAppstate.class).setText("Select your library.");
+        stateManager.getState(HudTextAppstate.class).setText("Create your library.");
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
 
         TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/" + x, JsonElement.class), new TemplatesParser(componentsBuilder.build()));
-        String[] cardAliases = load("templates/card_list.json", String[].class);
+        String[] cardAliases = load("templates/card_pool.json", String[].class);
         Map<String, Integer> cardAliasToId = new LinkedHashMap<>();
         for (String card : cardAliases) {
             int id = templatesLoader.registerCardAlias(card);
@@ -86,7 +87,9 @@ public class GameApplication extends SimpleApplication {
 
         RawLibraryTemplate presetLibrary = LibraryIO.load("library.json");
         if (presetLibrary == null) {
-            presetLibrary = load("templates/libraries/default.json", RawLibraryTemplate.class);
+            presetLibrary = new RawLibraryTemplate();
+            presetLibrary.hero = "minions/shyvana.json";
+            presetLibrary.cards = new HashMap<>();
         }
         deckBuilderAppstate = new MyDeckBuilderAppstate(cards, null, cardImages, rootNode, presetLibrary);
         stateManager.attach(deckBuilderAppstate);

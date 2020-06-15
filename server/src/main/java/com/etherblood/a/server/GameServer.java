@@ -24,7 +24,7 @@ public class GameServer {
     private final Server server;
 
     public GameServer(JwtParser jwtParser, Function<String, JsonElement> assetLoader) {
-        RawLibraryTemplate botLibrary = new Gson().fromJson(assetLoader.apply("libraries/default.json"), RawLibraryTemplate.class);
+        RawLibraryTemplate botLibrary = new Gson().fromJson(assetLoader.apply("libraries/bot.json"), RawLibraryTemplate.class);
 
         server = new Server();
         NetworkUtil.init(server.getKryo());

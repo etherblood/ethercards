@@ -14,6 +14,7 @@
         <module>network-api</module>
         <module>server</module>
         <module>client</module>
+        <module>library-builder-ai</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
