@@ -30,6 +30,7 @@ public class Main {
         int iterationMutationCount = Integer.parseInt(properties.getProperty("iterationMutationCount"));
         int collissionMutationCount = Integer.parseInt(properties.getProperty("collissionMutationCount"));
         int botStrength = Integer.parseInt(properties.getProperty("botStrength"));
+        String templatesPath = properties.getProperty("templatesPath");
 
         if (mutationCandidatesCount > agentCount) {
             throw new IllegalArgumentException("mutationCandidatesCount must be smaller than agentCount.");
@@ -39,7 +40,7 @@ public class Main {
         Random random = new Random();
         Function<String, JsonElement> assetLoader = x -> {
             try {
-                return gson.fromJson(Files.newBufferedReader(Paths.get("../assets/templates/" + x)), JsonElement.class);
+                return gson.fromJson(Files.newBufferedReader(Paths.get(templatesPath + x)), JsonElement.class);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
