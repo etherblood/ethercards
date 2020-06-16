@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
@@ -22,7 +23,9 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         Properties properties = new Properties();
-        properties.load(Files.newBufferedReader(Paths.get("config.properties")));
+        try ( Reader reader = Files.newBufferedReader(Paths.get("config.properties"))) {
+            properties.load(reader);
+        }
         int initialMutations = Integer.parseInt(properties.getProperty("initialMutations"));
         int agentCount = Integer.parseInt(properties.getProperty("agentCount"));
         int mutationCandidatesCount = Integer.parseInt(properties.getProperty("mutationCandidatesCount"));
@@ -39,8 +42,8 @@ public class Main {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Random random = new Random();
         Function<String, JsonElement> assetLoader = x -> {
-            try {
-                return gson.fromJson(Files.newBufferedReader(Paths.get(templatesPath + x)), JsonElement.class);
+            try ( Reader reader = Files.newBufferedReader(Paths.get(templatesPath + x))) {
+                return gson.fromJson(reader, JsonElement.class);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

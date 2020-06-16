@@ -25,6 +25,7 @@ import com.etherblood.a.templates.TemplatesParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -94,18 +95,18 @@ public class TestSandbox {
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
         Function<String, JsonElement> assetLoader = x -> {
-            try {
-                return new Gson().fromJson(Files.newBufferedReader(Paths.get("../assets/templates/" + x)), JsonElement.class);
+            try ( Reader reader = Files.newBufferedReader(Paths.get("../assets/templates/" + x))) {
+                return new Gson().fromJson(reader, JsonElement.class);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         };
         TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components));
-        
+
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
         rawLibrary.hero = "minions/lots_of_health.json";
         rawLibrary.cards = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_list.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
-        
+
         LibraryTemplate lib0 = loader.parseLibrary(rawLibrary);
         LibraryTemplate lib1 = lib0;
         settingsBuilder.templates = loader.buildGameTemplates();

@@ -3,6 +3,7 @@ package com.etherblood.a.gui;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.jme3.system.AppSettings;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -10,11 +11,13 @@ import java.util.Properties;
 public class Main {
 
     public static void main(String... args) throws Exception {
-        if(args.length == 0) {
+        if (args.length == 0) {
             throw new IllegalArgumentException("First argument must be a jwt.");
         }
         Properties properties = new Properties();
-        properties.load(Files.newBufferedReader(Paths.get("config.properties")));
+        try ( Reader reader = Files.newBufferedReader(Paths.get("config.properties"))) {
+            properties.load(reader);
+        }
         String jwtPubKeyPath = properties.getProperty("jwtPubKeyPath");
         String jwtUrl = properties.getProperty("jwtUrl");
 
