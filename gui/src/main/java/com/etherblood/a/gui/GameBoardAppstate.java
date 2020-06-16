@@ -519,7 +519,8 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             playerZones.put(player, new PlayerZones(deckZone, handZone, boardZone));
         }
         BoardAppState boardAppState = new BoardAppState(board, rootNode, BoardSettings.builder()
-                .draggedCardProjectionZ(0.9975f)
+                .hoverInspectionDelay(0f)
+                .dragProjectionZ(0.9975f)
                 .build());
         return boardAppState;
     }

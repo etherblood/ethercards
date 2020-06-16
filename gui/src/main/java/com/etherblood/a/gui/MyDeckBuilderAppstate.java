@@ -1,6 +1,7 @@
 package com.etherblood.a.gui;
 
 import com.destrostudios.cardgui.BoardObjectVisualizer;
+import com.destrostudios.cardgui.BoardSettings;
 import com.destrostudios.cardgui.Card;
 import com.destrostudios.cardgui.CardZone;
 import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderAppState;
@@ -104,6 +105,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .deckCardOrder(deckCardOrder)
                 .collectionCardsPerRow(16)
                 .collectionRowsPerPage(7)
+                .boardSettings(BoardSettings.builder()
+                        .dragProjectionZ(0.9975f)
+                        .hoverInspectionDelay(0f)
+                        .build())
                 .build();
 
         HashMap<CardModel, Integer> deck = new HashMap<>();
