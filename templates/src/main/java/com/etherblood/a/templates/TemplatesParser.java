@@ -9,9 +9,10 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
-import com.etherblood.a.rules.templates.effects.SingleTargetDamageEffect;
+import com.etherblood.a.rules.templates.effects.DamageEffect;
+import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
-import com.etherblood.a.rules.templates.effects.targeting.RandomlyTargetedEffects;
+import com.etherblood.a.rules.templates.effects.targeting.TargetedEffects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -39,9 +40,10 @@ public class TemplatesParser {
         this.components = components;
         Map<String, Class<? extends Effect>> classes = new HashMap<>();
         classes.put("summon", SummonEffect.class);
-        classes.put("singleTargetDamage", SingleTargetDamageEffect.class);
+        classes.put("damage", DamageEffect.class);
+        classes.put("fractionalDamage", FractionalDamageEffect.class);
         classes.put("buff", BuffEffect.class);
-        classes.put("randomTarget", RandomlyTargetedEffects.class);
+        classes.put("targeted", TargetedEffects.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }

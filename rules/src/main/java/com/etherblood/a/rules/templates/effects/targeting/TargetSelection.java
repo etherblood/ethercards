@@ -1,6 +1,6 @@
 package com.etherblood.a.rules.templates.effects.targeting;
 
-public enum TargetType {
+public enum TargetSelection {
     SOURCE,
     OWN_MINION,
     OWN_HERO,

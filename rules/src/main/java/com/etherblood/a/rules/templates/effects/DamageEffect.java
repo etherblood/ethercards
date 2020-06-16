@@ -5,11 +5,11 @@ import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
-public class SingleTargetDamageEffect extends Effect {
+public class DamageEffect extends Effect {
 
     public final int damage;
 
-    public SingleTargetDamageEffect(int damage) {
+    public DamageEffect(int damage) {
         this.damage = damage;
     }
 

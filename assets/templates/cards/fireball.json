@@ -11,7 +11,7 @@
         "targeted": true,
         "effects": [
             {
-                "type": "singleTargetDamage",
+                "type": "damage",
                 "damage": 4
             }
         ]

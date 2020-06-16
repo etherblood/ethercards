@@ -1,0 +1,13 @@
+{
+    "alias": "minions/hidetsugu.json",
+    "display": {
+        "name": "Heartless Hidetsugu",
+        "imagePath": "images/cards/hidetsugu.jpg",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 4,
+        "HEALTH": 3,
+        "SUMMONING_SICKNESS": 1
+    }
+}

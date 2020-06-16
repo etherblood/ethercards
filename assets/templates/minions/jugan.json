@@ -8,7 +8,8 @@
     },
     "onDeath": [
         {
-            "type": "randomTarget",
+            "type": "targeted",
+            "targeting": "ANY",
             "targets": ["OWN_MINION"],
             "effects": [
                 {
@@ -20,7 +21,8 @@
                 }
             ]
         }, {
-            "type": "randomTarget",
+            "type": "targeted",
+            "targeting": "ANY",
             "targets": ["OWN_MINION"],
             "effects": [
                 {
@@ -32,7 +34,8 @@
                 }
             ]
         }, {
-            "type": "randomTarget",
+            "type": "targeted",
+            "targeting": "ANY",
             "targets": ["OWN_MINION"],
             "effects": [
                 {
@@ -44,7 +47,8 @@
                 }
             ]
         }, {
-            "type": "randomTarget",
+            "type": "targeted",
+            "targeting": "ANY",
             "targets": ["OWN_MINION"],
             "effects": [
                 {
@@ -56,7 +60,8 @@
                 }
             ]
         }, {
-            "type": "randomTarget",
+            "type": "targeted",
+            "targeting": "ANY",
             "targets": ["OWN_MINION"],
             "effects": [
                 {

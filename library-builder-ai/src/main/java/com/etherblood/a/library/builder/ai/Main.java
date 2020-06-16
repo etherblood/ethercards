@@ -59,6 +59,7 @@ public class Main {
         startLibrary.hero = "minions/shyvana.json";
         startLibrary.cards = new HashMap<>();
 
+        Paths.get("agents").toFile().mkdir();
         LibraryAgent[] agents = new LibraryAgent[agentCount];
         for (int i = 0; i < agentCount; i++) {
             Path filePath = Paths.get("agents/library" + i + ".json");
@@ -101,7 +102,7 @@ public class Main {
                 }
             }
             int worstAgentIndex = Arrays.asList(agents).indexOf(sortedAgents[0]);
-            System.out.println("Replacing agent " + worstAgentIndex);
+            System.out.println("Replacing agent " + worstAgentIndex + " with:");
             LibraryAgent worstAgent = agents[worstAgentIndex];
             worstAgent.library = newLibrary;
             saveLibrary(worstAgent.filePath, worstAgent.library, gson);
@@ -120,8 +121,7 @@ public class Main {
             }
         }
         Comparator<LibraryAgent> comparator = Comparator.comparing(x -> x.score());
-        comparator.thenComparing(x -> Arrays.stream(agents).mapToInt(other -> distance(other.library, x.library)).sum());
-        comparator = comparator.thenComparing(x -> random.nextInt());
+        comparator = comparator.thenComparing(x -> Arrays.stream(agents).mapToInt(other -> distance(other.library, x.library)).sum());
         LibraryAgent[] sortedAgents = Arrays.stream(agents).sorted(comparator).toArray(LibraryAgent[]::new);
         LibraryAgent bestAgent = sortedAgents[agentCount - 1];
         System.out.print(Arrays.asList(agents).indexOf(bestAgent) + ": " + bestAgent.score() + " ");
