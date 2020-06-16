@@ -3,7 +3,8 @@
     "display": {
         "name": "Gobbo",
         "imagePath": "images/cards/Goblin.png",
-        "colors": ["RED"]
+        "colors": ["RED"],
+        "description": "Haste"
     },
     "components": {
         "ATTACK": 1,

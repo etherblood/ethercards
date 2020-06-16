@@ -3,7 +3,8 @@
     "display": {
         "name": "Harvest Golem",
         "imagePath": "images/cards/Harvest_Golem_full.jpg",
-        "colors": ["BLACK"]
+        "colors": ["BLACK"],
+        "description": "Summon a 2/1 Damaged Golem when this dies."
     },
     "onDeath": [
         {

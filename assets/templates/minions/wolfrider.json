@@ -3,7 +3,8 @@
     "display": {
         "name": "Wolfrider",
         "imagePath": "images/cards/Wolfrider_full.jpg",
-        "colors": ["RED"]
+        "colors": ["RED"],
+        "description": "Haste"
     },
     "components": {
         "ATTACK": 3,

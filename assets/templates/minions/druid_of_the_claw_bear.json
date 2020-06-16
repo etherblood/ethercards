@@ -3,7 +3,8 @@
     "display": {
         "name": "Druid of the Claw",
         "imagePath": "images/cards/Bear_Form_(art).jpg",
-        "colors": ["GREEN"]
+        "colors": ["GREEN"],
+        "description": "Haste"
     },
     "components": {
         "ATTACK": 4,

@@ -3,7 +3,8 @@
     "display": {
         "name": "Ysera",
         "imagePath": "images/cards/ysera.jpg",
-        "colors": ["BLUE"]
+        "colors": ["BLUE"],
+        "description": "1 draw per turn."
     },
     "components": {
         "ATTACK": 4,

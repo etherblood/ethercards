@@ -3,7 +3,8 @@
     "display": {
         "name": "Grim Patron",
         "imagePath": "images/cards/Grim_Patron_art.jpg",
-        "colors": ["RED"]
+        "colors": ["RED"],
+        "description": "Summon a 3/3 Grim Patron whenever this survives damage."
     },
     "onSurvive": [
         {

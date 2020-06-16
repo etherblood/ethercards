@@ -3,7 +3,8 @@
     "display": {
         "name": "Jugan, the Rising Star",
         "imagePath": "images/cards/jugan.jpg",
-        "colors": ["GREEN"]
+        "colors": ["GREEN"],
+        "description": "Distribute five +1/+1 buffs amongst your minions when this dies."
     },
     "onDeath": [
         {

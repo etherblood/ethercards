@@ -3,7 +3,8 @@
     "display": {
         "name": "Druid of the Claw",
         "imagePath": "images/cards/Cat_Form_full.png",
-        "colors": ["GREEN"]
+        "colors": ["GREEN"],
+        "description": "Haste"
     },
     "components": {
         "ATTACK": 4,

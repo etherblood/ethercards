@@ -3,7 +3,8 @@
     "display": {
         "name": "Nerubian egg",
         "imagePath": "images/cards/Nerubian_Egg_full.jpg",
-        "colors": ["BLACK"]
+        "colors": ["BLACK"],
+        "description": "Cannot attack, summon a 4/4 Nerubian when this dies."
     },
     "onDeath": [
         {

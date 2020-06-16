@@ -3,7 +3,8 @@
     "display": {
         "name": "Quickwall",
         "imagePath": "images/cards/quickwall.png",
-        "colors": ["WHITE"]
+        "colors": ["WHITE"],
+        "description": "Haste, cannot attack."
     },
     "components": {
         "ATTACK": 1,
