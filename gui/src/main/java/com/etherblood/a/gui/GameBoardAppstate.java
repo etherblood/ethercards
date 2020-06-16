@@ -520,7 +520,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             playerZones.put(player, new PlayerZones(deckZone, handZone, boardZone));
         }
         BoardAppState boardAppState = new BoardAppState(board, rootNode, BoardSettings.builder()
-                .hoverInspectionDelay(0f)
+                .hoverInspectionDelay(1f)
                 .isInspectable(this::isInBattleZone)
                 .dragProjectionZ(0.9975f)
                 .build());

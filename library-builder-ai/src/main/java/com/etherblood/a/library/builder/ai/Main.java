@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -52,11 +53,11 @@ public class Main {
                 throw new RuntimeException(ex);
             }
         };
-        List<String> cardPool = Arrays.asList(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class));
+        Map<String, Integer> cardPool = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 10));
 
         RawLibraryTemplate startLibrary = new RawLibraryTemplate();
         startLibrary.hero = "minions/shyvana.json";
-        startLibrary.cards = cardPool.stream().collect(Collectors.toMap(x -> x, x -> 1));
+        startLibrary.cards = new HashMap<>();
 
         LibraryAgent[] agents = new LibraryAgent[agentCount];
         for (int i = 0; i < agentCount; i++) {
@@ -67,7 +68,7 @@ public class Main {
             } else {
                 agent.library = copy(startLibrary);
                 for (int j = 0; j < initialMutations; j++) {
-                    mutateLibrary(agent.library, cardPool, random);
+                    mutateLibrary(agent.library.cards, cardPool, random);
                 }
                 saveLibrary(agent.filePath, agent.library, gson);
             }
@@ -78,9 +79,6 @@ public class Main {
         for (int i = 0; i + 1 < agentCount; i++) {
             LibraryAgent a = agents[i];
             for (int j = i + 1; j < agentCount; j++) {
-                if (i == j) {
-                    continue;
-                }
                 LibraryAgent b = agents[j];
                 System.out.print("battle " + i + " vs " + j + ": ");
                 int result = battleSetup.battle(a.library, b.library);
@@ -95,11 +93,11 @@ public class Main {
 
             RawLibraryTemplate newLibrary = copy(agents[agentCount - random.nextInt(mutationCandidatesCount) - 1].library);
             for (int mutation = 0; mutation < iterationMutationCount; mutation++) {
-                mutateLibrary(newLibrary, cardPool, random);
+                mutateLibrary(newLibrary.cards, cardPool, random);
             }
             while (Arrays.stream(agents).anyMatch(x -> x.library.equals(newLibrary))) {
                 for (int mutation = 0; mutation < collissionMutationCount; mutation++) {
-                    mutateLibrary(newLibrary, cardPool, random);
+                    mutateLibrary(newLibrary.cards, cardPool, random);
                 }
             }
             int worstAgentIndex = Arrays.asList(agents).indexOf(sortedAgents[0]);
@@ -143,15 +141,35 @@ public class Main {
         }
     }
 
-    private static void mutateLibrary(RawLibraryTemplate library, List<String> cardpool, Random random) {
-        if (library.cards.isEmpty() || random.nextBoolean()) {
-            String card = cardpool.get(random.nextInt(cardpool.size()));
-            library.cards.merge(card, 1, Main::sum);
+    private static void mutateLibrary(Map<String, Integer> library, Map<String, Integer> cardpool, Random random) {
+        List<String> cards = new ArrayList<>(cardpool.keySet());
+        String card = cards.get(random.nextInt(cards.size()));
+        if (random.nextBoolean()) {
+            if (!library.getOrDefault(card, 0).equals(cardpool.get(card))) {
+                library.merge(card, 1, Main::sum);
+            }
         } else {
-            List<String> cards = new ArrayList<>(library.cards.keySet());
-            String card = cards.get(random.nextInt(cards.size()));
-            library.cards.merge(card, -1, Main::sum);
+            if (library.containsKey(card)) {
+                library.merge(card, -1, Main::sum);
+            }
         }
+    }
+
+    private static Map<String, Integer> crossLibraries(Map<String, Integer> a, Map<String, Integer> b, Random random) {
+        Set<String> cards = new HashSet<>(a.keySet());
+        cards.addAll(b.keySet());
+        Map<String, Integer> result = new HashMap<>();
+        for (String card : cards) {
+            int aCount = a.getOrDefault(card, 0);
+            int bCount = b.getOrDefault(card, 0);
+            int min = Math.min(aCount, bCount);
+            int max = Math.max(aCount, bCount);
+            int newCount = min + random.nextInt(max - min + 1);
+            if (newCount != 0) {
+                result.put(card, newCount);
+            }
+        }
+        return result;
     }
 
     private static RawLibraryTemplate copy(RawLibraryTemplate library) {
