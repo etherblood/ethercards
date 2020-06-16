@@ -6,16 +6,20 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -56,12 +60,18 @@ public class Main {
 
         LibraryAgent[] agents = new LibraryAgent[agentCount];
         for (int i = 0; i < agentCount; i++) {
-            LibraryAgent agent = new LibraryAgent(agentCount);
-            agent.library = copy(startLibrary);
-            agents[i] = agent;
-            for (int j = 0; j < initialMutations; j++) {
-                mutateLibrary(agent.library, cardPool, random);
+            Path filePath = Paths.get("agents/library" + i + ".json");
+            LibraryAgent agent = new LibraryAgent(filePath, agentCount);
+            if (filePath.toFile().exists()) {
+                agent.library = loadLibrary(filePath, gson);
+            } else {
+                agent.library = copy(startLibrary);
+                for (int j = 0; j < initialMutations; j++) {
+                    mutateLibrary(agent.library, cardPool, random);
+                }
+                saveLibrary(agent.filePath, agent.library, gson);
             }
+            agents[i] = agent;
         }
 
         BattleSetup battleSetup = new BattleSetup(assetLoader, botStrength);
@@ -98,10 +108,10 @@ public class Main {
                 }
             }
             int worstAgentIndex = Arrays.asList(agents).indexOf(sortedAgents[0]);
+            System.out.println("Replacing agent " + worstAgentIndex);
             LibraryAgent worstAgent = agents[worstAgentIndex];
             worstAgent.library = newLibrary;
-            System.out.println("Replaced agent " + worstAgentIndex);
-            System.out.println();
+            saveLibrary(worstAgent.filePath, worstAgent.library, gson);
             System.out.println();
             for (int i = 0; i < agentCount; i++) {
                 if (i == worstAgentIndex) {
@@ -116,12 +126,25 @@ public class Main {
             }
         }
         Comparator<LibraryAgent> comparator = Comparator.comparing(x -> x.score());
+        comparator.thenComparing(x -> Arrays.stream(agents).mapToInt(other -> distance(other.library, x.library)).sum());
         comparator = comparator.thenComparing(x -> random.nextInt());
         LibraryAgent[] sortedAgents = Arrays.stream(agents).sorted(comparator).toArray(LibraryAgent[]::new);
         LibraryAgent bestAgent = sortedAgents[agentCount - 1];
         System.out.print(Arrays.asList(agents).indexOf(bestAgent) + ": " + bestAgent.score() + " ");
         System.out.println(gson.toJson(bestAgent.library.cards));
         System.out.println();
+    }
+
+    private static void saveLibrary(Path filePath, RawLibraryTemplate library, Gson gson) throws IOException {
+        try ( Writer writer = Files.newBufferedWriter(filePath)) {
+            gson.toJson(library, writer);
+        }
+    }
+
+    private static RawLibraryTemplate loadLibrary(Path filePath, Gson gson) throws IOException {
+        try ( Reader writer = Files.newBufferedReader(filePath)) {
+            return gson.fromJson(writer, RawLibraryTemplate.class);
+        }
     }
 
     private static void mutateLibrary(RawLibraryTemplate library, List<String> cardpool, Random random) {
@@ -140,6 +163,16 @@ public class Main {
         result.hero = library.hero;
         result.cards = new HashMap<>(library.cards);
         return result;
+    }
+
+    private static int distance(RawLibraryTemplate a, RawLibraryTemplate b) {
+        Set<String> cards = new HashSet<>(a.cards.keySet());
+        cards.addAll(b.cards.keySet());
+        int sum = 0;
+        for (String card : cards) {
+            sum += Math.abs(a.cards.getOrDefault(card, 0) - b.cards.getOrDefault(card, 0));
+        }
+        return sum;
     }
 
     private static Integer sum(Integer a, Integer b) {
