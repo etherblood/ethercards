@@ -92,11 +92,6 @@ public class Main {
         for (int iteration = 0; iteration < numIterations; iteration++) {
             System.out.println(Instant.now() + " iteration " + (iteration + 1) + "/" + numIterations);
             LibraryAgent[] sortedAgents = Arrays.stream(agents).sorted(Comparator.comparing(x -> x.score())).toArray(LibraryAgent[]::new);
-            for (LibraryAgent agent : agents) {
-                System.out.print(Arrays.asList(agents).indexOf(agent) + ": " + agent.score() + " ");
-                System.out.println(gson.toJson(agent.library.cards));
-                System.out.println();
-            }
 
             RawLibraryTemplate newLibrary = copy(agents[agentCount - random.nextInt(mutationCandidatesCount) - 1].library);
             for (int mutation = 0; mutation < iterationMutationCount; mutation++) {
@@ -112,6 +107,7 @@ public class Main {
             LibraryAgent worstAgent = agents[worstAgentIndex];
             worstAgent.library = newLibrary;
             saveLibrary(worstAgent.filePath, worstAgent.library, gson);
+            System.out.println(gson.toJson(worstAgent.library.cards));
             System.out.println();
             for (int i = 0; i < agentCount; i++) {
                 if (i == worstAgentIndex) {

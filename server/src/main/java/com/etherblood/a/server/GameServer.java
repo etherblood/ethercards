@@ -47,7 +47,6 @@ public class GameServer {
 
             @Override
             public void disconnected(Connection connection) {
-                LOG.info("Connection {} disconnected.", connection.getID());
                 try {
                     gameService.onDisconnect(connection);
                 } catch (Throwable t) {
@@ -57,7 +56,6 @@ public class GameServer {
 
             @Override
             public void connected(Connection connection) {
-                LOG.info("Connection {} connected.", connection.getID());
             }
 
         });
