@@ -3,7 +3,8 @@
     "display": {
         "name": "Haunted creeper",
         "imagePath": "images/cards/Haunted_Creeper_(art).jpg",
-        "colors": ["BLACK"]
+        "colors": ["BLACK"],
+        "description": "Summon two 1/1 spectral spiders when this dies."
     },
     "onDeath": [
         {

@@ -8,6 +8,7 @@ import com.destrostudios.cardgui.Card;
 import com.destrostudios.cardgui.CardZone;
 import com.destrostudios.cardgui.Interactivity;
 import com.destrostudios.cardgui.TargetSnapMode;
+import com.destrostudios.cardgui.TransformedBoardObject;
 import com.destrostudios.cardgui.boardobjects.TargetArrow;
 import com.destrostudios.cardgui.events.MoveCardEvent;
 import com.destrostudios.cardgui.interactivities.AimToTargetInteractivity;
@@ -520,9 +521,23 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         }
         BoardAppState boardAppState = new BoardAppState(board, rootNode, BoardSettings.builder()
                 .hoverInspectionDelay(0f)
+                .isInspectable(this::isInBattleZone)
                 .dragProjectionZ(0.9975f)
                 .build());
         return boardAppState;
+    }
+
+    private boolean isInBattleZone(TransformedBoardObject<?> transformedBoardObject) {
+        if (transformedBoardObject instanceof Card) {
+            Card<?> card = (Card<?>) transformedBoardObject;
+            CardZone cardZone = card.getZonePosition().getZone();
+            for (PlayerZones playerZones : playerZones.values()) {
+                if ((cardZone == playerZones.getBoardZone())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

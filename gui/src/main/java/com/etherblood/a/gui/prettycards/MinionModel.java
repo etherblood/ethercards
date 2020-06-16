@@ -1,6 +1,7 @@
 package com.etherblood.a.gui.prettycards;
 
 import com.destrostudios.cardgui.BoardObjectModel;
+import com.destrostudios.cardgui.annotations.IsBoardObjectInspected;
 import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.jme3.math.ColorRGBA;
 import java.util.Objects;
@@ -11,6 +12,12 @@ public class MinionModel extends BoardObjectModel {
     private int entityId, attack, health;
     private boolean faceUp, damaged;
     private ColorRGBA glow;
+    @IsBoardObjectInspected
+    private boolean isInspected;
+
+    public boolean isInspected() {
+        return isInspected;
+    }
 
     public boolean isFaceUp() {
         return faceUp;

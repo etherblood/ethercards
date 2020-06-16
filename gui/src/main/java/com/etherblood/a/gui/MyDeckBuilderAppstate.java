@@ -108,6 +108,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .boardSettings(BoardSettings.builder()
                         .dragProjectionZ(0.9975f)
                         .hoverInspectionDelay(0f)
+                        .isInspectable(x -> collectionZone.getCards().contains(x))
                         .build())
                 .build();
 
