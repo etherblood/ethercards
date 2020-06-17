@@ -439,10 +439,10 @@ public class MoveService {
 
     private String getCardName(int entity) {
         OptionalInt templateId = data.getOptional(entity, core.CARD_TEMPLATE);
-        if (templateId.isEmpty()) {
-            return null;
+        if (templateId.isPresent()) {
+            return settings.templates.getCard(templateId.getAsInt()).getTemplateName();
         }
-        return settings.templates.getCard(templateId.getAsInt()).getTemplateName();
+        return null;
     }
 
     public boolean canCast(int player, int castable) {
