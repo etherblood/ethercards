@@ -28,6 +28,7 @@ import com.etherblood.a.rules.systems.TemporariesCleanupSystem;
 import com.etherblood.a.rules.systems.UpkeepSystem;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.templates.effects.targeting.TargetUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -426,8 +427,22 @@ public class MoveService {
         if (validateMoves) {
             validateCanCast(player, castable, target != null ? target : ~0, true);
         }
-        data.set(castable, core.CAST_TARGET, target != null ? target : ~0);
-        runSystems(castSystems);
+        String cardName = getCardName(castable);
+        try {
+            data.set(castable, core.CAST_TARGET, target != null ? target : ~0);
+            runSystems(castSystems);
+        } catch (Throwable t) {
+            LOG.error("Error when casting {}.", cardName);
+            throw t;
+        }
+    }
+
+    private String getCardName(int entity) {
+        OptionalInt templateId = data.getOptional(entity, core.CARD_TEMPLATE);
+        if (templateId.isEmpty()) {
+            return null;
+        }
+        return settings.templates.getCard(templateId.getAsInt()).getTemplateName();
     }
 
     public boolean canCast(int player, int castable) {
@@ -502,17 +517,17 @@ public class MoveService {
             CardCast cast;
             if (phase.getAsInt() == PlayerPhase.ATTACK_PHASE) {
                 cast = template.getAttackPhaseCast();
-                if (cast != null && cast.isTargeted() && !data.has(target, core.IN_BATTLE_ZONE)) {
+                if (cast != null && cast.isTargeted() && !TargetUtil.isValidTarget(data, castable, target, cast.getTargets())) {
                     if (throwOnFail) {
-                        throw new IllegalArgumentException("Failed to cast, target #" + target + " is not in battle zone.");
+                        throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
                     }
                     return false;
                 }
             } else if (phase.getAsInt() == PlayerPhase.BLOCK_PHASE) {
                 cast = template.getBlockPhaseCast();
-                if (cast != null && cast.isTargeted() && !data.has(target, core.IN_BATTLE_ZONE)) {
+                if (cast != null && cast.isTargeted() && !TargetUtil.isValidTarget(data, castable, target, cast.getTargets())) {
                     if (throwOnFail) {
-                        throw new IllegalArgumentException("Failed to cast, target #" + target + " is not in battle zone.");
+                        throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
                     }
                     return false;
                 }

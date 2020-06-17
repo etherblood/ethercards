@@ -8,7 +8,7 @@
     },
     "attackCast": {
         "manaCost": 1,
-        "targeted": true,
+        "targets": ["OWN_MINION", "OPPONENT_MINION"],
         "effects": [
             {
                 "type": "buff",

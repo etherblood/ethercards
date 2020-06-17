@@ -1,0 +1,30 @@
+{
+    "alias": "cards/coldlight_oracle.json",
+    "display": {
+        "name": "Coldlight Oracle",
+        "imagePath": "images/cards/Coldlight_Oracle_full.jpg",
+        "colors": ["BLUE"],
+        "description": "Summon a 2/2 Coldlight Oracle, each player draws 2 cards."
+    },
+    "attackCast": {
+        "manaCost": 3,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/coldlight_oracle.json"
+            }, {
+                "type": "targeted",
+                "targeting": "ALL",
+                "targets": ["OWNER", "OPPONENT"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DRAW_CARDS": 2
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

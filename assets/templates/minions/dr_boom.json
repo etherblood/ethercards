@@ -1,0 +1,13 @@
+{
+    "alias": "minions/dr_boom.json",
+    "display": {
+        "name": "Dr. Boom",
+        "imagePath": "images/cards/dr_boom.png",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 7,
+        "HEALTH": 7,
+        "SUMMONING_SICKNESS": 1
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "alias": "minions/boombot.json",
+    "display": {
+        "name": "Boombot",
+        "imagePath": "images/cards/boombot.png",
+        "colors": ["RED"],
+        "description": "Deal 2 damage to a random enemy when this dies."
+    },
+    "onDeath": [
+        {
+            "type": "targeted",
+            "targeting": "ANY",
+            "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "DAMAGE": 2
+                    }
+                }
+            ]
+        }
+    ],
+    "components": {
+        "ATTACK": 1,
+        "HEALTH": 1,
+        "SUMMONING_SICKNESS": 1
+    }
+}

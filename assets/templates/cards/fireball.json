@@ -8,11 +8,13 @@
     },
     "attackCast": {
         "manaCost": 4,
-        "targeted": true,
+        "targets": ["OWN_MINION", "OWN_HERO", "OPPONENT_MINION", "OPPONENT_HERO"],
         "effects": [
             {
-                "type": "damage",
-                "damage": 4
+                "type": "buff",
+                "components": {
+                    "DAMAGE": 4
+                }
             }
         ]
     }

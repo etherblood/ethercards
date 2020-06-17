@@ -1,0 +1,13 @@
+{
+    "alias": "minions/coldlight_oracle.json",
+    "display": {
+        "name": "Coldlight Oracle",
+        "imagePath": "images/cards/Coldlight_Oracle_full.jpg",
+        "colors": ["BLUE"]
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 2,
+        "SUMMONING_SICKNESS": 1
+    }
+}

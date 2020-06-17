@@ -16,6 +16,7 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.templates.effects.targeting.TargetUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -108,7 +109,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
     private void addCastMoves(Game game, int player, int handCard, CardCast cast, List<Move> result) {
         if (cast.isTargeted()) {
-            for (int target : game.getData().list(core.IN_BATTLE_ZONE)) {
+            for (int target : TargetUtil.findValidTargets(game.getData(), handCard, cast.getTargets())) {
                 result.add(new Cast(player, handCard, target));
             }
         } else {

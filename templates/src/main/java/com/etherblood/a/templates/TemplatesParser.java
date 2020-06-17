@@ -9,9 +9,9 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
-import com.etherblood.a.rules.templates.effects.DamageEffect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
+import com.etherblood.a.rules.templates.effects.targeting.TargetFilters;
 import com.etherblood.a.rules.templates.effects.targeting.TargetedEffects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,7 +40,6 @@ public class TemplatesParser {
         this.components = components;
         Map<String, Class<? extends Effect>> classes = new HashMap<>();
         classes.put("summon", SummonEffect.class);
-        classes.put("damage", DamageEffect.class);
         classes.put("fractionalDamage", FractionalDamageEffect.class);
         classes.put("buff", BuffEffect.class);
         classes.put("targeted", TargetedEffects.class);
@@ -114,8 +113,8 @@ public class TemplatesParser {
         if (castJson != null && !castJson.isJsonNull()) {
             CardCastBuilder cast = builder.getAttackPhaseCast();
             cast.setManaCost(castJson.getAsJsonPrimitive("manaCost").getAsInt());
-            if (castJson.has("targeted")) {
-                cast.setTargeted(castJson.getAsJsonPrimitive("targeted").getAsBoolean());
+            if (castJson.has("targets")) {
+                cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
             }
             for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
@@ -127,8 +126,8 @@ public class TemplatesParser {
         if (castJson != null && !castJson.isJsonNull()) {
             CardCastBuilder cast = builder.getBlockPhaseCast();
             cast.setManaCost(castJson.getAsJsonPrimitive("manaCost").getAsInt());
-            if (castJson.has("targeted")) {
-                cast.setTargeted(castJson.getAsJsonPrimitive("targeted").getAsBoolean());
+            if (castJson.has("targets")) {
+                cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
             }
             for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
