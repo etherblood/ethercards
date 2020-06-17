@@ -2,8 +2,8 @@ package com.etherblood.a.gui.soprettyboard;
 
 import com.destrostudios.cardgui.transformations.ConstantButTargetedTransformation;
 import com.destrostudios.cardgui.transformations.DynamicTransformation;
-import com.destrostudios.cardgui.transformations.SimpleTargetPositionTransformation3f;
-import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
+import com.destrostudios.cardgui.transformations.LinearTargetPositionTransformation3f;
+import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedPositionTransformationSpeed3f;
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedRotationTransformationSpeed;
 import com.etherblood.a.gui.GameApplication;
@@ -39,8 +39,8 @@ public class CameraAppState extends MyBaseAppState {
     }
 
     public void moveTo(Vector3f position, Quaternion rotation, float duration) {
-        positionTransformation = new SimpleTargetPositionTransformation3f(position, new TimeBasedPositionTransformationSpeed3f(duration));
-        rotationTransformation = new SimpleTargetRotationTransformation(rotation, new TimeBasedRotationTransformationSpeed(duration));
+        positionTransformation = new LinearTargetPositionTransformation3f(position, new TimeBasedPositionTransformationSpeed3f(duration));
+        rotationTransformation = new LinearTargetRotationTransformation(rotation, new TimeBasedRotationTransformationSpeed(duration));
         positionTransformation.setCurrentValue(mainApplication.getCamera().getLocation());
         rotationTransformation.setCurrentValue(mainApplication.getCamera().getRotation());
     }

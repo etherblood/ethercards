@@ -101,12 +101,12 @@
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui</artifactId>
-            <version>5a7376d433c122c9f3a63bc3be74c5f39ce812a0</version>
+            <version>9d9a142b3b96f762ae0f942c2bc6b5dfa4801504</version>
         </dependency>
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui-samples</artifactId>
-            <version>5a7376d433c122c9f3a63bc3be74c5f39ce812a0</version>
+            <version>9d9a142b3b96f762ae0f942c2bc6b5dfa4801504</version>
         </dependency>
         <dependency>
             <groupId>${jm3.group}</groupId>

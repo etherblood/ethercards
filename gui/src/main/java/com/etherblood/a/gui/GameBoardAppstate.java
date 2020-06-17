@@ -18,7 +18,7 @@ import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.Connectio
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
-import com.destrostudios.cardgui.transformations.SimpleTargetRotationTransformation;
+import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.entities.EntityData;
@@ -408,7 +408,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             visualCards.put(myCard, card);
             objectEntities.put(card, myCard);
 
-            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
+            card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
         }
         return card;
     }
@@ -423,8 +423,8 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
 
             EntityData data = game.getData();
             CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> data.has(myCard, core.TIRED));
-            card.rotation().addRelativeTransformation(new SimpleTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
+            card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> data.has(myCard, core.TIRED));
+            card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
         }
         return card;
     }
