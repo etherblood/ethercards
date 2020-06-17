@@ -1,0 +1,18 @@
+{
+    "alias": "cards/malorne.json",
+    "display": {
+        "name": "Malorne",
+        "imagePath": "images/cards/Malorne_full.jpg",
+        "colors": ["GREEN"],
+        "description": "Summon a 9/7 Malorne which is shuffled into your library when it dies."
+    },
+    "attackCast": {
+        "manaCost": 8,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/malorne.json"
+            }
+        ]
+    }
+}

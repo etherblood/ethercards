@@ -49,4 +49,9 @@ public class DisplayCardTemplate extends CardTemplate {
     public String getTemplateName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "DisplayCardTemplate{" + "alias=" + alias + '}';
+    }
 }

@@ -7,7 +7,7 @@
         "description": "Summon a 1/2 haunted creeper which summons two 1/1 spectral spiders when it dies."
     },
     "attackCast": {
-        "manaCost": 2,
+        "manaCost": 3,
         "effects": [
             {
                 "type": "summon",

@@ -32,8 +32,8 @@ public class TargetedEffects extends Effect {
                 }
                 break;
             case ALL:
-                for (int availableTarget : availableTargets) {
-                    for (Effect effect : effects) {
+                for (Effect effect : effects) {
+                    for (int availableTarget : availableTargets) {
                         effect.apply(settings, data, random, source, availableTarget);
                     }
                 }

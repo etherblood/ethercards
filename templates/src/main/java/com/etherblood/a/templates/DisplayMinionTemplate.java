@@ -64,4 +64,9 @@ public class DisplayMinionTemplate extends MinionTemplate {
     public String getTemplateName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "DisplayMinionTemplate{" + "alias=" + alias + '}';
+    }
 }

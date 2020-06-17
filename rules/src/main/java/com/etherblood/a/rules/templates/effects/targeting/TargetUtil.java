@@ -18,7 +18,7 @@ public class TargetUtil {
         if (sourceOwner == target) {
             return targetTypes.contains(TargetFilters.OWNER);
         }
-        if (data.has(target, core.IN_BATTLE_ZONE)) {
+        if (data.has(target, core.IN_BATTLE_ZONE) && !data.has(target, core.DIE)) {
             int targetOwner = data.get(target, core.OWNED_BY);
             if (data.has(target, core.HERO)) {
                 if (sourceOwner == targetOwner) {
@@ -42,9 +42,8 @@ public class TargetUtil {
         assert !targetTypes.contains(null);
         IntList availableTargets = new IntList();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        IntList list = data.list(core.IN_BATTLE_ZONE);
         int sourceOwner = data.get(source, core.OWNED_BY);
-        for (int minion : list) {
+        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             if (data.has(minion, core.DIE)) {
                 continue;
             }

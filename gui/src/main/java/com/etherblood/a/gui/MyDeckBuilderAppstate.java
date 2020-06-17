@@ -58,6 +58,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         this.presetLibrary = presetLibrary;
         this.rootNode = rootNode;
 
+        Comparator<CardModel> cardOrder = Comparator.comparingInt(x -> getManaCost(x));
+        cardOrder = cardOrder.thenComparing(x -> x.getTemplate().getName());
+        cardOrder = cardOrder.thenComparingInt(x -> x.getTemplate().getId());
+
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
             CardModel cardModel = new CardModel();
@@ -65,6 +69,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             cardModel.setTemplate((DisplayCardTemplate) card);
             allCardModels.add(cardModel);
         }
+        allCardModels.sort(cardOrder);
         CardZone collectionZone = new SimpleIntervalZone(new Vector3f(-2, 0, 0), new Vector3f(1, 1, 1.4f));
         CardZone deckZone = new SimpleIntervalZone(new Vector3f(8.25f, 0, -4.715f), new Vector3f(1, 1, 0.57f));
         BoardObjectVisualizer<CardZone> collectionZoneVisualizer = new DebugZoneVisualizer() {
@@ -91,9 +96,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
         BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new CardVisualizer_Card(cardPainterJME);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
-        Comparator<CardModel> deckCardOrder = Comparator.comparing(x -> getManaCost(x));
-        deckCardOrder = deckCardOrder.thenComparing(x -> x.getTemplate().getName());
-        deckCardOrder = deckCardOrder.thenComparing(x -> x.getTemplate().getId());
         DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
                 .allCardModels(allCardModels)
                 .collectionZone(collectionZone)
@@ -102,12 +104,12 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .deckZoneVisualizer(deckZoneVisualizer)
                 .collectionCardVisualizer(collectionCardVisualizer)
                 .deckCardVisualizer(deckCardVisualizer)
-                .deckCardOrder(deckCardOrder)
+                .deckCardOrder(cardOrder)
                 .collectionCardsPerRow(16)
                 .collectionRowsPerPage(7)
                 .boardSettings(BoardSettings.builder()
                         .dragProjectionZ(0.9975f)
-                        .hoverInspectionDelay(0f)
+                        .hoverInspectionDelay(0.3f)
                         .isInspectable(x -> collectionZone.getCards().contains(x))
                         .build())
                 .build();

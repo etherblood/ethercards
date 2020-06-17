@@ -8,6 +8,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
+import com.etherblood.a.rules.templates.effects.CreateCardEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
@@ -42,6 +43,7 @@ public class TemplatesParser {
         classes.put("summon", SummonEffect.class);
         classes.put("fractionalDamage", FractionalDamageEffect.class);
         classes.put("buff", BuffEffect.class);
+        classes.put("create", CreateCardEffect.class);
         classes.put("targeted", TargetedEffects.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);

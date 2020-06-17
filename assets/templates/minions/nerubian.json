@@ -6,8 +6,8 @@
         "colors": ["BLACK"]
     },
     "components": {
-        "ATTACK": 4,
-        "HEALTH": 4,
+        "ATTACK": 3,
+        "HEALTH": 3,
         "SUMMONING_SICKNESS": 1
     }
 }
