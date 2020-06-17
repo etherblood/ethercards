@@ -38,7 +38,8 @@ public class CoreComponents implements ComponentsModule {
     public final int MINION_TEMPLATE;
     public final int HERO;
     public final int MULLIGAN;
-
+    public final int POISONED;
+    public final int VENOM;
 
     public CoreComponents(ToIntFunction<String> register) {
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
@@ -74,5 +75,7 @@ public class CoreComponents implements ComponentsModule {
         MINION_TEMPLATE = register.applyAsInt("MINION_TEMPLATE");
         HERO = register.applyAsInt("HERO");
         MULLIGAN = register.applyAsInt("MULLIGAN");
+        POISONED = register.applyAsInt("POISONED");
+        VENOM = register.applyAsInt("VENOM");
     }
 }

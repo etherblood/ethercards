@@ -1,0 +1,15 @@
+{
+    "alias": "minions/maexxna.json",
+    "display": {
+        "name": "Maexxna",
+        "imagePath": "images/cards/Maexxna_full.jpg",
+        "colors": ["BLACK"],
+        "description": "Venom 4"
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 8,
+        "VENOM": 4,
+        "SUMMONING_SICKNESS": 1
+    }
+}

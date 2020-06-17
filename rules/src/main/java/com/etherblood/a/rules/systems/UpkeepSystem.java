@@ -29,6 +29,10 @@ public class UpkeepSystem extends AbstractSystem {
                 data.getOptional(entity, core.MANA_GROWTH).ifPresent(growth -> {
                     SystemsUtil.increase(data, entity, core.MANA_POOL, growth);
                 });
+                data.getOptional(entity, core.POISONED).ifPresent(poison -> {
+                    SystemsUtil.damage(data, entity, poison);
+                    SystemsUtil.decreaseAndRemoveLtZero(data, entity, core.POISONED, 1);
+                });
                 mana += data.getOptional(entity, core.MANA_POOL).orElse(0);
                 draws += data.getOptional(entity, core.DRAWS_PER_TURN).orElse(0);
             }

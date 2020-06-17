@@ -1,0 +1,18 @@
+{
+    "alias": "cards/maexxna.json",
+    "display": {
+        "name": "Maexxna",
+        "imagePath": "images/cards/Maexxna_full.jpg",
+        "colors": ["BLACK"],
+        "description": "Summon a 2/8 Maexxna with Venom 4."
+    },
+    "attackCast": {
+        "manaCost": 6,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/maexxna.json"
+            }
+        ]
+    }
+}

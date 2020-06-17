@@ -62,6 +62,14 @@ public class SystemsUtil {
         damage(data, attacker, data.getOptional(blocker, core.ATTACK).orElse(0));
         data.remove(attacker, core.ATTACKS_TARGET);
         data.remove(blocker, core.BLOCKS_ATTACKER);
+        int attackerVenom = data.getOptional(attacker, core.VENOM).orElse(0);
+        if (attackerVenom > 0) {
+            increase(data, blocker, core.POISONED, attackerVenom);
+        }
+        int blockerVenom = data.getOptional(blocker, core.VENOM).orElse(0);
+        if (blockerVenom > 0) {
+            increase(data, attacker, core.POISONED, blockerVenom);
+        }
     }
 
     public static void damage(EntityData data, int target, int damage) {

@@ -22,6 +22,8 @@ public class DeathSystem extends AbstractSystem {
             data.remove(entity, core.TIRED);
             data.remove(entity, core.SUMMONING_SICKNESS);
             data.remove(entity, core.HERO);
+            data.remove(entity, core.POISONED);
+            data.remove(entity, core.VENOM);
             // TODO: full cleanup
             
             for (int attacker : data.list(core.ATTACKS_TARGET)) {

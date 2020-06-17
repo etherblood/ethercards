@@ -18,6 +18,8 @@ public class SummonEffect extends Effect {
 
     @Override
     public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, int source, int target) {
-        SystemsUtil.summon(settings, data, minionId, data.get(source, data.getComponents().getModule(CoreComponents.class).OWNED_BY));
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        int owner = data.get(source, core.OWNED_BY);
+        SystemsUtil.summon(settings, data, minionId, owner);
     }
 }
