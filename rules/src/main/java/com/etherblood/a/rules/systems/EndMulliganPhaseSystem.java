@@ -16,6 +16,9 @@ public class EndMulliganPhaseSystem extends AbstractSystem {
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (int player : data.list(core.END_PHASE)) {
+            if (data.get(player, core.END_PHASE) != PlayerPhase.MULLIGAN_PHASE) {
+                continue;
+            }
             data.remove(player, core.END_PHASE);
             data.remove(player, core.ACTIVE_PLAYER_PHASE);
         }

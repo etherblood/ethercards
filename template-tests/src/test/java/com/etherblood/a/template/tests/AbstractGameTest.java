@@ -30,9 +30,13 @@ import org.junit.jupiter.api.BeforeEach;
 public abstract class AbstractGameTest {
 
     private static final String DEFAULT_HERO = "minions/lots_of_health.json";
-    private final GameSettings settings;
     private final TemplatesLoader loader;
+    public final GameSettings settings;
     public final CoreComponents core;
+    
+    public EntityData data;
+    public MoveService moves;
+    public Game game;
 
     public AbstractGameTest() {
         Function<String, JsonElement> assetLoader = x -> {
@@ -65,18 +69,9 @@ public abstract class AbstractGameTest {
 
     @BeforeEach
     public void before() {
-        System.out.println("before");
-    }
-
-    @AfterEach
-    public void after() {
-        System.out.println("after");
-    }
-
-    public Game game() {
-        EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(settings, data, HistoryRandom.producer());
-        Game game = new Game(settings, data, moves);
+        data = new SimpleEntityData(settings.components);
+        moves = new MoveService(settings, data, HistoryRandom.producer());
+        game = new Game(settings, data, moves);
 
         SimpleSetup setup = new SimpleSetup(2);
         setup.setLibrary(0, new IntList());
@@ -88,24 +83,33 @@ public abstract class AbstractGameTest {
         for (int player : data.list(core.DRAW_CARDS)) {
             data.remove(player, core.DRAW_CARDS);
         }
+        for (int hero : data.list(core.DRAWS_PER_TURN)) {
+            data.remove(hero, core.DRAWS_PER_TURN);
+        }
         data.set(game.findPlayerByIndex(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE);
-        return game;
     }
 
-    public int player(Game game, int index) {
+    @AfterEach
+    public void after() {
+        data = null;
+        moves = null;
+        game = null;
+    }
+
+    public int player(int index) {
         return game.findPlayerByIndex(index);
     }
 
-    public int hero(Game game, int index) {
-        int player = player(game, index);
-        return game.getData().list(core.HERO).stream().filter(x -> game.getData().hasValue(x, core.OWNED_BY, player)).findAny().getAsInt();
+    public int hero(int index) {
+        int player = player(index);
+        return data.list(core.HERO).stream().filter(x -> data.hasValue(x, core.OWNED_BY, player)).findAny().getAsInt();
     }
 
-    public int summon(Game game, String minionTemplate, int owner) {
-        return summon(game, getMinionId(minionTemplate), owner);
+    public int summon(String minionTemplate, int owner) {
+        return summon(getMinionId(minionTemplate), owner);
     }
 
-    public int summon(Game game, int minionTemplate, int owner) {
+    public int summon(int minionTemplate, int owner) {
         return SystemsUtil.summon(settings, game.getData(), minionTemplate, owner);
     }
 

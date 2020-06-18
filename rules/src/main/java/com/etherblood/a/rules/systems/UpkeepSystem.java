@@ -14,12 +14,14 @@ public class UpkeepSystem extends AbstractSystem {
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (int player : data.list(core.END_PHASE)) {
+            if (data.get(player, core.END_PHASE) == PlayerPhase.ATTACK_PHASE) {
+                continue;
+            }
             data.remove(player, core.END_PHASE);
             data.set(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE);
 
             int mana = 0;
             int draws = data.getOptional(player, core.DRAW_CARDS).orElse(0);
-            draws++;
             for (int entity : data.list(core.IN_BATTLE_ZONE).stream()
                     .filter(x -> data.hasValue(x, core.OWNED_BY, player))
                     .toArray()) {

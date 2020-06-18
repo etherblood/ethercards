@@ -198,7 +198,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanEndAttackPhase(player, true);
         }
-        data.set(player, core.END_PHASE, 1);
+        data.set(player, core.END_PHASE, PlayerPhase.ATTACK_PHASE);
         runSystems(endAttackPhaseSystems);
     }
 
@@ -220,7 +220,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanEndBlockPhase(player, true);
         }
-        data.set(player, core.END_PHASE, 1);
+        data.set(player, core.END_PHASE, PlayerPhase.BLOCK_PHASE);
         runSystems(endBlockPhaseSystems);
     }
 
@@ -242,7 +242,7 @@ public class MoveService {
         if (validateMoves) {
             verifyCanEndMulliganPhase(player, true);
         }
-        data.set(player, core.END_PHASE, 1);
+        data.set(player, core.END_PHASE, PlayerPhase.MULLIGAN_PHASE);
         runSystems(endMulliganPhaseSystems);
     }
 
