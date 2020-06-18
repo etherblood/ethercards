@@ -28,14 +28,16 @@ public class EndAttackPhaseSystem extends AbstractSystem {
                     SystemsUtil.increase(data, owner, core.DRAW_CARDS, draws);
                 });
             }
+            for (int minion : data.list(core.SUMMONING_SICKNESS)) {
+                if (data.hasValue(minion, core.OWNED_BY, player)) {
+                    SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.SUMMONING_SICKNESS, 1);
+                }
+            }
 
             Integer nextPlayer = SystemsUtil.nextPlayer(data, player);
             if (nextPlayer != null) {
                 data.set(nextPlayer, core.START_PHASE_REQUEST, PlayerPhase.BLOCK);
             }
-        }
-        for (int minion : data.list(core.SUMMONING_SICKNESS)) {
-            SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.SUMMONING_SICKNESS, 1);
         }
     }
 }
