@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.systems;
+package com.etherblood.a.rules.systems.phases;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.AbstractSystem;
@@ -8,13 +8,13 @@ import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
-public class EndBlockPhaseBattleSystem extends AbstractSystem {
+public class EndBlockPhaseSystem extends AbstractSystem {
 
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        for (int player : data.list(core.END_PHASE)) {
-            if (data.get(player, core.END_PHASE) != PlayerPhase.BLOCK_PHASE) {
+        for (int player : data.list(core.END_PHASE_ACTION)) {
+            if (data.get(player, core.END_PHASE_ACTION) != PlayerPhase.BLOCK) {
                 continue;
             }
             for (int attacker : data.list(core.ATTACKS_TARGET)) {
@@ -31,6 +31,7 @@ public class EndBlockPhaseBattleSystem extends AbstractSystem {
                     data.remove(attacker, core.ATTACKS_TARGET);
                 }
             }
+            data.set(player, core.START_PHASE_REQUEST, PlayerPhase.ATTACK);
         }
     }
 }

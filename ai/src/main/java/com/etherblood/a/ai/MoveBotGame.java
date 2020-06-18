@@ -36,7 +36,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
         for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
             int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
             switch (phase) {
-                case PlayerPhase.ATTACK_PHASE: {
+                case PlayerPhase.ATTACK: {
                     IntList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int attacker : minions) {
                         if (!game.getMoves().canDeclareAttack(player, attacker)) {
@@ -66,7 +66,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
                     result.add(new EndAttackPhase(player));
                     break;
                 }
-                case PlayerPhase.BLOCK_PHASE: {
+                case PlayerPhase.BLOCK: {
                     IntList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int blocker : minions) {
                         if (!game.getMoves().canBlock(player, blocker)) {
@@ -90,7 +90,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
                     result.add(new EndBlockPhase(player));
                     break;
                 }
-                case PlayerPhase.MULLIGAN_PHASE: {
+                case PlayerPhase.MULLIGAN: {
                     for (int card : data.list(core.IN_HAND_ZONE)) {
                         if (game.getMoves().canDeclareMulligan(player, card)) {
                             result.add(new DeclareMulligan(player, card));

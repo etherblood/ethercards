@@ -5,14 +5,20 @@ import java.util.function.ToIntFunction;
 
 public class CoreComponents implements ComponentsModule {
 
+    public final int END_PHASE_REQUEST;
+    public final int END_PHASE_ACTION;
+    public final int START_PHASE_REQUEST;
+    public final int START_PHASE_ACTION;
+    public final int DAMAGE_REQUEST;
+    public final int DAMAGE_ACTION;
+    public final int DEATH_REQUEST;
+    public final int DEATH_ACTION;
+    public final int PLAYER_RESULT_REQUEST;
     public final int PLAYER_RESULT;
     public final int PLAYER_INDEX;
     public final int ACTIVE_PLAYER_PHASE;
-    public final int END_PHASE;
     public final int HEALTH;
     public final int ATTACK;
-    public final int DAMAGE;
-    public final int DIE;
     public final int OWNED_BY;
     public final int IN_BATTLE_ZONE;
     public final int IN_HAND_ZONE;
@@ -42,14 +48,20 @@ public class CoreComponents implements ComponentsModule {
     public final int VENOM;
 
     public CoreComponents(ToIntFunction<String> register) {
+        END_PHASE_REQUEST = register.applyAsInt("END_PHASE_REQUEST");
+        END_PHASE_ACTION = register.applyAsInt("END_PHASE_ACTION");
+        START_PHASE_REQUEST = register.applyAsInt("START_PHASE_REQUEST");
+        START_PHASE_ACTION = register.applyAsInt("START_PHASE_ACTION");
+        DAMAGE_REQUEST = register.applyAsInt("DAMAGE_REQUEST");
+        DAMAGE_ACTION = register.applyAsInt("DAMAGE_ACTION");
+        DEATH_REQUEST = register.applyAsInt("DEATH_REQUEST");
+        DEATH_ACTION = register.applyAsInt("DEATH_ACTION");
+        PLAYER_RESULT_REQUEST = register.applyAsInt("PLAYER_RESULT_REQUEST");
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
         PLAYER_INDEX = register.applyAsInt("PLAYER_INDEX");
         ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
-        END_PHASE = register.applyAsInt("END_PHASE");
         HEALTH = register.applyAsInt("HEALTH");
         ATTACK = register.applyAsInt("ATTACK");
-        DAMAGE = register.applyAsInt("DAMAGE");
-        DIE = register.applyAsInt("DIE");
         OWNED_BY = register.applyAsInt("OWNED_BY");
         IN_BATTLE_ZONE = register.applyAsInt("IN_BATTLE_ZONE");
         IN_HAND_ZONE = register.applyAsInt("IN_HAND_ZONE");

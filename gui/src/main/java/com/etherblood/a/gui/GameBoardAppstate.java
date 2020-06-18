@@ -179,11 +179,11 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                 builder.append(" LOST");
             } else if (game.hasPlayerWon(player)) {
                 builder.append(" WON");
-            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE)) {
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK)) {
                 builder.append(" ATTACK_PHASE");
-            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE)) {
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK)) {
                 builder.append(" BLOCK_PHASE");
-            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN)) {
                 builder.append(" MULLIGAN_PHASE");
             }
             builder.append(System.lineSeparator());
@@ -196,13 +196,13 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             int phase = optionalPhase.getAsInt();
             endPhaseButton.setCullHint(Spatial.CullHint.Dynamic);
             switch (phase) {
-                case PlayerPhase.ATTACK_PHASE:
+                case PlayerPhase.ATTACK:
                     endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_turn.png"));
                     break;
-                case PlayerPhase.BLOCK_PHASE:
+                case PlayerPhase.BLOCK:
                     endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_phase.png"));
                     break;
-                case PlayerPhase.MULLIGAN_PHASE:
+                case PlayerPhase.MULLIGAN:
                     endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_mulligan.png"));
                     break;
                 default:
@@ -553,13 +553,13 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             CoreComponents core = data.getComponents().getModule(CoreComponents.class);
             data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
                 switch (phase) {
-                    case PlayerPhase.BLOCK_PHASE:
+                    case PlayerPhase.BLOCK:
                         requestMove(new EndBlockPhase(userControlledPlayer));
                         break;
-                    case PlayerPhase.ATTACK_PHASE:
+                    case PlayerPhase.ATTACK:
                         requestMove(new EndAttackPhase(userControlledPlayer));
                         break;
-                    case PlayerPhase.MULLIGAN_PHASE:
+                    case PlayerPhase.MULLIGAN:
                         requestMove(new EndMulliganPhase(userControlledPlayer));
                         break;
                 }

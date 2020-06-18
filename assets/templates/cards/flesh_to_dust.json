@@ -13,7 +13,7 @@
             {
                 "type": "buff",
                 "components": {
-                    "DIE": 1
+                    "DEATH_REQUEST": 1
                 }
             }
         ]

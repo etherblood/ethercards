@@ -1,4 +1,4 @@
-package com.etherblood.a.template.tests;
+package com.etherblood.a.game.tests;
 
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
@@ -86,7 +86,7 @@ public abstract class AbstractGameTest {
         for (int hero : data.list(core.DRAWS_PER_TURN)) {
             data.remove(hero, core.DRAWS_PER_TURN);
         }
-        data.set(game.findPlayerByIndex(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE);
+        data.set(game.findPlayerByIndex(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
     }
 
     @AfterEach
@@ -105,11 +105,11 @@ public abstract class AbstractGameTest {
         return data.list(core.HERO).stream().filter(x -> data.hasValue(x, core.OWNED_BY, player)).findAny().getAsInt();
     }
 
-    public int summon(String minionTemplate, int owner) {
-        return summon(getMinionId(minionTemplate), owner);
+    public int summon(int owner, String minionTemplate) {
+        return summon(owner, getMinionId(minionTemplate));
     }
 
-    public int summon(int minionTemplate, int owner) {
+    public int summon(int owner, int minionTemplate) {
         return SystemsUtil.summon(settings, game.getData(), minionTemplate, owner);
     }
 

@@ -81,7 +81,7 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
         for (int player : data.list(core.PLAYER_INDEX)) {
             if (data.hasValue(player, core.PLAYER_INDEX, selfIndex)) {
                 self = player;
-            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN_PHASE)) {
+            } else if (data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN)) {
                 // discard mulligans of opponents, they make no difference since all hand cards will be randomized
                 data.remove(player, core.ACTIVE_PLAYER_PHASE);
             }

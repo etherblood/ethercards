@@ -5,7 +5,6 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
-import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
@@ -14,13 +13,6 @@ import java.util.function.IntUnaryOperator;
 
 public class CastSystem extends AbstractSystem {
 
-    private final GameTemplates templates;
-
-    public CastSystem(GameTemplates templates) {
-        this.templates = templates;
-    }
-
-
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
@@ -28,10 +20,10 @@ public class CastSystem extends AbstractSystem {
         for (int castSource : entities) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
-            CardTemplate template = templates.getCard(cardTemplateId);
+            CardTemplate template = settings.templates.getCard(cardTemplateId);
             int owner = data.get(castSource, core.OWNED_BY);
             CardCast cast;
-            if (data.get(owner, core.ACTIVE_PLAYER_PHASE) == PlayerPhase.ATTACK_PHASE) {
+            if (data.get(owner, core.ACTIVE_PLAYER_PHASE) == PlayerPhase.ATTACK) {
                 cast = template.getAttackPhaseCast();
             } else {
                 cast = template.getBlockPhaseCast();

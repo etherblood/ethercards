@@ -17,11 +17,11 @@ public class PlayerStatusSystem extends AbstractSystem {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         updatePlayerDeaths(data);
 
-        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
-            if (data.has(player, core.PLAYER_RESULT)) {
+        for (int player : data.list(core.PLAYER_RESULT)) {
+            if (data.has(player, core.ACTIVE_PLAYER_PHASE)) {
                 nextTurn(data, player);
                 data.remove(player, core.ACTIVE_PLAYER_PHASE);
-                data.remove(player, core.END_PHASE);
+                data.remove(player, core.END_PHASE_REQUEST);
             }
         }
     }
@@ -30,7 +30,7 @@ public class PlayerStatusSystem extends AbstractSystem {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         Integer bestPlayer = SystemsUtil.nextPlayer(data, player);
         if (bestPlayer != null) {
-            data.set(bestPlayer, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE);
+            data.set(bestPlayer, core.START_PHASE_REQUEST, PlayerPhase.BLOCK);
         }
     }
 
@@ -55,12 +55,12 @@ public class PlayerStatusSystem extends AbstractSystem {
         if (alive.size() == 1) {
             int winner = alive.get(0);
             if (!data.hasValue(winner, core.PLAYER_RESULT, PlayerResult.VICTORY)) {
-                data.set(winner, core.PLAYER_RESULT, PlayerResult.VICTORY);
+                data.set(winner, core.PLAYER_RESULT_REQUEST, PlayerResult.VICTORY);
             }
         }
         for (int loser : dead) {
             if (!data.hasValue(loser, core.PLAYER_RESULT, PlayerResult.LOSS)) {
-                data.set(loser, core.PLAYER_RESULT, PlayerResult.LOSS);
+                data.set(loser, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
             }
         }
     }

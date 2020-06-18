@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.systems;
+package com.etherblood.a.rules.systems.phases;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.AbstractSystem;
@@ -8,17 +8,16 @@ import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
-public class UpkeepSystem extends AbstractSystem {
+public class StartAttackPhaseSystem extends AbstractSystem {
 
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        for (int player : data.list(core.END_PHASE)) {
-            if (data.get(player, core.END_PHASE) == PlayerPhase.ATTACK_PHASE) {
+        for (int player : data.list(core.START_PHASE_ACTION)) {
+            if (data.get(player, core.START_PHASE_ACTION) != PlayerPhase.ATTACK) {
                 continue;
             }
-            data.remove(player, core.END_PHASE);
-            data.set(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK_PHASE);
+            data.set(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
 
             int mana = 0;
             int draws = data.getOptional(player, core.DRAW_CARDS).orElse(0);

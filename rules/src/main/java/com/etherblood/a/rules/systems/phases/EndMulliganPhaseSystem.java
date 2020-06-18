@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.systems;
+package com.etherblood.a.rules.systems.phases;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -15,12 +15,16 @@ public class EndMulliganPhaseSystem extends AbstractSystem {
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        for (int player : data.list(core.END_PHASE)) {
-            if (data.get(player, core.END_PHASE) != PlayerPhase.MULLIGAN_PHASE) {
+        boolean playerEndedMulligan = false;
+        for (int player : data.list(core.END_PHASE_ACTION)) {
+            if (data.get(player, core.END_PHASE_ACTION) != PlayerPhase.MULLIGAN) {
                 continue;
             }
-            data.remove(player, core.END_PHASE);
             data.remove(player, core.ACTIVE_PLAYER_PHASE);
+            playerEndedMulligan = true;
+        }
+        if (!playerEndedMulligan) {
+            return;
         }
         IntList activePlayers = data.list(core.ACTIVE_PLAYER_PHASE);
         if (activePlayers.isEmpty()) {
@@ -40,13 +44,12 @@ public class EndMulliganPhaseSystem extends AbstractSystem {
 
             Integer startingPlayer = null;
             for (int player : data.list(core.PLAYER_INDEX)) {
-                if (data.get(player, core.PLAYER_INDEX) == 0) {
+                if (data.hasValue(player, core.PLAYER_INDEX, 0)) {
                     startingPlayer = player;
                     break;
                 }
             }
-            data.set(startingPlayer, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE);
-            data.set(startingPlayer, core.END_PHASE, 1);
+            data.set(startingPlayer, core.START_PHASE_REQUEST, PlayerPhase.ATTACK);
         }
     }
 }

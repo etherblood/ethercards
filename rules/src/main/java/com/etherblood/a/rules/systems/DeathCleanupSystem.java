@@ -7,14 +7,13 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
 import java.util.function.IntUnaryOperator;
 
-public class DeathSystem extends AbstractSystem {
+public class DeathCleanupSystem extends AbstractSystem {
 
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        IntList deaths = data.list(core.DIE);
+        IntList deaths = data.list(core.DEATH_ACTION);
         for (int entity : deaths) {
-            data.remove(entity, core.IN_BATTLE_ZONE);
             data.remove(entity, core.OWNED_BY);
             data.remove(entity, core.ATTACKS_TARGET);
             data.remove(entity, core.ATTACK);
@@ -25,13 +24,6 @@ public class DeathSystem extends AbstractSystem {
             data.remove(entity, core.POISONED);
             data.remove(entity, core.VENOM);
             // TODO: full cleanup
-            
-            for (int attacker : data.list(core.ATTACKS_TARGET)) {
-                int target = data.get(attacker, core.ATTACKS_TARGET);
-                if (target == entity) {
-                    data.remove(attacker, core.ATTACKS_TARGET);
-                }
-            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.systems;
+package com.etherblood.a.rules.systems.phases;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.AbstractSystem;
@@ -13,11 +13,10 @@ public class EndAttackPhaseSystem extends AbstractSystem {
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        for (int player : data.list(core.END_PHASE)) {
-            if (data.get(player, core.END_PHASE) != PlayerPhase.ATTACK_PHASE) {
+        for (int player : data.list(core.END_PHASE_ACTION)) {
+            if (data.get(player, core.END_PHASE_ACTION) != PlayerPhase.ATTACK) {
                 continue;
             }
-            data.remove(player, core.END_PHASE);
             data.remove(player, core.ACTIVE_PLAYER_PHASE);
 
             for (int attacker : data.list(core.ATTACKS_TARGET).stream()
@@ -32,7 +31,7 @@ public class EndAttackPhaseSystem extends AbstractSystem {
 
             Integer nextPlayer = SystemsUtil.nextPlayer(data, player);
             if (nextPlayer != null) {
-                data.set(nextPlayer, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK_PHASE);
+                data.set(nextPlayer, core.START_PHASE_REQUEST, PlayerPhase.BLOCK);
             }
         }
         for (int minion : data.list(core.SUMMONING_SICKNESS)) {

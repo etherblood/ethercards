@@ -77,7 +77,7 @@ public class SystemsUtil {
             return;
         }
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        increase(data, target, core.DAMAGE, damage);
+        increase(data, target, core.DAMAGE_REQUEST, damage);
     }
 
     public static int summon(GameSettings settings, EntityData data, int minionTemplate, int owner) {
@@ -135,7 +135,7 @@ public class SystemsUtil {
         for (int minion : minions) {
             if (data.hasValue(minion, core.OWNED_BY, player)) {
                 int health = data.getOptional(minion, core.HEALTH).orElse(0);
-                int damage = data.getOptional(minion, core.DAMAGE).orElse(0);
+                int damage = data.getOptional(minion, core.DAMAGE_REQUEST).orElse(0);
                 effectiveHealth.set(minion, health - damage);
                 myMinions.add(minion);
             }

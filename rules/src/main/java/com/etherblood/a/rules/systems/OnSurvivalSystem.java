@@ -14,9 +14,9 @@ public class OnSurvivalSystem extends AbstractSystem {
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        IntList damaged = data.list(core.DAMAGE);
+        IntList damaged = data.list(core.DAMAGE_ACTION);
         for (int entity : damaged) {
-            if (data.has(entity, core.DIE)) {
+            if (data.has(entity, core.DEATH_REQUEST)) {
                 continue;
             }
             int sourceTemplateId = data.get(entity, core.MINION_TEMPLATE);

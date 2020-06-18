@@ -13,7 +13,7 @@
             {
                 "type": "buff",
                 "components": {
-                    "DAMAGE": 4
+                    "DAMAGE_REQUEST": 4
                 }
             }
         ]

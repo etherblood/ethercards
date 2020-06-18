@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestSandbox {
 
-    @Test
+//    @Test
     public void simulateGame() throws InterruptedException {
         float[] result = new float[2];
         long[] nanos = new long[2];
