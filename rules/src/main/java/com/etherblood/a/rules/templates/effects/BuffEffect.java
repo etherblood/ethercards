@@ -3,6 +3,7 @@ package com.etherblood.a.rules.templates.effects;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.systems.util.SystemsUtil;
 import com.etherblood.a.rules.templates.effects.filedtypes.ComponentsMap;
 import java.util.function.IntUnaryOperator;
 
@@ -18,9 +19,8 @@ public class BuffEffect extends Effect {
     @Override
     public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, int source, int target) {
         for (int component : components) {
-            int value = data.getOptional(target, component).orElse(0);
-            value += components.get(component);
-            data.set(target, component, value);
+            int amount = components.get(component);
+            SystemsUtil.increase(data, target, component, amount);
         }
     }
 }

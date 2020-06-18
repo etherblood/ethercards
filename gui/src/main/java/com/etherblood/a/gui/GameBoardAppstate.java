@@ -71,9 +71,12 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GameBoardAppstate extends AbstractAppState implements ActionListener {
 
+    private static final Logger LOG = LoggerFactory.getLogger(GameBoardAppstate.class);
     private static final float ZONE_HEIGHT = 1.3f;
     private final Consumer<Move> moveRequester;
     private final GameReplayService gameReplayService;
@@ -565,6 +568,10 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
     }
 
     private void requestMove(Move move) {
+        if (game.isGameOver()) {
+            LOG.error("Game is already over, discarded {}.", move);
+            return;
+        }
         moveRequester.accept(move);
     }
 

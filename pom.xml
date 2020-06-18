@@ -15,6 +15,7 @@
         <module>server</module>
         <module>client</module>
         <module>library-builder-ai</module>
+        <module>template-tests</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

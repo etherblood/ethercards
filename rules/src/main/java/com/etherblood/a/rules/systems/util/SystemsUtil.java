@@ -80,7 +80,7 @@ public class SystemsUtil {
         increase(data, target, core.DAMAGE, damage);
     }
 
-    public static void summon(GameSettings settings, EntityData data, int minionTemplate, int owner) {
+    public static int summon(GameSettings settings, EntityData data, int minionTemplate, int owner) {
         MinionTemplate minion = settings.templates.getMinion(minionTemplate);
         int entity = data.createEntity();
         for (int component : minion) {
@@ -89,6 +89,7 @@ public class SystemsUtil {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         data.set(entity, core.IN_BATTLE_ZONE, 1);
         data.set(entity, core.OWNED_BY, owner);
+        return entity;
     }
 
     public static void drawCards(EntityData data, int amount, IntUnaryOperator random, int player) {
