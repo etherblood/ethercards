@@ -17,6 +17,7 @@ public class GamePhaseTest extends AbstractGameTest {
         moves.move(new EndMulliganPhase(player(0)));
         
         Assertions.assertFalse(data.has(player(0), core.ACTIVE_PLAYER_PHASE));
+        Assertions.assertEquals(PlayerPhase.MULLIGAN, data.get(player(1), core.ACTIVE_PLAYER_PHASE));
         
         moves.move(new EndMulliganPhase(player(1)));
         
