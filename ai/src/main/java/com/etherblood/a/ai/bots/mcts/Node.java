@@ -9,7 +9,7 @@ public class Node<T> {
 
     private static final Object[] EMPTY = new Object[0];
 
-    private final float scores[];
+    private final float[] scores;
     private Object[] childs = EMPTY;
 
     public Node(int playerCount) {
@@ -38,21 +38,21 @@ public class Node<T> {
         }
     }
 
-    public Node getChild(T move) {
+    public Node<T> getChild(T move) {
         return Objects.requireNonNull(getChildOrDefault(move, null));
     }
 
     @SuppressWarnings("unchecked")
-    public Node getChildOrDefault(T move, Node defaultValue) {
+    public Node<T> getChildOrDefault(T move, Node<T> defaultValue) {
         for (int i = 0; i < childs.length; i += 2) {
             if (childs[i].equals(move)) {
-                return (Node) childs[i + 1];
+                return (Node<T>) childs[i + 1];
             }
         }
         return defaultValue;
     }
 
-    public void addChild(T move, Node node) {
+    public void addChild(T move, Node<T> node) {
         int index = childs.length;
         childs = Arrays.copyOf(childs, childs.length + 2);
         childs[index] = move;

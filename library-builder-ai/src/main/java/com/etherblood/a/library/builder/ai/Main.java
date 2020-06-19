@@ -90,7 +90,7 @@ public class Main {
         }
         for (int iteration = 0; iteration < numIterations; iteration++) {
             System.out.println(Instant.now() + " iteration " + (iteration + 1) + "/" + numIterations);
-            LibraryAgent[] sortedAgents = Arrays.stream(agents).sorted(Comparator.comparing(x -> x.score())).toArray(LibraryAgent[]::new);
+            LibraryAgent[] sortedAgents = Arrays.stream(agents).sorted(Comparator.comparing(LibraryAgent::score)).toArray(LibraryAgent[]::new);
 
             RawLibraryTemplate newLibrary = copy(agents[agentCount - random.nextInt(mutationCandidatesCount) - 1].library);
             for (int mutation = 0; mutation < iterationMutationCount; mutation++) {
@@ -120,7 +120,7 @@ public class Main {
                 opponent.scores[worstAgentIndex] = -result;
             }
         }
-        Comparator<LibraryAgent> comparator = Comparator.comparing(x -> x.score());
+        Comparator<LibraryAgent> comparator = Comparator.comparing(LibraryAgent::score);
         comparator = comparator.thenComparing(x -> Arrays.stream(agents).mapToInt(other -> distance(other.library, x.library)).sum());
         LibraryAgent[] sortedAgents = Arrays.stream(agents).sorted(comparator).toArray(LibraryAgent[]::new);
         LibraryAgent bestAgent = sortedAgents[agentCount - 1];

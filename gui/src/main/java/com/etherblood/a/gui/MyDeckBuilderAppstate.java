@@ -58,7 +58,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         this.presetLibrary = presetLibrary;
         this.rootNode = rootNode;
 
-        Comparator<CardModel> cardOrder = Comparator.comparingInt(x -> getManaCost(x));
+        Comparator<CardModel> cardOrder = Comparator.comparingInt(this::getManaCost);
         cardOrder = cardOrder.thenComparing(x -> x.getTemplate().getName());
         cardOrder = cardOrder.thenComparingInt(x -> x.getTemplate().getId());
 
@@ -66,7 +66,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         for (DisplayCardTemplate card : cards) {
             CardModel cardModel = new CardModel();
             cardModel.setFaceUp(true);
-            cardModel.setTemplate((DisplayCardTemplate) card);
+            cardModel.setTemplate(card);
             allCardModels.add(cardModel);
         }
         allCardModels.sort(cardOrder);

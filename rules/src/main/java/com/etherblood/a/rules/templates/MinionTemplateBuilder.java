@@ -35,8 +35,7 @@ public class MinionTemplateBuilder {
 
     public MinionTemplate build(int id) {
         components.set(core.MINION_TEMPLATE, id);
-        MinionTemplate minionTemplate = new MinionTemplate(id, components, onDeathEffects, onSurviveEffects);
-        return minionTemplate;
+        return new MinionTemplate(id, components, onDeathEffects, onSurviveEffects);
     }
 
 }

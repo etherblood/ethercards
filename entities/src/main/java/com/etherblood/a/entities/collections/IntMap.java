@@ -42,8 +42,7 @@ public class IntMap implements Iterable<Integer> {
         if (hasFreeKey) {
             consumer.accept(FREE_KEY, freeValue);
         }
-        for (int i = 0; i < data.length; i++) {
-            long keyValue = data[i];
+        for (long keyValue : data) {
             if (keyValue != FREE_KEYVALUE) {
                 consumer.accept(key(keyValue), value(keyValue));
             }
@@ -54,8 +53,7 @@ public class IntMap implements Iterable<Integer> {
         if (hasFreeKey) {
             consumer.accept(FREE_KEY);
         }
-        for (int i = 0; i < data.length; i++) {
-            long keyValue = data[i];
+        for (long keyValue : data) {
             if (keyValue != FREE_KEYVALUE) {
                 consumer.accept(key(keyValue));
             }
@@ -160,8 +158,7 @@ public class IntMap implements Iterable<Integer> {
         data = new long[capacity];
         Arrays.fill(data, FREE_KEY);
         updateFillLimit(capacity);
-        for (int index = 0; index < oldData.length; index++) {
-            long keyValue = oldData[index];
+        for (long keyValue : oldData) {
             int key = key(keyValue);
             if (key == FREE_KEY) {
                 continue;

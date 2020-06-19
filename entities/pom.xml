@@ -6,7 +6,6 @@
         <artifactId>a</artifactId>
         <version>0.1.0</version>
     </parent>
-    <groupId>com.etherblood.a</groupId>
     <artifactId>entities</artifactId>
     <packaging>jar</packaging>
 </project>

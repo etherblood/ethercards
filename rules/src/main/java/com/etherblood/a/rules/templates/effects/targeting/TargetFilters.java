@@ -7,5 +7,5 @@ public enum TargetFilters {
     OPPONENT_MINION,
     OPPONENT_HERO,
     OWNER,
-    OPPONENT;
+    OPPONENT
 }

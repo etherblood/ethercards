@@ -137,9 +137,7 @@ public class MoveService {
             throw new AssertionError(move);
         }
         int randomSize = random.getHistory().size();
-        runWithBackup(() -> {
-            runnable.run();
-        });
+        runWithBackup(runnable::run);
         if (history != null) {
             int[] randomResults = random.getHistory().stream().skip(randomSize).toArray();
             MoveReplay replay = new MoveReplay();

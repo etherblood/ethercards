@@ -36,10 +36,9 @@ import org.junit.jupiter.api.Test;
 
 public class TestSandbox {
 
-//    @Test
+    @Test
     public void simulateGame() throws InterruptedException {
         float[] result = new float[2];
-        long[] nanos = new long[2];
         for (int i = 0; i < 1; i++) {
             Game game = startGame();
 
@@ -60,14 +59,10 @@ public class TestSandbox {
             while (!game.isGameOver()) {
                 Move move;
                 if (game.isPlayerActive(game.findPlayerByIndex(0))) {
-                    long start = System.nanoTime();
                     move = bot0.findBestMove(0);
-                    nanos[0] += System.nanoTime() - start;
 
                 } else {
-                    long start = System.nanoTime();
                     move = bot1.findBestMove(1);
-                    nanos[1] += System.nanoTime() - start;
                 }
                 game.getMoves().move(move);
             }

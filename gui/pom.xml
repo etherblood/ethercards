@@ -119,7 +119,7 @@
             <version>${jm3.version}</version>
         </dependency>
         <dependency>
-            <!-- TODO: remove logger binding -->
+            <!-- TODO: replace with better logger binding -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.30</version>

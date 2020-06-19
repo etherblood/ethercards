@@ -13,7 +13,7 @@ public class Components {
 
     public Components(List<ComponentMeta> components, List<ComponentsModule> modules) {
         this.components = new ArrayList<>(components);
-        this.modules = modules.stream().collect(Collectors.toMap(x -> x.getClass(), x -> x));
+        this.modules = modules.stream().collect(Collectors.toMap(ComponentsModule::getClass, x -> x));
     }
 
     public ComponentMeta getMeta(int id) {

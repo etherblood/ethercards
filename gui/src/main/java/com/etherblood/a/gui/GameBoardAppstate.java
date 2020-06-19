@@ -505,7 +505,6 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             float z = 2 * (ZONE_HEIGHT / 2);
             x += 3.25f;
             SimpleIntervalZone boardZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(-directionX, 1, 1));
-            x += 1.25f;
 
             x = -0.5f;
             x += 3.75f;
@@ -522,12 +521,11 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
             board.addZone(boardZone);
             playerZones.put(player, new PlayerZones(deckZone, handZone, boardZone));
         }
-        BoardAppState boardAppState = new BoardAppState(board, rootNode, BoardSettings.builder()
+        return new BoardAppState(board, rootNode, BoardSettings.builder()
                 .hoverInspectionDelay(1f)
                 .isInspectable(this::isInBattleZone)
                 .dragProjectionZ(0.9975f)
                 .build());
-        return boardAppState;
     }
 
     private boolean isInBattleZone(TransformedBoardObject<?> transformedBoardObject) {

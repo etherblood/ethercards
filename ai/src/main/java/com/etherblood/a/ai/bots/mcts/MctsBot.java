@@ -2,15 +2,8 @@ package com.etherblood.a.ai.bots.mcts;
 
 import com.etherblood.a.ai.BotGame;
 import com.etherblood.a.entities.collections.IntList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+
+import java.util.*;
 import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +26,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     private Node<Move> rootNode;
     private int rootNodeHistoryPointer = 0;
 
-    public MctsBot(Game sourceGame, Game simulationGame, MctsBotSettings settings) {
+    public MctsBot(Game sourceGame, Game simulationGame, MctsBotSettings<Move, Game> settings) {
         this.sourceGame = sourceGame;
         this.simulationGame = simulationGame;
         this.random = settings.random;
@@ -68,7 +61,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
             while (rootNode.visits() < strength) {
                 simulationGame.copyStateFrom(sourceGame);
                 // randomize opponents hand cards
-                // TODO: use a priori knowlege for better approximation of real hand cards
+                // TODO: use a priori knowledge for better approximation of real hand cards
                 // TODO: the simulated opponent also only 'knows' our hand...
                 simulationGame.randomizeHiddenInformation(random, playerIndex);
                 iteration(rootNode, raveScores);
@@ -85,7 +78,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                     LOG.info("{}: {}", Math.round(visits(node, move)), sourceGame.toMoveString(move));
                 }
                 IntList branching = new IntList();
-                List<Node<Move>> nodes = Arrays.asList(rootNode);
+                List<Node<Move>> nodes = Collections.singletonList(rootNode);
                 while (!nodes.isEmpty()) {
                     branching.add(nodes.size());
                     List<Node<Move>> nextNodes = new ArrayList<>();
@@ -95,7 +88,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
                     nodes = nextNodes;
                 }
                 LOG.info("Tree dimensions: {} - {}", branching.size(), branching.toArray());
-                LOG.info("Expected winrate: {}%", Math.round(100 * rootNode.score(playerIndex) / rootNode.visits()));
+                LOG.info("Expected win-rate: {}%", Math.round(100 * rootNode.score(playerIndex) / rootNode.visits()));
             }
         }
         return moves.get(0);
@@ -213,8 +206,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     private float calcUtc(float parentTotal, float childTotal, float childScore) {
         float exploitation = childScore / (childTotal + EPSILON);
         float exploration = (float) (Math.sqrt(uctConstant * Math.log(parentTotal + 1) / (childTotal + EPSILON)));
-        float uctValue = exploitation + exploration;
-        return uctValue;
+        return exploitation + exploration;
     }
 
     private Node<Move> getChild(Node<Move> node, Move move) {
