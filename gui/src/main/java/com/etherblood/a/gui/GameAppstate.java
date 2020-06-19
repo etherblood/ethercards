@@ -74,9 +74,9 @@ import java.util.function.IntPredicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GameBoardAppstate extends AbstractAppState implements ActionListener {
+public class GameAppstate extends AbstractAppState implements ActionListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GameBoardAppstate.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GameAppstate.class);
     private static final float ZONE_HEIGHT = 1.3f;
     private final Consumer<Move> moveRequester;
     private final GameReplayService gameReplayService;
@@ -86,7 +86,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
     private final Map<Integer, Card<CardModel>> visualCards = new HashMap<>();
     private final Map<Integer, Card<MinionModel>> visualMinions = new HashMap<>();
     private final Map<BoardObject<?>, Integer> objectEntities = new HashMap<>();
-    private final Map<Integer, ConnectionMarker> attacks = new HashMap<>();
+    private final Map<Integer, ConnectionMarker> arrows = new HashMap<>();
     private final int userControlledPlayer;
     private final CardImages cardImages;
 
@@ -98,7 +98,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
     private Geometry endPhaseButton;
     private final Node endPhaseButtonNode = new Node();
 
-    public GameBoardAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode) {
+    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
         this.game = gameReplayService.createInstance();
@@ -151,7 +151,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         visualCards.clear();
         visualMinions.clear();
         objectEntities.clear();
-        attacks.clear();
+        arrows.clear();
         board = null;
         game = null;
 
@@ -224,28 +224,33 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
         }
 
         for (int attacker : data.list(core.ATTACKS_TARGET)) {
-            if (!attacks.containsKey(attacker)) {
+            if (!arrows.containsKey(attacker)) {
                 int target = data.get(attacker, core.ATTACKS_TARGET);
                 if (visualMinions.containsKey(target)) {
-                    ConnectionMarker arrow = new ConnectionMarker() {
-                        @Override
-                        public void update(float lastTimePerFrame) {
-                            getModel().updateIfNotEquals(true, false, () -> {
-                            });
-                        }
-
-                    };
+                    ConnectionMarker arrow = new ConnectionMarker();
                     arrow.getModel().setSourceBoardObject(visualMinions.get(attacker));
-                    attacks.put(attacker, arrow);
+                    arrows.put(attacker, arrow);
                     board.register(arrow);
                 }
             }
         }
 
-        for (Map.Entry<Integer, ConnectionMarker> entry : new ArrayList<>(attacks.entrySet())) {
+        for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
+            if (!arrows.containsKey(blocker)) {
+                int target = data.get(blocker, core.BLOCKS_ATTACKER);
+                if (visualMinions.containsKey(target)) {
+                    ConnectionMarker arrow = new ConnectionMarker();
+                    arrow.getModel().setSourceBoardObject(visualMinions.get(blocker));
+                    arrows.put(blocker, arrow);
+                    board.register(arrow);
+                }
+            }
+        }
+
+        for (Map.Entry<Integer, ConnectionMarker> entry : new ArrayList<>(arrows.entrySet())) {
             ConnectionMarker arrow = entry.getValue();
-            int attacker = entry.getKey();
-            OptionalInt target = data.getOptional(attacker, core.ATTACKS_TARGET);
+            int minion = entry.getKey();
+            OptionalInt target = data.getOptional(minion, core.ATTACKS_TARGET);
             if (target.isPresent()) {
                 Card<MinionModel> targetObject = visualMinions.get(target.getAsInt());
                 if (targetObject != null) {
@@ -253,7 +258,15 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                     continue;
                 }
             }
-            attacks.remove(attacker);
+            OptionalInt attacker = data.getOptional(minion, core.BLOCKS_ATTACKER);
+            if (attacker.isPresent()) {
+                Card<MinionModel> targetObject = visualMinions.get(attacker.getAsInt());
+                if (targetObject != null) {
+                    arrow.getModel().setTargetBoardObject(targetObject);
+                    continue;
+                }
+            }
+            arrows.remove(minion);
             board.unregister(arrow);
         }
     }
@@ -484,6 +497,7 @@ public class GameBoardAppstate extends AbstractAppState implements ActionListene
                 .width(0.5f)
                 .build()));
         board.registerVisualizer_Class(ConnectionMarker.class, new ConnectionMarkerVisualizer(SimpleTargetArrowSettings.builder()
+                .color(ColorRGBA.White)
                 .arcHeight(0.1f)
                 .width(0.25f)
                 .build()));

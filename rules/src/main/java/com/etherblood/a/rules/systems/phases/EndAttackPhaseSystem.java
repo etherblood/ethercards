@@ -22,7 +22,9 @@ public class EndAttackPhaseSystem extends AbstractSystem {
             for (int attacker : data.list(core.ATTACKS_TARGET).stream()
                     .filter(x -> data.hasValue(x, core.OWNED_BY, player))
                     .toArray()) {
+                int target = data.get(attacker, core.ATTACKS_TARGET);
                 data.set(attacker, core.TIRED, 1);
+                data.set(target, core.TIRED, 1);
                 data.getOptional(attacker, core.DRAWS_ON_ATTACK).ifPresent(draws -> {
                     int owner = data.get(attacker, core.OWNED_BY);
                     SystemsUtil.increase(data, owner, core.DRAW_CARDS, draws);

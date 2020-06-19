@@ -17,6 +17,23 @@ public class EndBlockPhaseSystem extends AbstractSystem {
             if (data.get(player, core.END_PHASE_ACTION) != PlayerPhase.BLOCK) {
                 continue;
             }
+
+            for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
+                int owner = data.get(blocker, core.OWNED_BY);
+                if (owner != player) {
+                    continue;
+                }
+                int attacker = data.get(blocker, core.BLOCKS_ATTACKER);
+                SystemsUtil.fight(data, attacker, blocker);
+                data.remove(attacker, core.ATTACKS_TARGET);
+                data.remove(blocker, core.BLOCKS_ATTACKER);
+                SystemsUtil.increase(data, blocker, core.TIRED, 1);
+
+                data.getOptional(blocker, core.DRAWS_ON_BLOCK).ifPresent(draws -> {
+                    SystemsUtil.increase(data, owner, core.DRAW_CARDS, draws);
+                });
+            }
+
             for (int attacker : data.list(core.ATTACKS_TARGET)) {
                 int attackTarget = data.get(attacker, core.ATTACKS_TARGET);
                 if (data.hasValue(attackTarget, core.OWNED_BY, player)) {

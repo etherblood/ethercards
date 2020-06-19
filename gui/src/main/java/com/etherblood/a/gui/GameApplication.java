@@ -113,7 +113,7 @@ public class GameApplication extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        if (stateManager.getState(GameBoardAppstate.class) != null) {
+        if (stateManager.getState(GameAppstate.class) != null) {
             return;
         }
         if (selectedLibrary == null) {
@@ -154,7 +154,7 @@ public class GameApplication extends SimpleApplication {
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
-            stateManager.attach(new GameBoardAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode));
+            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode));
             futureGameReplayService = null;
         }
     }

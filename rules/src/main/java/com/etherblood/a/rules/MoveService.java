@@ -88,7 +88,7 @@ public class MoveService {
                 new StartMulliganPhaseSystem(),
                 new StartBlockPhaseSystem(),
                 new StartAttackPhaseSystem(),
-                new BlockSystem(),
+//                new BlockSystem(),
                 new CastSystem(),
                 new DrawSystem(),
                 new DamageSystem(),
@@ -378,6 +378,12 @@ public class MoveService {
             }
             return false;
         }
+        if (data.has(blocker, core.BLOCKS_ATTACKER)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is already blocking.");
+            }
+            return false;
+        }
         if (data.has(blocker, core.CANNOT_BLOCK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " can not block.");
@@ -616,7 +622,6 @@ public class MoveService {
         requests.add(core.START_PHASE_REQUEST);
         requests.add(core.PLAYER_RESULT_REQUEST);
         requests.add(core.CAST_TARGET);
-        requests.add(core.BLOCKS_ATTACKER);
         BooleanSupplier requestExists = () -> requests.stream().flatMap(component -> data.list(component).stream()).findAny().isPresent();
         while (requestExists.getAsBoolean()) {
             runSystems(systems);
