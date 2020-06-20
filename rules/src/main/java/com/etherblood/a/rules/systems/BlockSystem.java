@@ -14,7 +14,7 @@ public class BlockSystem extends AbstractSystem {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
             int attacker = data.get(blocker, core.BLOCKS_ATTACKER);
-            SystemsUtil.fight(data, attacker, blocker);
+            SystemsUtil.fight(data, random, attacker, blocker);
             data.remove(attacker, core.ATTACKS_TARGET);
             data.remove(blocker, core.BLOCKS_ATTACKER);
             SystemsUtil.increase(data, blocker, core.TIRED, 1);

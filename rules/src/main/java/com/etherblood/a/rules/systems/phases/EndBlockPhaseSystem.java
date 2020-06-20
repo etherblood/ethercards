@@ -24,8 +24,10 @@ public class EndBlockPhaseSystem extends AbstractSystem {
                     continue;
                 }
                 int attacker = data.get(blocker, core.BLOCKS_ATTACKER);
-                SystemsUtil.fight(data, attacker, blocker);
-                data.remove(attacker, core.ATTACKS_TARGET);
+                SystemsUtil.fight(data, random, attacker, blocker);
+                if (!data.has(attacker, core.TRAMPLE)) {
+                    data.remove(attacker, core.ATTACKS_TARGET);
+                }
                 data.remove(blocker, core.BLOCKS_ATTACKER);
                 SystemsUtil.increase(data, blocker, core.TIRED, 1);
 
@@ -38,7 +40,7 @@ public class EndBlockPhaseSystem extends AbstractSystem {
                 int attackTarget = data.get(attacker, core.ATTACKS_TARGET);
                 if (data.hasValue(attackTarget, core.OWNED_BY, player)) {
                     if (data.has(attackTarget, core.IN_BATTLE_ZONE)) {
-                        SystemsUtil.fight(data, attacker, attackTarget);
+                        SystemsUtil.fight(data, random, attacker, attackTarget);
 
                         data.getOptional(attackTarget, core.DRAWS_ON_ATTACKED).ifPresent(draws -> {
                             int owner = data.get(attackTarget, core.OWNED_BY);

@@ -46,6 +46,8 @@ public class CoreComponents implements ComponentsModule {
     public final int MULLIGAN;
     public final int POISONED;
     public final int VENOM;
+    public final int TRAMPLE;
+    public final int LIFELINK;
 
     public CoreComponents(ToIntFunction<String> register) {
         END_PHASE_REQUEST = register.applyAsInt("END_PHASE_REQUEST");
@@ -89,5 +91,7 @@ public class CoreComponents implements ComponentsModule {
         MULLIGAN = register.applyAsInt("MULLIGAN");
         POISONED = register.applyAsInt("POISONED");
         VENOM = register.applyAsInt("VENOM");
+        TRAMPLE = register.applyAsInt("TRAMPLE");
+        LIFELINK = register.applyAsInt("LIFELINK");
     }
 }

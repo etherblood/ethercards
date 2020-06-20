@@ -1,0 +1,30 @@
+{
+    "alias": "cards/arborback_stomper.json",
+    "display": {
+        "name": "Arborback Stomper",
+        "imagePath": "images/cards/arborback_stomper.jpg",
+        "colors": ["GREEN"],
+        "description": "Summon a 5/4 Arborback Stomper with Trample, your hero gains 5 health."
+    },
+    "attackCast": {
+        "manaCost": 5,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/arborback_stomper.json"
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OWN_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "HEALTH": 5
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

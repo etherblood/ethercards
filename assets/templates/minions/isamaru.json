@@ -1,0 +1,13 @@
+{
+    "alias": "minions/isamaru.json",
+    "display": {
+        "name": "Isamaru, Hound of Konda",
+        "imagePath": "images/cards/isamaru.jpg",
+        "colors": ["WHITE"]
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 2,
+        "SUMMONING_SICKNESS": 1
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "alias": "cards/isamaru.json",
+    "display": {
+        "name": "Isamaru, Hound of Konda",
+        "imagePath": "images/cards/isamaru.jpg",
+        "colors": ["WHITE"],
+        "description": "Summon a 2/2 Isamaru, Hound of Konda."
+    },
+    "attackCast": {
+        "manaCost": 1,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/isamaru.json"
+            }
+        ]
+    }
+}

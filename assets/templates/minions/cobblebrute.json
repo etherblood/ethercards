@@ -1,0 +1,13 @@
+{
+    "alias": "minions/cobblebrute.json",
+    "display": {
+        "name": "Cobblebrute",
+        "imagePath": "images/cards/cobblebrute.jpg",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 5,
+        "HEALTH": 2,
+        "SUMMONING_SICKNESS": 1
+    }
+}

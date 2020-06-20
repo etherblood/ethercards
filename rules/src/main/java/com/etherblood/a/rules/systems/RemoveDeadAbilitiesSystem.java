@@ -7,7 +7,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
 import java.util.function.IntUnaryOperator;
 
-public class RemoveDeadFromBattleSystem extends AbstractSystem {
+public class RemoveDeadAbilitiesSystem extends AbstractSystem {
 
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
@@ -15,13 +15,15 @@ public class RemoveDeadFromBattleSystem extends AbstractSystem {
         IntList deaths = data.list(core.DEATH_ACTION);
         for (int entity : deaths) {
             data.remove(entity, core.IN_BATTLE_ZONE);
-
-            for (int attacker : data.list(core.ATTACKS_TARGET)) {
-                int target = data.get(attacker, core.ATTACKS_TARGET);
-                if (target == entity) {
-                    data.remove(attacker, core.ATTACKS_TARGET);
-                }
-            }
+            data.remove(entity, core.MANA_POOL);
+            data.remove(entity, core.MANA_GROWTH);
+            data.remove(entity, core.DRAWS_PER_TURN);
+            data.remove(entity, core.DRAWS_ON_ATTACK);
+            data.remove(entity, core.DRAWS_ON_BLOCK);
+            data.remove(entity, core.DRAWS_ON_ATTACKED);
+            data.remove(entity, core.ATTACKS_TARGET);
+            // TODO: remove all interacting components
+            
         }
     }
 

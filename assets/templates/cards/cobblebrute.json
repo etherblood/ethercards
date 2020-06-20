@@ -1,0 +1,18 @@
+{
+    "alias": "cards/cobblebrute.json",
+    "display": {
+        "name": "Cobblebrute",
+        "imagePath": "images/cards/cobblebrute.jpg",
+        "colors": ["RED"],
+        "description": "Summon a 5/2 Cobblebrute."
+    },
+    "attackCast": {
+        "manaCost": 4,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/cobblebrute.json"
+            }
+        ]
+    }
+}

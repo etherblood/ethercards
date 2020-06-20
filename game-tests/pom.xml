@@ -8,6 +8,7 @@
     </parent>
     <artifactId>game-tests</artifactId>
     <packaging>jar</packaging>
+    <name>game-tests</name>
     
     <build>
         <plugins>
@@ -53,5 +54,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <name>game-tests</name>
 </project>

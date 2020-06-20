@@ -56,20 +56,19 @@ public class SystemsUtil {
         }
     }
 
-    public static void fight(EntityData data, int attacker, int blocker) {
+    public static void fight(EntityData data, IntUnaryOperator random, int attacker, int blocker) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        damage(data, blocker, data.getOptional(attacker, core.ATTACK).orElse(0));
-        damage(data, attacker, data.getOptional(blocker, core.ATTACK).orElse(0));
-        data.remove(attacker, core.ATTACKS_TARGET);
-        data.remove(blocker, core.BLOCKS_ATTACKER);
-        int attackerVenom = data.getOptional(attacker, core.VENOM).orElse(0);
-        if (attackerVenom > 0) {
-            increase(data, blocker, core.POISONED, attackerVenom);
-        }
-        int blockerVenom = data.getOptional(blocker, core.VENOM).orElse(0);
-        if (blockerVenom > 0) {
-            increase(data, attacker, core.POISONED, blockerVenom);
-        }
+        int attackerDamage = data.getOptional(attacker, core.ATTACK).orElse(0);
+        int blockerDamage = data.getOptional(blocker, core.ATTACK).orElse(0);
+
+        damage(data, blocker, attackerDamage);
+        damage(data, attacker, blockerDamage);
+
+        data.getOptional(attacker, core.LIFELINK).ifPresent(target -> increase(data, target, core.HEALTH, attackerDamage));
+        data.getOptional(blocker, core.LIFELINK).ifPresent(target -> increase(data, target, core.HEALTH, blockerDamage));
+
+        data.getOptional(attacker, core.VENOM).ifPresent(venom -> increase(data, blocker, core.POISONED, venom));
+        data.getOptional(blocker, core.VENOM).ifPresent(venom -> increase(data, attacker, core.POISONED, venom));
     }
 
     public static void damage(EntityData data, int target, int damage) {
@@ -80,16 +79,46 @@ public class SystemsUtil {
         increase(data, target, core.DAMAGE_REQUEST, damage);
     }
 
-    public static int summon(GameSettings settings, EntityData data, int minionTemplate, int owner) {
-        MinionTemplate minion = settings.templates.getMinion(minionTemplate);
-        int entity = data.createEntity();
-        for (int component : minion) {
-            data.set(entity, component, minion.get(component));
-        }
+    public static int summonHero(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        data.set(entity, core.IN_BATTLE_ZONE, 1);
-        data.set(entity, core.OWNED_BY, owner);
-        return entity;
+        int hero = data.createEntity();
+        data.set(hero, core.HERO, 1);
+        applyTemplate(settings, data, random, minionTemplate, hero, owner);
+        //TODO: mana growth & draws should be somehow added to the player, not their hero
+        SystemsUtil.increase(data, hero, core.MANA_GROWTH, 1);
+        SystemsUtil.increase(data, hero, core.DRAWS_PER_TURN, 1);
+        return hero;
+    }
+
+    public static int summonMinion(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
+        int minion = data.createEntity();
+        applyTemplate(settings, data, random, minionTemplate, minion, owner);
+        return minion;
+    }
+
+    private static void applyTemplate(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int minion, int owner) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        MinionTemplate template = settings.templates.getMinion(minionTemplate);
+        data.set(minion, core.OWNED_BY, owner);
+        data.set(minion, core.IN_BATTLE_ZONE, 1);
+        for (int component : template) {
+            if (component == core.LIFELINK) {
+                data.set(minion, component, randomHero(data, random, owner));
+            } else {
+                data.set(minion, component, template.get(component));
+            }
+        }
+    }
+
+    private static int randomHero(EntityData data, IntUnaryOperator random, int player) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        IntList ownHeroes = new IntList();
+        for (int hero : data.list(core.HERO)) {
+            if (data.hasValue(hero, core.OWNED_BY, player)) {
+                ownHeroes.add(hero);
+            }
+        }
+        return ownHeroes.getRandomItem(random);
     }
 
     public static void drawCards(EntityData data, int amount, IntUnaryOperator random, int player) {

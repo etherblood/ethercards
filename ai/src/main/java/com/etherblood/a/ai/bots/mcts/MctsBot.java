@@ -39,6 +39,7 @@ public class MctsBot<Move, Game extends BotGame<Move, Game>> {
     }
 
     public Move findBestMove(int playerIndex) throws InterruptedException {
+        assert !sourceGame.isGameOver();
         if (sourceGame.getMoveHistory() == null) {
             rootNode = null;
         } else {

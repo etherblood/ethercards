@@ -15,7 +15,6 @@ public class DeathCleanupSystem extends AbstractSystem {
         IntList deaths = data.list(core.DEATH_ACTION);
         for (int entity : deaths) {
             data.remove(entity, core.OWNED_BY);
-            data.remove(entity, core.ATTACKS_TARGET);
             data.remove(entity, core.ATTACK);
             data.remove(entity, core.HEALTH);
             data.remove(entity, core.TIRED);

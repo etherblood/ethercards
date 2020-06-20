@@ -38,6 +38,7 @@ public class TestSandbox {
 
     @Test
     public void simulateGame() throws InterruptedException {
+        // TODO: use & log seed for reproducibility
         // Note: This is not a benchmark, asserts are enabled and gamelength may vary
         float[] result = new float[2];
         for (int i = 0; i < 1; i++) {

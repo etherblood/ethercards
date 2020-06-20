@@ -1,0 +1,78 @@
+{
+    "alias": "cards/dragonlord_atarka.json",
+    "display": {
+        "name": "Dragonlord Atarka",
+        "imagePath": "images/cards/dragonlord_atarka.jpg",
+        "colors": ["RED", "GREEN"],
+        "description": "Summon a 8/8 Dragonlord Atarka with Trample, randomly deal 1 damage to an enemy 5 times."
+    },
+    "attackCast": {
+        "manaCost": 7,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/dragonlord_atarka.json"
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

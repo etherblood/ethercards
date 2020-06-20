@@ -1,0 +1,14 @@
+{
+    "alias": "minions/dragonlord_atarka.json",
+    "display": {
+        "name": "Dragonlord Atarka",
+        "imagePath": "images/cards/dragonlord_atarka.jpg",
+        "colors": ["RED", "GREEN"]
+    },
+    "components": {
+        "ATTACK": 8,
+        "HEALTH": 8,
+        "SUMMONING_SICKNESS": 1,
+        "TRAMPLE": 1
+    }
+}

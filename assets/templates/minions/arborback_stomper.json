@@ -1,0 +1,15 @@
+{
+    "alias": "minions/arborback_stomper.json",
+    "display": {
+        "name": "Arborback Stomper",
+        "imagePath": "images/cards/arborback_stomper.jpg",
+        "colors": ["GREEN"],
+        "description": "Trample."
+    },
+    "components": {
+        "ATTACK": 5,
+        "HEALTH": 4,
+        "SUMMONING_SICKNESS": 1,
+        "TRAMPLE": 1
+    }
+}

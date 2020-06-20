@@ -1,0 +1,14 @@
+{
+    "alias": "minions/baloth_pup.json",
+    "display": {
+        "name": "Baloth Pup",
+        "imagePath": "images/cards/baloth_pup.jpg",
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 3,
+        "HEALTH": 1,
+        "SUMMONING_SICKNESS": 1,
+        "TRAMPLE": 1
+    }
+}

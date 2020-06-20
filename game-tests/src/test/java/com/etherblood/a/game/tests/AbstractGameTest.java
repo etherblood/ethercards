@@ -110,7 +110,7 @@ public abstract class AbstractGameTest {
     }
 
     public int summon(int owner, int minionTemplate) {
-        return SystemsUtil.summon(settings, game.getData(), minionTemplate, owner);
+        return SystemsUtil.summonMinion(settings, data, game.getMoves().getRandom(), minionTemplate, owner);
     }
 
     public int getCardId(String alias) {

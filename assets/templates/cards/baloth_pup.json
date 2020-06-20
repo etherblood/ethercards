@@ -1,0 +1,18 @@
+{
+    "alias": "cards/baloth_pup.json",
+    "display": {
+        "name": "Baloth Pup",
+        "imagePath": "images/cards/baloth_pup.jpg",
+        "colors": ["GREEN"],
+        "description": "Summon a 3/1 Baloth Pup with Trample."
+    },
+    "attackCast": {
+        "manaCost": 2,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/baloth_pup.json"
+            }
+        ]
+    }
+}

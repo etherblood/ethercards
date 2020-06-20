@@ -24,6 +24,10 @@ public class HistoryRandom implements IntUnaryOperator {
 
     @Override
     public int applyAsInt(int operand) {
+        if (operand == 1) {
+            // skip when only possible result is '0'
+            return 0;
+        }
         if (next < history.size()) {
             int result = history.get(next++);
             assert 0 <= result && result < operand;

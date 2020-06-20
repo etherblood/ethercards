@@ -26,7 +26,7 @@ import com.etherblood.a.rules.systems.OnDeathSystem;
 import com.etherblood.a.rules.systems.OnSurvivalSystem;
 import com.etherblood.a.rules.systems.PlayerStatusSystem;
 import com.etherblood.a.rules.systems.PreventNecroInteractionsSystem;
-import com.etherblood.a.rules.systems.RemoveDeadFromBattleSystem;
+import com.etherblood.a.rules.systems.RemoveDeadAbilitiesSystem;
 import com.etherblood.a.rules.systems.core.RequestsToActionsSystem;
 import com.etherblood.a.rules.systems.phases.StartAttackPhaseSystem;
 import com.etherblood.a.rules.systems.phases.StartBlockPhaseSystem;
@@ -75,13 +75,12 @@ public class MoveService {
             this.history = null;
         }
 
-        systems = Arrays.asList(
-                // modify requests
+        systems = Arrays.asList(// modify requests
                 new PreventNecroInteractionsSystem(),
                 // requests -> actions 
                 new RequestsToActionsSystem(),
                 // process actions & create requests
-                new RemoveDeadFromBattleSystem(),
+                new RemoveDeadAbilitiesSystem(),
                 new EndMulliganPhaseSystem(),
                 new EndBlockPhaseSystem(),
                 new EndAttackPhaseSystem(),
