@@ -33,7 +33,7 @@ public abstract class AbstractGameTest {
     private final TemplatesLoader loader;
     public final GameSettings settings;
     public final CoreComponents core;
-    
+
     public EntityData data;
     public MoveService moves;
     public Game game;
@@ -103,6 +103,18 @@ public abstract class AbstractGameTest {
     public int hero(int index) {
         int player = player(index);
         return data.list(core.HERO).stream().filter(x -> data.hasValue(x, core.OWNED_BY, player)).findAny().getAsInt();
+    }
+
+    public int createHandCard(int owner, String cardTemplate) {
+        return createHandCard(owner, getCardId(cardTemplate));
+    }
+
+    public int createHandCard(int owner, int cardTemplate) {
+        int card = data.createEntity();
+        data.set(card, core.CARD_TEMPLATE, cardTemplate);
+        data.set(card, core.OWNED_BY, owner);
+        data.set(card, core.IN_HAND_ZONE, 1);
+        return card;
     }
 
     public int summon(int owner, String minionTemplate) {

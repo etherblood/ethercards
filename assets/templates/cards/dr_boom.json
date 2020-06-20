@@ -7,7 +7,7 @@
         "description": "Summon a 7/7 Dr. Boom and two 1/1 Boombots which deal 2 damage to a random enemy when they die."
     },
     "attackCast": {
-        "manaCost": 8,
+        "manaCost": 7,
         "effects": [
             {
                 "type": "summon",
