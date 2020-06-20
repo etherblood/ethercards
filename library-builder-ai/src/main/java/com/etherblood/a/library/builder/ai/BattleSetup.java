@@ -44,7 +44,7 @@ public class BattleSetup {
                 int player = activeGame.findPlayerByIndex(i);
                 if (activeGame.isPlayerActive(player)) {
                     Move move = bot.findBestMove(i);
-                    activeGame.getMoves().move(move);
+                    activeGame.getMoves().apply(move);
                     break;
                 }
             }
@@ -90,7 +90,7 @@ public class BattleSetup {
         MoveService moves = new MoveService(settings, data, HistoryRandom.producer());
         Game game = new Game(settings, data, moves);
         setup.apply(game);
-        moves.move(new Start());
+        moves.apply(new Start());
         return game;
     }
 

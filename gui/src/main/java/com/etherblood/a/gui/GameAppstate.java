@@ -67,6 +67,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
@@ -287,6 +288,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         if (game.isGameOver()) {
             return;
         }
+        List<Move> moves = game.getMoves().generate(false, false);
         int index = 0;
         for (int cardEntity : cards) {
             if (data.has(cardEntity, core.CARD_TEMPLATE)) {
@@ -296,10 +298,14 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 cardModel.setFaceUp(!data.has(cardEntity, core.IN_LIBRARY_ZONE));
                 cardModel.setTemplate((DisplayCardTemplate) game.getTemplates().getCard(data.get(cardEntity, core.CARD_TEMPLATE)));
 
-                if (game.getMoves().canCast(userControlledPlayer, cardEntity)) {
+                if(moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
+                        .anyMatch(cast -> cast.player == userControlledPlayer && cast.source == cardEntity)) {
+//                if (game.getMoves().canCast(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
                     cardModel.setGlow(ColorRGBA.Yellow);
-                } else if (game.getMoves().canDeclareMulligan(userControlledPlayer, cardEntity)) {
+                } else if (moves.stream().filter(DeclareMulligan.class::isInstance).map(DeclareMulligan.class::cast)
+                        .anyMatch(mulligan -> mulligan.player == userControlledPlayer && mulligan.card == cardEntity)) {
+//                } else if (game.getMoves().canDeclareMulligan(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(mulliganInteractivity(userControlledPlayer, cardEntity));
                     cardModel.setGlow(ColorRGBA.Red);
                 } else {
@@ -318,10 +324,14 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 minionModel.setTemplate(template);
                 minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
 
-                if (game.getMoves().canDeclareAttack(userControlledPlayer, cardEntity)) {
+                if(moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
+                        .anyMatch(attack -> attack.player == userControlledPlayer && attack.source == cardEntity)) {
+//                if (game.getMoves().canDeclareAttack(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));
                     minionModel.setGlow(ColorRGBA.Red);
-                } else if (game.getMoves().canBlock(userControlledPlayer, cardEntity)) {
+                } else if (moves.stream().filter(Block.class::isInstance).map(Block.class::cast)
+                        .anyMatch(block -> block.player == userControlledPlayer && block.source == cardEntity)) {
+//                } else if (game.getMoves().canBlock(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(blockInteractivity(userControlledPlayer, cardEntity));
                     minionModel.setGlow(ColorRGBA.Blue);
                 } else {
@@ -340,7 +350,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             public boolean isValid(BoardObject target) {
                 if (target instanceof Card) {
                     int targetId = objectEntities.get(target);
-                    return game.getMoves().canDeclareAttack(player, attacker, targetId);
+                    List<Move> moves = game.getMoves().generate(false, false);
+                    return moves.stream().anyMatch(new DeclareAttack(player, attacker, targetId)::equals);
                 }
                 return false;
             }
@@ -360,7 +371,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             public boolean isValid(BoardObject target) {
                 if (target instanceof Card) {
                     int targetId = objectEntities.get(target);
-                    return game.getMoves().canBlock(player, blocker, targetId);
+                    List<Move> moves = game.getMoves().generate(false, false);
+                    return moves.stream().anyMatch(new Block(player, blocker, targetId)::equals);
                 }
                 return false;
             }
@@ -385,7 +397,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 public boolean isValid(BoardObject target) {
                     if (target instanceof Card) {
                         int targetId = objectEntities.get(target);
-                        return game.getMoves().canCast(player, castable, targetId);
+                        List<Move> moves = game.getMoves().generate(false, false);
+                        return moves.stream().anyMatch(new Cast(player, castable, targetId)::equals);
                     }
                     return false;
                 }
@@ -493,11 +506,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         board.registerVisualizer(card -> card.getModel() instanceof CardModel, new CardVisualizer_Card(cardPainterJME));
         board.registerVisualizer(card -> card.getModel() instanceof MinionModel, new CardVisualizer_Minion(cardPainterJME));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
-                .color(ColorRGBA.White)
+                .color(new ColorRGBA(1, 1, 1, 0.8f))
                 .width(0.5f)
                 .build()));
         board.registerVisualizer_Class(ConnectionMarker.class, new ConnectionMarkerVisualizer(SimpleTargetArrowSettings.builder()
-                .color(ColorRGBA.White)
+                .color(new ColorRGBA(1, 1, 1, 0.5f))
                 .arcHeight(0.1f)
                 .width(0.25f)
                 .build()));

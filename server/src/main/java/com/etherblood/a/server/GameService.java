@@ -20,6 +20,7 @@ import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
+import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.templates.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.util.ArrayList;
@@ -89,6 +90,9 @@ public class GameService {
     }
 
     public synchronized void onMoveRequest(Connection connection, Move move) {
+        if(move instanceof Update) {
+            return;
+        }
         GamePlayerMapping mapping = getPlayerByConnectionId(connection.getID());
         UUID gameId = mapping.gameId;
         makeMove(gameId, move);

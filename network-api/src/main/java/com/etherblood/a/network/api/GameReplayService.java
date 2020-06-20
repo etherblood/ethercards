@@ -71,14 +71,14 @@ public class GameReplayService {
             for (int randomResult : moveReplay.randomResults) {
                 game.getMoves().getRandom().getHistory().add(randomResult);
             }
-            game.getMoves().move(moveReplay.move);
+            game.getMoves().apply(moveReplay.move);
         }
     }
 
     public synchronized MoveReplay apply(Move move) {
         updateCachedGame();
         MoveService moves = cachedGame.getMoves();
-        moves.move(move);
+        moves.apply(move);
         MoveReplay moveReplay = moves.getHistory().get(moves.getHistory().size() - 1);
         assert move == moveReplay.move;
         replay.moves.add(moveReplay);

@@ -11,9 +11,9 @@ import com.etherblood.a.rules.moves.EndAttackPhase;
 import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
-import com.etherblood.a.rules.systems.BlockSystem;
 import com.etherblood.a.rules.systems.CastSystem;
 import com.etherblood.a.rules.systems.core.ClearActionsSystem;
 import com.etherblood.a.rules.systems.DamageSystem;
@@ -88,7 +88,7 @@ public class MoveService {
                 new StartMulliganPhaseSystem(),
                 new StartBlockPhaseSystem(),
                 new StartAttackPhaseSystem(),
-//                new BlockSystem(),
+                // new BlockSystem(),//TODO: remove or readd after new blocking logic has been tested
                 new CastSystem(),
                 new DrawSystem(),
                 new DamageSystem(),
@@ -105,7 +105,99 @@ public class MoveService {
         return Collections.unmodifiableList(history);
     }
 
-    public void move(Move move) {
+    public List<Move> generate(boolean pruneFriendlyAttacks, boolean pruneSurrender) {
+        List<Move> result = new ArrayList<>();
+        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
+            int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
+            switch (phase) {
+                case PlayerPhase.ATTACK: {
+                    IntList minions = data.list(core.IN_BATTLE_ZONE);
+                    for (int attacker : minions) {
+                        if (!canDeclareAttack(player, attacker, false)) {
+                            continue;
+                        }
+                        for (int target : minions) {
+                            if (pruneFriendlyAttacks) {
+                                if (data.hasValue(target, core.OWNED_BY, player)) {
+                                    continue;
+                                }
+                            }
+                            if (canDeclareAttack(player, attacker, target, false)) {
+                                result.add(new DeclareAttack(player, attacker, target));
+                            }
+                        }
+                    }
+                    IntList handCards = data.list(core.IN_HAND_ZONE);
+                    for (int handCard : handCards) {
+                        if (!canCast(player, handCard, false)) {
+                            continue;
+                        }
+                        CardTemplate template = settings.templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
+                        CardCast cast = template.getAttackPhaseCast();
+                        addCastMoves(player, handCard, cast, result);
+                    }
+                    result.add(new EndAttackPhase(player));
+                    break;
+                }
+                case PlayerPhase.BLOCK: {
+                    IntList minions = data.list(core.IN_BATTLE_ZONE);
+                    for (int blocker : minions) {
+                        if (!canBlock(player, blocker, false)) {
+                            continue;
+                        }
+                        for (int target : minions) {
+                            if (canBlock(player, blocker, target, false)) {
+                                result.add(new Block(player, blocker, target));
+                            }
+                        }
+                    }
+                    IntList handCards = data.list(core.IN_HAND_ZONE);
+                    for (int handCard : handCards) {
+                        if (!canCast(player, handCard, false)) {
+                            continue;
+                        }
+                        CardTemplate template = settings.templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
+                        CardCast cast = template.getBlockPhaseCast();
+                        addCastMoves(player, handCard, cast, result);
+                    }
+                    result.add(new EndBlockPhase(player));
+                    break;
+                }
+                case PlayerPhase.MULLIGAN: {
+                    for (int card : data.list(core.IN_HAND_ZONE)) {
+                        if (canDeclareMulligan(player, card, false)) {
+                            result.add(new DeclareMulligan(player, card));
+                        }
+                    }
+                    result.add(new EndMulliganPhase(player));
+                    break;
+                }
+                default:
+                    throw new AssertionError(phase);
+            }
+        }
+        if (!pruneSurrender) {
+            for (int player : data.list(core.PLAYER_INDEX)) {
+                if (canSurrender(player, false)) {
+                    result.add(new Surrender(player));
+                }
+            }
+
+        }
+        return result;
+    }
+
+    private void addCastMoves(int player, int handCard, CardCast cast, List<Move> result) {
+        if (cast.isTargeted()) {
+            for (int target : TargetUtil.findValidTargets(data, handCard, cast.getTargets())) {
+                result.add(new Cast(player, handCard, target));
+            }
+        } else {
+            result.add(new Cast(player, handCard, ~0));
+        }
+    }
+
+    public void apply(Move move) {
         Runnable runnable;
         if (move instanceof Block) {
             Block block = (Block) move;
@@ -133,6 +225,8 @@ public class MoveService {
             runnable = () -> surrender(surrender.player);
         } else if (move instanceof Start) {
             runnable = this::start;
+        } else if (move instanceof Update) {
+            runnable = this::update;
         } else {
             throw new AssertionError(move);
         }
@@ -149,7 +243,7 @@ public class MoveService {
 
     private void start() {
         if (validateMoves) {
-            verifyCanStart(true);
+            canStart(true);
         }
         for (int player : data.list(core.PLAYER_INDEX)) {
             data.set(player, core.START_PHASE_REQUEST, PlayerPhase.MULLIGAN);
@@ -157,11 +251,7 @@ public class MoveService {
         update();
     }
 
-    public boolean canStart() {
-        return verifyCanStart(false);
-    }
-
-    private boolean verifyCanStart(boolean throwOnFail) {
+    private boolean canStart(boolean throwOnFail) {
         if (!data.list(core.ACTIVE_PLAYER_PHASE).isEmpty()) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to start game, there are already active players.");
@@ -179,17 +269,13 @@ public class MoveService {
 
     private void endAttackPhase(int player) {
         if (validateMoves) {
-            verifyCanEndAttackPhase(player, true);
+            canEndAttackPhase(player, true);
         }
         data.set(player, core.END_PHASE_REQUEST, PlayerPhase.ATTACK);
         update();
     }
 
-    public boolean canEndAttackPhase(int player) {
-        return verifyCanEndAttackPhase(player, false);
-    }
-
-    private boolean verifyCanEndAttackPhase(int player, boolean throwOnFail) {
+    private boolean canEndAttackPhase(int player, boolean throwOnFail) {
         if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end attack phase, player #" + player + " is not in attack phase.");
@@ -201,17 +287,13 @@ public class MoveService {
 
     private void endBlockPhase(int player) {
         if (validateMoves) {
-            verifyCanEndBlockPhase(player, true);
+            canEndBlockPhase(player, true);
         }
         data.set(player, core.END_PHASE_REQUEST, PlayerPhase.BLOCK);
         update();
     }
 
-    public boolean canEndBlockPhase(int player) {
-        return verifyCanEndBlockPhase(player, false);
-    }
-
-    private boolean verifyCanEndBlockPhase(int player, boolean throwOnFail) {
+    private boolean canEndBlockPhase(int player, boolean throwOnFail) {
         if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end block phase, player #" + player + " is not in block phase.");
@@ -223,17 +305,13 @@ public class MoveService {
 
     private void endMulliganPhase(int player) {
         if (validateMoves) {
-            verifyCanEndMulliganPhase(player, true);
+            canEndMulliganPhase(player, true);
         }
         data.set(player, core.END_PHASE_REQUEST, PlayerPhase.MULLIGAN);
         update();
     }
 
-    public boolean canEndMulliganPhase(int player) {
-        return verifyCanEndMulliganPhase(player, false);
-    }
-
-    private boolean verifyCanEndMulliganPhase(int player, boolean throwOnFail) {
+    private boolean canEndMulliganPhase(int player, boolean throwOnFail) {
         if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to end mulligan phase, player #" + player + " is not in mulligan phase.");
@@ -245,31 +323,23 @@ public class MoveService {
 
     private void declareAttack(int player, int attacker, int target) {
         if (validateMoves) {
-            verifyCanDeclareAttack(player, attacker, target, true);
+            canDeclareAttack(player, attacker, target, true);
         }
         data.set(attacker, core.ATTACKS_TARGET, target);
         update();
     }
 
-    public boolean canDeclareAttack(int player, int attacker, int target) {
-        return verifyCanDeclareAttack(player, attacker, target, false);
-    }
-
-    private boolean verifyCanDeclareAttack(int player, int attacker, int target, boolean throwOnFail) {
+    private boolean canDeclareAttack(int player, int attacker, int target, boolean throwOnFail) {
         if (!data.has(target, core.IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is not in battle zone.");
             }
             return false;
         }
-        return verifyCanDeclareAttack(player, attacker, throwOnFail);
+        return canDeclareAttack(player, attacker, throwOnFail);
     }
 
-    public boolean canDeclareAttack(int player, int attacker) {
-        return verifyCanDeclareAttack(player, attacker, false);
-    }
-
-    private boolean verifyCanDeclareAttack(int player, int attacker, boolean throwOnFail) {
+    private boolean canDeclareAttack(int player, int attacker, boolean throwOnFail) {
         if (!data.hasValue(attacker, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " does not own attacker #" + attacker + ".");
@@ -317,17 +387,13 @@ public class MoveService {
 
     private void block(int player, int blocker, int attacker) {
         if (validateMoves) {
-            verifyCanBlock(player, blocker, attacker, true);
+            canBlock(player, blocker, attacker, true);
         }
         data.set(blocker, core.BLOCKS_ATTACKER, attacker);
         update();
     }
 
-    public boolean canBlock(int player, int blocker, int attacker) {
-        return verifyCanBlock(player, blocker, attacker, false);
-    }
-
-    private boolean verifyCanBlock(int player, int blocker, int attacker, boolean throwOnFail) {
+    private boolean canBlock(int player, int blocker, int attacker, boolean throwOnFail) {
         if (!data.has(attacker, core.ATTACKS_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " is not attacking.");
@@ -340,14 +406,10 @@ public class MoveService {
             }
             return false;
         }
-        return verifyCanBlock(player, blocker, throwOnFail);
+        return canBlock(player, blocker, throwOnFail);
     }
 
-    public boolean canBlock(int player, int blocker) {
-        return verifyCanBlock(player, blocker, false);
-    }
-
-    private boolean verifyCanBlock(int player, int blocker, boolean throwOnFail) {
+    private boolean canBlock(int player, int blocker, boolean throwOnFail) {
         if (!data.hasValue(blocker, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " does not own blocker #" + blocker + ".");
@@ -414,7 +476,7 @@ public class MoveService {
 
     private void cast(int player, int castable, Integer target) {
         if (validateMoves) {
-            validateCanCast(player, castable, target != null ? target : ~0, true);
+            canCast(player, castable, target != null ? target : ~0, true);
         }
         String cardName = getCardName(castable);
         try {
@@ -434,15 +496,7 @@ public class MoveService {
         return null;
     }
 
-    public boolean canCast(int player, int castable) {
-        return validateCanCast(player, castable, false);
-    }
-
-    public boolean canCast(int player, int castable, Integer target) {
-        return validateCanCast(player, castable, target != null ? target : ~0, false);
-    }
-
-    private boolean validateCanCast(int player, int castable, boolean throwOnFail) {
+    private boolean canCast(int player, int castable, boolean throwOnFail) {
         if (!data.hasValue(castable, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, player #" + player + " does not own castable #" + castable + ".");
@@ -499,7 +553,7 @@ public class MoveService {
         return true;
     }
 
-    private boolean validateCanCast(int player, int castable, int target, boolean throwOnFail) {
+    private boolean canCast(int player, int castable, int target, boolean throwOnFail) {
         CardTemplate template = settings.templates.getCard(data.get(castable, core.CARD_TEMPLATE));
         OptionalInt phase = data.getOptional(player, core.ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
@@ -522,22 +576,18 @@ public class MoveService {
                 }
             }
         }
-        return validateCanCast(player, castable, throwOnFail);
+        return canCast(player, castable, throwOnFail);
     }
 
     private void declareMulligan(int player, int card) {
         if (validateMoves) {
-            verifyCanDeclareMulligan(player, card, true);
+            canDeclareMulligan(player, card, true);
         }
         data.set(card, core.MULLIGAN, card);
         update();
     }
 
-    public boolean canDeclareMulligan(int player, int card) {
-        return verifyCanDeclareMulligan(player, card, false);
-    }
-
-    private boolean verifyCanDeclareMulligan(int player, int card, boolean throwOnFail) {
+    private boolean canDeclareMulligan(int player, int card, boolean throwOnFail) {
         if (!data.hasValue(card, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare mulligan, player #" + player + " does not own card #" + card + ".");
@@ -567,17 +617,13 @@ public class MoveService {
 
     private void surrender(int player) {
         if (validateMoves) {
-            validateCanSurrender(player, true);
+            canSurrender(player, true);
         }
         data.set(player, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
         update();
     }
 
-    public boolean canSurrender(int player) {
-        return validateCanSurrender(player, false);
-    }
-
-    private boolean validateCanSurrender(int player, boolean throwOnFail) {
+    private boolean canSurrender(int player, boolean throwOnFail) {
         if (hasPlayerLost(player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to surrender, player #" + player + " already lost.");
@@ -614,7 +660,7 @@ public class MoveService {
         }
     }
 
-    public void update() {
+    private void update() {
         IntList requests = new IntList();
         requests.add(core.DAMAGE_REQUEST);
         requests.add(core.DEATH_REQUEST);

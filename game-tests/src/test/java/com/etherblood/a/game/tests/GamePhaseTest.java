@@ -14,12 +14,12 @@ public class GamePhaseTest extends AbstractGameTest {
         data.set(player(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN);
         data.set(player(1), core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN);
         
-        moves.move(new EndMulliganPhase(player(0)));
+        moves.apply(new EndMulliganPhase(player(0)));
         
         Assertions.assertFalse(data.has(player(0), core.ACTIVE_PLAYER_PHASE));
         Assertions.assertEquals(PlayerPhase.MULLIGAN, data.get(player(1), core.ACTIVE_PLAYER_PHASE));
         
-        moves.move(new EndMulliganPhase(player(1)));
+        moves.apply(new EndMulliganPhase(player(1)));
         
         Assertions.assertEquals(PlayerPhase.ATTACK, data.get(player(0), core.ACTIVE_PLAYER_PHASE));
         Assertions.assertFalse(data.has(player(1), core.ACTIVE_PLAYER_PHASE));
@@ -30,7 +30,7 @@ public class GamePhaseTest extends AbstractGameTest {
         data.set(player(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK);
         data.remove(player(1), core.ACTIVE_PLAYER_PHASE);
         
-        moves.move(new EndBlockPhase(player(0)));
+        moves.apply(new EndBlockPhase(player(0)));
         
         Assertions.assertEquals(PlayerPhase.ATTACK, data.get(player(0), core.ACTIVE_PLAYER_PHASE));
         Assertions.assertFalse(data.has(player(1), core.ACTIVE_PLAYER_PHASE));
@@ -41,7 +41,7 @@ public class GamePhaseTest extends AbstractGameTest {
         data.set(player(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
         data.remove(player(1), core.ACTIVE_PLAYER_PHASE);
         
-        moves.move(new EndAttackPhase(player(0)));
+        moves.apply(new EndAttackPhase(player(0)));
         
         Assertions.assertFalse(data.has(player(0), core.ACTIVE_PLAYER_PHASE));
         Assertions.assertEquals(PlayerPhase.BLOCK, data.get(player(1), core.ACTIVE_PLAYER_PHASE));

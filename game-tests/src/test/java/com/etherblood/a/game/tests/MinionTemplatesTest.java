@@ -1,5 +1,6 @@
 package com.etherblood.a.game.tests;
 
+import com.etherblood.a.rules.moves.Update;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
         int previousHealth = data.get(hero(1), core.HEALTH);
         
         data.set(boombot, core.DEATH_REQUEST, 1);
-        game.getMoves().update();
+        game.getMoves().apply(new Update());
         
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth - boomBotDamage, actualHealth);

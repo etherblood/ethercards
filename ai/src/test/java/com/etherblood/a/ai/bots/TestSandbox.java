@@ -38,6 +38,7 @@ public class TestSandbox {
 
     @Test
     public void simulateGame() throws InterruptedException {
+        // Note: This is not a benchmark, asserts are enabled and gamelength may vary
         float[] result = new float[2];
         for (int i = 0; i < 1; i++) {
             Game game = startGame();
@@ -64,7 +65,7 @@ public class TestSandbox {
                 } else {
                     move = bot1.findBestMove(1);
                 }
-                game.getMoves().move(move);
+                game.getMoves().apply(move);
             }
             if (game.hasPlayerWon(game.findPlayerByIndex(0))) {
                 result[0]++;
@@ -126,7 +127,7 @@ public class TestSandbox {
         MoveService moves = new MoveService(settings, data, HistoryRandom.producer());
         Game game = new Game(settings, data, moves);
         setup.apply(game);
-        moves.move(new Start());
+        moves.apply(new Start());
         return game;
     }
 }

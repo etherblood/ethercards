@@ -31,90 +31,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
     @Override
     public List<Move> generateMoves() {
-        EntityData data = game.getData();
-        List<Move> result = new ArrayList<>();
-        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
-            int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
-            switch (phase) {
-                case PlayerPhase.ATTACK: {
-                    IntList minions = data.list(core.IN_BATTLE_ZONE);
-                    for (int attacker : minions) {
-                        if (!game.getMoves().canDeclareAttack(player, attacker)) {
-                            continue;
-                        }
-                        for (int target : minions) {
-                            if (pruneFriendlyAttacks) {
-                                if (data.hasValue(target, core.OWNED_BY, player)) {
-                                    // technically a valid target, but we prune friendly fire attacks for the AI (for now)
-                                    continue;
-                                }
-                            }
-                            if (game.getMoves().canDeclareAttack(player, attacker, target)) {
-                                result.add(new DeclareAttack(player, attacker, target));
-                            }
-                        }
-                    }
-                    IntList handCards = data.list(core.IN_HAND_ZONE);
-                    for (int handCard : handCards) {
-                        if (!game.getMoves().canCast(player, handCard)) {
-                            continue;
-                        }
-                        CardTemplate template = game.getTemplates().getCard(data.get(handCard, core.CARD_TEMPLATE));
-                        CardCast cast = template.getAttackPhaseCast();
-                        addCastMoves(game, player, handCard, cast, result);
-                    }
-                    result.add(new EndAttackPhase(player));
-                    break;
-                }
-                case PlayerPhase.BLOCK: {
-                    IntList minions = data.list(core.IN_BATTLE_ZONE);
-                    for (int blocker : minions) {
-                        if (!game.getMoves().canBlock(player, blocker)) {
-                            continue;
-                        }
-                        for (int target : minions) {
-                            if (game.getMoves().canBlock(player, blocker, target)) {
-                                result.add(new Block(player, blocker, target));
-                            }
-                        }
-                    }
-                    IntList handCards = data.list(core.IN_HAND_ZONE);
-                    for (int handCard : handCards) {
-                        if (!game.getMoves().canCast(player, handCard)) {
-                            continue;
-                        }
-                        CardTemplate template = game.getTemplates().getCard(data.get(handCard, core.CARD_TEMPLATE));
-                        CardCast cast = template.getBlockPhaseCast();
-                        addCastMoves(game, player, handCard, cast, result);
-                    }
-                    result.add(new EndBlockPhase(player));
-                    break;
-                }
-                case PlayerPhase.MULLIGAN: {
-                    for (int card : data.list(core.IN_HAND_ZONE)) {
-                        if (game.getMoves().canDeclareMulligan(player, card)) {
-                            result.add(new DeclareMulligan(player, card));
-                        }
-                    }
-                    result.add(new EndMulliganPhase(player));
-                    break;
-                }
-                default:
-                    throw new AssertionError(phase);
-            }
-        }
-        // skip generating a surrender move for the AI
-        return result;
-    }
-
-    private void addCastMoves(Game game, int player, int handCard, CardCast cast, List<Move> result) {
-        if (cast.isTargeted()) {
-            for (int target : TargetUtil.findValidTargets(game.getData(), handCard, cast.getTargets())) {
-                result.add(new Cast(player, handCard, target));
-            }
-        } else {
-            result.add(new Cast(player, handCard, ~0));
-        }
+        return game.getMoves().generate(pruneFriendlyAttacks, true);
     }
 
     @Override
@@ -147,12 +64,12 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
         if (move instanceof Start) {
             return "Start";
         }
-        return "Unknown Move " + move;
+        return String.valueOf(move);
     }
 
     @Override
     public void applyMove(Move move) {
-        game.getMoves().move(move);
+        game.getMoves().apply(move);
     }
 
     @Override
