@@ -4,7 +4,7 @@
         "name": "Fireball",
         "imagePath": "images/cards/Mountain.png",
         "colors": ["RED"],
-        "description": "Deal 4 damage to the selected target."
+        "description": "Deal 6 damage to the selected target."
     },
     "attackCast": {
         "manaCost": 4,
@@ -13,7 +13,7 @@
             {
                 "type": "buff",
                 "components": {
-                    "DAMAGE_REQUEST": 4
+                    "DAMAGE_REQUEST": 6
                 }
             }
         ]

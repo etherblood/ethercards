@@ -72,7 +72,7 @@ public class SystemsUtil {
     }
 
     public static void damage(EntityData data, int target, int damage) {
-        if (damage == 0) {
+        if (damage <= 0) {
             return;
         }
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
@@ -110,7 +110,7 @@ public class SystemsUtil {
         }
     }
 
-    private static int randomHero(EntityData data, IntUnaryOperator random, int player) {
+    public static int randomHero(EntityData data, IntUnaryOperator random, int player) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList ownHeroes = new IntList();
         for (int hero : data.list(core.HERO)) {
