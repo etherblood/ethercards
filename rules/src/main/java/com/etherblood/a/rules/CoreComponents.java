@@ -48,6 +48,7 @@ public class CoreComponents implements ComponentsModule {
     public final int VENOM;
     public final int TRAMPLE;
     public final int LIFELINK;
+    public final int OWN_MINIONS_HASTE_AURA;
 
     public CoreComponents(ToIntFunction<String> register) {
         END_PHASE_REQUEST = register.applyAsInt("END_PHASE_REQUEST");
@@ -93,5 +94,6 @@ public class CoreComponents implements ComponentsModule {
         VENOM = register.applyAsInt("VENOM");
         TRAMPLE = register.applyAsInt("TRAMPLE");
         LIFELINK = register.applyAsInt("LIFELINK");
+        OWN_MINIONS_HASTE_AURA = register.applyAsInt("OWN_MINIONS_HASTE_AURA");
     }
 }

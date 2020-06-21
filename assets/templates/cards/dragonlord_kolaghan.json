@@ -1,0 +1,19 @@
+{
+    "alias": "cards/dragonlord_kolaghan.json",
+    "display": {
+        "name": "Dragonlord Kolaghan",
+        "imagePath": "images/cards/dragonlord_kolaghan.jpg",
+        "colors": ["BLACK", "RED"],
+        "description": "Summon a Fast 6/5 Dragonlord Kolaghan with Haste Aura."
+    },
+    "attackCast": {
+        "manaCost": 6,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/dragonlord_kolaghan.json",
+                "fast": true
+            }
+        ]
+    }
+}

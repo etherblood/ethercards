@@ -1,0 +1,13 @@
+{
+    "alias": "minions/dragonlord_kolaghan.json",
+    "display": {
+        "name": "Dragonlord Kolaghan",
+        "imagePath": "images/cards/dragonlord_kolaghan.jpg",
+        "colors": ["BLACK", "RED"]
+    },
+    "components": {
+        "ATTACK": 6,
+        "HEALTH": 5,
+        "OWN_MINIONS_HASTE_AURA": true
+    }
+}

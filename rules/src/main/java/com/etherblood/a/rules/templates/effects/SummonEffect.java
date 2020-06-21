@@ -22,8 +22,10 @@ public class SummonEffect extends Effect {
     public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int owner = data.get(source, core.OWNED_BY);
+        // haste-aura check before summoning to exclude summon buffing itself
+        boolean addSickness = !fast && data.list(core.OWN_MINIONS_HASTE_AURA).stream().noneMatch(minion -> data.hasValue(minion, core.OWNED_BY, owner));
         int summon = SystemsUtil.createMinion(settings, data, random, minionId, owner);
-        if(!fast) {
+        if (addSickness) {
             data.set(summon, core.SUMMONING_SICKNESS, 1);
         }
     }

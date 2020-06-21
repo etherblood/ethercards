@@ -363,6 +363,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.CANNOT_BE_BLOCKED)) {
                     keywords.add("Cannot_be_blocked");
                 }
+                if (data.has(cardEntity, core.OWN_MINIONS_HASTE_AURA)) {
+                    keywords.add("Haste_Aura");
+                }
                 minionModel.setKeywords(keywords);
 
                 if (moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)

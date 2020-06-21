@@ -22,6 +22,7 @@ public class RemoveDeadAbilitiesSystem extends AbstractSystem {
             data.remove(entity, core.DRAWS_ON_BLOCK);
             data.remove(entity, core.DRAWS_ON_ATTACKED);
             data.remove(entity, core.ATTACKS_TARGET);
+            data.remove(entity, core.OWN_MINIONS_HASTE_AURA);
             // TODO: remove all interacting components
             
         }
