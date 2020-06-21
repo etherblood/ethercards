@@ -4,7 +4,10 @@ import com.destrostudios.cardgui.BoardObjectModel;
 import com.destrostudios.cardgui.annotations.IsBoardObjectInspected;
 import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.jme3.math.ColorRGBA;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class MinionModel extends BoardObjectModel {
 
@@ -12,6 +15,7 @@ public class MinionModel extends BoardObjectModel {
     private int entityId, attack, health;
     private boolean faceUp, damaged;
     private ColorRGBA glow;
+    private Set<String> keywords = new HashSet<>();
     @IsBoardObjectInspected
     private boolean isInspected;
 
@@ -34,6 +38,15 @@ public class MinionModel extends BoardObjectModel {
     public void setTemplate(DisplayMinionTemplate template) {
         Objects.requireNonNull(template);
         updateIfNotEquals(this.template, template, () -> this.template = template);
+    }
+
+    public Set<String> getKeywords() {
+        return Collections.unmodifiableSet(keywords);
+    }
+
+    public void setKeywords(Set<String> keywords) {
+        Objects.requireNonNull(keywords);
+        updateIfNotEquals(this.keywords, keywords, () -> this.keywords = keywords);
     }
 
     public int getEntityId() {

@@ -4,7 +4,7 @@
         "name": "Bunch of gobbos",
         "imagePath": "images/cards/Goblin.png",
         "colors": ["RED"],
-        "description": "Summon 3 1/1 gobbos with Haste that can't block."
+        "description": "Summon 3 Fast 1/1 gobbos that can't block."
     },
     "attackCast": {
         "manaCost": 4,

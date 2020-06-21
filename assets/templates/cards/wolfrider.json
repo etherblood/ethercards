@@ -4,7 +4,7 @@
         "name": "Wolfrider",
         "imagePath": "images/cards/Wolfrider_full.jpg",
         "colors": ["RED"],
-        "description": "Summon a 3/1 wolfrider with Haste."
+        "description": "Summon a Fast 3/1 Wolfrider."
     },
     "attackCast": {
         "manaCost": 3,

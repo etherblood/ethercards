@@ -4,7 +4,7 @@
         "name": "Quickwall",
         "imagePath": "images/cards/quickwall.png",
         "colors": ["WHITE"],
-        "description": "Summon a 1/4 quickwall with Haste that can't attack."
+        "description": "Summon a Fast 1/4 quickwall that can't attack."
     },
     "blockCast": {
         "manaCost": 2,

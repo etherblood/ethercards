@@ -685,7 +685,7 @@ public class MoveService {
         IntList winners = new IntList();
         IntList losers = new IntList();
         for (int player : playerResults) {
-            if (data.get(player, core.PLAYER_RESULT) == PlayerResult.VICTORY) {
+            if (data.get(player, core.PLAYER_RESULT) == PlayerResult.WIN) {
                 winners.add(player);
             } else {
                 losers.add(player);
@@ -752,7 +752,7 @@ public class MoveService {
     }
 
     private boolean hasPlayerWon(int player) {
-        return data.hasValue(player, core.PLAYER_RESULT, PlayerResult.VICTORY);
+        return data.hasValue(player, core.PLAYER_RESULT, PlayerResult.WIN);
     }
 
     private boolean hasPlayerLost(int player) {

@@ -4,7 +4,7 @@
         "name": "Ysera",
         "imagePath": "images/cards/ysera.jpg",
         "colors": ["BLUE"],
-        "description": "Summon a 4/12 Ysera with 1 draw per turn."
+        "description": "Summon a 4/12 Ysera with 1 Draw per Turn."
     },
     "attackCast": {
         "manaCost": 9,

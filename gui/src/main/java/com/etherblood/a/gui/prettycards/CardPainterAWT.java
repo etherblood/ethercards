@@ -13,6 +13,8 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -160,24 +162,26 @@ public class CardPainterAWT {
         }
 //        drawCardCostManaAmount(graphics, template.getAttackPhaseCast() != null ? template.getAttackPhaseCast().getManaCost() : template.getBlockPhaseCast().getManaCost(), (width - textStartX - CARDCOSTICONSIZE), (46 - (CARDCOSTICONSIZE / 2)));
         tmpY = 370;
-//            if (drawnKeywords.size() > 0) {
-//                String keywordsText = "";
-//                for (int i = 0; i < drawnKeywords.size(); i++) {
-//                    if (i != 0) {
-//                        keywordsText += " ";
-//                    }
-//                    String keyword = drawnKeywords.get(i);
-//                    keywordsText += keyword + (keyword.equals("Cast") ? ":" : ".");
-//                }
-//                graphics.setFont(FONTKEYWORDS);
-//                tmpX = textStartX;
-//                drawStringMultiLine(graphics, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
+        List<String> drawnKeywords = new ArrayList<>(cardModel.getKeywords());
+        drawnKeywords.sort(Comparator.naturalOrder());
+        if (drawnKeywords.size() > 0) {
+            String keywordsText = "";
+            for (int i = 0; i < drawnKeywords.size(); i++) {
+                if (i != 0) {
+                    keywordsText += " ";
+                }
+                String keyword = drawnKeywords.get(i);
+                keywordsText += keyword;
+            }
+            graphics.setFont(FONTKEYWORDS);
+            tmpX = textStartX;
+            drawStringMultiLine(graphics, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
 //                if (castDescription != null) {
 //                    tmpX += 3;
 //                    drawSpellDescription(graphics, castDescription, LINEWIDTH, tmpX, textStartX, tmpY);
 //                }
-//                tmpY += 18;
-//            }
+            tmpY += 18;
+        }
         graphics.setColor(Color.BLACK);
         String description = template.getDescription();
         if (description != null) {

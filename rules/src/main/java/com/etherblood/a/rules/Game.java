@@ -59,7 +59,7 @@ public class Game {
     }
 
     public boolean hasPlayerWon(int player) {
-        return data.hasValue(player, core.PLAYER_RESULT, PlayerResult.VICTORY);
+        return data.hasValue(player, core.PLAYER_RESULT, PlayerResult.WIN);
     }
 
     public boolean hasPlayerLost(int player) {

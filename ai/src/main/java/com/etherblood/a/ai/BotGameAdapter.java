@@ -57,7 +57,7 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
         IntList winners = new IntList();
         IntList losers = new IntList();
         for (int player : playerResults) {
-            if (data.get(player, core.PLAYER_RESULT) == PlayerResult.VICTORY) {
+            if (data.get(player, core.PLAYER_RESULT) == PlayerResult.WIN) {
                 winners.add(player);
             } else {
                 losers.add(player);

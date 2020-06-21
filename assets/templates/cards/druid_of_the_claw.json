@@ -4,7 +4,7 @@
         "name": "Druid of the Claw",
         "imagePath": "images/cards/Druid_of_the_Claw_full.jpg",
         "colors": ["GREEN"],
-        "description": "Attack phase: summon a 4/4 cat with charge.\nBlock phase: summon a 4/6 bear."
+        "description": "Attack phase: Summon a Fast 4/4 Cat.\nBlock phase: Summon a Fast 4/6 Bear."
     },
     "blockCast": {
         "manaCost": 5,

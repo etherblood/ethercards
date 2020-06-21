@@ -67,9 +67,11 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 import org.slf4j.Logger;
@@ -298,7 +300,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 cardModel.setFaceUp(!data.has(cardEntity, core.IN_LIBRARY_ZONE));
                 cardModel.setTemplate((DisplayCardTemplate) game.getTemplates().getCard(data.get(cardEntity, core.CARD_TEMPLATE)));
 
-                if(moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
+                if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
                         .anyMatch(cast -> cast.player == userControlledPlayer && cast.source == cardEntity)) {
 //                if (game.getMoves().canCast(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
@@ -323,8 +325,46 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 DisplayMinionTemplate template = (DisplayMinionTemplate) game.getTemplates().getMinion(data.get(cardEntity, core.MINION_TEMPLATE));
                 minionModel.setTemplate(template);
                 minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
+                Set<String> keywords = new HashSet<>();
+                if (data.has(cardEntity, core.TRAMPLE)) {
+                    keywords.add("Trample");
+                }
+                if (data.has(cardEntity, core.LIFELINK)) {
+                    keywords.add("Lifelink");
+                }
+                if (data.has(cardEntity, core.VENOM)) {
+                    keywords.add("Venom_" + data.get(cardEntity, core.VENOM));
+                }
+                if (data.has(cardEntity, core.POISONED)) {
+                    keywords.add("Poisoned_" + data.get(cardEntity, core.POISONED));
+                }
+                if (data.has(cardEntity, core.MANA_POOL)) {
+                    keywords.add("Mana_Pool_" + data.get(cardEntity, core.MANA_POOL));
+                }
+                if (data.has(cardEntity, core.MANA_GROWTH)) {
+                    keywords.add("Mana_Growth_" + data.get(cardEntity, core.MANA_GROWTH));
+                }
+                if (data.has(cardEntity, core.DRAWS_PER_TURN)) {
+                    keywords.add("Draws_per_Turn " + data.get(cardEntity, core.DRAWS_PER_TURN));
+                }
+                if (data.has(cardEntity, core.DRAWS_ON_ATTACK)) {
+                    keywords.add("Draws_on_Attack " + data.get(cardEntity, core.DRAWS_ON_ATTACK));
+                }
+                if (data.has(cardEntity, core.DRAWS_ON_BLOCK)) {
+                    keywords.add("Draws_on_Block " + data.get(cardEntity, core.DRAWS_ON_BLOCK));
+                }
+                if (data.has(cardEntity, core.CANNOT_ATTACK)) {
+                    keywords.add("Cannot_attack");
+                }
+                if (data.has(cardEntity, core.CANNOT_BLOCK)) {
+                    keywords.add("Cannot_block");
+                }
+                if (data.has(cardEntity, core.CANNOT_BE_BLOCKED)) {
+                    keywords.add("Cannot_be_blocked");
+                }
+                minionModel.setKeywords(keywords);
 
-                if(moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
+                if (moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
                         .anyMatch(attack -> attack.player == userControlledPlayer && attack.source == cardEntity)) {
 //                if (game.getMoves().canDeclareAttack(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));

@@ -3,8 +3,7 @@
     "display": {
         "name": "Satyr",
         "imagePath": "images/cards/Voyaging Satyr.png",
-        "colors": ["GREEN"],
-        "description": "1 Mana Pool"
+        "colors": ["GREEN"]
     },
     "components": {
         "ATTACK": 1,

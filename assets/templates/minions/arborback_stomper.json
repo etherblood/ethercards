@@ -3,8 +3,7 @@
     "display": {
         "name": "Arborback Stomper",
         "imagePath": "images/cards/arborback_stomper.jpg",
-        "colors": ["GREEN"],
-        "description": "Trample."
+        "colors": ["GREEN"]
     },
     "components": {
         "ATTACK": 5,

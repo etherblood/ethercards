@@ -60,8 +60,8 @@ public class PlayerStatusSystem extends AbstractSystem {
 
         if (alive.size() == 1) {
             int winner = alive.get(0);
-            if (!data.hasValue(winner, core.PLAYER_RESULT, PlayerResult.VICTORY)) {
-                data.set(winner, core.PLAYER_RESULT_REQUEST, PlayerResult.VICTORY);
+            if (!data.hasValue(winner, core.PLAYER_RESULT, PlayerResult.WIN)) {
+                data.set(winner, core.PLAYER_RESULT_REQUEST, PlayerResult.WIN);
             }
         }
         for (int loser : dead) {
