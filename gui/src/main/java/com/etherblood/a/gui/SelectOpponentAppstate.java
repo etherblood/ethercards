@@ -19,6 +19,7 @@ public class SelectOpponentAppstate extends AbstractAppState {
     private final Geometry lv3Button;
     private final Geometry lv6Button;
     private final Geometry lv10Button;
+    private final Geometry lv100Button;
     private Integer selectedStrength;
 
     public SelectOpponentAppstate(Node rootNode, AssetManager assetManager) {
@@ -28,6 +29,7 @@ public class SelectOpponentAppstate extends AbstractAppState {
         lv3Button = createButton(assetManager, "level_3", 2);
         lv6Button = createButton(assetManager, "level_6", 3);
         lv10Button = createButton(assetManager, "level_10", 4);
+        lv100Button = createButton(assetManager, "level_100", 5);
     }
 
     public Integer getSelectedStrength() {
@@ -44,12 +46,14 @@ public class SelectOpponentAppstate extends AbstractAppState {
         buttonAppstate.registerButton(lv3Button, createHandler(3), colors);
         buttonAppstate.registerButton(lv6Button, createHandler(6), colors);
         buttonAppstate.registerButton(lv10Button, createHandler(10), colors);
+        buttonAppstate.registerButton(lv100Button, createHandler(100), colors);
         stateManager.getState(HudTextAppstate.class).setText("Select your opponent.");
         rootNode.attachChild(humanButton);
         rootNode.attachChild(lv1Button);
         rootNode.attachChild(lv3Button);
         rootNode.attachChild(lv6Button);
         rootNode.attachChild(lv10Button);
+        rootNode.attachChild(lv100Button);
     }
 
     @Override
@@ -60,12 +64,14 @@ public class SelectOpponentAppstate extends AbstractAppState {
         buttonAppstate.unregisterButton(lv3Button);
         buttonAppstate.unregisterButton(lv6Button);
         buttonAppstate.unregisterButton(lv10Button);
+        buttonAppstate.unregisterButton(lv100Button);
         stateManager.getState(HudTextAppstate.class).setText("");
         rootNode.detachChild(humanButton);
         rootNode.detachChild(lv1Button);
         rootNode.detachChild(lv3Button);
         rootNode.detachChild(lv6Button);
         rootNode.detachChild(lv10Button);
+        rootNode.detachChild(lv100Button);
     }
 
     private Runnable createHandler(int strength) {

@@ -143,7 +143,7 @@ public class GameService {
                 Move move = entry.getValue().get();
                 UUID gameId = entry.getKey();
                 GameDataPrinter printer = new GameDataPrinter(games.get(gameId).createInstance());
-                LOG.info("Game_{} computed move '{}'.", gameId, printer.toMoveString(move));
+                LOG.debug("Game_{} computed move '{}'.", gameId, printer.toMoveString(move));
                 makeMove(gameId, move);
             }
         }

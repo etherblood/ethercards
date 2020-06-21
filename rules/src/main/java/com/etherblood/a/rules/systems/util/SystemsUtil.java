@@ -160,26 +160,31 @@ public class SystemsUtil {
 
     private static void applyFatigue(EntityData data, int player, int fatigue) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        IntList minions = data.list(core.IN_BATTLE_ZONE);
-        IntMap effectiveHealth = new IntMap();
-        IntList myMinions = new IntList();
-        for (int minion : minions) {
-            if (data.hasValue(minion, core.OWNED_BY, player)) {
-                int health = data.getOptional(minion, core.HEALTH).orElse(0);
-                int damage = data.getOptional(minion, core.DAMAGE_REQUEST).orElse(0);
-                effectiveHealth.set(minion, health - damage);
-                myMinions.add(minion);
+        IntList ownHeroes = new IntList();
+        for (int hero : data.list(core.HERO)) {
+            if (data.hasValue(hero, core.OWNED_BY, player) && data.has(hero, core.IN_BATTLE_ZONE)) {
+                ownHeroes.add(hero);
             }
         }
-        if (myMinions.isEmpty()) {
+        if (ownHeroes.isEmpty()) {
             return;
+        }
+        if (ownHeroes.size() == 1) {
+            SystemsUtil.damage(data, ownHeroes.get(0), fatigue);
+            return;
+        }
+        IntMap effectiveHealth = new IntMap();
+        for (int hero : ownHeroes) {
+            int health = data.getOptional(hero, core.HEALTH).orElse(0);
+            int damage = data.getOptional(hero, core.DAMAGE_REQUEST).orElse(0);
+            effectiveHealth.set(hero, health - damage);
         }
         IntMap fatigueDamage = new IntMap();
         for (int i = 0; i < fatigue; i++) {
-            int bestEntity = myMinions.get(0);
+            int bestEntity = ownHeroes.get(0);
             int bestValue = effectiveHealth.get(bestEntity);
-            for (int j = 1; j < myMinions.size(); j++) {
-                int entity = myMinions.get(j);
+            for (int j = 1; j < ownHeroes.size(); j++) {
+                int entity = ownHeroes.get(j);
                 int value = effectiveHealth.get(entity);
                 if (value > bestValue) {
                     bestEntity = entity;
@@ -195,9 +200,7 @@ public class SystemsUtil {
 
         for (int minion : fatigueDamage) {
             int fatigueDmg = fatigueDamage.get(minion);
-            if (fatigueDmg > 0) {
-                SystemsUtil.damage(data, minion, fatigueDmg);
-            }
+            SystemsUtil.damage(data, minion, fatigueDmg);
         }
     }
 
