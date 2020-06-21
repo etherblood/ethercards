@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
+import com.etherblood.a.ai.bots.mcts.multithread.MultithreadMctsBot;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.network.api.GameReplayService;
@@ -165,7 +166,8 @@ public class GameService {
             }
             if (botGame.isPlayerIndexActive(bot.playerIndex)) {
                 LOG.debug("Game_{} start computing move.", bot.gameId);
-                botMoves.put(bot.gameId, executor.submit(() -> bot.bot.findBestMove(bot.playerIndex)));
+                int availableProcessors = Math.min(3, Runtime.getRuntime().availableProcessors());
+                botMoves.put(bot.gameId, executor.submit(() -> bot.bot.findBestMove(bot.playerIndex, availableProcessors)));
             } else {
                 LOG.debug("Game_{} skip, it is not the bots turn.", bot.gameId);
             }
@@ -204,7 +206,7 @@ public class GameService {
                     MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
                     settings.strength = request.strength;
                     Game gameInstance = game.createInstance();
-                    MctsBot<Move, MoveBotGame> mcts = new MctsBot<>(new MoveBotGame(gameInstance), new MoveBotGame(simulationGame(gameInstance)), settings);
+                    MultithreadMctsBot mcts = new MultithreadMctsBot(new MoveBotGame(gameInstance), () -> new MoveBotGame(simulationGame(gameInstance)), settings);
                     bots.add(new GameBotMapping(gameId, Arrays.asList(setup.players).indexOf(bot), mcts));
 
                     connection.sendTCP(setup);
