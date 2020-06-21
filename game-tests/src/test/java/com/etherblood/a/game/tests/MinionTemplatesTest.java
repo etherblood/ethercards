@@ -25,7 +25,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
     }
 
     @Test
-    public void dragonlord_atarka_trample_through_ornithopter() {
+    public void dragonlordAtarka_trample_through_ornithopter() {
         int atarka = createMinion(player(0), "minions/dragonlord_atarka.json");
         int ornithopter = createMinion(player(1), "minions/ornithopter.json");
 
@@ -45,7 +45,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
     }
 
     @Test
-    public void dragonlord_dromoka_lifelink() {
+    public void dragonlordDromoka_lifelink() {
         int atarka = createMinion(player(0), "minions/dragonlord_dromoka.json");
 
         int previousHealth = data.get(hero(0), core.HEALTH);
@@ -61,10 +61,10 @@ public class MinionTemplatesTest extends AbstractGameTest {
     }
 
     @Test
-    public void armadillo_cloak() {
+    public void armadilloCloak() {
         int armadilloCloakHealth = 2;
         int armadilloCloakAttack = 2;
-        
+
         int ornithopter = createMinion(player(0), "minions/ornithopter.json");
         int armadillo_cloak = createHandCard(player(0), "cards/armadillo_cloak.json");
 
@@ -76,10 +76,21 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
         int actualHealth = data.get(ornithopter, core.HEALTH);
         int actualAttack = data.get(ornithopter, core.ATTACK);
-        
+
         Assertions.assertEquals(previousHealth + armadilloCloakHealth, actualHealth);
         Assertions.assertEquals(previousAttack + armadilloCloakAttack, actualAttack);
         Assertions.assertTrue(data.has(ornithopter, core.TRAMPLE));
         Assertions.assertEquals(hero(0), data.get(ornithopter, core.LIFELINK));
+    }
+
+    @Test
+    public void goblinGuide_give_draw() {
+        int goblinGuide = createMinion(player(0), "minions/goblin_guide.json");
+        int orniThopter = createLibraryCard(player(1), "minions/ornithopter.json");
+
+        game.getMoves().apply(new DeclareAttack(player(0), goblinGuide, hero(1)));
+        game.getMoves().apply(new EndAttackPhase(player(0)));
+
+        Assertions.assertTrue(data.has(orniThopter, core.IN_HAND_ZONE));
     }
 }

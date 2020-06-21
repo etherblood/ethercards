@@ -35,6 +35,7 @@ public class CoreComponents implements ComponentsModule {
     public final int DRAW_CARDS;
     public final int DRAWS_PER_TURN;
     public final int DRAWS_ON_ATTACK;
+    public final int GIVE_DRAWS_ON_ATTACK;
     public final int DRAWS_ON_BLOCK;
     public final int DRAWS_ON_ATTACKED;
     public final int FATIGUE;
@@ -81,6 +82,7 @@ public class CoreComponents implements ComponentsModule {
         DRAW_CARDS = register.applyAsInt("DRAW_CARDS");
         DRAWS_PER_TURN = register.applyAsInt("DRAWS_PER_TURN");
         DRAWS_ON_ATTACK = register.applyAsInt("DRAWS_ON_ATTACK");
+        GIVE_DRAWS_ON_ATTACK = register.applyAsInt("GIVE_DRAWS_ON_ATTACK");
         DRAWS_ON_BLOCK = register.applyAsInt("DRAWS_ON_BLOCK");
         DRAWS_ON_ATTACKED = register.applyAsInt("DRAWS_ON_ATTACKED");
         FATIGUE = register.applyAsInt("FATIGUE");

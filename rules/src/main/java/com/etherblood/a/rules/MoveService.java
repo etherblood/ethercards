@@ -697,54 +697,54 @@ public class MoveService {
                 if (data.has(player, core.PLAYER_RESULT)) {
                     continue;
                 }
-                throw new IllegalStateException();
+                throw new IllegalStateException("Players without playerResult exist when there is already a winner.");
             }
         }
         for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
             if (data.has(player, core.PLAYER_RESULT)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Active player has a playerResult.");
             }
             if (!data.has(player, core.PLAYER_INDEX)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Active player does not have a playerIndex");
             }
         }
 
         if (data.list(core.ACTIVE_PLAYER_PHASE).isEmpty() && data.list(core.START_PHASE_REQUEST).isEmpty()) {
             if (winners.size() + losers.size() != players.size()) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Some players are still without playerResult and there is no activePlayerPhase.");
             }
         }
 
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             if (!data.has(minion, core.OWNED_BY)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Minion without owner in battle zone.");
             }
             if (!data.has(minion, core.MINION_TEMPLATE)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Minion without template in battle zone.");
             }
         }
 
         for (int minion : data.list(core.IN_HAND_ZONE)) {
             if (!data.has(minion, core.OWNED_BY)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Card without owner in hand zone.");
             }
             if (!data.has(minion, core.CARD_TEMPLATE)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Card without template in hand zone.");
             }
         }
 
         for (int minion : data.list(core.IN_LIBRARY_ZONE)) {
             if (!data.has(minion, core.OWNED_BY)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Card without owner in library zone.");
             }
             if (!data.has(minion, core.CARD_TEMPLATE)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Card without template in library zone.");
             }
         }
 
         for (int minion : data.list(core.ATTACKS_TARGET)) {
             if (!data.has(minion, core.IN_BATTLE_ZONE)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Attacking minion is not in battle zone.");
             }
         }
 

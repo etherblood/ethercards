@@ -105,6 +105,18 @@ public abstract class AbstractGameTest {
         return data.list(core.HERO).stream().filter(x -> data.hasValue(x, core.OWNED_BY, player)).findAny().getAsInt();
     }
 
+    public int createLibraryCard(int owner, String cardTemplate) {
+        return createLibraryCard(owner, getCardId(cardTemplate));
+    }
+
+    public int createLibraryCard(int owner, int cardTemplate) {
+        int card = data.createEntity();
+        data.set(card, core.CARD_TEMPLATE, cardTemplate);
+        data.set(card, core.OWNED_BY, owner);
+        data.set(card, core.IN_LIBRARY_ZONE, 1);
+        return card;
+    }
+
     public int createHandCard(int owner, String cardTemplate) {
         return createHandCard(owner, getCardId(cardTemplate));
     }

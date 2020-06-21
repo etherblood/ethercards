@@ -1,0 +1,13 @@
+{
+    "alias": "minions/goblin_guide.json",
+    "display": {
+        "name": "Goblin Guide",
+        "imagePath": "images/cards/goblin_guide.jpg",
+        "colors": ["RED"]
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 2,
+        "GIVE_DRAWS_ON_ATTACK": 1
+    }
+}

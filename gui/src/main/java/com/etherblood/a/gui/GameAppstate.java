@@ -351,6 +351,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.DRAWS_ON_ATTACK)) {
                     keywords.add("Draws_on_Attack " + data.get(cardEntity, core.DRAWS_ON_ATTACK));
                 }
+                if (data.has(cardEntity, core.GIVE_DRAWS_ON_ATTACK)) {
+                    keywords.add("Give_Draws_on_Attack " + data.get(cardEntity, core.GIVE_DRAWS_ON_ATTACK));
+                }
                 if (data.has(cardEntity, core.DRAWS_ON_BLOCK)) {
                     keywords.add("Draws_on_Block " + data.get(cardEntity, core.DRAWS_ON_BLOCK));
                 }

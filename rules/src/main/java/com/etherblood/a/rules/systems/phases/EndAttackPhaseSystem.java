@@ -24,10 +24,18 @@ public class EndAttackPhaseSystem extends AbstractSystem {
                     .toArray()) {
                 int target = data.get(attacker, core.ATTACKS_TARGET);
                 data.set(attacker, core.TIRED, 1);
+                if (!data.has(target, core.IN_BATTLE_ZONE)) {
+                    data.remove(attacker, core.ATTACKS_TARGET);
+                    continue;
+                }
                 data.set(target, core.TIRED, 1);
                 data.getOptional(attacker, core.DRAWS_ON_ATTACK).ifPresent(draws -> {
                     int owner = data.get(attacker, core.OWNED_BY);
                     SystemsUtil.increase(data, owner, core.DRAW_CARDS, draws);
+                });
+                data.getOptional(attacker, core.GIVE_DRAWS_ON_ATTACK).ifPresent(draws -> {
+                    int targetOwner = data.get(target, core.OWNED_BY);
+                    SystemsUtil.increase(data, targetOwner, core.DRAW_CARDS, draws);
                 });
             }
             for (int minion : data.list(core.SUMMONING_SICKNESS)) {
