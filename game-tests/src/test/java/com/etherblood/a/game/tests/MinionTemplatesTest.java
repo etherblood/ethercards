@@ -65,6 +65,9 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
     @Test
     public void armadillo_cloak() {
+        int armadilloCloakHealth = 2;
+        int armadilloCloakAttack = 2;
+        
         int ornithopter = summon(player(0), "minions/ornithopter.json");
         int armadillo_cloak = createHandCard(player(0), "cards/armadillo_cloak.json");
 
@@ -75,9 +78,10 @@ public class MinionTemplatesTest extends AbstractGameTest {
         game.getMoves().apply(new Cast(player(0), armadillo_cloak, ornithopter));
 
         int actualHealth = data.get(ornithopter, core.HEALTH);
-        Assertions.assertEquals(previousHealth + 2, actualHealth);
         int actualAttack = data.get(ornithopter, core.ATTACK);
-        Assertions.assertEquals(previousAttack + 2, actualAttack);
+        
+        Assertions.assertEquals(previousHealth + armadilloCloakHealth, actualHealth);
+        Assertions.assertEquals(previousAttack + armadilloCloakAttack, actualAttack);
         Assertions.assertTrue(data.has(ornithopter, core.TRAMPLE));
         Assertions.assertEquals(hero(0), data.get(ornithopter, core.LIFELINK));
     }
