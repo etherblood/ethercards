@@ -8,7 +8,6 @@
     "components": {
         "ATTACK": 5,
         "HEALTH": 4,
-        "SUMMONING_SICKNESS": 1,
         "TRAMPLE": 1
     }
 }

@@ -79,7 +79,7 @@ public class SystemsUtil {
         increase(data, target, core.DAMAGE_REQUEST, damage);
     }
 
-    public static int summonHero(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
+    public static int createHero(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int hero = data.createEntity();
         data.set(hero, core.HERO, 1);
@@ -90,7 +90,7 @@ public class SystemsUtil {
         return hero;
     }
 
-    public static int summonMinion(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
+    public static int createMinion(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
         int minion = data.createEntity();
         applyTemplate(settings, data, random, minionTemplate, minion, owner);
         return minion;

@@ -18,6 +18,7 @@ import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.Connectio
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
+import com.destrostudios.cardgui.transformations.LinearTargetPositionTransformation3f;
 import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;

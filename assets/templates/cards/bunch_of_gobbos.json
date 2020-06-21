@@ -11,15 +11,18 @@
         "effects": [
             {
                 "type": "summon",
-                "minionId": "minions/gobbo.json"
+                "minionId": "minions/gobbo.json",
+                "fast": true
             },
             {
                 "type": "summon",
-                "minionId": "minions/gobbo.json"
+                "minionId": "minions/gobbo.json",
+                "fast": true
             },
             {
                 "type": "summon",
-                "minionId": "minions/gobbo.json"
+                "minionId": "minions/gobbo.json",
+                "fast": true
             }
         ]
     }

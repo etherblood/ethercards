@@ -13,7 +13,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
     @Test
     public void boombot_deathrattle() {
-        int boombot = summon(player(0), "minions/boombot.json");
+        int boombot = createMinion(player(0), "minions/boombot.json");
         int boomBotDamage = 2;
         int previousHealth = data.get(hero(1), core.HEALTH);
 
@@ -26,10 +26,8 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
     @Test
     public void dragonlord_atarka_trample_through_ornithopter() {
-        int atarka = summon(player(0), "minions/dragonlord_atarka.json");
-        data.remove(atarka, core.SUMMONING_SICKNESS);
-        int ornithopter = summon(player(1), "minions/ornithopter.json");
-        data.remove(ornithopter, core.SUMMONING_SICKNESS);
+        int atarka = createMinion(player(0), "minions/dragonlord_atarka.json");
+        int ornithopter = createMinion(player(1), "minions/ornithopter.json");
 
         int previousHealth = data.get(hero(1), core.HEALTH);
         int atarkaAttack = data.get(atarka, core.ATTACK);
@@ -48,8 +46,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
     @Test
     public void dragonlord_dromoka_lifelink() {
-        int atarka = summon(player(0), "minions/dragonlord_dromoka.json");
-        data.remove(atarka, core.SUMMONING_SICKNESS);
+        int atarka = createMinion(player(0), "minions/dragonlord_dromoka.json");
 
         int previousHealth = data.get(hero(0), core.HEALTH);
         int dromokaAttack = data.get(atarka, core.ATTACK);
@@ -68,7 +65,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
         int armadilloCloakHealth = 2;
         int armadilloCloakAttack = 2;
         
-        int ornithopter = summon(player(0), "minions/ornithopter.json");
+        int ornithopter = createMinion(player(0), "minions/ornithopter.json");
         int armadillo_cloak = createHandCard(player(0), "cards/armadillo_cloak.json");
 
         int previousHealth = data.get(ornithopter, core.HEALTH);

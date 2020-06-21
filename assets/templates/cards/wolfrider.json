@@ -11,7 +11,8 @@
         "effects": [
             {
                 "type": "summon",
-                "minionId": "minions/wolfrider.json"
+                "minionId": "minions/wolfrider.json",
+                "fast": true
             }
         ]
     }

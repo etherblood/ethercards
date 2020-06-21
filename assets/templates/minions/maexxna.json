@@ -8,7 +8,6 @@
     "components": {
         "ATTACK": 2,
         "HEALTH": 8,
-        "VENOM": 4,
-        "SUMMONING_SICKNESS": 1
+        "VENOM": 4
     }
 }

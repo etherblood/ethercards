@@ -7,7 +7,6 @@
     },
     "components": {
         "ATTACK": 4,
-        "HEALTH": 5,
-        "SUMMONING_SICKNESS": 1
+        "HEALTH": 5
     }
 }

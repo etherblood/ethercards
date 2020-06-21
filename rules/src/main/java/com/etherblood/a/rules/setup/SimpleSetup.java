@@ -3,7 +3,6 @@ package com.etherblood.a.rules.setup;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 
@@ -30,7 +29,8 @@ public class SimpleSetup {
                 data.set(player, core.DRAW_CARDS, 4);
             }
 
-            SystemsUtil.summonHero(game.getSettings(), data, x -> 0, heroes[i], player);
+            int hero = SystemsUtil.createHero(game.getSettings(), data, x -> 0, heroes[i], player);
+            data.set(hero, core.SUMMONING_SICKNESS, 1);
 
             for (int cardTemplate : libraries[i]) {
                 int card = data.createEntity();
