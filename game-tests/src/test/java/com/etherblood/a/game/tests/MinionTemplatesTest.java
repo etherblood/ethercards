@@ -80,7 +80,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
         Assertions.assertEquals(previousHealth + armadilloCloakHealth, actualHealth);
         Assertions.assertEquals(previousAttack + armadilloCloakAttack, actualAttack);
         Assertions.assertTrue(data.has(ornithopter, core.TRAMPLE));
-        Assertions.assertEquals(hero(0), data.get(ornithopter, core.LIFELINK));
+        Assertions.assertTrue(data.has(ornithopter, core.LIFELINK));
     }
 
     @Test

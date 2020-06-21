@@ -42,6 +42,7 @@ import java.util.Map;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
+    private static final int CARD_COPIES_LIMIT = 3;
     private RawLibraryTemplate result = null;
     private final RawLibraryTemplate presetLibrary;
 
@@ -172,9 +173,8 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         resultLibrary.hero = presetLibrary.hero;
         resultLibrary.cards = new HashMap<>();
         for (Map.Entry<CardModel, Integer> entry : deckBuilderAppState.getDeck().entrySet()) {
-            resultLibrary.cards.put(entry.getKey().getTemplate().getAlias(), entry.getValue());
+            resultLibrary.cards.put(entry.getKey().getTemplate().getAlias(), Math.min(entry.getValue(), CARD_COPIES_LIMIT));
         }
-        System.out.println("library selected");
         result = resultLibrary;
     }
 

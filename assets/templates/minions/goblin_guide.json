@@ -3,7 +3,8 @@
     "display": {
         "name": "Goblin Guide",
         "imagePath": "images/cards/goblin_guide.jpg",
-        "colors": ["RED"]
+        "colors": ["RED"],
+        "flavourText": "\"I've been all over this world. I even remember some of those places.\""
     },
     "components": {
         "ATTACK": 2,

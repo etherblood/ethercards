@@ -1,0 +1,18 @@
+{
+    "alias": "cards/aerial_responder.json",
+    "display": {
+        "name": "Aerial Responder",
+        "imagePath": "images/cards/aerial_responder.png",
+        "colors": ["WHITE"],
+        "description": "Summon a 2/3 Aerial Responder with Lifelink and Vigilance."
+    },
+    "attackCast": {
+        "manaCost": 3,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/aerial_responder.json"
+            }
+        ]
+    }
+}

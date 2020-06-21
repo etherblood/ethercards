@@ -64,8 +64,14 @@ public class SystemsUtil {
         damage(data, blocker, attackerDamage);
         damage(data, attacker, blockerDamage);
 
-        data.getOptional(attacker, core.LIFELINK).ifPresent(target -> increase(data, target, core.HEALTH, attackerDamage));
-        data.getOptional(blocker, core.LIFELINK).ifPresent(target -> increase(data, target, core.HEALTH, blockerDamage));
+        if (data.has(attacker, core.LIFELINK)) {
+            int attackerOwner = data.get(attacker, core.OWNED_BY);
+            increase(data, randomHero(data, random, attackerOwner), core.HEALTH, attackerDamage);
+        }
+        if (data.has(blocker, core.LIFELINK)) {
+            int blockerOwner = data.get(blocker, core.OWNED_BY);
+            increase(data, randomHero(data, random, blockerOwner), core.HEALTH, blockerDamage);
+        }
 
         data.getOptional(attacker, core.VENOM).ifPresent(venom -> increase(data, blocker, core.POISONED, venom));
         data.getOptional(blocker, core.VENOM).ifPresent(venom -> increase(data, attacker, core.POISONED, venom));
@@ -102,11 +108,7 @@ public class SystemsUtil {
         data.set(minion, core.OWNED_BY, owner);
         data.set(minion, core.IN_BATTLE_ZONE, 1);
         for (int component : template) {
-            if (component == core.LIFELINK) {
-                data.set(minion, component, randomHero(data, random, owner));
-            } else {
-                data.set(minion, component, template.get(component));
-            }
+            data.set(minion, component, template.get(component));
         }
     }
 

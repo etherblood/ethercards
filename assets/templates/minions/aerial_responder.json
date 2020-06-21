@@ -1,0 +1,15 @@
+{
+    "alias": "minions/aerial_responder.json",
+    "display": {
+        "name": "Aerial Responder",
+        "imagePath": "images/cards/aerial_responder.png",
+        "colors": ["WHITE"],
+        "flavourTest": "Dwarves have an instinct for repair, an inherent understanding of how systems work, and a reputation for fearlessness. They're perfect candidates for the Fair's emergency response team."
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 3,
+        "LIFELINK": true,
+        "VIGILANCE": true
+    }
+}

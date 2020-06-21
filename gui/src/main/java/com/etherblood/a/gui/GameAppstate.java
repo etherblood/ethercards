@@ -333,6 +333,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.LIFELINK)) {
                     keywords.add("Lifelink");
                 }
+                if (data.has(cardEntity, core.VIGILANCE)) {
+                    keywords.add("Vigilance");
+                }
                 if (data.has(cardEntity, core.VENOM)) {
                     keywords.add("Venom_" + data.get(cardEntity, core.VENOM));
                 }
@@ -346,16 +349,16 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     keywords.add("Mana_Growth_" + data.get(cardEntity, core.MANA_GROWTH));
                 }
                 if (data.has(cardEntity, core.DRAWS_PER_TURN)) {
-                    keywords.add("Draws_per_Turn " + data.get(cardEntity, core.DRAWS_PER_TURN));
+                    keywords.add("Draws_per_Turn_" + data.get(cardEntity, core.DRAWS_PER_TURN));
                 }
                 if (data.has(cardEntity, core.DRAWS_ON_ATTACK)) {
-                    keywords.add("Draws_on_Attack " + data.get(cardEntity, core.DRAWS_ON_ATTACK));
+                    keywords.add("Draws_on_Attack_" + data.get(cardEntity, core.DRAWS_ON_ATTACK));
                 }
                 if (data.has(cardEntity, core.GIVE_DRAWS_ON_ATTACK)) {
-                    keywords.add("Give_Draws_on_Attack " + data.get(cardEntity, core.GIVE_DRAWS_ON_ATTACK));
+                    keywords.add("Give_Draws_on_Attack_" + data.get(cardEntity, core.GIVE_DRAWS_ON_ATTACK));
                 }
                 if (data.has(cardEntity, core.DRAWS_ON_BLOCK)) {
-                    keywords.add("Draws_on_Block " + data.get(cardEntity, core.DRAWS_ON_BLOCK));
+                    keywords.add("Draws_on_Block_" + data.get(cardEntity, core.DRAWS_ON_BLOCK));
                 }
                 if (data.has(cardEntity, core.CANNOT_ATTACK)) {
                     keywords.add("Cannot_attack");
@@ -368,6 +371,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 }
                 if (data.has(cardEntity, core.OWN_MINIONS_HASTE_AURA)) {
                     keywords.add("Haste_Aura");
+                }
+                if (data.has(cardEntity, core.FATIGUE)) {
+                    keywords.add("Fatigue_" + data.get(cardEntity, core.FATIGUE));
                 }
                 minionModel.setKeywords(keywords);
 

@@ -22,8 +22,10 @@ public class EndAttackPhaseSystem extends AbstractSystem {
             for (int attacker : data.list(core.ATTACKS_TARGET).stream()
                     .filter(x -> data.hasValue(x, core.OWNED_BY, player))
                     .toArray()) {
+                if (!data.has(attacker, core.VIGILANCE)) {
+                    data.set(attacker, core.TIRED, 1);
+                }
                 int target = data.get(attacker, core.ATTACKS_TARGET);
-                data.set(attacker, core.TIRED, 1);
                 if (!data.has(target, core.IN_BATTLE_ZONE)) {
                     data.remove(attacker, core.ATTACKS_TARGET);
                     continue;

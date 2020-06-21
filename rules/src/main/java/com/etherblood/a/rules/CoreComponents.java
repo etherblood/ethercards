@@ -49,6 +49,7 @@ public class CoreComponents implements ComponentsModule {
     public final int VENOM;
     public final int TRAMPLE;
     public final int LIFELINK;
+    public final int VIGILANCE;
     public final int OWN_MINIONS_HASTE_AURA;
 
     public CoreComponents(ToIntFunction<String> register) {
@@ -96,6 +97,7 @@ public class CoreComponents implements ComponentsModule {
         VENOM = register.applyAsInt("VENOM");
         TRAMPLE = register.applyAsInt("TRAMPLE");
         LIFELINK = register.applyAsInt("LIFELINK");
+        VIGILANCE = register.applyAsInt("VIGILANCE");
         OWN_MINIONS_HASTE_AURA = register.applyAsInt("OWN_MINIONS_HASTE_AURA");
     }
 }

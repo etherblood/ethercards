@@ -19,16 +19,9 @@ public class BuffEffect extends Effect {
 
     @Override
     public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (int component : components) {
-            if (core.LIFELINK == component) {
-                int owner = data.get(target, core.OWNED_BY);
-                int hero = SystemsUtil.randomHero(data, random, owner);
-                data.set(target, component, hero);
-            } else {
-                int amount = components.get(component);
-                SystemsUtil.increase(data, target, component, amount);
-            }
+            int amount = components.get(component);
+            SystemsUtil.increase(data, target, component, amount);
         }
     }
 }
