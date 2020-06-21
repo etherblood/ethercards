@@ -33,6 +33,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -76,6 +77,13 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         BoardObjectVisualizer<CardZone> collectionZoneVisualizer = new DebugZoneVisualizer() {
 
             @Override
+            protected Geometry createVisualizationObject(AssetManager assetManager) {
+                Geometry geometry = super.createVisualizationObject(assetManager);
+                geometry.setCullHint(Spatial.CullHint.Always);
+                return geometry;
+            }
+
+            @Override
             protected Vector2f getSize(CardZone zone) {
                 return new Vector2f(16.5f, 10);
             }
@@ -86,6 +94,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             protected Geometry createVisualizationObject(AssetManager assetManager) {
                 Geometry visualizationObject = super.createVisualizationObject(assetManager);
                 visualizationObject.move(0, 0, 4.715f);
+                visualizationObject.setCullHint(Spatial.CullHint.Always);
                 return visualizationObject;
             }
 
