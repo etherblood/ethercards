@@ -11,9 +11,11 @@ import com.etherblood.a.templates.RawLibraryTemplate;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +26,9 @@ public class GameServer {
     private final Server server;
 
     public GameServer(JwtParser jwtParser, Function<String, JsonElement> assetLoader) {
-        RawLibraryTemplate botLibrary = new Gson().fromJson(assetLoader.apply("libraries/bot.json"), RawLibraryTemplate.class);
+        RawLibraryTemplate botLibrary = new RawLibraryTemplate();
+        botLibrary.hero = "minions/shyvana.json";
+        botLibrary.cards = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
 
         server = new Server();
         NetworkUtil.init(server.getKryo());

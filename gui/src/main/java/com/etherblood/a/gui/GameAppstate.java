@@ -37,7 +37,7 @@ import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.moves.Block;
+import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
 import com.etherblood.a.rules.moves.DeclareMulligan;
@@ -373,7 +373,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 //                if (game.getMoves().canDeclareAttack(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));
                     minionModel.setGlow(ColorRGBA.Red);
-                } else if (moves.stream().filter(Block.class::isInstance).map(Block.class::cast)
+                } else if (moves.stream().filter(DeclareBlock.class::isInstance).map(DeclareBlock.class::cast)
                         .anyMatch(block -> block.player == userControlledPlayer && block.source == cardEntity)) {
 //                } else if (game.getMoves().canBlock(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(blockInteractivity(userControlledPlayer, cardEntity));
@@ -416,7 +416,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (target instanceof Card) {
                     int targetId = objectEntities.get(target);
                     List<Move> moves = game.getMoves().generate(false, false);
-                    return moves.stream().anyMatch(new Block(player, blocker, targetId)::equals);
+                    return moves.stream().anyMatch(new DeclareBlock(player, blocker, targetId)::equals);
                 }
                 return false;
             }
@@ -425,7 +425,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             public void trigger(BoardObject source, BoardObject target) {
                 int actor = objectEntities.get(source);
                 int dest = objectEntities.get(target);
-                requestMove(new Block(player, actor, dest));
+                requestMove(new DeclareBlock(player, actor, dest));
             }
         };
     }

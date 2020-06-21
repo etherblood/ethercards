@@ -1,23 +1,9 @@
 package com.etherblood.a.ai;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.moves.Block;
-import com.etherblood.a.rules.moves.Cast;
-import com.etherblood.a.rules.moves.DeclareAttack;
-import com.etherblood.a.rules.moves.DeclareMulligan;
-import com.etherblood.a.rules.moves.EndAttackPhase;
-import com.etherblood.a.rules.moves.EndBlockPhase;
-import com.etherblood.a.rules.moves.EndMulliganPhase;
+import com.etherblood.a.rules.GameDataPrinter;
 import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.rules.moves.Start;
-import com.etherblood.a.rules.templates.CardCast;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.effects.targeting.TargetUtil;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,35 +22,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
     @Override
     public String toMoveString(Move move) {
-        if (move instanceof EndBlockPhase) {
-            return "End BlockPhase";
-        }
-        if (move instanceof EndAttackPhase) {
-            return "End AttackPhase";
-        }
-        if (move instanceof EndMulliganPhase) {
-            return "End MulliganPhase";
-        }
-        if (move instanceof DeclareMulligan) {
-            DeclareMulligan mulligan = (DeclareMulligan) move;
-            return "DeclareMulligan " + toCardString(mulligan.card);
-        }
-        if (move instanceof Cast) {
-            Cast cast = (Cast) move;
-            return "Cast " + toCardString(cast.source) + " -> " + toMinionString(cast.target);
-        }
-        if (move instanceof Block) {
-            Block block = (Block) move;
-            return "Block " + toMinionString(block.source) + " -> " + toMinionString(block.target);
-        }
-        if (move instanceof DeclareAttack) {
-            DeclareAttack attack = (DeclareAttack) move;
-            return "DeclareAttack " + toMinionString(attack.source) + " -> " + toMinionString(attack.target);
-        }
-        if (move instanceof Start) {
-            return "Start";
-        }
-        return String.valueOf(move);
+        return new GameDataPrinter(game).toMoveString(move);
     }
 
     @Override

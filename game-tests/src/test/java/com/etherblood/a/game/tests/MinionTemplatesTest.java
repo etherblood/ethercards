@@ -1,6 +1,6 @@
 package com.etherblood.a.game.tests;
 
-import com.etherblood.a.rules.moves.Block;
+import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
 import com.etherblood.a.rules.moves.EndAttackPhase;
@@ -35,7 +35,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
         game.getMoves().apply(new DeclareAttack(player(0), atarka, hero(1)));
         game.getMoves().apply(new EndAttackPhase(player(0)));
 
-        game.getMoves().apply(new Block(player(1), ornithopter, atarka));
+        game.getMoves().apply(new DeclareBlock(player(1), ornithopter, atarka));
         game.getMoves().apply(new EndBlockPhase(player(1)));
 
         Assertions.assertFalse(data.has(ornithopter, core.IN_BATTLE_ZONE));

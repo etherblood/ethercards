@@ -14,7 +14,7 @@ import com.etherblood.a.network.api.serializers.moves.EndBlockPhaseSerializer;
 import com.etherblood.a.network.api.serializers.moves.EndMulliganPhaseSerializer;
 import com.etherblood.a.network.api.serializers.moves.SurrenderSerializer;
 import com.etherblood.a.rules.MoveReplay;
-import com.etherblood.a.rules.moves.Block;
+import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
 import com.etherblood.a.rules.moves.DeclareMulligan;
@@ -46,7 +46,7 @@ public class NetworkUtil {
         kryo.register(LinkedTreeMap.class);
 
         kryo.register(Start.class);
-        kryo.register(Block.class, new BlockSerializer());
+        kryo.register(DeclareBlock.class, new BlockSerializer());
         kryo.register(Cast.class, new CastSerializer());
         kryo.register(DeclareAttack.class, new DeclareAttackSerializer());
         kryo.register(DeclareMulligan.class, new DeclareMulliganSerializer());

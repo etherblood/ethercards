@@ -3,7 +3,7 @@ package com.etherblood.a.rules;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.rules.moves.Block;
+import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
 import com.etherblood.a.rules.moves.DeclareMulligan;
@@ -141,12 +141,12 @@ public class MoveService {
                 case PlayerPhase.BLOCK: {
                     IntList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int blocker : minions) {
-                        if (!canBlock(player, blocker, false)) {
+                        if (!canDeclareBlock(player, blocker, false)) {
                             continue;
                         }
                         for (int target : minions) {
-                            if (canBlock(player, blocker, target, false)) {
-                                result.add(new Block(player, blocker, target));
+                            if (canDeclareBlock(player, blocker, target, false)) {
+                                result.add(new DeclareBlock(player, blocker, target));
                             }
                         }
                     }
@@ -198,9 +198,9 @@ public class MoveService {
 
     public void apply(Move move) {
         Runnable runnable;
-        if (move instanceof Block) {
-            Block block = (Block) move;
-            runnable = () -> block(block.player, block.source, block.target);
+        if (move instanceof DeclareBlock) {
+            DeclareBlock block = (DeclareBlock) move;
+            runnable = () -> declareBlock(block.player, block.source, block.target);
         } else if (move instanceof Cast) {
             Cast cast = (Cast) move;
             runnable = () -> cast(cast.player, cast.source, cast.target);
@@ -384,15 +384,15 @@ public class MoveService {
         return true;
     }
 
-    private void block(int player, int blocker, int attacker) {
+    private void declareBlock(int player, int blocker, int attacker) {
         if (validateMoves) {
-            canBlock(player, blocker, attacker, true);
+            canDeclareBlock(player, blocker, attacker, true);
         }
         data.set(blocker, core.BLOCKS_ATTACKER, attacker);
         update();
     }
 
-    private boolean canBlock(int player, int blocker, int attacker, boolean throwOnFail) {
+    private boolean canDeclareBlock(int player, int blocker, int attacker, boolean throwOnFail) {
         if (!data.has(attacker, core.ATTACKS_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " is not attacking.");
@@ -405,10 +405,10 @@ public class MoveService {
             }
             return false;
         }
-        return canBlock(player, blocker, throwOnFail);
+        return canDeclareBlock(player, blocker, throwOnFail);
     }
 
-    private boolean canBlock(int player, int blocker, boolean throwOnFail) {
+    private boolean canDeclareBlock(int player, int blocker, boolean throwOnFail) {
         if (!data.hasValue(blocker, core.OWNED_BY, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " does not own blocker #" + blocker + ".");

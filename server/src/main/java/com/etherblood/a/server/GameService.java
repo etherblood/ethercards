@@ -14,6 +14,7 @@ import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.rules.Game;
+import com.etherblood.a.rules.GameDataPrinter;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
@@ -77,7 +78,7 @@ public class GameService {
         }
         for (GamePlayerMapping player : players) {
             if (player.connectionId == connection.getID()) {
-                LOG.info("Surrendering game {} for player {} due to disconnect.", player.gameId, player.playerId);
+                LOG.info("Game_{} surrendering for player {} due to disconnect.", player.gameId, player.playerId);
                 GameReplayService game = games.get(player.gameId);
                 makeMove(player.gameId, new Surrender(game.getPlayerEntity(player.playerIndex)));
                 assert game.isGameOver();
@@ -102,9 +103,11 @@ public class GameService {
     }
 
     private void makeMove(UUID gameId, Move move) {
-        LOG.info("Game {} make move {}.", gameId, move);
-        GameReplayService gameReplayService = games.get(gameId);
-        MoveReplay moveReplay = gameReplayService.apply(move);
+        GameReplayService game = games.get(gameId);
+        Game gameInstance = game.createInstance();
+        GameDataPrinter printer = new GameDataPrinter(gameInstance);
+        LOG.info("Game_{} make move '{}'.", gameId, printer.toMoveString(move));
+        MoveReplay moveReplay = game.apply(move);
         for (GamePlayerMapping player : getPlayersByGameId(gameId)) {
             Connection other = getConnection(player.connectionId);
             if (other != null) {
@@ -115,9 +118,9 @@ public class GameService {
         if (botMove != null) {
             botMove.cancel(true);
         }
-        if (gameReplayService.isGameOver()) {
-            LOG.info("Game {} ended.", gameId);
-            GameReplayService game = games.remove(gameId);
+        if (game.isGameOver()) {
+            LOG.info("Game_{} ended.", gameId);
+            games.remove(gameId);
             for (GamePlayerMapping player : getPlayersByGameId(gameId)) {
                 int playerEntity = game.getPlayerEntity(player.playerIndex);
                 LOG.info("{} {}.", game.getPlayerName(player.playerIndex), game.hasPlayerWon(playerEntity) ? "won" : (game.hasPlayerLost(playerEntity) ? "lost" : " has no result"));
@@ -138,8 +141,10 @@ public class GameService {
             if (entry.getValue().isDone()) {
                 iterator.remove();
                 Move move = entry.getValue().get();
-                LOG.info("Apply computed move {} to game {}.", move, entry.getKey());
-                makeMove(entry.getKey(), move);
+                UUID gameId = entry.getKey();
+                GameDataPrinter printer = new GameDataPrinter(games.get(gameId).createInstance());
+                LOG.info("Game_{} computed move '{}'.", gameId, printer.toMoveString(move));
+                makeMove(gameId, move);
             }
         }
         if (bots.isEmpty()) {
@@ -148,7 +153,7 @@ public class GameService {
         LOG.debug("Processing {} bots.", bots.size());
         for (GameBotMapping bot : bots) {
             if (botMoves.containsKey(bot.gameId)) {
-                LOG.debug("Still computing move for game {}.", bot.gameId);
+                LOG.debug("Game_{} Still computing move.", bot.gameId);
                 continue;
             }
 
@@ -159,10 +164,10 @@ public class GameService {
                 throw new AssertionError();
             }
             if (botGame.isPlayerIndexActive(bot.playerIndex)) {
-                LOG.info("Start computing move for game {}.", bot.gameId);
+                LOG.debug("Game_{} start computing move.", bot.gameId);
                 botMoves.put(bot.gameId, executor.submit(() -> bot.bot.findBestMove(bot.playerIndex)));
             } else {
-                LOG.debug("Skip game {}, it is not the bots turn.", bot.gameId);
+                LOG.debug("Game_{} skip, it is not the bots turn.", bot.gameId);
             }
         }
     }
