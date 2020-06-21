@@ -530,10 +530,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
             float x = -1.25f;
             float z = 2 * (ZONE_HEIGHT / 2);
-            x += 3.25f;
-            SimpleIntervalZone boardZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(-directionX, 1, 1));
+            x += 3.9f;
+            SimpleIntervalZone boardZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(-0.9f * directionX, 1, 1));
 
-            x = -0.5f;
+            x = 0;
             x += 3.75f;
             SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.02f, 0));
             z += ZONE_HEIGHT / 2;
@@ -606,7 +606,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         button.setMaterial(mat);
 
-        button.setLocalScale(0.8f);
+        button.setLocalScale(0.3f);
         button.setLocalTranslation(2.6f, 0.5f, 1);
         button.setLocalRotation(new Quaternion().fromAngles(-FastMath.QUARTER_PI, 0, 0));
         return button;

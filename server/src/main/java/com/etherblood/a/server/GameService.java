@@ -23,6 +23,7 @@ import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.templates.RawLibraryTemplate;
 import com.google.gson.JsonElement;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -43,6 +45,7 @@ public class GameService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GameService.class);
 
+    private final Random random = new SecureRandom();
     private final Server server;
     private final JwtParser jwtParser;
     private final Function<String, JsonElement> assetLoader;
@@ -90,7 +93,7 @@ public class GameService {
     }
 
     public synchronized void onMoveRequest(Connection connection, Move move) {
-        if(move instanceof Update) {
+        if (move instanceof Update) {
             return;
         }
         GamePlayerMapping mapping = getPlayerByConnectionId(connection.getID());
@@ -185,7 +188,7 @@ public class GameService {
                     bot.library = botLibrary;
 
                     GameSetup setup = new GameSetup();
-                    setup.players = new PlayerSetup[]{human, bot};
+                    setup.players = shuffle(new PlayerSetup[]{human, bot});
                     UUID gameId = UUID.randomUUID();
                     GameReplayService game = new GameReplayService(setup, assetLoader);
                     MoveReplay moveReplay = game.apply(new Start());
@@ -232,7 +235,7 @@ public class GameService {
             player1.library = request1.library;
 
             GameSetup setup = new GameSetup();
-            setup.players = new PlayerSetup[]{player0, player1};
+            setup.players = shuffle(new PlayerSetup[]{player0, player1});
             GameReplayService game = new GameReplayService(setup, assetLoader);
             MoveReplay moveReplay = game.apply(new Start());
             UUID gameId = UUID.randomUUID();
@@ -249,6 +252,16 @@ public class GameService {
             connectionGameRequests.remove(connection0.getID());
             connectionGameRequests.remove(connection1.getID());
         }
+    }
+
+    private <T> T[] shuffle(T[] array) {
+        for (int i = 0; i < array.length; i++) {
+            int j = random.nextInt(array.length - i);
+            T tmp = array[i];
+            array[i] = array[j];
+            array[j] = tmp;
+        }
+        return array;
     }
 
     private List<GamePlayerMapping> getPlayersByGameId(UUID gameId) {

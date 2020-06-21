@@ -15,7 +15,7 @@ public class PlayerStatusSystem extends AbstractSystem {
     @Override
     public void run(GameSettings settings, EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        updatePlayerDeaths(data);
+        updatePlayerResults(data);
 
         for (int player : data.list(core.PLAYER_RESULT)) {
             if (data.has(player, core.ACTIVE_PLAYER_PHASE)) {
@@ -34,14 +34,20 @@ public class PlayerStatusSystem extends AbstractSystem {
         }
     }
 
-    private void updatePlayerDeaths(EntityData data) {
+    private void updatePlayerResults(EntityData data) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList players = data.list(core.PLAYER_INDEX);
         IntList heroes = data.list(core.HERO);
         IntList alive = new IntList();
         for (int minion : heroes) {
+            if (data.has(minion, core.DEATH_ACTION)) {
+                continue;
+            }
             int owner = data.get(minion, core.OWNED_BY);
-            if (!alive.contains(owner) && !data.hasValue(owner, core.PLAYER_RESULT, PlayerResult.LOSS)) {
+            if (data.hasValue(owner, core.PLAYER_RESULT, PlayerResult.LOSS)) {
+                continue;
+            }
+            if (!alive.contains(owner)) {
                 alive.add(owner);
             }
         }
