@@ -717,7 +717,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         button.setMaterial(mat);
 
         button.setLocalScale(0.3f);
-        button.setLocalTranslation(2.6f, 0.5f, 1);
+        button.setLocalTranslation(3.3f, 0.5f, 1);
         button.setLocalRotation(new Quaternion().fromAngles(-FastMath.QUARTER_PI, 0, 0));
         return button;
     }

@@ -6,7 +6,7 @@
         "colors": ["RED"]
     },
     "components": {
-        "ATTACK": 2,
+        "ATTACK": 1,
         "HEALTH": 1
     }
 }

@@ -4,14 +4,15 @@
         "name": "Goblin",
         "imagePath": "images/cards/Goblin.png",
         "colors": ["RED"],
-        "description": "Summon a 2/1 goblin."
+        "description": "Summon a Fast 1/1 Goblin."
     },
     "attackCast": {
         "manaCost": 1,
         "effects": [
             {
                 "type": "summon",
-                "minionId": "minions/goblin.json"
+                "minionId": "minions/goblin.json",
+                "fast": true
             }
         ]
     }

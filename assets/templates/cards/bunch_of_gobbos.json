@@ -1,27 +1,27 @@
 {
     "alias": "cards/bunch_of_gobbos.json",
     "display": {
-        "name": "Bunch of gobbos",
-        "imagePath": "images/cards/Goblin.png",
+        "name": "Bunch of Goblins",
+        "imagePath": "images/cards/bunch_of_goblins.jpg",
         "colors": ["RED"],
-        "description": "Summon 3 Fast 1/1 gobbos that can't block."
+        "description": "Summon 3 Fast 1/1 Goblins."
     },
     "attackCast": {
         "manaCost": 4,
         "effects": [
             {
                 "type": "summon",
-                "minionId": "minions/gobbo.json",
+                "minionId": "minions/goblin.json",
                 "fast": true
             },
             {
                 "type": "summon",
-                "minionId": "minions/gobbo.json",
+                "minionId": "minions/goblin.json",
                 "fast": true
             },
             {
                 "type": "summon",
-                "minionId": "minions/gobbo.json",
+                "minionId": "minions/goblin.json",
                 "fast": true
             }
         ]
