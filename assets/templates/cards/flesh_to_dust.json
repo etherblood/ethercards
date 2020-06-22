@@ -15,6 +15,9 @@
                 "components": {
                     "DEATH_REQUEST": 1
                 }
+            }, {
+                "type": "particle",
+                "alias": "flesh_to_dust"
             }
         ]
     }

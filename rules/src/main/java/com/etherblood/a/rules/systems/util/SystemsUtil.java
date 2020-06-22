@@ -3,6 +3,8 @@ package com.etherblood.a.rules.systems.util;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
+import com.etherblood.a.game.events.api.GameEventListener;
+import com.etherblood.a.game.events.api.events.BattleEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.templates.MinionTemplate;
@@ -56,7 +58,8 @@ public class SystemsUtil {
         }
     }
 
-    public static void fight(EntityData data, IntUnaryOperator random, int attacker, int blocker) {
+    public static void fight(EntityData data, IntUnaryOperator random, int attacker, int blocker, GameEventListener events) {
+        events.fire(new BattleEvent(attacker, blocker));
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int attackerDamage = data.getOptional(attacker, core.ATTACK).orElse(0);
         int blockerDamage = data.getOptional(blocker, core.ATTACK).orElse(0);

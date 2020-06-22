@@ -3,6 +3,7 @@ package com.etherblood.a.rules;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
@@ -17,7 +18,6 @@ import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.systems.CastSystem;
 import com.etherblood.a.rules.systems.core.ClearActionsSystem;
 import com.etherblood.a.rules.systems.DamageSystem;
-import com.etherblood.a.rules.systems.DeathCleanupSystem;
 import com.etherblood.a.rules.systems.DrawSystem;
 import com.etherblood.a.rules.systems.phases.EndAttackPhaseSystem;
 import com.etherblood.a.rules.systems.phases.EndBlockPhaseSystem;
@@ -26,7 +26,7 @@ import com.etherblood.a.rules.systems.OnDeathSystem;
 import com.etherblood.a.rules.systems.OnSurvivalSystem;
 import com.etherblood.a.rules.systems.PlayerStatusSystem;
 import com.etherblood.a.rules.systems.PreventNecroInteractionsSystem;
-import com.etherblood.a.rules.systems.RemoveDeadAbilitiesSystem;
+import com.etherblood.a.rules.systems.DeathSystem;
 import com.etherblood.a.rules.systems.core.RequestsToActionsSystem;
 import com.etherblood.a.rules.systems.phases.StartAttackPhaseSystem;
 import com.etherblood.a.rules.systems.phases.StartBlockPhaseSystem;
@@ -52,23 +52,25 @@ public class MoveService {
     private final HistoryRandom random;
     private final List<MoveReplay> history;
     private final CoreComponents core;
+    private final GameEventListener eventListener;
 
     private final boolean backupsEnabled;
     private final boolean validateMoves;
 
     private final List<AbstractSystem> systems;
 
-    public MoveService(GameSettings settings, EntityData data, HistoryRandom random) {
-        this(settings, data, random, Collections.emptyList(), true, true);
+    public MoveService(GameSettings settings, EntityData data, HistoryRandom random, GameEventListener eventListener) {
+        this(settings, data, random, Collections.emptyList(), true, true, eventListener);
     }
 
-    public MoveService(GameSettings settings, EntityData data, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves) {
+    public MoveService(GameSettings settings, EntityData data, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves, GameEventListener eventListener) {
         this.settings = settings;
         this.data = data;
         this.random = random;
         this.core = data.getComponents().getModule(CoreComponents.class);
         this.backupsEnabled = backupsEnabled;
         this.validateMoves = validateMoves;
+        this.eventListener = eventListener;
         if (history != null) {
             this.history = new ArrayList<>(history);
         } else {
@@ -79,23 +81,22 @@ public class MoveService {
                 new PreventNecroInteractionsSystem(),
                 // requests -> actions 
                 new RequestsToActionsSystem(),
+                // trigger effects
+                new OnDeathSystem(),
+                new OnSurvivalSystem(),
                 // process actions & create requests
-                new RemoveDeadAbilitiesSystem(),
+                new DeathSystem(),
+                new DamageSystem(),
+                new PlayerStatusSystem(),
                 new EndMulliganPhaseSystem(),
                 new EndBlockPhaseSystem(),
                 new EndAttackPhaseSystem(),
                 new StartMulliganPhaseSystem(),
                 new StartBlockPhaseSystem(),
                 new StartAttackPhaseSystem(),
-                // new BlockSystem(),//TODO: remove or readd after new blocking logic has been tested
                 new CastSystem(),
                 new DrawSystem(),
-                new DamageSystem(),
-                new OnDeathSystem(),
-                new OnSurvivalSystem(),
-                new PlayerStatusSystem(),
                 // cleanup & clear processed actions
-                new DeathCleanupSystem(),
                 new ClearActionsSystem()
         );
     }
@@ -669,13 +670,14 @@ public class MoveService {
         requests.add(core.CAST_TARGET);
         BooleanSupplier requestExists = () -> requests.stream().flatMap(component -> data.list(component).stream()).findAny().isPresent();
         while (requestExists.getAsBoolean()) {
+            eventListener.nextIteration();
             runSystems(systems);
         }
     }
 
     private void runSystems(List<AbstractSystem> systems) {
         for (AbstractSystem system : systems) {
-            system.run(settings, data, random);
+            system.run(settings, data, random, eventListener);
         }
         assert validateStateLegal();
     }

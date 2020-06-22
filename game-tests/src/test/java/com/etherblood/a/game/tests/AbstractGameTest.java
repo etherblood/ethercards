@@ -11,6 +11,7 @@ import com.etherblood.a.rules.GameSettingsBuilder;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.rules.PlayerPhase;
+import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.systems.util.SystemsUtil;
 import com.etherblood.a.templates.RawLibraryTemplate;
@@ -70,7 +71,7 @@ public abstract class AbstractGameTest {
     @BeforeEach
     public void before() {
         data = new SimpleEntityData(settings.components);
-        moves = new MoveService(settings, data, HistoryRandom.producer());
+        moves = new MoveService(settings, data, HistoryRandom.producer(), new NoopGameEventListener());
         game = new Game(settings, data, moves);
 
         SimpleSetup setup = new SimpleSetup(2);

@@ -2,6 +2,7 @@ package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.collections.IntList;
 import java.security.SecureRandom;
+import java.util.Objects;
 import java.util.function.IntUnaryOperator;
 
 public class HistoryRandom implements IntUnaryOperator {
@@ -33,6 +34,7 @@ public class HistoryRandom implements IntUnaryOperator {
             assert 0 <= result && result < operand;
             return result;
         }
+        Objects.requireNonNull(sourceRandom, "History random is set to consumer and can't generate random numbers");
         int result = sourceRandom.applyAsInt(operand);
         history.add(result);
         next++;

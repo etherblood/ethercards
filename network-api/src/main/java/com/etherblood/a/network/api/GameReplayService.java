@@ -14,6 +14,7 @@ import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
 import com.etherblood.a.rules.MoveService;
+import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.templates.LibraryTemplate;
@@ -23,6 +24,7 @@ import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
+import com.etherblood.a.game.events.api.GameEventListener;
 
 public class GameReplayService {
 
@@ -38,7 +40,11 @@ public class GameReplayService {
         replay.moves = new ArrayList<>();
     }
 
-    public synchronized Game createInstance() {
+    public Game createInstance() {
+        return createInstance(new NoopGameEventListener());
+    }
+
+    public synchronized Game createInstance(GameEventListener listener) {
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         Components components = componentsBuilder.build();
@@ -58,7 +64,7 @@ public class GameReplayService {
         builder.templates = loader.buildGameTemplates();
         GameSettings settings = builder.build();
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(settings, data, HistoryRandom.producer(), Collections.emptyList(), true, true);
+        MoveService moves = new MoveService(settings, data, HistoryRandom.producer(), Collections.emptyList(), true, true, listener);
         Game game = new Game(settings, data, moves);
         simpleSetup.apply(game);
         updateInstance(game);

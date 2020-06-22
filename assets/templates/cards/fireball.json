@@ -2,7 +2,7 @@
     "alias": "cards/fireball.json",
     "display": {
         "name": "Fireball",
-        "imagePath": "images/cards/Mountain.png",
+        "imagePath": "images/cards/fireball.jpg",
         "colors": ["RED"],
         "description": "Deal 6 damage to the selected target."
     },
@@ -15,6 +15,9 @@
                 "components": {
                     "DAMAGE_REQUEST": 6
                 }
+            }, {
+                "type": "particle",
+                "alias": "fireball"
             }
         ]
     }

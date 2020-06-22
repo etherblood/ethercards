@@ -2,6 +2,7 @@ package com.etherblood.a.rules.templates.effects;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
+import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
@@ -21,7 +22,7 @@ public class CreateCardEffect extends Effect {
     }
 
     @Override
-    public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, int source, int target) {
+    public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int entity = data.createEntity();
         data.set(entity, core.CARD_TEMPLATE, cardId);

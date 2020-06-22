@@ -11,6 +11,7 @@ import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.CreateCardEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
+import com.etherblood.a.rules.templates.effects.ParticleEventEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
 import com.etherblood.a.rules.templates.effects.targeting.TargetFilters;
 import com.etherblood.a.rules.templates.effects.targeting.TargetedEffects;
@@ -45,6 +46,7 @@ public class TemplatesParser {
         classes.put("buff", BuffEffect.class);
         classes.put("create", CreateCardEffect.class);
         classes.put("targeted", TargetedEffects.class);
+        classes.put("particle", ParticleEventEffect.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }

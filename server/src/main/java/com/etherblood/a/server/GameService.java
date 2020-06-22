@@ -3,7 +3,6 @@ package com.etherblood.a.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.ai.bots.mcts.multithread.MultithreadMctsBot;
 import com.etherblood.a.entities.EntityData;
@@ -19,6 +18,7 @@ import com.etherblood.a.rules.GameDataPrinter;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
+import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
@@ -289,7 +289,7 @@ public class GameService {
 
     private Game simulationGame(Game game) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false);
+        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false, new NoopGameEventListener());
         return new Game(game.getSettings(), data, moves);
     }
 }

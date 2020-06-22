@@ -15,6 +15,7 @@ import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveService;
+import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.setup.SimpleSetup;
@@ -82,7 +83,7 @@ public class TestSandbox {
 
     private Game simulationGame(Game game) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false);
+        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false, new NoopGameEventListener());
         return new Game(game.getSettings(), data, moves);
     }
 
@@ -125,7 +126,7 @@ public class TestSandbox {
         setup.setHero(1, lib1.hero);
 
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(settings, data, HistoryRandom.producer());
+        MoveService moves = new MoveService(settings, data, HistoryRandom.producer(), new NoopGameEventListener());
         Game game = new Game(settings, data, moves);
         setup.apply(game);
         moves.apply(new Start());

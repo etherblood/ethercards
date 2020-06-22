@@ -1,5 +1,6 @@
 package com.etherblood.a.gui;
 
+import com.destrostudios.cardgui.Animation;
 import com.destrostudios.cardgui.Board;
 import com.destrostudios.cardgui.BoardAppState;
 import com.destrostudios.cardgui.BoardObject;
@@ -13,6 +14,12 @@ import com.destrostudios.cardgui.boardobjects.TargetArrow;
 import com.destrostudios.cardgui.events.MoveCardEvent;
 import com.destrostudios.cardgui.interactivities.AimToTargetInteractivity;
 import com.destrostudios.cardgui.interactivities.DragToPlayInteractivity;
+import com.destrostudios.cardgui.samples.animations.CameraShakeAnimation;
+import com.destrostudios.cardgui.samples.animations.ShootInEntryAnimation;
+import com.destrostudios.cardgui.samples.animations.SimpleEntryAnimation;
+import com.destrostudios.cardgui.samples.animations.SlamEntryAnimation;
+import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
+import com.destrostudios.cardgui.samples.animations.WhirlpoolEntryAnimation;
 import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.ConnectionMarker;
 import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.ConnectionMarkerVisualizer;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
@@ -23,6 +30,10 @@ import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.a.game.events.api.events.ParticleEvent;
+import com.etherblood.a.gui.particles.ColorModel;
+import com.etherblood.a.gui.particles.ColoredSphere;
+import com.etherblood.a.gui.particles.ColoredSphereVisualizer;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;
@@ -85,6 +96,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final GameReplayService gameReplayService;
     private Game game;
     private Board board;
+    private final QueueEventListener events;
     private final Map<Integer, PlayerZones> playerZones = new HashMap<>();
     private final Map<Integer, Card<CardModel>> visualCards = new HashMap<>();
     private final Map<Integer, Card<MinionModel>> visualMinions = new HashMap<>();
@@ -101,10 +113,13 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private Geometry endPhaseButton;
     private final Node endPhaseButtonNode = new Node();
 
+    private final Map<Animation, BoardObject> particleMap = new HashMap<>();
+
     public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
-        this.game = gameReplayService.createInstance();
+        events = new QueueEventListener();
+        this.game = gameReplayService.createInstance(events);
         this.userControlledPlayer = game.findPlayerByIndex(gameReplayService.getPlayerIndex(authentication.user.id));
         this.cardImages = cardImages;
         this.rootNode = rootNode;
@@ -120,9 +135,42 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     @Override
     public void update(float tpf) {
+        for (Map.Entry<Animation, BoardObject> entry : new ArrayList<>(particleMap.entrySet())) {
+            if (entry.getKey().isFinished()) {
+                board.unregister(entry.getValue());
+                particleMap.remove(entry.getKey());
+            }
+        }
         gameReplayService.updateInstance(game);
+        Object event;
+        while ((event = events.getQueue().poll()) != null) {
+            playAnimation(event);
+        }
         updateBoard();
         updateCamera();
+    }
+
+    private void playAnimation(Object event) {
+        if (event instanceof ParticleEvent) {
+            ParticleEvent particle = (ParticleEvent) event;
+            switch (particle.alias) {
+                case "flamestrike": {
+                    board.playAnimation(new CameraShakeAnimation(cameraAppstate.getCamera(), 0.3f, 0.2f));
+                    break;
+                }
+                case "fireball": {
+                    ColoredSphere sphere = new ColoredSphere(new ColorModel());
+                    sphere.getModel().setColor(ColorRGBA.Yellow);
+                    sphere.resetTransformations();
+                    sphere.position().setCurrentValue(visualCards.get(particle.source).position().getCurrentValue());
+                    board.register(sphere);
+                    TargetedArcAnimation animation = new TargetedArcAnimation(sphere, visualMinions.get(particle.target), 1, 0.6f);
+                    board.playAnimation(animation);
+                    particleMap.put(animation, sphere);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -390,6 +438,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     card.clearInteractivity();
                     minionModel.setGlow(null);
                 }
+                if (card.getZonePosition().getZone() != cardZone) {
+                    board.playAnimation(new SlamEntryAnimation(card, 0.3f));
+                }
                 board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index)));
             }
             index++;
@@ -531,6 +582,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private BoardAppState initBoardGui() {
         CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
+        board.registerVisualizer_Class(ColoredSphere.class, new ColoredSphereVisualizer());
         board.registerVisualizer_Class(CardZone.class, new DebugZoneVisualizer() {
 
             @Override
