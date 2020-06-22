@@ -15,11 +15,8 @@ import com.destrostudios.cardgui.events.MoveCardEvent;
 import com.destrostudios.cardgui.interactivities.AimToTargetInteractivity;
 import com.destrostudios.cardgui.interactivities.DragToPlayInteractivity;
 import com.destrostudios.cardgui.samples.animations.CameraShakeAnimation;
-import com.destrostudios.cardgui.samples.animations.ShootInEntryAnimation;
-import com.destrostudios.cardgui.samples.animations.SimpleEntryAnimation;
 import com.destrostudios.cardgui.samples.animations.SlamEntryAnimation;
 import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
-import com.destrostudios.cardgui.samples.animations.WhirlpoolEntryAnimation;
 import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.ConnectionMarker;
 import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.ConnectionMarkerVisualizer;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
@@ -28,6 +25,7 @@ import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
+import com.destrostudios.cardgui.zones.SimpleScalingIntervalZone;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.events.ParticleEvent;
@@ -635,11 +633,19 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             float x = -1.25f;
             float z = 2 * (ZONE_HEIGHT / 2);
             x += 3.9f;
-            SimpleIntervalZone boardZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(-0.9f * directionX, 1, 1));
+            SimpleIntervalZone boardZone = new SimpleScalingIntervalZone(offset.add(-x, 0, directionZ * z), zoneRotation, new Vector3f(-0.9f * directionX, 1, 1)) {
+                @Override
+                protected float getScale() {
+                    long cardsCount = game.getData().list(core.IN_BATTLE_ZONE).stream().filter(x -> game.getData().hasValue(x, core.OWNED_BY, player)).count();
+                    float limit = 6;
+                    return ((cardsCount < limit) ? 1 : (limit / cardsCount));
+                }
+
+            };
 
             x = 0;
             x += 3.75f;
-            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(directionX * x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.02f, 0));
+            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(-x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.02f, 0));
             z += ZONE_HEIGHT / 2;
 
             x = 0;
