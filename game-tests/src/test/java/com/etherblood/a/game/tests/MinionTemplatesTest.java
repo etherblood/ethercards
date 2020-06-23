@@ -23,6 +23,18 @@ public class MinionTemplatesTest extends AbstractGameTest {
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth - boomBotDamage, actualHealth);
     }
+    
+    @Test
+    public void grimPatron_death_onSurvive_not_triggered() {
+        int boombot = createMinion(player(0), "minions/grim_patron.json");
+        int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
+
+        data.set(boombot, core.DAMAGE_REQUEST, 3);
+        game.getMoves().apply(new Update());
+
+        int actualMinionCount = data.list(core.IN_BATTLE_ZONE).size();
+        Assertions.assertEquals(previousMinionCount - 1, actualMinionCount);
+    }
 
     @Test
     public void dragonlordAtarka_trample_through_ornithopter() {

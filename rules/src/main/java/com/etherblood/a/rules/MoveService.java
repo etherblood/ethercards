@@ -23,7 +23,6 @@ import com.etherblood.a.rules.systems.phases.EndAttackPhaseSystem;
 import com.etherblood.a.rules.systems.phases.EndBlockPhaseSystem;
 import com.etherblood.a.rules.systems.phases.EndMulliganPhaseSystem;
 import com.etherblood.a.rules.systems.OnDeathSystem;
-import com.etherblood.a.rules.systems.OnSurvivalSystem;
 import com.etherblood.a.rules.systems.PlayerStatusSystem;
 import com.etherblood.a.rules.systems.PreventNecroInteractionsSystem;
 import com.etherblood.a.rules.systems.DeathSystem;
@@ -83,7 +82,6 @@ public class MoveService {
                 new RequestsToActionsSystem(),
                 // trigger effects
                 new OnDeathSystem(),
-                new OnSurvivalSystem(),
                 // process actions & create requests
                 new DeathSystem(),
                 new DamageSystem(),
