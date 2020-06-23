@@ -76,7 +76,8 @@ public class MoveService {
             this.history = null;
         }
 
-        systems = Arrays.asList(// modify requests
+        systems = Arrays.asList(
+                // modify requests
                 new PreventNecroInteractionsSystem(),
                 // requests -> actions 
                 new RequestsToActionsSystem(),

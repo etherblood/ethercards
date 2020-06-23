@@ -17,8 +17,6 @@ import com.destrostudios.cardgui.interactivities.DragToPlayInteractivity;
 import com.destrostudios.cardgui.samples.animations.CameraShakeAnimation;
 import com.destrostudios.cardgui.samples.animations.SlamEntryAnimation;
 import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
-import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.ConnectionMarker;
-import com.destrostudios.cardgui.samples.boardobjects.connectionmarker.ConnectionMarkerVisualizer;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
@@ -29,6 +27,8 @@ import com.destrostudios.cardgui.zones.SimpleScalingIntervalZone;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.events.ParticleEvent;
+import com.etherblood.a.gui.arrows.ColoredConnectionArrow;
+import com.etherblood.a.gui.arrows.ColoredConnectionArrowVisualizer;
 import com.etherblood.a.gui.particles.ColorModel;
 import com.etherblood.a.gui.particles.ColoredSphere;
 import com.etherblood.a.gui.particles.ColoredSphereVisualizer;
@@ -99,7 +99,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final Map<Integer, Card<CardModel>> visualCards = new HashMap<>();
     private final Map<Integer, Card<MinionModel>> visualMinions = new HashMap<>();
     private final Map<BoardObject<?>, Integer> objectEntities = new HashMap<>();
-    private final Map<Integer, ConnectionMarker> arrows = new HashMap<>();
+    private final Map<Integer, ColoredConnectionArrow> arrows = new HashMap<>();
     private final int userControlledPlayer;
     private final CardImages cardImages;
 
@@ -272,48 +272,46 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             updateZone(battleCards.stream().filter(playerFilter).toArray(), zones.getBoardZone(), Vector3f.UNIT_X);
         }
 
-        for (int attacker : data.list(core.ATTACKS_TARGET)) {
-            if (!arrows.containsKey(attacker)) {
-                int target = data.get(attacker, core.ATTACKS_TARGET);
-                if (visualMinions.containsKey(target)) {
-                    ConnectionMarker arrow = new ConnectionMarker();
-                    arrow.getModel().setSourceBoardObject(visualMinions.get(attacker));
-                    arrows.put(attacker, arrow);
-                    board.register(arrow);
-                }
-            }
-        }
-
+        IntList blocked = new IntList();
         for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
-            if (!arrows.containsKey(blocker)) {
-                int target = data.get(blocker, core.BLOCKS_ATTACKER);
-                if (visualMinions.containsKey(target)) {
-                    ConnectionMarker arrow = new ConnectionMarker();
-                    arrow.getModel().setSourceBoardObject(visualMinions.get(blocker));
-                    arrows.put(blocker, arrow);
-                    board.register(arrow);
-                }
+            int target = data.get(blocker, core.BLOCKS_ATTACKER);
+            blocked.add(target);
+            ColoredConnectionArrow arrow = arrows.get(blocker);
+            if (arrow == null) {
+                ColorRGBA color = new ColorRGBA(0.25f, 0.25f, 1, 0.75f);
+                arrow = new ColoredConnectionArrow(visualMinions.get(blocker), visualMinions.get(target), color);
+                arrows.put(blocker, arrow);
+                board.register(arrow);
+            }
+        }
+        for (int attacker : data.list(core.ATTACKS_TARGET)) {
+            int target = data.get(attacker, core.ATTACKS_TARGET);
+            ColoredConnectionArrow arrow = arrows.get(attacker);
+            ColorRGBA color;
+            if (blocked.contains(attacker)) {
+                color = new ColorRGBA(0.5f, 0, 0, 0.25f);
+            } else {
+                color = new ColorRGBA(1, 0.25f, 0.25f, 0.75f);
+            }
+            if (arrow == null) {
+                arrow = new ColoredConnectionArrow(visualMinions.get(attacker), visualMinions.get(target), color);
+                arrows.put(attacker, arrow);
+                board.register(arrow);
+            } else {
+                arrow.getModel().setColor(color);
             }
         }
 
-        for (Map.Entry<Integer, ConnectionMarker> entry : new ArrayList<>(arrows.entrySet())) {
-            ConnectionMarker arrow = entry.getValue();
+        for (Map.Entry<Integer, ColoredConnectionArrow> entry : new ArrayList<>(arrows.entrySet())) {
+            ColoredConnectionArrow arrow = entry.getValue();
             int minion = entry.getKey();
             OptionalInt target = data.getOptional(minion, core.ATTACKS_TARGET);
             if (target.isPresent()) {
-                Card<MinionModel> targetObject = visualMinions.get(target.getAsInt());
-                if (targetObject != null) {
-                    arrow.getModel().setTargetBoardObject(targetObject);
-                    continue;
-                }
+                continue;
             }
-            OptionalInt attacker = data.getOptional(minion, core.BLOCKS_ATTACKER);
-            if (attacker.isPresent()) {
-                Card<MinionModel> targetObject = visualMinions.get(attacker.getAsInt());
-                if (targetObject != null) {
-                    arrow.getModel().setTargetBoardObject(targetObject);
-                    continue;
-                }
+            OptionalInt blocker = data.getOptional(minion, core.BLOCKS_ATTACKER);
+            if (blocker.isPresent()) {
+                continue;
             }
             arrows.remove(minion);
             board.unregister(arrow);
@@ -348,12 +346,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
                 if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
                         .anyMatch(cast -> cast.player == userControlledPlayer && cast.source == cardEntity)) {
-//                if (game.getMoves().canCast(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
                     cardModel.setGlow(ColorRGBA.Yellow);
                 } else if (moves.stream().filter(DeclareMulligan.class::isInstance).map(DeclareMulligan.class::cast)
                         .anyMatch(mulligan -> mulligan.player == userControlledPlayer && mulligan.card == cardEntity)) {
-//                } else if (game.getMoves().canDeclareMulligan(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(mulliganInteractivity(userControlledPlayer, cardEntity));
                     cardModel.setGlow(ColorRGBA.Red);
                 } else {
@@ -424,12 +420,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
                 if (moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
                         .anyMatch(attack -> attack.player == userControlledPlayer && attack.source == cardEntity)) {
-//                if (game.getMoves().canDeclareAttack(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));
                     minionModel.setGlow(ColorRGBA.Red);
                 } else if (moves.stream().filter(DeclareBlock.class::isInstance).map(DeclareBlock.class::cast)
                         .anyMatch(block -> block.player == userControlledPlayer && block.source == cardEntity)) {
-//                } else if (game.getMoves().canBlock(userControlledPlayer, cardEntity)) {
                     card.setInteractivity(blockInteractivity(userControlledPlayer, cardEntity));
                     minionModel.setGlow(ColorRGBA.Blue);
                 } else {
@@ -611,8 +605,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 .color(new ColorRGBA(1, 1, 1, 0.8f))
                 .width(0.5f)
                 .build()));
-        board.registerVisualizer_Class(ConnectionMarker.class, new ConnectionMarkerVisualizer(SimpleTargetArrowSettings.builder()
-                .color(new ColorRGBA(1, 1, 1, 0.5f))
+        board.registerVisualizer_Class(ColoredConnectionArrow.class, new ColoredConnectionArrowVisualizer(SimpleTargetArrowSettings.builder()
                 .arcHeight(0.1f)
                 .width(0.25f)
                 .build()));
