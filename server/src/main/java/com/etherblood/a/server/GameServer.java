@@ -27,7 +27,7 @@ public class GameServer {
 
     public GameServer(JwtParser jwtParser, Function<String, JsonElement> assetLoader) {
         RawLibraryTemplate botLibrary = new RawLibraryTemplate();
-        botLibrary.hero = "minions/shyvana.json";
+        botLibrary.hero = "minions/elderwood_ahri.json";
         botLibrary.cards = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
 
         server = new Server();

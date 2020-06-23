@@ -1,0 +1,13 @@
+{
+    "alias": "minions/elderwood_ahri.json",
+    "display": {
+        "name": "Ahri",
+        "imagePath": "images/cards/elderwood_ahri.jpg",
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 0,
+        "HEALTH": 30,
+        "CANNOT_ATTACK": true
+    }
+}

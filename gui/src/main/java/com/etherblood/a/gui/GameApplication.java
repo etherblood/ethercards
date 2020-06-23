@@ -88,7 +88,7 @@ public class GameApplication extends SimpleApplication {
         RawLibraryTemplate presetLibrary = LibraryIO.load("library.json");
         if (presetLibrary == null) {
             presetLibrary = new RawLibraryTemplate();
-            presetLibrary.hero = "minions/shyvana.json";
+            presetLibrary.hero = "minions/elderwood_ahri.json";
             presetLibrary.cards = new HashMap<>();
         }
         deckBuilderAppstate = new MyDeckBuilderAppstate(cards, null, cardImages, rootNode, presetLibrary);
