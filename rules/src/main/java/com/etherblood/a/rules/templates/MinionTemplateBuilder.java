@@ -12,17 +12,27 @@ public class MinionTemplateBuilder {
     protected final IntMap components = new IntMap();
     protected final List<Effect> onDeathEffects = new ArrayList<>();
     protected final List<Effect> onSurviveEffects = new ArrayList<>();
+    protected final List<Effect> onUpkeepEffects = new ArrayList<>();
+    protected final List<Effect> afterBattleEffects = new ArrayList<>();
 
     public MinionTemplateBuilder(CoreComponents core) {
         this.core = core;
     }
-    
+
     public void onDeath(Effect effect) {
         onDeathEffects.add(effect);
     }
-    
+
     public void onSurvive(Effect effect) {
         onSurviveEffects.add(effect);
+    }
+
+    public void onUpkeep(Effect effect) {
+        onUpkeepEffects.add(effect);
+    }
+
+    public void afterBattle(Effect effect) {
+        afterBattleEffects.add(effect);
     }
 
     public void set(int component, int value) {
@@ -35,7 +45,7 @@ public class MinionTemplateBuilder {
 
     public MinionTemplate build(int id) {
         components.set(core.MINION_TEMPLATE, id);
-        return new MinionTemplate(id, components, onDeathEffects, onSurviveEffects);
+        return new MinionTemplate(id, components, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
     }
 
 }

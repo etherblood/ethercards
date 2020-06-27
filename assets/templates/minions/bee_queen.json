@@ -1,0 +1,21 @@
+{
+    "alias": "minions/bee_queen.json",
+    "display": {
+        "name": "Bee Queen",
+        "imagePath": "images/cards/bee_queen.gif",
+        "colors": ["GREEN"],
+        "description": "Summon a 0/0 Bee Worker with Venom each Turn which dies after combat."
+    },
+    "onUpkeep": [
+        {
+            "type": "summon",
+            "minionId": "minions/bee_worker.json"
+        }
+    ],
+    "components": {
+        "ATTACK": 0,
+        "HEALTH": 3,
+        "VENOM": 2,
+        "OWN_MINIONS_HEALTH_AURA": 1
+    }
+}

@@ -54,7 +54,7 @@ public class CardPainterAWT {
 //            if (castDescription != null) {
 //                drawnKeywords.add("Cast");
 //            }
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.BLACK);
         graphics.fillRect(35, 68, 329, 242);
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
         graphics.drawImage(cardImages.getCachedImage(imageFilePath, 329, 242), 35, 68, null);
@@ -146,7 +146,7 @@ public class CardPainterAWT {
 //            if (castDescription != null) {
 //                drawnKeywords.add("Cast");
 //            }
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.BLACK);
         graphics.fillRect(35, 68, 329, 242);
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
         graphics.drawImage(cardImages.getCachedImage(imageFilePath, 329, 242), 35, 68, null);
@@ -232,7 +232,7 @@ public class CardPainterAWT {
     public void drawMinion_Minified(Graphics2D graphics, MinionModel cardModel, int width, int height) {
         DisplayMinionTemplate template = cardModel.getTemplate();
         graphics = (Graphics2D) graphics.create();
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.BLACK);
         graphics.fillRect(36, 36, 328, 488);
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
         graphics.drawImage(cardImages.getCachedImage(imageFilePath, 663, 488), -131, 36, null);

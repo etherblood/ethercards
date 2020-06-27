@@ -5,6 +5,8 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
+import com.etherblood.a.rules.templates.MinionTemplate;
+import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ActionSystem;
 import com.etherblood.a.rules.updates.Trigger;
@@ -73,6 +75,17 @@ public class StartPhaseSystem implements ActionSystem {
 
         draws = Math.max(draws, 0);
         data.set(player, core.DRAW_CARDS_REQUEST, draws);
+        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+            if (!data.hasValue(minion, core.OWNED_BY, player)) {
+                continue;
+            }
+
+            int templateId = data.get(minion, core.MINION_TEMPLATE);
+            MinionTemplate template = templates.getMinion(templateId);
+            for (Effect onUpkeepEffect : template.getOnUpkeepEffects()) {
+                onUpkeepEffect.apply(data, templates, random, events, minion, ~0);
+            }
+        }
     }
 
     private void startBattlePhase(int player) {
@@ -82,11 +95,14 @@ public class StartPhaseSystem implements ActionSystem {
                 continue;
             }
             int attacker = data.get(blocker, core.BLOCKS_ATTACKER);
-            SystemsUtil.fight(data, random, attacker, blocker, events);
+            data.remove(blocker, core.BLOCKS_ATTACKER);
+            if (!data.has(attacker, core.IN_BATTLE_ZONE)) {
+                continue;
+            }
+            SystemsUtil.fight(data, templates, random, attacker, blocker, events);
             if (!data.has(attacker, core.TRAMPLE)) {
                 data.remove(attacker, core.ATTACKS_TARGET);
             }
-            data.remove(blocker, core.BLOCKS_ATTACKER);
             SystemsUtil.increase(data, blocker, core.TIRED, 1);
 
             data.getOptional(blocker, core.DRAWS_ON_BLOCK).ifPresent(draws -> {

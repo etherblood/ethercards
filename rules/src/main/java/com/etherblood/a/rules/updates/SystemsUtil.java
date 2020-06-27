@@ -8,6 +8,7 @@ import com.etherblood.a.game.events.api.events.BattleEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.MinionTemplate;
+import com.etherblood.a.rules.templates.effects.Effect;
 
 import java.util.function.IntUnaryOperator;
 
@@ -55,7 +56,7 @@ public class SystemsUtil {
         }
     }
 
-    public static void fight(EntityData data, IntUnaryOperator random, int attacker, int blocker, GameEventListener events) {
+    public static void fight(EntityData data, GameTemplates templates, IntUnaryOperator random, int attacker, int blocker, GameEventListener events) {
         events.fire(new BattleEvent(attacker, blocker));
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int attackerDamage = data.getOptional(attacker, core.ATTACK).orElse(0);
@@ -73,8 +74,29 @@ public class SystemsUtil {
             increase(data, randomHero(data, random, blockerOwner), core.HEALTH, blockerDamage);
         }
 
-        data.getOptional(attacker, core.VENOM).ifPresent(venom -> increase(data, blocker, core.POISONED, venom));
-        data.getOptional(blocker, core.VENOM).ifPresent(venom -> increase(data, attacker, core.POISONED, venom));
+        EffectiveStatsService stats = new EffectiveStatsService(data);
+        int attackerVenom = stats.venom(attacker);
+        if (attackerVenom != 0) {
+            increase(data, blocker, core.POISONED, attackerVenom);
+        }
+        int blockerVenom = stats.venom(blocker);
+        if (blockerVenom != 0) {
+            increase(data, attacker, core.POISONED, blockerVenom);
+        }
+
+        int attackerTemplateId = data.get(attacker, core.MINION_TEMPLATE);
+        MinionTemplate attackerTemplate = templates.getMinion(attackerTemplateId);
+        for (Effect afterBattleEffect : attackerTemplate.getAfterBattleEffects()) {
+            //TODO: blocker & attacker should be passed as arguments after improving targeting
+            afterBattleEffect.apply(data, templates, random, events, attacker, attacker);
+        }
+
+        int blockerTemplateId = data.get(blocker, core.MINION_TEMPLATE);
+        MinionTemplate blockerTemplate = templates.getMinion(blockerTemplateId);
+        for (Effect afterBattleEffect : blockerTemplate.getAfterBattleEffects()) {
+            //TODO: blocker & attacker should be passed as arguments after improving targeting
+            afterBattleEffect.apply(data, templates, random, events, blocker, blocker);
+        }
     }
 
     public static void damage(EntityData data, int target, int damage) {

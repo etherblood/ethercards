@@ -1,0 +1,14 @@
+{
+    "alias": "minions/force_of_savagery.json",
+    "display": {
+        "name": "Force of Savagery",
+        "imagePath": "images/cards/force_of_savagery.jpeg",
+        "colors": ["GREEN"],
+        "flavourText": "\"Life cannot be created and then abandoned. It must be nurtured and fed so that it may express its ripened might.\"\n—Freyalise"
+    },
+    "components": {
+        "ATTACK": 8,
+        "HEALTH": 0,
+        "TRAMPLE": true
+    }
+}

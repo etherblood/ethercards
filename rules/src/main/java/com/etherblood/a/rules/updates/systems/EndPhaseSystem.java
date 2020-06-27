@@ -97,7 +97,7 @@ public class EndPhaseSystem implements ActionSystem {
             int attackTarget = data.get(attacker, core.ATTACKS_TARGET);
             if (data.hasValue(attackTarget, core.OWNED_BY, player)) {
                 if (data.has(attackTarget, core.IN_BATTLE_ZONE)) {
-                    SystemsUtil.fight(data, random, attacker, attackTarget, events);
+                    SystemsUtil.fight(data, templates, random, attacker, attackTarget, events);
 
                     data.getOptional(attackTarget, core.DRAWS_ON_ATTACKED).ifPresent(draws -> {
                         int owner = data.get(attackTarget, core.OWNED_BY);

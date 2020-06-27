@@ -12,8 +12,8 @@ public class DisplayMinionTemplate extends MinionTemplate {
     private final String alias, name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayMinionTemplate(int id, IntMap components, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
-        super(id, components, onDeathEffects, onSurviveEffects);
+    public DisplayMinionTemplate(int id, IntMap components, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
+        super(id, components, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
         this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;

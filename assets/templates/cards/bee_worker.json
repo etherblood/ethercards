@@ -1,0 +1,30 @@
+{
+    "alias": "cards/bee_worker.json",
+    "display": {
+        "name": "Bee Worker",
+        "imagePath": "images/cards/bee_worker.gif",
+        "colors": ["GREEN"],
+        "description": "Summon a 0/0 Bee Worker with Venom 1 which dies after battle. Draw 1."
+    },
+    "casts": [{
+            "manaCost": 1,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/bee_worker.json"
+                }, {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWNER"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "DRAW_CARDS_REQUEST": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+        }]
+}

@@ -55,6 +55,7 @@ import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.jme3.app.Application;
@@ -358,13 +359,14 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 }
                 board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index)));
             } else if (data.has(cardEntity, core.MINION_TEMPLATE)) {
+                EffectiveStatsService stats = new EffectiveStatsService(data);
                 Card<MinionModel> card = getOrCreateMinion(cardEntity);
                 MinionModel minionModel = card.getModel();
                 minionModel.setEntityId(cardEntity);
                 minionModel.setFaceUp(true);
                 minionModel.setHero(data.has(cardEntity, core.HERO));
                 minionModel.setAttack(data.getOptional(cardEntity, core.ATTACK).orElse(0));
-                minionModel.setHealth(data.getOptional(cardEntity, core.HEALTH).orElse(0));
+                minionModel.setHealth(stats.health(cardEntity));
                 DisplayMinionTemplate template = (DisplayMinionTemplate) game.getTemplates().getMinion(data.get(cardEntity, core.MINION_TEMPLATE));
                 minionModel.setTemplate(template);
                 minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
@@ -378,8 +380,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.VIGILANCE)) {
                     keywords.add("Vigilance");
                 }
-                if (data.has(cardEntity, core.VENOM)) {
-                    keywords.add("Venom_" + data.get(cardEntity, core.VENOM));
+                if (stats.venom(cardEntity) != 0) {
+                    keywords.add("Venom_" + stats.venom(cardEntity));
                 }
                 if (data.has(cardEntity, core.POISONED)) {
                     keywords.add("Poisoned_" + data.get(cardEntity, core.POISONED));
@@ -414,14 +416,20 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.OWN_MINIONS_HASTE_AURA)) {
                     keywords.add("Haste_Aura");
                 }
-                if (data.has(cardEntity, core.FAST_TO_ATTACK)) {
+                if (stats.isFastToAttack(cardEntity)) {
                     keywords.add("Fast_to_attack");
                 }
-                if (data.has(cardEntity, core.FAST_TO_DEFEND)) {
+                if (stats.isFastToDefend(cardEntity)) {
                     keywords.add("Fast_to_block");
                 }
                 if (data.has(cardEntity, core.FATIGUE)) {
                     keywords.add("Fatigue_" + data.get(cardEntity, core.FATIGUE));
+                }
+                if (data.has(cardEntity, core.OWN_MINIONS_HEALTH_AURA)) {
+                    keywords.add("Health_Aura_" + data.get(cardEntity, core.OWN_MINIONS_HEALTH_AURA));
+                }
+                if (data.has(cardEntity, core.OWN_MINIONS_VENOM_AURA)) {
+                    keywords.add("Venom_Aura_" + data.get(cardEntity, core.OWN_MINIONS_VENOM_AURA));
                 }
                 minionModel.setKeywords(keywords);
 

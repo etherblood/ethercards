@@ -1,0 +1,18 @@
+{
+    "alias": "cards/bee_hive.json",
+    "display": {
+        "name": "Bee Hive",
+        "imagePath": "images/cards/bee_hive.jpg",
+        "colors": ["GREEN"],
+        "description": "Summon a 0/4 Bee Hive with 1 Health Aura which cannot attack and summons a 0/0 Bee Worker with Venom 1 each turn."
+    },
+    "casts": [{
+            "manaCost": 2,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/bee_hive.json"
+                }
+            ]
+        }]
+}

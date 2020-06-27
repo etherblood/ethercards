@@ -1,0 +1,18 @@
+{
+    "alias": "cards/bee_warrior.json",
+    "display": {
+        "name": "Bee Warrior",
+        "imagePath": "images/cards/bee_warrior.gif",
+        "colors": ["GREEN"],
+        "description": "Summon a 3/1 Bee Warrior with Vigilance."
+    },
+    "casts": [{
+            "manaCost": 1,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/bee_warrior.json"
+                }
+            ]
+        }]
+}

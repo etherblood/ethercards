@@ -55,6 +55,8 @@ public class CoreComponents implements ComponentsModule {
     public final int FAST_TO_ATTACK;
     public final int FAST_TO_DEFEND;
     public final int OWN_MINIONS_HASTE_AURA;
+    public final int OWN_MINIONS_HEALTH_AURA;
+    public final int OWN_MINIONS_VENOM_AURA;
 
     public CoreComponents(ToIntFunction<String> register) {
         END_PHASE_REQUEST = register.applyAsInt("END_PHASE_REQUEST");
@@ -107,5 +109,7 @@ public class CoreComponents implements ComponentsModule {
         FAST_TO_ATTACK = register.applyAsInt("FAST_TO_ATTACK");
         FAST_TO_DEFEND = register.applyAsInt("FAST_TO_DEFEND");
         OWN_MINIONS_HASTE_AURA = register.applyAsInt("OWN_MINIONS_HASTE_AURA");
+        OWN_MINIONS_HEALTH_AURA = register.applyAsInt("OWN_MINIONS_HEALTH_AURA");
+        OWN_MINIONS_VENOM_AURA = register.applyAsInt("OWN_MINIONS_VENOM_AURA");
     }
 }

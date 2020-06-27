@@ -1,0 +1,18 @@
+{
+    "alias": "cards/bee_drone.json",
+    "display": {
+        "name": "Bee Drone",
+        "imagePath": "images/cards/bee_drone.gif",
+        "colors": ["GREEN"],
+        "description": "Summon a 2/1 Bee Drone with Venom 1 Aura."
+    },
+    "casts": [{
+            "manaCost": 2,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/bee_drone.json"
+                }
+            ]
+        }]
+}

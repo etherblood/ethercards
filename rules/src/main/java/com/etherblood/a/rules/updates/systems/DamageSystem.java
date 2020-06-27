@@ -65,7 +65,8 @@ public class DamageSystem implements ActionSystem {
             int damage = data.get(entity, core.DAMAGE_ACTION);
             assert data.has(entity, core.IN_BATTLE_ZONE);
 
-            SystemsUtil.decreaseAndRemoveLtZero(data, entity, core.HEALTH, damage);
+            int previous = data.getOptional(entity, core.HEALTH).orElse(0);
+            data.set(entity, core.HEALTH, previous - damage);
         }
     }
 

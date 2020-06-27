@@ -13,11 +13,15 @@ public class MinionTemplate implements Iterable<Integer> {
     protected final IntMap components;
     protected final List<Effect> onDeathEffects;
     protected final List<Effect> onSurviveEffects;
+    protected final List<Effect> onUpkeepEffects;
+    protected final List<Effect> afterBattleEffects;
 
-    public MinionTemplate(int id, IntMap components, List<Effect> onDeathEffects, List<Effect> onSurviveEffects) {
+    public MinionTemplate(int id, IntMap components, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
         this.id = id;
         this.onDeathEffects = Collections.unmodifiableList(new ArrayList<>(onDeathEffects));
         this.onSurviveEffects = Collections.unmodifiableList(new ArrayList<>(onSurviveEffects));
+        this.onUpkeepEffects = Collections.unmodifiableList(new ArrayList<>(onUpkeepEffects));
+        this.afterBattleEffects = Collections.unmodifiableList(new ArrayList<>(afterBattleEffects));
         this.components = new IntMap();
         for (int key : components) {
             this.components.set(key, components.get(key));
@@ -38,6 +42,14 @@ public class MinionTemplate implements Iterable<Integer> {
 
     public List<Effect> getOnSurviveEffects() {
         return onSurviveEffects;
+    }
+
+    public List<Effect> getOnUpkeepEffects() {
+        return onUpkeepEffects;
+    }
+
+    public List<Effect> getAfterBattleEffects() {
+        return afterBattleEffects;
     }
 
     @Override

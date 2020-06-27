@@ -125,10 +125,10 @@ public class TemplatesParser {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
                 cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
             }
-            if(castJson.has("attackCast")) {
+            if (castJson.has("attackCast")) {
                 cast.setAttackCast(castJson.get("attackCast").getAsBoolean());
             }
-            if(castJson.has("blockCast")) {
+            if (castJson.has("blockCast")) {
                 cast.setAttackCast(castJson.get("blockCast").getAsBoolean());
             }
         }
@@ -186,6 +186,20 @@ public class TemplatesParser {
             for (JsonElement jsonElement : onSurvive) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
                 builder.onSurvive(aliasGson.fromJson(effectJson, Effect.class));
+            }
+        }
+        JsonArray onUpkeep = minionJson.getAsJsonArray("onUpkeep");
+        if (onUpkeep != null) {
+            for (JsonElement jsonElement : onUpkeep) {
+                JsonObject effectJson = jsonElement.getAsJsonObject();
+                builder.onUpkeep(aliasGson.fromJson(effectJson, Effect.class));
+            }
+        }
+        JsonArray afterBattle = minionJson.getAsJsonArray("afterBattle");
+        if (afterBattle != null) {
+            for (JsonElement jsonElement : afterBattle) {
+                JsonObject effectJson = jsonElement.getAsJsonObject();
+                builder.afterBattle(aliasGson.fromJson(effectJson, Effect.class));
             }
         }
 

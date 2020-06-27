@@ -1,0 +1,27 @@
+{
+    "alias": "cards/innervate.json",
+    "display": {
+        "name": "Innervate",
+        "imagePath": "images/cards/innervate.jpg",
+        "colors": ["BLUE"],
+        "description": "Gain 2 Mana."
+    },
+    "casts": [{
+            "manaCost": 0,
+            "effects": [
+                {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWNER"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "MANA": 2
+                            }
+                        }
+                    ]
+                }
+            ]
+        }]
+}

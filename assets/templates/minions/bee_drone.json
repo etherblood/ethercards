@@ -1,0 +1,13 @@
+{
+    "alias": "minions/bee_drone.json",
+    "display": {
+        "name": "Bee Drone",
+        "imagePath": "images/cards/bee_drone.gif",
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 2,
+        "HEALTH": 1,
+        "OWN_MINIONS_VENOM_AURA": 1
+    }
+}

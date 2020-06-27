@@ -1,0 +1,13 @@
+{
+    "alias": "minions/bee_warrior.json",
+    "display": {
+        "name": "Bee Warrior",
+        "imagePath": "images/cards/bee_warrior.gif",
+        "colors": ["GREEN"]
+    },
+    "components": {
+        "ATTACK": 3,
+        "HEALTH": 1,
+        "VIGILANCE": true
+    }
+}

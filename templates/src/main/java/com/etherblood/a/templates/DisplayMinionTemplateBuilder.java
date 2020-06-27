@@ -17,7 +17,7 @@ public class DisplayMinionTemplateBuilder extends MinionTemplateBuilder {
     public void setAlias(String alias) {
         this.alias = alias;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
@@ -41,6 +41,6 @@ public class DisplayMinionTemplateBuilder extends MinionTemplateBuilder {
     @Override
     public DisplayMinionTemplate build(int templateId) {
         components.set(core.MINION_TEMPLATE, templateId);
-        return new DisplayMinionTemplate(templateId, components, onDeathEffects, onSurviveEffects, alias, name, flavourText, description, imagePath, colors);
+        return new DisplayMinionTemplate(templateId, components, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, alias, name, flavourText, description, imagePath, colors);
     }
 }

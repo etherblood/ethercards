@@ -1,0 +1,22 @@
+{
+    "alias": "minions/bee_hive.json",
+    "display": {
+        "name": "Bee Hive",
+        "imagePath": "images/cards/bee_hive.jpg",
+        "colors": ["GREEN"],
+        "description": "Summon a 0/0 Bee Worker with Venom 1 each turn."
+    },
+    "onUpkeep": [
+        {
+            "type": "summon",
+            "minionId": "minions/bee_worker.json"
+        }
+    ],
+    "components": {
+        "ATTACK": 0,
+        "HEALTH": 4,
+        "CANNOT_ATTACK": true,
+        "CANNOT_BLOCK": true,
+        "OWN_MINIONS_HEALTH_AURA": 1
+    }
+}

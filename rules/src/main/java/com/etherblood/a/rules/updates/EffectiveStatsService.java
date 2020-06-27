@@ -23,7 +23,20 @@ public class EffectiveStatsService {
 
     public int health(int minion) {
         assert data.has(minion, core.IN_BATTLE_ZONE);
-        return data.getOptional(minion, core.HEALTH).orElse(0);
+        int health = data.getOptional(minion, core.HEALTH).orElse(0);
+        if (!data.has(minion, core.HERO)) {
+            health += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_HEALTH_AURA);
+        }
+        return health;
+    }
+
+    public int venom(int minion) {
+        assert data.has(minion, core.IN_BATTLE_ZONE);
+        int venom = data.getOptional(minion, core.VENOM).orElse(0);
+        if (!data.has(minion, core.HERO)) {
+            venom += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_VENOM_AURA);
+        }
+        return venom;
     }
 
     public boolean isFastToAttack(int minion) {
@@ -66,5 +79,22 @@ public class EffectiveStatsService {
             }
         }
         return false;
+    }
+
+    private int sumOwnerOtherMinionComponents(int minion, int component) {
+        int sum = 0;
+        int owner = data.get(minion, core.OWNED_BY);
+        for (int other : data.list(component)) {
+            if (other == minion) {
+                continue;
+            }
+            if (!data.has(other, core.IN_BATTLE_ZONE)) {
+                continue;
+            }
+            if (data.hasValue(other, core.OWNED_BY, owner)) {
+                sum += data.get(other, component);
+            }
+        }
+        return sum;
     }
 }
