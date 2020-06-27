@@ -13,7 +13,10 @@ public class CoreComponents implements ComponentsModule {
     public final int DAMAGE_ACTION;
     public final int DEATH_REQUEST;
     public final int DEATH_ACTION;
+    public final int DRAW_CARDS_REQUEST;
+    public final int DRAW_CARDS_ACTION;
     public final int PLAYER_RESULT_REQUEST;
+    public final int PLAYER_RESULT_ACTION;
     public final int PLAYER_RESULT;
     public final int PLAYER_INDEX;
     public final int ACTIVE_PLAYER_PHASE;
@@ -32,7 +35,6 @@ public class CoreComponents implements ComponentsModule {
     public final int MANA;
     public final int MANA_POOL;
     public final int MANA_GROWTH;
-    public final int DRAW_CARDS;
     public final int DRAWS_PER_TURN;
     public final int DRAWS_ON_ATTACK;
     public final int GIVE_DRAWS_ON_ATTACK;
@@ -62,6 +64,7 @@ public class CoreComponents implements ComponentsModule {
         DEATH_REQUEST = register.applyAsInt("DEATH_REQUEST");
         DEATH_ACTION = register.applyAsInt("DEATH_ACTION");
         PLAYER_RESULT_REQUEST = register.applyAsInt("PLAYER_RESULT_REQUEST");
+        PLAYER_RESULT_ACTION = register.applyAsInt("PLAYER_RESULT_ACTION");
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
         PLAYER_INDEX = register.applyAsInt("PLAYER_INDEX");
         ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
@@ -80,7 +83,8 @@ public class CoreComponents implements ComponentsModule {
         MANA = register.applyAsInt("MANA");
         MANA_POOL = register.applyAsInt("MANA_POOL");
         MANA_GROWTH = register.applyAsInt("MANA_GROWTH");
-        DRAW_CARDS = register.applyAsInt("DRAW_CARDS");
+        DRAW_CARDS_REQUEST = register.applyAsInt("DRAW_CARDS_REQUEST");
+        DRAW_CARDS_ACTION = register.applyAsInt("DRAW_CARDS_ACTION");
         DRAWS_PER_TURN = register.applyAsInt("DRAWS_PER_TURN");
         DRAWS_ON_ATTACK = register.applyAsInt("DRAWS_ON_ATTACK");
         GIVE_DRAWS_ON_ATTACK = register.applyAsInt("GIVE_DRAWS_ON_ATTACK");

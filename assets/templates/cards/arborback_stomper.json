@@ -26,5 +26,26 @@
                 ]
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 5,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/arborback_stomper.json"
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OWN_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "HEALTH": 5
+                        }
+                    }
+                ]
+            }
+        ]
     }
 }

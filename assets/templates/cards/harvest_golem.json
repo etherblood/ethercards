@@ -14,5 +14,14 @@
                 "minionId": "minions/harvest_golem.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 3,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/harvest_golem.json"
+            }
+        ]
     }
 }

@@ -14,5 +14,14 @@
                 "minionId": "minions/aerial_responder.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 3,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/aerial_responder.json"
+            }
+        ]
     }
 }

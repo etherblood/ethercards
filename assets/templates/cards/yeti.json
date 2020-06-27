@@ -14,5 +14,14 @@
                 "minionId": "minions/yeti.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 4,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/yeti.json"
+            }
+        ]
     }
 }

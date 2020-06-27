@@ -1,18 +1,13 @@
-package com.etherblood.a.rules.systems.phases;
+package com.etherblood.a.rules.updates.systems.phases;
 
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.systems.util.SystemsUtil;
-import java.util.function.IntUnaryOperator;
+import com.etherblood.a.rules.updates.SystemsUtil;
 
-public class EndAttackPhaseSystem extends AbstractSystem {
+public class EndAttackPhaseSystem {
 
-    @Override
-    public void run(GameSettings settings, EntityData data, IntUnaryOperator random, GameEventListener eventListener) {
+    public void run(EntityData data) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (int player : data.list(core.END_PHASE_ACTION)) {
             if (data.get(player, core.END_PHASE_ACTION) != PlayerPhase.ATTACK) {
@@ -34,11 +29,11 @@ public class EndAttackPhaseSystem extends AbstractSystem {
                 data.set(target, core.TIRED, 1);
                 data.getOptional(attacker, core.DRAWS_ON_ATTACK).ifPresent(draws -> {
                     int owner = data.get(attacker, core.OWNED_BY);
-                    SystemsUtil.increase(data, owner, core.DRAW_CARDS, draws);
+                    SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
                 });
                 data.getOptional(attacker, core.GIVE_DRAWS_ON_ATTACK).ifPresent(draws -> {
                     int targetOwner = data.get(target, core.OWNED_BY);
-                    SystemsUtil.increase(data, targetOwner, core.DRAW_CARDS, draws);
+                    SystemsUtil.increase(data, targetOwner, core.DRAW_CARDS_REQUEST, draws);
                 });
             }
             for (int minion : data.list(core.SUMMONING_SICKNESS)) {

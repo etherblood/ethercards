@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.systems.util;
+package com.etherblood.a.rules.updates;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -6,7 +6,7 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.BattleEvent;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.MinionTemplate;
 
 import java.util.function.IntUnaryOperator;
@@ -88,26 +88,26 @@ public class SystemsUtil {
         increase(data, target, core.DAMAGE_REQUEST, damage);
     }
 
-    public static int createHero(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
+    public static int createHero(EntityData data, GameTemplates templates, IntUnaryOperator random, int minionTemplate, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int hero = data.createEntity();
         data.set(hero, core.HERO, 1);
-        applyTemplate(settings, data, random, minionTemplate, hero, owner);
+        applyTemplate(data, templates, random, minionTemplate, hero, owner);
         //TODO: mana growth & draws should be somehow added to the player, not their hero
         SystemsUtil.increase(data, hero, core.MANA_GROWTH, 1);
         SystemsUtil.increase(data, hero, core.DRAWS_PER_TURN, 1);
         return hero;
     }
 
-    public static int createMinion(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int owner) {
+    public static int createMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, int minionTemplate, int owner) {
         int minion = data.createEntity();
-        applyTemplate(settings, data, random, minionTemplate, minion, owner);
+        applyTemplate(data, templates, random, minionTemplate, minion, owner);
         return minion;
     }
 
-    private static void applyTemplate(GameSettings settings, EntityData data, IntUnaryOperator random, int minionTemplate, int minion, int owner) {
+    private static void applyTemplate(EntityData data, GameTemplates templates, IntUnaryOperator random, int minionTemplate, int minion, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        MinionTemplate template = settings.templates.getMinion(minionTemplate);
+        MinionTemplate template = templates.getMinion(minionTemplate);
         data.set(minion, core.OWNED_BY, owner);
         data.set(minion, core.IN_BATTLE_ZONE, 1);
         for (int component : template) {

@@ -1,27 +1,51 @@
-package com.etherblood.a.rules.systems;
+package com.etherblood.a.rules.updates.systems;
 
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
+import com.etherblood.a.rules.updates.ActionSystem;
 import java.util.function.IntUnaryOperator;
 
-public class CastSystem extends AbstractSystem {
+public class CastSystem implements ActionSystem {
+
+    private final EntityData data;
+    private final GameTemplates templates;
+    private final IntUnaryOperator random;
+    private final GameEventListener events;
+    private final CoreComponents core;
+
+    public CastSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
+        this.data = data;
+        this.templates = templates;
+        this.random = random;
+        this.events = events;
+        this.core = data.getComponents().getModule(CoreComponents.class);
+    }
 
     @Override
-    public void run(GameSettings settings, EntityData data, IntUnaryOperator random, GameEventListener eventListener) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        IntList entities = data.list(core.CAST_TARGET);
-        for (int castSource : entities) {
+    public boolean isActive() {
+        return data.list(core.CAST_TARGET).nonEmpty();
+    }
+
+    @Override
+    public void modify() {
+    }
+
+    @Override
+    public void triggerAndClean() {
+    }
+
+    @Override
+    public void apply() {
+        for (int castSource : data.list(core.CAST_TARGET)) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
-            CardTemplate template = settings.templates.getCard(cardTemplateId);
+            CardTemplate template = templates.getCard(cardTemplateId);
             int owner = data.get(castSource, core.OWNED_BY);
             CardCast cast;
             if (data.get(owner, core.ACTIVE_PLAYER_PHASE) == PlayerPhase.ATTACK) {
@@ -39,7 +63,7 @@ public class CastSystem extends AbstractSystem {
                 data.set(owner, core.MANA, mana);
             }
             for (Effect effect : cast.getEffects()) {
-                effect.apply(settings, data, random, eventListener, castSource, target);
+                effect.apply(data, templates, random, events, castSource, target);
             }
             data.remove(castSource, core.CAST_TARGET);
             data.remove(castSource, core.IN_HAND_ZONE);

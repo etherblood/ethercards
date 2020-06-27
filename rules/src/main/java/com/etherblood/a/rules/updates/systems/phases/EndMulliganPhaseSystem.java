@@ -1,20 +1,16 @@
-package com.etherblood.a.rules.systems.phases;
+package com.etherblood.a.rules.updates.systems.phases;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.AbstractSystem;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.systems.util.SystemsUtil;
+import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
-public class EndMulliganPhaseSystem extends AbstractSystem {
+public class EndMulliganPhaseSystem {
 
-    @Override
-    public void run(GameSettings settings, EntityData data, IntUnaryOperator random, GameEventListener eventListener) {
+    public void run(EntityData data, IntUnaryOperator random) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         boolean playerEndedMulligan = false;
         for (int player : data.list(core.END_PHASE_ACTION)) {

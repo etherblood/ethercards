@@ -13,7 +13,7 @@ public class MinionModel extends BoardObjectModel {
 
     private DisplayMinionTemplate template;
     private int entityId, attack, health;
-    private boolean faceUp, damaged;
+    private boolean faceUp, damaged, hero;
     private ColorRGBA glow;
     private Set<String> keywords = new HashSet<>();
     @IsBoardObjectInspected
@@ -29,6 +29,14 @@ public class MinionModel extends BoardObjectModel {
 
     public void setFaceUp(boolean faceUp) {
         updateIfNotEquals(this.faceUp, faceUp, () -> this.faceUp = faceUp);
+    }
+
+    public boolean isHero() {
+        return hero;
+    }
+
+    public void setHero(boolean hero) {
+        updateIfNotEquals(this.hero, hero, () -> this.hero = hero);
     }
 
     public DisplayMinionTemplate getTemplate() {

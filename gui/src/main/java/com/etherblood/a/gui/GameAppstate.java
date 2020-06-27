@@ -362,6 +362,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 MinionModel minionModel = card.getModel();
                 minionModel.setEntityId(cardEntity);
                 minionModel.setFaceUp(true);
+                minionModel.setHero(data.has(cardEntity, core.HERO));
                 minionModel.setAttack(data.getOptional(cardEntity, core.ATTACK).orElse(0));
                 minionModel.setHealth(data.getOptional(cardEntity, core.HEALTH).orElse(0));
                 DisplayMinionTemplate template = (DisplayMinionTemplate) game.getTemplates().getMinion(data.get(cardEntity, core.MINION_TEMPLATE));

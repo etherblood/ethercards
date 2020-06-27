@@ -14,5 +14,14 @@
                 "minionId": "minions/ysera.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 9,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/ysera.json"
+            }
+        ]
     }
 }

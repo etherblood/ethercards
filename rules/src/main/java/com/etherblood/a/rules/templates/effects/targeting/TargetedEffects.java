@@ -3,7 +3,7 @@ package com.etherblood.a.rules.templates.effects.targeting;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.GameSettings;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.effects.Effect;
 import java.util.function.IntUnaryOperator;
 
@@ -20,7 +20,7 @@ public class TargetedEffects extends Effect {
     }
 
     @Override
-    public void apply(GameSettings settings, EntityData data, IntUnaryOperator random, GameEventListener events, int source, int target) {
+    public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         IntList availableTargets = TargetUtil.findValidTargets(data, source, targets);
         if (availableTargets.isEmpty()) {
             return;
@@ -29,13 +29,13 @@ public class TargetedEffects extends Effect {
             case ANY:
                 int newTarget = availableTargets.getRandomItem(random);
                 for (Effect effect : effects) {
-                    effect.apply(settings, data, random, events, source, newTarget);
+                    effect.apply(data, templates, random, events, source, newTarget);
                 }
                 break;
             case ALL:
                 for (Effect effect : effects) {
                     for (int availableTarget : availableTargets) {
-                        effect.apply(settings, data, random, events, source, availableTarget);
+                        effect.apply(data, templates, random, events, source, availableTarget);
                     }
                 }
                 break;

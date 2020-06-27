@@ -14,5 +14,14 @@
                 "minionId": "minions/dragonlord_dromoka.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 6,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/dragonlord_dromoka.json"
+            }
+        ]
     }
 }

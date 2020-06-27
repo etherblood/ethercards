@@ -15,5 +15,14 @@
                 "fast": true
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 3,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/wolfrider.json"
+            }
+        ]
     }
 }

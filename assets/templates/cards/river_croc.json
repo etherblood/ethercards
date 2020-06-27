@@ -14,5 +14,14 @@
                 "minionId": "minions/river_croc.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 2,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/river_croc.json"
+            }
+        ]
     }
 }

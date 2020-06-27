@@ -15,5 +15,15 @@
                 "fast": true
             }
         ]
+    },
+    "attackCast": {
+        "manaCost": 2,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/quickwall.json",
+                "fast": true
+            }
+        ]
     }
 }

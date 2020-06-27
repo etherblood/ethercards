@@ -14,5 +14,14 @@
                 "minionId": "minions/satyr.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 2,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/satyr.json"
+            }
+        ]
     }
 }

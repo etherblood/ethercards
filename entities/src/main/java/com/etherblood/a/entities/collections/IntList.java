@@ -165,6 +165,10 @@ public class IntList implements Iterable<Integer> {
         return size() == 0;
     }
 
+    public boolean nonEmpty() {
+        return size() != 0;
+    }
+
     @Override
     public PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {

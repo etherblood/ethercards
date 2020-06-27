@@ -25,11 +25,23 @@ public class MinionTemplatesTest extends AbstractGameTest {
     }
     
     @Test
-    public void grimPatron_death_onSurvive_not_triggered() {
-        int boombot = createMinion(player(0), "minions/grim_patron.json");
+    public void grimPatron_onSurvive() {
+        int patron = createMinion(player(0), "minions/grim_patron.json");
         int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
 
-        data.set(boombot, core.DAMAGE_REQUEST, 3);
+        data.set(patron, core.DAMAGE_REQUEST, 1);
+        game.getMoves().apply(new Update());
+
+        int actualMinionCount = data.list(core.IN_BATTLE_ZONE).size();
+        Assertions.assertEquals(previousMinionCount + 1, actualMinionCount);
+    }
+    
+    @Test
+    public void grimPatron_death_onSurvive_not_triggered() {
+        int patron = createMinion(player(0), "minions/grim_patron.json");
+        int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
+
+        data.set(patron, core.DAMAGE_REQUEST, 3);
         game.getMoves().apply(new Update());
 
         int actualMinionCount = data.list(core.IN_BATTLE_ZONE).size();
@@ -54,6 +66,25 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth - atarkaAttack, actualHealth);
+    }
+
+    @Test
+    public void dragonlordAtarka_trample_blocked_by_killing_attacker() {
+        int attackingAtarka = createMinion(player(0), "minions/dragonlord_atarka.json");
+        int blockingAtarka = createMinion(player(1), "minions/dragonlord_atarka.json");
+
+        int previousHealth = data.get(hero(1), core.HEALTH);
+
+        game.getMoves().apply(new DeclareAttack(player(0), attackingAtarka, hero(1)));
+        game.getMoves().apply(new EndAttackPhase(player(0)));
+
+        game.getMoves().apply(new DeclareBlock(player(1), blockingAtarka, attackingAtarka));
+        game.getMoves().apply(new EndBlockPhase(player(1)));
+
+        Assertions.assertFalse(data.has(attackingAtarka, core.IN_BATTLE_ZONE));
+
+        int actualHealth = data.get(hero(1), core.HEALTH);
+        Assertions.assertEquals(previousHealth, actualHealth);
     }
 
     @Test
@@ -102,7 +133,26 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
         game.getMoves().apply(new DeclareAttack(player(0), goblinGuide, hero(1)));
         game.getMoves().apply(new EndAttackPhase(player(0)));
-
+        
         Assertions.assertTrue(data.has(orniThopter, core.IN_HAND_ZONE));
+    }
+
+    @Test
+    public void blocking_protects_attackTarget() {
+        int attacker = createMinion(player(0), "minions/satyr.json");
+        int blocker = createMinion(player(1), "minions/satyr.json");
+
+        int previousHealth = data.get(hero(1), core.HEALTH);
+
+        game.getMoves().apply(new DeclareAttack(player(0), attacker, hero(1)));
+        game.getMoves().apply(new EndAttackPhase(player(0)));
+
+        game.getMoves().apply(new DeclareBlock(player(1), blocker, attacker));
+        game.getMoves().apply(new EndBlockPhase(player(1)));
+
+        Assertions.assertTrue(data.has(attacker, core.IN_BATTLE_ZONE), "attacker must not die for this test");
+
+        int actualHealth = data.get(hero(1), core.HEALTH);
+        Assertions.assertEquals(previousHealth, actualHealth);
     }
 }

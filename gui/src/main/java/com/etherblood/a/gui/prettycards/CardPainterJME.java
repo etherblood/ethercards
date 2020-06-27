@@ -7,13 +7,14 @@ import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class CardPainterJME {
+    
+    private final int width = 400;
+    private final int height = 560;
+    private final CardPainterAWT cardPainterAWT;
 
     public CardPainterJME(CardPainterAWT cardPainterAWT) {
         this.cardPainterAWT = cardPainterAWT;
     }
-    private int width = 400;
-    private int height = 560;
-    private CardPainterAWT cardPainterAWT;
 
     public PaintableImage drawCard(CardModel cardModel){
         return drawCard(graphics -> cardPainterAWT.drawCard(graphics, cardModel, width, height));
@@ -28,7 +29,7 @@ public class CardPainterJME {
     }
 
     private PaintableImage drawCard(Consumer<Graphics2D> painter){
-        PaintableImage paintableImage = new PaintableImage(400, 560);
+        PaintableImage paintableImage = new PaintableImage(width, height);
         BufferedImage bufferedImage = new BufferedImage(paintableImage.getWidth(), paintableImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = (Graphics2D) bufferedImage.getGraphics();
         painter.accept(graphics);

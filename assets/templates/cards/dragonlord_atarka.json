@@ -74,5 +74,74 @@
                 ]
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 7,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/dragonlord_atarka.json"
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }, {
+                "type": "targeted",
+                "targeting": "ANY",
+                "targets": ["OPPONENT_MINION", "OPPONENT_HERO"],
+                "effects": [
+                    {
+                        "type": "buff",
+                        "components": {
+                            "DAMAGE_REQUEST": 1
+                        }
+                    }
+                ]
+            }
+        ]
     }
 }

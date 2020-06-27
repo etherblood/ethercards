@@ -15,30 +15,14 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
-import com.etherblood.a.rules.systems.CastSystem;
-import com.etherblood.a.rules.systems.core.ClearActionsSystem;
-import com.etherblood.a.rules.systems.DamageSystem;
-import com.etherblood.a.rules.systems.DrawSystem;
-import com.etherblood.a.rules.systems.phases.EndAttackPhaseSystem;
-import com.etherblood.a.rules.systems.phases.EndBlockPhaseSystem;
-import com.etherblood.a.rules.systems.phases.EndMulliganPhaseSystem;
-import com.etherblood.a.rules.systems.OnDeathSystem;
-import com.etherblood.a.rules.systems.PlayerStatusSystem;
-import com.etherblood.a.rules.systems.PreventNecroInteractionsSystem;
-import com.etherblood.a.rules.systems.DeathSystem;
-import com.etherblood.a.rules.systems.core.RequestsToActionsSystem;
-import com.etherblood.a.rules.systems.phases.StartAttackPhaseSystem;
-import com.etherblood.a.rules.systems.phases.StartBlockPhaseSystem;
-import com.etherblood.a.rules.systems.phases.StartMulliganPhaseSystem;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.targeting.TargetUtil;
+import com.etherblood.a.rules.updates.SystemFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.OptionalInt;
-import java.util.function.BooleanSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +39,6 @@ public class MoveService {
 
     private final boolean backupsEnabled;
     private final boolean validateMoves;
-
-    private final List<AbstractSystem> systems;
 
     public MoveService(GameSettings settings, EntityData data, HistoryRandom random, GameEventListener eventListener) {
         this(settings, data, random, Collections.emptyList(), true, true, eventListener);
@@ -75,29 +57,6 @@ public class MoveService {
         } else {
             this.history = null;
         }
-
-        systems = Arrays.asList(
-                // modify requests
-                new PreventNecroInteractionsSystem(),
-                // requests -> actions 
-                new RequestsToActionsSystem(),
-                // trigger effects
-                new OnDeathSystem(),
-                // process actions & create requests
-                new DeathSystem(),
-                new DamageSystem(),
-                new PlayerStatusSystem(),
-                new EndMulliganPhaseSystem(),
-                new EndBlockPhaseSystem(),
-                new EndAttackPhaseSystem(),
-                new StartMulliganPhaseSystem(),
-                new StartBlockPhaseSystem(),
-                new StartAttackPhaseSystem(),
-                new CastSystem(),
-                new DrawSystem(),
-                // cleanup & clear processed actions
-                new ClearActionsSystem()
-        );
     }
 
     public List<MoveReplay> getHistory() {
@@ -660,18 +619,19 @@ public class MoveService {
     }
 
     private void update() {
-        IntList requests = new IntList();
-        requests.add(core.DAMAGE_REQUEST);
-        requests.add(core.DEATH_REQUEST);
-        requests.add(core.END_PHASE_REQUEST);
-        requests.add(core.START_PHASE_REQUEST);
-        requests.add(core.PLAYER_RESULT_REQUEST);
-        requests.add(core.CAST_TARGET);
-        BooleanSupplier requestExists = () -> requests.stream().flatMap(component -> data.list(component).stream()).findAny().isPresent();
-        while (requestExists.getAsBoolean()) {
-            eventListener.nextIteration();
-            runSystems(systems);
-        }
+        new SystemFactory(data, settings.templates, random, eventListener).build().run();
+//        IntList requests = new IntList();
+//        requests.add(core.DAMAGE_REQUEST);
+//        requests.add(core.DEATH_REQUEST);
+//        requests.add(core.END_PHASE_REQUEST);
+//        requests.add(core.START_PHASE_REQUEST);
+//        requests.add(core.PLAYER_RESULT_REQUEST);
+//        requests.add(core.CAST_TARGET);
+//        BooleanSupplier requestExists = () -> requests.stream().flatMap(component -> data.list(component).stream()).findAny().isPresent();
+//        while (requestExists.getAsBoolean()) {
+//            eventListener.nextIteration();
+//            runSystems(systems);
+//        }
     }
 
     private void runSystems(List<AbstractSystem> systems) {

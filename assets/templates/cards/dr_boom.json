@@ -22,5 +22,22 @@
                 "minionId": "minions/boombot.json"
             }
         ]
+    },
+    "blockCast": {
+        "manaCost": 7,
+        "effects": [
+            {
+                "type": "summon",
+                "minionId": "minions/boombot.json"
+            },
+            {
+                "type": "summon",
+                "minionId": "minions/dr_boom.json"
+            },
+            {
+                "type": "summon",
+                "minionId": "minions/boombot.json"
+            }
+        ]
     }
 }

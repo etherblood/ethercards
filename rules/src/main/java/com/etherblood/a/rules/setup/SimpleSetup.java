@@ -4,7 +4,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.systems.util.SystemsUtil;
+import com.etherblood.a.rules.updates.SystemsUtil;
 
 public class SimpleSetup {
 
@@ -24,12 +24,12 @@ public class SimpleSetup {
             int player = data.createEntity();
             data.set(player, core.PLAYER_INDEX, i);
             if (i == 0) {
-                data.set(player, core.DRAW_CARDS, 3);
+                data.set(player, core.DRAW_CARDS_REQUEST, 3);
             } else {
-                data.set(player, core.DRAW_CARDS, 4);
+                data.set(player, core.DRAW_CARDS_REQUEST, 4);
             }
 
-            int hero = SystemsUtil.createHero(game.getSettings(), data, x -> 0, heroes[i], player);
+            int hero = SystemsUtil.createHero(data, game.getTemplates(), x -> 0, heroes[i], player);
             data.set(hero, core.SUMMONING_SICKNESS, 1);
 
             for (int cardTemplate : libraries[i]) {
