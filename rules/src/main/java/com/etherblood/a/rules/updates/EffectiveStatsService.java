@@ -32,14 +32,8 @@ public class EffectiveStatsService {
             return true;
         }
         if (!data.has(minion, core.HERO)) {
-            int owner = data.get(minion, core.OWNED_BY);
-            for (int other : data.list(core.OWN_MINIONS_HASTE_AURA)) {
-                if (!data.has(other, core.IN_BATTLE_ZONE)) {
-                    continue;
-                }
-                if (data.hasValue(other, core.OWNED_BY, owner)) {
-                    return true;
-                }
+            if (hasOwnerOtherMinionWithComponent(minion, core.OWN_MINIONS_HASTE_AURA)) {
+                return true;
             }
         }
         return false;
@@ -51,14 +45,24 @@ public class EffectiveStatsService {
             return true;
         }
         if (!data.has(minion, core.HERO)) {
-            int owner = data.get(minion, core.OWNED_BY);
-            for (int other : data.list(core.OWN_MINIONS_HASTE_AURA)) {
-                if (!data.has(other, core.IN_BATTLE_ZONE)) {
-                    continue;
-                }
-                if (data.hasValue(other, core.OWNED_BY, owner)) {
-                    return true;
-                }
+            if (hasOwnerOtherMinionWithComponent(minion, core.OWN_MINIONS_HASTE_AURA)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasOwnerOtherMinionWithComponent(int minion, int component) {
+        int owner = data.get(minion, core.OWNED_BY);
+        for (int other : data.list(component)) {
+            if (other == minion) {
+                continue;
+            }
+            if (!data.has(other, core.IN_BATTLE_ZONE)) {
+                continue;
+            }
+            if (data.hasValue(other, core.OWNED_BY, owner)) {
+                return true;
             }
         }
         return false;

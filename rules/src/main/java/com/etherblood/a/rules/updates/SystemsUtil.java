@@ -43,11 +43,8 @@ public class SystemsUtil {
         return total;
     }
 
-    public static int decreaseAndRemoveLtZero(EntityData data, int entity, int component, int value) {
-        int total = data.getOptional(entity, component).orElse(0);
-        total -= value;
-        setAndRemoveLtZero(data, entity, component, total);
-        return total;
+    public static void decreaseAndRemoveLtZero(EntityData data, int entity, int component, int value) {
+        data.getOptional(entity, component).ifPresent(previous -> setAndRemoveLtZero(data, entity, component, previous - value));
     }
 
     public static void setAndRemoveLtZero(EntityData data, int entity, int component, int value) {

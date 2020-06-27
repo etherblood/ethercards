@@ -51,21 +51,22 @@ public class StartPhaseSystem implements ActionSystem {
     private void startAttackPhase(int player) {
         int mana = 0;
         int draws = data.getOptional(player, core.DRAW_CARDS_REQUEST).orElse(0);
-        for (int entity : data.list(core.IN_BATTLE_ZONE).stream()
-                .filter(x -> data.hasValue(x, core.OWNED_BY, player))
-                .toArray()) {
-            data.getOptional(entity, core.TIRED).ifPresent(tiredness -> {
-                SystemsUtil.setAndRemoveLtZero(data, entity, core.TIRED, tiredness - 1);
+        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+            if (!data.hasValue(minion, core.OWNED_BY, player)) {
+                continue;
+            }
+
+            SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.SUMMONING_SICKNESS, 1);
+            SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.TIRED, 1);
+            data.getOptional(minion, core.MANA_GROWTH).ifPresent(growth -> {
+                SystemsUtil.increase(data, minion, core.MANA_POOL, growth);
             });
-            data.getOptional(entity, core.MANA_GROWTH).ifPresent(growth -> {
-                SystemsUtil.increase(data, entity, core.MANA_POOL, growth);
+            data.getOptional(minion, core.POISONED).ifPresent(poison -> {
+                SystemsUtil.damage(data, minion, poison);
+                SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.POISONED, 1);
             });
-            data.getOptional(entity, core.POISONED).ifPresent(poison -> {
-                SystemsUtil.damage(data, entity, poison);
-                SystemsUtil.decreaseAndRemoveLtZero(data, entity, core.POISONED, 1);
-            });
-            mana += data.getOptional(entity, core.MANA_POOL).orElse(0);
-            draws += data.getOptional(entity, core.DRAWS_PER_TURN).orElse(0);
+            mana += data.getOptional(minion, core.MANA_POOL).orElse(0);
+            draws += data.getOptional(minion, core.DRAWS_PER_TURN).orElse(0);
         }
         mana = Math.max(mana, 0);
         data.set(player, core.MANA, mana);
@@ -110,7 +111,7 @@ public class StartPhaseSystem implements ActionSystem {
             if (data.has(entity, core.PLAYER_RESULT)) {
                 continue;
             }
-            
+
             data.set(entity, core.START_PHASE_ACTION, phase);
         }
     }

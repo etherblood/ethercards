@@ -54,9 +54,10 @@ public class EndPhaseSystem implements ActionSystem {
     }
 
     private void endAttackPhase(int player) {
-        for (int attacker : data.list(core.ATTACKS_TARGET).stream()
-                .filter(x -> data.hasValue(x, core.OWNED_BY, player))
-                .toArray()) {
+        for (int attacker : data.list(core.ATTACKS_TARGET)) {
+            if (!data.hasValue(attacker, core.OWNED_BY, player)) {
+                continue;
+            }
             if (!data.has(attacker, core.VIGILANCE)) {
                 data.set(attacker, core.TIRED, 1);
             }
@@ -75,7 +76,7 @@ public class EndPhaseSystem implements ActionSystem {
                 SystemsUtil.increase(data, targetOwner, core.DRAW_CARDS_REQUEST, draws);
             });
         }
-        for (int minion : data.list(core.SUMMONING_SICKNESS)) {
+        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             if (data.hasValue(minion, core.OWNED_BY, player)) {
                 SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.SUMMONING_SICKNESS, 1);
             }
