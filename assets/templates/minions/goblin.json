@@ -7,6 +7,7 @@
     },
     "components": {
         "ATTACK": 1,
-        "HEALTH": 1
+        "HEALTH": 1,
+        "FAST_TO_ATTACK": true
     }
 }

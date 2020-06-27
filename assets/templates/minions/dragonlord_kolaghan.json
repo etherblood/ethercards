@@ -8,6 +8,8 @@
     "components": {
         "ATTACK": 6,
         "HEALTH": 5,
-        "OWN_MINIONS_HASTE_AURA": true
+        "OWN_MINIONS_HASTE_AURA": true,
+        "FAST_TO_ATTACK": true,
+        "FAST_TO_DEFEND": true
     }
 }

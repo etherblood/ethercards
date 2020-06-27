@@ -4,15 +4,15 @@
         "name": "BAD",
         "imagePath": "images/cards/Goblin.png",
         "colors": ["RED"],
-        "description": "Summon a 2/1 goblin."
+        "description": "Summon a 1/1 goblin."
     },
-    "attackCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/goblin.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 3,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/goblin.json"
+                }
+            ]
+        }]
 }

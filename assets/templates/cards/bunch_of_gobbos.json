@@ -6,24 +6,21 @@
         "colors": ["RED"],
         "description": "Summon 3 Fast 1/1 Goblins."
     },
-    "attackCast": {
-        "manaCost": 4,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/goblin.json",
-                "fast": true
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/goblin.json",
-                "fast": true
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/goblin.json",
-                "fast": true
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 4,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/goblin.json"
+                },
+                {
+                    "type": "summon",
+                    "minionId": "minions/goblin.json"
+                },
+                {
+                    "type": "summon",
+                    "minionId": "minions/goblin.json"
+                }
+            ]
+        }]
 }

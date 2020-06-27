@@ -1,5 +1,7 @@
 package com.etherblood.a.templates;
 
+import com.etherblood.a.rules.templates.CardCast;
+import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.CardTemplateBuilder;
 import java.util.List;
 
@@ -34,6 +36,6 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
 
     @Override
     public DisplayCardTemplate build(int templateId) {
-        return new DisplayCardTemplate(templateId, attackPhaseCast.build(), blockPhaseCast.build(), alias, name, flavourText, description, imagePath, colors);
+        return new DisplayCardTemplate(templateId, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), alias, name, flavourText, description, imagePath, colors);
     }
 }

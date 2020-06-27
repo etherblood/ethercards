@@ -6,17 +6,17 @@
         "colors": ["RED"],
         "description": "Summon 2 4/3 orcs."
     },
-    "attackCast": {
-        "manaCost": 4,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/orc.json"
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/orc.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 4,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/orc.json"
+                },
+                {
+                    "type": "summon",
+                    "minionId": "minions/orc.json"
+                }
+            ]
+        }]
 }

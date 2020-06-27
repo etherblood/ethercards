@@ -1,19 +1,20 @@
 package com.etherblood.a.rules.templates;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CardTemplateBuilder {
 
-    protected final CardCastBuilder attackPhaseCast = new CardCastBuilder(), blockPhaseCast = new CardCastBuilder();
+    protected final List<CardCastBuilder> casts = new ArrayList<>();
 
-    public CardCastBuilder getAttackPhaseCast() {
-        return attackPhaseCast;
-    }
-
-    public CardCastBuilder getBlockPhaseCast() {
-        return blockPhaseCast;
+    public CardCastBuilder newCast() {
+        CardCastBuilder cast = new CardCastBuilder();
+        casts.add(cast);
+        return cast;
     }
 
     public CardTemplate build(int templateId) {
-        return new CardTemplate(templateId, attackPhaseCast.build(), blockPhaseCast.build());
+        return new CardTemplate(templateId, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new));
     }
 
 }

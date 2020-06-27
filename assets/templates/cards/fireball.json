@@ -6,19 +6,19 @@
         "colors": ["RED"],
         "description": "Deal 6 damage to the selected target."
     },
-    "attackCast": {
-        "manaCost": 4,
-        "targets": ["OWN_MINION", "OWN_HERO", "OPPONENT_MINION", "OPPONENT_HERO"],
-        "effects": [
-            {
-                "type": "buff",
-                "components": {
-                    "DAMAGE_REQUEST": 6
+    "casts": [{
+            "manaCost": 4,
+            "targets": ["OWN_MINION", "OWN_HERO", "OPPONENT_MINION", "OPPONENT_HERO"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "DAMAGE_REQUEST": 6
+                    }
+                }, {
+                    "type": "particle",
+                    "alias": "fireball"
                 }
-            }, {
-                "type": "particle",
-                "alias": "fireball"
-            }
-        ]
-    }
+            ]
+        }]
 }

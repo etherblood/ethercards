@@ -6,22 +6,13 @@
         "colors": ["BLUE"],
         "description": "Summon a 4/12 Ysera with 1 Draw per Turn."
     },
-    "attackCast": {
-        "manaCost": 9,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/ysera.json"
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 9,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/ysera.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 9,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/ysera.json"
+                }
+            ]
+        }]
 }

@@ -52,6 +52,8 @@ public class CoreComponents implements ComponentsModule {
     public final int TRAMPLE;
     public final int LIFELINK;
     public final int VIGILANCE;
+    public final int FAST_TO_ATTACK;
+    public final int FAST_TO_DEFEND;
     public final int OWN_MINIONS_HASTE_AURA;
 
     public CoreComponents(ToIntFunction<String> register) {
@@ -102,6 +104,8 @@ public class CoreComponents implements ComponentsModule {
         TRAMPLE = register.applyAsInt("TRAMPLE");
         LIFELINK = register.applyAsInt("LIFELINK");
         VIGILANCE = register.applyAsInt("VIGILANCE");
+        FAST_TO_ATTACK = register.applyAsInt("FAST_TO_ATTACK");
+        FAST_TO_DEFEND = register.applyAsInt("FAST_TO_DEFEND");
         OWN_MINIONS_HASTE_AURA = register.applyAsInt("OWN_MINIONS_HASTE_AURA");
     }
 }

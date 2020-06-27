@@ -6,24 +6,25 @@
         "colors": ["GREEN"],
         "description": "Attack phase: Summon a Fast 4/4 Cat.\nBlock phase: Summon a Fast 4/6 Bear."
     },
-    "blockCast": {
-        "manaCost": 5,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/druid_of_the_claw_bear.json",
-                "fast": true
-            }
-        ]
-    },
-    "attackCast": {
-        "manaCost": 5,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/druid_of_the_claw_cat.json",
-                "fast": true
-            }
-        ]
-    }
+    "casts": [{
+            "attackCast": false,
+            "manaCost": 5,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/druid_of_the_claw_bear.json",
+                    "fast": true
+                }
+            ]
+        }, {
+            "blockCast": false,
+            "manaCost": 5,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/druid_of_the_claw_cat.json",
+                    "fast": true
+                }
+            ]
+        }]
 }

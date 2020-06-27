@@ -6,46 +6,25 @@
         "colors": ["BLUE"],
         "description": "Summon a 2/2 Coldlight Oracle, each player draws 2 cards."
     },
-    "attackCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/coldlight_oracle.json"
-            }, {
-                "type": "targeted",
-                "targeting": "ALL",
-                "targets": ["OWNER", "OPPONENT"],
-                "effects": [
-                    {
-                        "type": "buff",
-                        "components": {
-                            "DRAW_CARDS_REQUEST": 2
+    "casts": [{
+            "manaCost": 3,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/coldlight_oracle.json"
+                }, {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWNER", "OPPONENT"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "DRAW_CARDS_REQUEST": 2
+                            }
                         }
-                    }
-                ]
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/coldlight_oracle.json"
-            }, {
-                "type": "targeted",
-                "targeting": "ALL",
-                "targets": ["OWNER", "OPPONENT"],
-                "effects": [
-                    {
-                        "type": "buff",
-                        "components": {
-                            "DRAW_CARDS_REQUEST": 2
-                        }
-                    }
-                ]
-            }
-        ]
-    }
+                    ]
+                }
+            ]
+        }]
 }

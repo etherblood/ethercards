@@ -9,6 +9,7 @@ import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
+import java.util.Arrays;
 import java.util.function.IntUnaryOperator;
 
 public class CastSystem implements ActionSystem {

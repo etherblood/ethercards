@@ -41,7 +41,7 @@ public class SystemFactory {
                         new DeathSystem(data, templates, random, events),
                         new PlayerResultSystem(data)
                 ),
-                new StatsService(data)
+                new EffectiveStatsService(data)
         );
     }
 }

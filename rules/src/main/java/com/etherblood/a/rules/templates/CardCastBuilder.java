@@ -7,6 +7,7 @@ import java.util.List;
 
 public class CardCastBuilder {
 
+    private boolean attackCast = true, blockCast = true;
     private int manaCost;
     private TargetFilters[] targets;
     private final List<Effect> effects = new ArrayList<>();
@@ -23,11 +24,19 @@ public class CardCastBuilder {
         effects.add(effect);
     }
 
+    public void setAttackCast(boolean attackCast) {
+        this.attackCast = attackCast;
+    }
+
+    public void setBlockCast(boolean blockCast) {
+        this.blockCast = blockCast;
+    }
+
     public CardCast build() {
         if (effects.isEmpty()) {
             return null;
         }
-        return new CardCast(manaCost, targets, effects);
+        return new CardCast(manaCost, targets, effects, attackCast, blockCast);
     }
 
 }

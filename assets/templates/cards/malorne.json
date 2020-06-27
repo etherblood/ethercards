@@ -6,13 +6,13 @@
         "colors": ["GREEN"],
         "description": "Summon a 9/7 Malorne which is shuffled into your library when it dies."
     },
-    "attackCast": {
-        "manaCost": 8,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/malorne.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 8,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/malorne.json"
+                }
+            ]
+        }]
 }

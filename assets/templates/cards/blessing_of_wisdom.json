@@ -6,17 +6,17 @@
         "colors": ["WHITE"],
         "description": "Choose a minion, whenever it blocks or attacks it's owner draws a card."
     },
-    "attackCast": {
-        "manaCost": 1,
-        "targets": ["OWN_MINION", "OPPONENT_MINION"],
-        "effects": [
-            {
-                "type": "buff",
-                "components": {
-                    "DRAWS_ON_BLOCK": 1,
-                    "DRAWS_ON_ATTACK": 1
+    "casts": [{
+            "manaCost": 1,
+            "targets": ["OWN_MINION", "OPPONENT_MINION"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "DRAWS_ON_BLOCK": 1,
+                        "DRAWS_ON_ATTACK": 1
+                    }
                 }
-            }
-        ]
-    }
+            ]
+        }]
 }

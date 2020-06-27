@@ -6,24 +6,24 @@
         "colors": ["RED"],
         "description": "Summon a 4/3 Heartless Hidetsugu and cut each heroes health in half."
     },
-    "attackCast": {
-        "manaCost": 5,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/hidetsugu.json"
-            }, {
-                "type": "targeted",
-                "targeting": "ALL",
-                "targets": ["OWN_HERO", "OPPONENT_HERO"],
-                "effects": [
-                    {
-                        "type": "fractionalDamage",
-                        "quotient": 1,
-                        "divident": 2
-                    }
-                ]
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 5,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/hidetsugu.json"
+                }, {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWN_HERO", "OPPONENT_HERO"],
+                    "effects": [
+                        {
+                            "type": "fractionalDamage",
+                            "quotient": 1,
+                            "divident": 2
+                        }
+                    ]
+                }
+            ]
+        }]
 }

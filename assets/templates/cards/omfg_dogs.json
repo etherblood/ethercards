@@ -6,21 +6,21 @@
         "colors": ["WHITE"],
         "description": "Summon 3 1/1 dogs."
     },
-    "attackCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/dog.json"
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/dog.json"
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/dog.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 3,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/dog.json"
+                },
+                {
+                    "type": "summon",
+                    "minionId": "minions/dog.json"
+                },
+                {
+                    "type": "summon",
+                    "minionId": "minions/dog.json"
+                }
+            ]
+        }]
 }

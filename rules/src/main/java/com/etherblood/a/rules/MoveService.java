@@ -18,6 +18,7 @@ import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.targeting.TargetUtil;
+import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemFactory;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +37,7 @@ public class MoveService {
     private final List<MoveReplay> history;
     private final CoreComponents core;
     private final GameEventListener eventListener;
+    private final EffectiveStatsService effectiveStats;
 
     private final boolean backupsEnabled;
     private final boolean validateMoves;
@@ -57,6 +59,7 @@ public class MoveService {
         } else {
             this.history = null;
         }
+        this.effectiveStats = new EffectiveStatsService(data);
     }
 
     public List<MoveReplay> getHistory() {
@@ -322,7 +325,7 @@ public class MoveService {
             }
             return false;
         }
-        if (data.has(attacker, core.SUMMONING_SICKNESS)) {
+        if (data.has(attacker, core.SUMMONING_SICKNESS) && !effectiveStats.isFastToAttack(attacker)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " has summoning sickness.");
             }
@@ -386,7 +389,7 @@ public class MoveService {
             }
             return false;
         }
-        if (data.has(blocker, core.SUMMONING_SICKNESS)) {
+        if (data.has(blocker, core.SUMMONING_SICKNESS) && !effectiveStats.isFastToDefend(blocker)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " has summoning sickness.");
             }

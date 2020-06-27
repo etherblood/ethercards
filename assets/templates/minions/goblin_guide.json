@@ -9,6 +9,7 @@
     "components": {
         "ATTACK": 2,
         "HEALTH": 2,
-        "GIVE_DRAWS_ON_ATTACK": 1
+        "GIVE_DRAWS_ON_ATTACK": 1,
+        "FAST_TO_ATTACK": true
     }
 }

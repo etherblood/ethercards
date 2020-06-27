@@ -6,24 +6,14 @@
         "colors": ["WHITE"],
         "description": "Summon a Fast 1/4 quickwall that can't attack."
     },
-    "blockCast": {
-        "manaCost": 2,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/quickwall.json",
-                "fast": true
-            }
-        ]
-    },
-    "attackCast": {
-        "manaCost": 2,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/quickwall.json",
-                "fast": true
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 2,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/quickwall.json",
+                    "fast": true
+                }
+            ]
+        }]
 }

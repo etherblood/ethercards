@@ -6,25 +6,25 @@
         "colors": ["RED"],
         "description": "Deal 4 damage to all enemy minions."
     },
-    "attackCast": {
-        "manaCost": 8,
-        "effects": [
-            {
-                "type": "targeted",
-                "targeting": "ALL",
-                "targets": ["OPPONENT_MINION"],
-                "effects": [
-                    {
-                        "type": "buff",
-                        "components": {
-                            "DAMAGE_REQUEST": 4
+    "casts": [{
+            "manaCost": 8,
+            "effects": [
+                {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OPPONENT_MINION"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "DAMAGE_REQUEST": 4
+                            }
                         }
-                    }
-                ]
-            }, {
-                "type": "particle",
-                "alias": "flamestrike"
-            }
-        ]
-    }
+                    ]
+                }, {
+                    "type": "particle",
+                    "alias": "flamestrike"
+                }
+            ]
+        }]
 }

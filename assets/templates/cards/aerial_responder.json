@@ -6,22 +6,13 @@
         "colors": ["WHITE"],
         "description": "Summon a 2/3 Aerial Responder with Lifelink and Vigilance."
     },
-    "attackCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/aerial_responder.json"
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/aerial_responder.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 3,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/aerial_responder.json"
+                }
+            ]
+        }]
 }

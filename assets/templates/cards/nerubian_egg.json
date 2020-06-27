@@ -6,13 +6,13 @@
         "colors": ["BLACK"],
         "description": "Summon a 0/2 nerubian egg which cannot attack and summons a 3/3 nerubian when it dies."
     },
-    "attackCast": {
-        "manaCost": 2,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/nerubian_egg.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 2,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/nerubian_egg.json"
+                }
+            ]
+        }]
 }

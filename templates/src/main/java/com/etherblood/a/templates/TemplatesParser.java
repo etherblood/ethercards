@@ -113,9 +113,10 @@ public class TemplatesParser {
             builder.setImagePath(null);
         }
 
-        JsonObject castJson = cardJson.getAsJsonObject("attackCast");
-        if (castJson != null && !castJson.isJsonNull()) {
-            CardCastBuilder cast = builder.getAttackPhaseCast();
+        JsonArray casts = cardJson.getAsJsonArray("casts");
+        for (JsonElement castElement : casts) {
+            JsonObject castJson = castElement.getAsJsonObject();
+            CardCastBuilder cast = builder.newCast();
             cast.setManaCost(castJson.getAsJsonPrimitive("manaCost").getAsInt());
             if (castJson.has("targets")) {
                 cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
@@ -124,18 +125,11 @@ public class TemplatesParser {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
                 cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
             }
-        }
-
-        castJson = cardJson.getAsJsonObject("blockCast");
-        if (castJson != null && !castJson.isJsonNull()) {
-            CardCastBuilder cast = builder.getBlockPhaseCast();
-            cast.setManaCost(castJson.getAsJsonPrimitive("manaCost").getAsInt());
-            if (castJson.has("targets")) {
-                cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
+            if(castJson.has("attackCast")) {
+                cast.setAttackCast(castJson.get("attackCast").getAsBoolean());
             }
-            for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
-                JsonObject effectJson = jsonElement.getAsJsonObject();
-                cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
+            if(castJson.has("blockCast")) {
+                cast.setAttackCast(castJson.get("blockCast").getAsBoolean());
             }
         }
         int id = registerIfAbsent(cardAliases, alias);

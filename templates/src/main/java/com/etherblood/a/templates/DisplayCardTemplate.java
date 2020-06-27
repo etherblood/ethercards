@@ -11,8 +11,8 @@ public class DisplayCardTemplate extends CardTemplate {
     private final String alias, name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayCardTemplate(int templateId, CardCast attackPhaseCast, CardCast blockPhaseCast, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
-        super(templateId, attackPhaseCast, blockPhaseCast);
+    public DisplayCardTemplate(int templateId, CardCast[] casts, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
+        super(templateId, casts);
         this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;

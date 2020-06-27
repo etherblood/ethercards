@@ -8,6 +8,7 @@
     "components": {
         "ATTACK": 1,
         "HEALTH": 4,
-        "CANNOT_ATTACK": true
+        "CANNOT_ATTACK": true,
+        "FAST_TO_DEFEND": true
     }
 }

@@ -414,6 +414,12 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.OWN_MINIONS_HASTE_AURA)) {
                     keywords.add("Haste_Aura");
                 }
+                if (data.has(cardEntity, core.FAST_TO_ATTACK)) {
+                    keywords.add("Fast_to_attack");
+                }
+                if (data.has(cardEntity, core.FAST_TO_DEFEND)) {
+                    keywords.add("Fast_to_block");
+                }
                 if (data.has(cardEntity, core.FATIGUE)) {
                     keywords.add("Fatigue_" + data.get(cardEntity, core.FATIGUE));
                 }

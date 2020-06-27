@@ -6,24 +6,14 @@
         "colors": ["BLACK", "RED"],
         "description": "Summon a Fast 6/5 Dragonlord Kolaghan with Haste Aura."
     },
-    "attackCast": {
-        "manaCost": 6,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/dragonlord_kolaghan.json",
-                "fast": true
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 6,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/dragonlord_kolaghan.json",
-                "fast": true
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 6,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/dragonlord_kolaghan.json",
+                    "fast": true
+                }
+            ]
+        }]
 }

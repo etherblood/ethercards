@@ -6,22 +6,13 @@
         "colors": ["BLACK"],
         "description": "Summon a 2/3 Harvest Golem which summons a 2/1 Damaged Golem when it dies."
     },
-    "attackCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/harvest_golem.json"
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/harvest_golem.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 3,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/harvest_golem.json"
+                }
+            ]
+        }]
 }

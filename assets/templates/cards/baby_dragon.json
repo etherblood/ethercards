@@ -6,13 +6,13 @@
         "colors": ["RED"],
         "description": "Summon a 1200/700 baby dragon."
     },
-    "attackCast": {
-        "manaCost": 3,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/baby_dragon.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 3,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/baby_dragon.json"
+                }
+            ]
+        }]
 }

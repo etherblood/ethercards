@@ -6,38 +6,21 @@
         "colors": ["RED"],
         "description": "Summon a 7/7 Dr. Boom and two 1/1 Boombots which deal 2 damage to a random enemy when they die."
     },
-    "attackCast": {
-        "manaCost": 7,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/boombot.json"
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/dr_boom.json"
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/boombot.json"
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 7,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/boombot.json"
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/dr_boom.json"
-            },
-            {
-                "type": "summon",
-                "minionId": "minions/boombot.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 7,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/boombot.json"
+                },
+                {
+                    "type": "summon",
+                    "minionId": "minions/dr_boom.json"
+                },
+                {
+                    "type": "summon",
+                    "minionId": "minions/boombot.json"
+                }
+            ]
+        }]
 }

@@ -8,14 +8,17 @@ import java.util.List;
 
 public class CardCast {
 
+    private final boolean attackCast, blockCast;
     private final int manaCost;
     private final TargetFilters[] targets;
     private final List<Effect> effects;
 
-    CardCast(int manaCost, TargetFilters[] targets, List<Effect> effects) {
+    CardCast(int manaCost, TargetFilters[] targets, List<Effect> effects, boolean attackCast, boolean blockCast) {
         this.manaCost = manaCost;
         this.targets = targets;
         this.effects = Collections.unmodifiableList(new ArrayList<>(effects));
+        this.attackCast = attackCast;
+        this.blockCast = blockCast;
     }
 
     public int getManaCost() {
@@ -32,5 +35,13 @@ public class CardCast {
 
     public TargetFilters[] getTargets() {
         return targets;
+    }
+
+    public boolean isAttackCast() {
+        return attackCast;
+    }
+
+    public boolean isBlockCast() {
+        return blockCast;
     }
 }

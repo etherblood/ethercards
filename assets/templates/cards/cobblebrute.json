@@ -6,22 +6,13 @@
         "colors": ["RED"],
         "description": "Summon a 5/2 Cobblebrute."
     },
-    "attackCast": {
-        "manaCost": 4,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/cobblebrute.json"
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 4,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/cobblebrute.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 4,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/cobblebrute.json"
+                }
+            ]
+        }]
 }

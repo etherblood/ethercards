@@ -6,19 +6,19 @@
         "colors": ["BLACK"],
         "description": "Choose a minion, destroy it."
     },
-    "attackCast": {
-        "manaCost": 5,
-        "targets": ["OWN_MINION", "OPPONENT_MINION"],
-        "effects": [
-            {
-                "type": "buff",
-                "components": {
-                    "DEATH_REQUEST": 1
+    "casts": [{
+            "manaCost": 5,
+            "targets": ["OWN_MINION", "OPPONENT_MINION"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "DEATH_REQUEST": 1
+                    }
+                }, {
+                    "type": "particle",
+                    "alias": "flesh_to_dust"
                 }
-            }, {
-                "type": "particle",
-                "alias": "flesh_to_dust"
-            }
-        ]
-    }
+            ]
+        }]
 }

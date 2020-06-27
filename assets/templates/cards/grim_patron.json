@@ -6,22 +6,13 @@
         "colors": ["RED"],
         "description": "Summon a 3/3 grim patron which summons a new grim patron whenever it survives damage."
     },
-    "attackCast": {
-        "manaCost": 5,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/grim_patron.json"
-            }
-        ]
-    },
-    "blockCast": {
-        "manaCost": 5,
-        "effects": [
-            {
-                "type": "summon",
-                "minionId": "minions/grim_patron.json"
-            }
-        ]
-    }
+    "casts": [{
+            "manaCost": 5,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/grim_patron.json"
+                }
+            ]
+        }]
 }

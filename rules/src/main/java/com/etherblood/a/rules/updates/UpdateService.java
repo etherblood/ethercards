@@ -4,11 +4,11 @@ import java.util.List;
 
 public class UpdateService {
 
-    private final StatsService stats;
+    private final EffectiveStatsService stats;
     private final List<ActionSystem> actionSystems;
     private final List<ActionSystem> phaseSystems;
 
-    public UpdateService(List<ActionSystem> phaseSystems, List<ActionSystem> actionSystems, StatsService stats) {
+    public UpdateService(List<ActionSystem> phaseSystems, List<ActionSystem> actionSystems, EffectiveStatsService stats) {
         this.stats = stats;
         this.actionSystems = actionSystems;
         this.phaseSystems = phaseSystems;

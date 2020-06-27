@@ -1,14 +1,15 @@
 package com.etherblood.a.rules.templates;
 
+import java.util.Arrays;
+
 public class CardTemplate {
 
     private final int id;
-    private final CardCast attackPhaseCast, blockPhaseCast;
+    private final CardCast[] casts;
 
-    protected CardTemplate(int templateId, CardCast attackPhaseCast, CardCast blockPhaseCast) {
+    protected CardTemplate(int templateId, CardCast[] casts) {
         this.id = templateId;
-        this.attackPhaseCast = attackPhaseCast;
-        this.blockPhaseCast = blockPhaseCast;
+        this.casts = casts;
     }
 
     public int getId() {
@@ -16,11 +17,15 @@ public class CardTemplate {
     }
 
     public CardCast getAttackPhaseCast() {
-        return attackPhaseCast;
+        return Arrays.stream(casts).filter(c -> c.isAttackCast()).findFirst().orElse(null);
     }
 
     public CardCast getBlockPhaseCast() {
-        return blockPhaseCast;
+        return Arrays.stream(casts).filter(c -> c.isBlockCast()).findFirst().orElse(null);
+    }
+
+    public CardCast[] getCasts() {
+        return casts;
     }
 
     public String getTemplateName() {
