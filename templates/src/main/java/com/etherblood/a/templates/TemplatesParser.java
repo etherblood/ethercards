@@ -14,6 +14,7 @@ import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
 import com.etherblood.a.rules.templates.effects.ParticleEventEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
+import com.etherblood.a.rules.templates.effects.TakeControlEffect;
 import com.etherblood.a.rules.templates.effects.targeting.TargetFilters;
 import com.etherblood.a.rules.templates.effects.targeting.TargetedEffects;
 import com.google.gson.Gson;
@@ -49,6 +50,7 @@ public class TemplatesParser {
         classes.put("targeted", TargetedEffects.class);
         classes.put("particle", ParticleEventEffect.class);
         classes.put("drawTemplate", DrawCardTemplateEffect.class);
+        classes.put("takeControl", TakeControlEffect.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }

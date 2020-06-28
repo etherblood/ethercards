@@ -1,0 +1,13 @@
+{
+    "alias": "minions/dragonlord_silumgar.json",
+    "display": {
+        "name": "Dragonlord Silumgar",
+        "imagePath": "images/cards/dragonlord_silumgar.jpg",
+        "colors": ["BLUE", "BLACK"]
+    },
+    "components": {
+        "ATTACK": 3,
+        "HEALTH": 5,
+        "VENOM": 5
+    }
+}
