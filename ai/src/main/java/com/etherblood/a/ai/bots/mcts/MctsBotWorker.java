@@ -1,4 +1,4 @@
-package com.etherblood.a.ai.bots.mcts.multithread;
+package com.etherblood.a.ai.bots.mcts;
 
 import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
@@ -14,9 +14,9 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
+class MctsBotWorker implements Runnable, Callable<Void> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MultithreadMctsBotWorker.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MctsBotWorker.class);
 
     private static final float EPSILON = 1e-6f;
     private final float uctConstant;
@@ -28,10 +28,10 @@ public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
     private final MoveBotGame sourceGame, simulationGame;
     private final int playerCount;
     private final int botPlayerIndex;
-    private final MultithreadNode rootNode;
-    private final MultithreadRaveScores raveScores;
+    private final MctsNode rootNode;
+    private final MctsRaveScores raveScores;
 
-    public MultithreadMctsBotWorker(MoveBotGame sourceGame, MoveBotGame simulationGame, MctsBotSettings<Move, MoveBotGame> settings, int playerIndex, MultithreadNode rootNode, MultithreadRaveScores raveScores) {
+    public MctsBotWorker(MoveBotGame sourceGame, MoveBotGame simulationGame, MctsBotSettings<Move, MoveBotGame> settings, int playerIndex, MctsNode rootNode, MctsRaveScores raveScores) {
         this.sourceGame = sourceGame;
         this.simulationGame = simulationGame;
         this.random = settings.random;
@@ -71,14 +71,14 @@ public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
         LOG.debug("worker finished after {} iterations.", iterations);
     }
 
-    private void iteration(MultithreadNode rootNode, MultithreadRaveScores raveScores) {
-        Deque<MultithreadNode> nodePath = new LinkedList<>();
+    private void iteration(MctsNode rootNode, MctsRaveScores raveScores) {
+        Deque<MctsNode> nodePath = new LinkedList<>();
         Deque<Move> movePath = new LinkedList<>();
         nodePath.add(rootNode);
         Move selectedMove = select(nodePath, movePath, raveScores);
 
         if (selectedMove != null) {
-            MultithreadNode child = new MultithreadNode(playerCount);
+            MctsNode child = new MctsNode(playerCount);
             nodePath.getLast().addChild(selectedMove, child);
             nodePath.add(child);
             movePath.add(selectedMove);
@@ -86,7 +86,7 @@ public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
         }
 
         float[] result = evaluation.apply(simulationGame);
-        for (MultithreadNode node : nodePath) {
+        for (MctsNode node : nodePath) {
             node.updateScores(result);
         }
         for (Move move : movePath) {
@@ -99,8 +99,8 @@ public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
         raveScores.getDefaultScore().updateScores(avgWeights);
     }
 
-    private Move select(Deque<MultithreadNode> nodePath, Deque<Move> movePath, MultithreadRaveScores raveScores) {
-        MultithreadNode node = nodePath.getLast();
+    private Move select(Deque<MctsNode> nodePath, Deque<Move> movePath, MctsRaveScores raveScores) {
+        MctsNode node = nodePath.getLast();
         Move selectedMove = uctSelect(node, raveScores);
         while ((node = getChild(node, selectedMove)) != null) {
             nodePath.add(node);
@@ -114,7 +114,7 @@ public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
         return selectedMove;
     }
 
-    private Move uctSelect(MultithreadNode node, MultithreadRaveScores raveScores) {
+    private Move uctSelect(MctsNode node, MctsRaveScores raveScores) {
         List<Move> moves = simulationGame.generateMoves();
         if (moves.size() == 1) {
             return moves.get(0);
@@ -124,14 +124,14 @@ public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
         float bestValue = Float.NEGATIVE_INFINITY;
         for (Move move : moves) {
             float score;
-            MultithreadNode child = getChild(node, move);
+            MctsNode child = getChild(node, move);
             if (child == null) {
                 score = firstPlayUrgency;
             } else {
                 score = calcUtc(node.visits(), child.visits(), child.score(activePlayerIndex));
             }
 
-            MultithreadRaveScore raveScore = raveScores.get(move);
+            MctsRaveScore raveScore = raveScores.get(move);
             if (raveScore == null) {
                 raveScore = raveScores.get(null);
             }
@@ -158,7 +158,7 @@ public class MultithreadMctsBotWorker implements Runnable, Callable<Void> {
         return exploitation + exploration;
     }
 
-    private MultithreadNode getChild(MultithreadNode node, Move move) {
+    private MctsNode getChild(MctsNode node, Move move) {
         return node.getChildOrDefault(move, null);
     }
 }

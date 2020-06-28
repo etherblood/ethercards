@@ -9,6 +9,7 @@ import java.util.function.Function;
 public class MctsBotSettings<Move, Game extends BotGame<Move, Game>> {
 
     public boolean verbose = false;
+    public int maxThreads = 1;
     public int strength = 10_000;
     public float uctConstant = 2;
     public float raveMultiplier = 1;

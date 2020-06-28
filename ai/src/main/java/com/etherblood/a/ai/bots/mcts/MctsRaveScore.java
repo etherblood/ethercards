@@ -1,10 +1,10 @@
-package com.etherblood.a.ai.bots.mcts.multithread;
+package com.etherblood.a.ai.bots.mcts;
 
-public class MultithreadRaveScore {
+class MctsRaveScore {
 
     private final float[] scores;
 
-    public MultithreadRaveScore(int playerCount) {
+    public MctsRaveScore(int playerCount) {
         scores = new float[playerCount];
     }
 

@@ -1,10 +1,10 @@
 package com.etherblood.a.ai.bots;
 
 import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
 import com.etherblood.a.ai.bots.evaluation.SimpleEvaluation;
+import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
@@ -51,21 +51,21 @@ public class TestSandbox {
             MctsBotSettings<Move, MoveBotGame> settings0 = new MctsBotSettings<>();
             settings0.strength = 100;
             settings0.evaluation = rolloutEvaluation0;
-            MctsBot<Move, MoveBotGame> bot0 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(simulationGame(game)), settings0);
+            MctsBot bot0 = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(simulationGame(game)), settings0);
 
             Function<MoveBotGame, float[]> rolloutEvaluation1 = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings1 = new MctsBotSettings<>();
             settings1.strength = 100;
             settings1.evaluation = rolloutEvaluation1;
-            MctsBot<Move, MoveBotGame> bot1 = new MctsBot<>(new MoveBotGame(game), new MoveBotGame(simulationGame(game)), settings1);
+            MctsBot bot1 = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(simulationGame(game)), settings1);
 
             while (!game.isGameOver()) {
                 Move move;
                 if (game.isPlayerActive(game.findPlayerByIndex(0))) {
-                    move = bot0.findBestMove(0);
+                    move = bot0.findMove(0);
 
                 } else {
-                    move = bot1.findBestMove(1);
+                    move = bot1.findMove(1);
                 }
                 game.getMoves().apply(move);
             }

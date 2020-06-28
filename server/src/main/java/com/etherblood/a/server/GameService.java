@@ -3,8 +3,10 @@ package com.etherblood.a.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.ai.MoveBotGame;
+import com.etherblood.a.ai.bots.Bot;
+import com.etherblood.a.ai.bots.RandomMover;
+import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
-import com.etherblood.a.ai.bots.mcts.multithread.MultithreadMctsBot;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.network.api.GameReplayService;
@@ -159,15 +161,14 @@ public class GameService {
             }
 
             GameReplayService game = games.get(bot.gameId);
-            MoveBotGame botGame = bot.bot.getSourceGame();
+            MoveBotGame botGame = bot.game;
             game.updateInstance(botGame.getGame());
             if (botGame.isGameOver()) {
                 throw new AssertionError();
             }
             if (botGame.isPlayerIndexActive(bot.playerIndex)) {
                 LOG.debug("Game_{} start computing move.", bot.gameId);
-                int availableProcessors = Math.min(3, Runtime.getRuntime().availableProcessors());
-                botMoves.put(bot.gameId, executor.submit(() -> bot.bot.findBestMove(bot.playerIndex, availableProcessors)));
+                botMoves.put(bot.gameId, executor.submit(() -> bot.bot.findMove(bot.playerIndex)));
             } else {
                 LOG.debug("Game_{} skip, it is not the bots turn.", bot.gameId);
             }
@@ -203,11 +204,18 @@ public class GameService {
 
                     players.add(new GamePlayerMapping(gameId, human.id, Arrays.asList(setup.players).indexOf(human), connection.getID()));
 
-                    MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
-                    settings.strength = request.strength;
                     Game gameInstance = game.createInstance();
-                    MultithreadMctsBot mcts = new MultithreadMctsBot(new MoveBotGame(gameInstance), () -> new MoveBotGame(simulationGame(gameInstance)), settings);
-                    bots.add(new GameBotMapping(gameId, Arrays.asList(setup.players).indexOf(bot), mcts));
+                    MoveBotGame moveBotGame = new MoveBotGame(gameInstance);
+                    Bot botInstance;
+                    if (request.strength <= 0) {
+                        botInstance = new RandomMover(moveBotGame, new Random());
+                    } else {
+                        MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
+                        settings.maxThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+                        settings.strength = request.strength;
+                        botInstance = new MctsBot(moveBotGame, () -> new MoveBotGame(simulationGame(gameInstance)), settings);
+                    }
+                    bots.add(new GameBotMapping(gameId, Arrays.asList(setup.players).indexOf(bot), moveBotGame, botInstance));
 
                     connection.sendTCP(setup);
                     connection.sendTCP(moveReplay);

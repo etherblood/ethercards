@@ -1,8 +1,8 @@
 package com.etherblood.a.library.builder.ai;
 
 import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
+import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
@@ -38,13 +38,13 @@ public class BattleSetup {
     public int battle(RawLibraryTemplate a, RawLibraryTemplate b) throws InterruptedException {
         Game activeGame = startGame(a, b);
 
-        MctsBot<Move, MoveBotGame> bot = new MctsBot<>(new MoveBotGame(activeGame), new MoveBotGame(simulationGame(activeGame)), botSettings);
+        MctsBot bot = new MctsBot(new MoveBotGame(activeGame), () -> new MoveBotGame(simulationGame(activeGame)), botSettings);
 
         while (!activeGame.isGameOver()) {
             for (int i = 0; i < 2; i++) {
                 int player = activeGame.findPlayerByIndex(i);
                 if (activeGame.isPlayerActive(player)) {
-                    Move move = bot.findBestMove(i);
+                    Move move = bot.findMove(i);
                     activeGame.getMoves().apply(move);
                     break;
                 }
