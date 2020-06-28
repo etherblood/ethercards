@@ -4,7 +4,7 @@
         "name": "Dr. Bees",
         "imagePath": "images/cards/dr_bees.gif",
         "colors": ["GREEN"],
-        "description": "Summon five 0/0 Bee Workers with Venom 1 which dies after battle."
+        "description": "Summon five 0/0 Bee Workers with Venom 1 which die after battle."
     },
     "casts": [{
             "manaCost": 4,

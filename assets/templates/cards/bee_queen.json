@@ -4,10 +4,10 @@
         "name": "Bee Queen",
         "imagePath": "images/cards/bee_queen.gif",
         "colors": ["GREEN"],
-        "description": "Summon a 0/3 Bee Queen with Venom 2 and 1 Health Aura."
+        "description": "Summon a 0/2 Bee Queen with Venom 2 and 1 Health Aura."
     },
     "casts": [{
-            "manaCost": 3,
+            "manaCost": 2,
             "effects": [
                 {
                     "type": "summon",

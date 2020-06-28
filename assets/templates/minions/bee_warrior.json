@@ -7,8 +7,8 @@
     },
     "components": {
         "ATTACK": 0,
-        "HEALTH": 4,
-        "VENOM": 2,
+        "HEALTH": 3,
+        "VENOM": 1,
         "VIGILANCE": true,
         "FAST_TO_DEFEND": true
     }

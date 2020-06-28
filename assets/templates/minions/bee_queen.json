@@ -8,7 +8,7 @@
     "components": {
         "ATTACK": 0,
         "HEALTH": 3,
-        "VENOM": 2,
+        "VENOM": 1,
         "OWN_MINIONS_HEALTH_AURA": 1
     }
 }

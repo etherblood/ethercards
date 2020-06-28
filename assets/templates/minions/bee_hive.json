@@ -4,17 +4,20 @@
         "name": "Bee Hive",
         "imagePath": "images/cards/bee_hive.jpg",
         "colors": ["GREEN"],
-        "description": "Summon a Bee Worker each turn."
+        "description": "Summon two Bee Workers each turn."
     },
     "onUpkeep": [
         {
+            "type": "summon",
+            "minionId": "minions/bee_worker.json"
+        }, {
             "type": "summon",
             "minionId": "minions/bee_worker.json"
         }
     ],
     "components": {
         "ATTACK": 0,
-        "HEALTH": 4,
+        "HEALTH": 3,
         "CANNOT_ATTACK": true,
         "CANNOT_BLOCK": true
     }
