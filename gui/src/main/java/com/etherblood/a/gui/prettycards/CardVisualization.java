@@ -25,6 +25,10 @@ public class CardVisualization extends CustomAttachmentVisualization<Node> {
         modelledCard.setFront(paintableImage);
     }
 
+    public void setFront(PaintableImage back, PaintableImage art, PaintableImage front) {
+        modelledCard.setFront(back, art, front);
+    }
+
     public void setGlow(ColorRGBA colorRGBA) {
         glowBox.setColor(colorRGBA);
         node.attachChild(glowBox.getGeometry());

@@ -141,9 +141,8 @@ public class CardPainterAWT {
         graphics.dispose();
     }
 
-    public void drawMinion_Full(Graphics2D graphics, MinionModel cardModel, int width, int height) {
+    public void drawMinion_Full(Graphics2D back, Graphics2D art, Graphics2D front, MinionModel cardModel, int width, int height) {
         DisplayMinionTemplate template = cardModel.getTemplate();
-        graphics = (Graphics2D) graphics.create();
 //        if (cardModel.isFaceUp()) {
 //            List<String> drawnKeywords = new LinkedList<>();
 //            drawnKeywords.addAll(cardModel.getKeywords());
@@ -151,18 +150,19 @@ public class CardPainterAWT {
 //            if (castDescription != null) {
 //                drawnKeywords.add("Cast");
 //            }
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(35, 68, 329, 242);
+        back.setColor(Color.BLACK);
+        back.fillRect(35, 68, 329, 242);
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
-        graphics.drawImage(cardImages.getCachedImage(imageFilePath, 329, 242), 35, 68, null);
+        Image cachedImage = cardImages.getCachedImage(imageFilePath, 329, 242);
+        art.drawImage(cachedImage, 35, 68, null);
         List<CardColor> colors = template.getColors();
-        graphics.drawImage(getCardBackgroundImage(colors, width, height, "full"), 0, 0, null);
-        graphics.setFont(FONTTITLE);
-        graphics.setColor(Color.BLACK);
+        back.drawImage(getCardBackgroundImage(colors, width, height, "full"), 0, 0, null);
+        front.setFont(FONTTITLE);
+        front.setColor(Color.BLACK);
         String title = template.getName();
         int textStartX = 45;
         if (title != null) {
-            graphics.drawString(title, 35, 57);
+            front.drawString(title, 35, 57);
 //            graphics.drawString(title, 45, 54);
         }
 //        drawCardCostManaAmount(graphics, template.getAttackPhaseCast() != null ? template.getAttackPhaseCast().getManaCost() : template.getBlockPhaseCast().getManaCost(), (width - textStartX - CARDCOSTICONSIZE), (46 - (CARDCOSTICONSIZE / 2)));
@@ -178,21 +178,21 @@ public class CardPainterAWT {
                 String keyword = drawnKeywords.get(i);
                 keywordsText += keyword;
             }
-            graphics.setFont(FONTKEYWORDS);
+            front.setFont(FONTKEYWORDS);
             tmpX = textStartX;
-            drawStringMultiLine(graphics, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
+            drawStringMultiLine(front, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
 //                if (castDescription != null) {
 //                    tmpX += 3;
 //                    drawSpellDescription(graphics, castDescription, LINEWIDTH, tmpX, textStartX, tmpY);
 //                }
             tmpY += 18;
         }
-        graphics.setColor(Color.BLACK);
+        front.setColor(Color.BLACK);
         String description = template.getDescription();
         if (description != null) {
-            graphics.setFont(FONTDESCRIPTION);
+            front.setFont(FONTDESCRIPTION);
             tmpX = textStartX;
-            drawStringMultiLine(graphics, description, LINEWIDTH, tmpX, textStartX, tmpY, -2);
+            drawStringMultiLine(front, description, LINEWIDTH, tmpX, textStartX, tmpY, -2);
             tmpY += 18;
         }
 //            List<Spell> spells = cardModel.getSpells();
@@ -210,11 +210,11 @@ public class CardPainterAWT {
         String flavourText = template.getFlavourText();
         if (flavourText != null) {
             tmpX = textStartX;
-            graphics.setFont(FONTFLAVORTEXT);
-            drawStringMultiLine(graphics, flavourText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
+            front.setFont(FONTFLAVORTEXT);
+            drawStringMultiLine(front, flavourText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
             tmpY += 18;
         }
-        drawStats(graphics, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
+        drawStats(front, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
 //            List<String> tribes = cardModel.getTribes();
 //            if (tribes.size() > 0) {
 //                String tribesText = "";
@@ -231,20 +231,18 @@ public class CardPainterAWT {
 //        } else {
 //            graphics.drawImage(CardImages.getCachedImage("images/cardback.png"), 0, 0, width, height, null);
 //        }
-        graphics.dispose();
     }
 
-    public void drawMinion_Minified(Graphics2D graphics, MinionModel cardModel, int width, int height) {
+    public void drawMinion_Minified(Graphics2D back, Graphics2D art, Graphics2D front, MinionModel cardModel, int width, int height) {
         DisplayMinionTemplate template = cardModel.getTemplate();
-        graphics = (Graphics2D) graphics.create();
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(36, 36, 328, 488);
+        back.setColor(Color.BLACK);
+        back.fillRect(36, 36, 328, 488);
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
-        graphics.drawImage(cardImages.getCachedImage(imageFilePath, 663, 488), -131, 36, null);
+        Image cachedImage = cardImages.getCachedImage(imageFilePath, 663, 488);
+        art.drawImage(cachedImage, 36, 36, 364, 524, 167, 0, 364 - 36 + 167, 524 - 36 + 0, null);
         List<CardColor> colors = template.getColors();
-        graphics.drawImage(getCardBackgroundImage(colors, width, height, "rect"), 0, 0, null);
-        drawStats(graphics, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
-        graphics.dispose();
+        back.drawImage(getCardBackgroundImage(colors, width, height, "rect"), 0, 0, null);
+        drawStats(front, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
     }
 
     private void drawStats(Graphics2D graphics, int attack, int health, boolean damaged) {

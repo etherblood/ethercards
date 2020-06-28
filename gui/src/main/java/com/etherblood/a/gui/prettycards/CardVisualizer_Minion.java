@@ -14,13 +14,21 @@ public class CardVisualizer_Minion extends CardVisualizer<MinionModel> {
 
     @Override
     protected void updateVisualizationObject(CardVisualization visualization, Card<MinionModel> card, AssetManager assetManager) {
-        PaintableImage frontImage;
+        PaintableImage back = cardPainter.createPaintable();
+        PaintableImage art = cardPainter.createPaintable();
+        PaintableImage front = cardPainter.createPaintable();
         if (card.getModel().isInspected()) {
-            frontImage = cardPainter.drawMinion_Full(card.getModel());
+            cardPainter.drawMinion_Full(card.getModel(), back, art, front);
         } else {
-            frontImage = cardPainter.drawMinion_Minified(card.getModel());
+            cardPainter.drawMinion_Minified(card.getModel(), back, art, front);
         }
-        visualization.setCardFront(frontImage);
+        if (card.getModel().isHero()) {
+            visualization.setFront(back, art, front);
+        } else {
+            back.paintImage(art, 0, 0, back.getWidth(), back.getHeight());
+            back.paintImage(front, 0, 0, back.getWidth(), back.getHeight());
+            visualization.setCardFront(back);
+        }
 
         if (card.getModel().getGlow() != null) {
             visualization.setGlow(card.getModel().getGlow());
