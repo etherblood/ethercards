@@ -7,7 +7,7 @@
         "description": "Summon a 5/2 Cobblebrute."
     },
     "casts": [{
-            "manaCost": 4,
+            "manaCost": 3,
             "effects": [
                 {
                     "type": "summon",

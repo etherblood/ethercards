@@ -2,7 +2,6 @@ package com.etherblood.a.ai.bots.mcts;
 
 import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.bots.Bot;
-import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.moves.Move;
 import java.util.ArrayList;
