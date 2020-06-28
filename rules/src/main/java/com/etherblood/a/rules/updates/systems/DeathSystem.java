@@ -1,5 +1,6 @@
 package com.etherblood.a.rules.updates.systems;
 
+import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.DeathEvent;
@@ -28,17 +29,17 @@ public class DeathSystem implements ActionSystem {
         };
         this.triggers = new Trigger[]{
             (entity, value) -> {
-                if(data.has(entity, core.HERO)) {
+                if (data.has(entity, core.HERO)) {
                     int owner = data.get(entity, core.OWNED_BY);
                     data.set(owner, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
                 }
-                
+
                 int templateId = data.get(entity, core.MINION_TEMPLATE);
                 MinionTemplate template = templates.getMinion(templateId);
                 for (Effect onDeathEffect : template.getOnDeathEffects()) {
                     onDeathEffect.apply(data, templates, random, events, entity, ~0);
                 }
-                
+
                 events.fire(new DeathEvent(entity));
             }
         };
@@ -82,6 +83,13 @@ public class DeathSystem implements ActionSystem {
                 trigger.trigger(entity, death);
             }
             data.remove(entity, core.DEATH_ACTION);
+            clearMinionEntity(entity);
+        }
+    }
+
+    private void clearMinionEntity(int entity) {
+        for (ComponentMeta meta : data.getComponents().getMetas()) {
+            data.remove(entity, meta.id);
         }
     }
 }
