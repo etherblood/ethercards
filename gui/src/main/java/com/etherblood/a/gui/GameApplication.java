@@ -56,13 +56,11 @@ public class GameApplication extends SimpleApplication {
         client = new GameClient(assetLoader);
         try {
             client.start(hostUrl);
-            if (selectedStrength == 0) {
+            if (selectedStrength < 0) {
                 futureGameReplayService = client.requestGame(authentication.rawJwt, selectedLibrary);
                 stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
-            } else if (selectedStrength > 0) {
-                futureGameReplayService = client.requestBotgame(authentication.rawJwt, selectedLibrary, selectedStrength * 10_000);
             } else {
-                throw new IllegalArgumentException(Integer.toString(selectedStrength));
+                futureGameReplayService = client.requestBotgame(authentication.rawJwt, selectedLibrary, selectedStrength * 10_000);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
