@@ -6,7 +6,7 @@
         "colors": ["WHITE"],
         "description": "Fast to Block, cannot Attack.",
         "stats": {
-            "attack": 1,
+            "attack": 2,
             "health": 4
         }
     },

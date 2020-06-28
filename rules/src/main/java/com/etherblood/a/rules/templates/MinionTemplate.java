@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.OptionalInt;
 
 public class MinionTemplate implements Iterable<Integer> {
 
@@ -34,6 +35,10 @@ public class MinionTemplate implements Iterable<Integer> {
 
     public int get(int component) {
         return components.get(component);
+    }
+
+    public boolean has(int component, int value) {
+        return components.getOrElse(component, ~value) == value;
     }
 
     public List<Effect> getOnDeathEffects() {

@@ -16,4 +16,9 @@ public class DisplayStats {
     public int getHealth() {
         return health;
     }
+
+    @Override
+    public String toString() {
+        return "DisplayStats{" + "attack=" + attack + ", health=" + health + '}';
+    }
 }
