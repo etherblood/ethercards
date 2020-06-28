@@ -4,7 +4,7 @@
         "name": "Bee Queen",
         "imagePath": "images/cards/bee_queen.gif",
         "colors": ["GREEN"],
-        "description": "Summon a 0/3 Bee Queen with Venom 2 and 1 Health Aura. It summons a 0/0 Bee Worker with Venom each Turn which dies after combat."
+        "description": "Summon a 0/3 Bee Queen with Venom 2 and 1 Health Aura."
     },
     "casts": [{
             "manaCost": 3,

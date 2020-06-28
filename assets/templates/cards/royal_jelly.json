@@ -9,7 +9,7 @@
     "casts": [{
             "attackCast": true,
             "blockCast": false,
-            "manaCost": 2,
+            "manaCost": 1,
             "effects": [
                 {
                     "type": "drawTemplate",
@@ -19,7 +19,7 @@
         }, {
             "attackCast": false,
             "blockCast": true,
-            "manaCost": 2,
+            "manaCost": 1,
             "effects": [
                 {
                     "type": "drawTemplate",
