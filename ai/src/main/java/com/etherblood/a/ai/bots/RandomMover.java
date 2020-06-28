@@ -17,8 +17,7 @@ public class RandomMover<Game extends BotGame<Move, Game>> implements Bot {
 
     @Override
     public Move findMove(int playerIndex) {
-        //TODO: generate only player moves
-        List<Move> moves = game.generateMoves();
+        List<Move> moves = game.generateMoves(playerIndex);
         return moves.get(random.nextInt(moves.size()));
     }
 }

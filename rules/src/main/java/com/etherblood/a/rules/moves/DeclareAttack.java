@@ -29,4 +29,9 @@ public class DeclareAttack implements Move {
         return "DeclareAttack{" + "player=" + player + ", source=" + source + ", target=" + target + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
+
 }

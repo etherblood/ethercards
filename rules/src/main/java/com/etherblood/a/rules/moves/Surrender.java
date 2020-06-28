@@ -27,4 +27,9 @@ public class Surrender implements Move {
         return "Surrender{" + "player=" + player + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
+
 }

@@ -27,4 +27,9 @@ public class EndMulliganPhase implements Move {
         return "EndMulliganPhase{" + "player=" + player + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
+
 }

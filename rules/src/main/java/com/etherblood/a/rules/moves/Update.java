@@ -17,4 +17,9 @@ public class Update implements Move {
         return "Update{" + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return null;
+    }
+
 }

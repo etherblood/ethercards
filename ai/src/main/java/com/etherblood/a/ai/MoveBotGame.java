@@ -21,6 +21,11 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
     }
 
     @Override
+    public List<Move> generateMoves(int playerIndex) {
+        return game.getMoves().generate(pruneFriendlyAttacks, true, getGame().findPlayerByIndex(playerIndex));
+    }
+
+    @Override
     public String toMoveString(Move move) {
         return new GameDataPrinter(game).toMoveString(move);
     }

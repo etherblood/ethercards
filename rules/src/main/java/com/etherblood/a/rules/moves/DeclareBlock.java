@@ -29,4 +29,9 @@ public class DeclareBlock implements Move {
         return "DeclareBlock{" + "player=" + player + ", source=" + source + ", target=" + target + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
+
 }

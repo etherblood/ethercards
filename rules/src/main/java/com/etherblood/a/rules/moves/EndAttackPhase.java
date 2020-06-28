@@ -27,4 +27,9 @@ public class EndAttackPhase implements Move {
         return "EndAttackPhase{" + "player=" + player + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
+
 }

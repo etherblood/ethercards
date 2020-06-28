@@ -27,4 +27,9 @@ public class EndBlockPhase implements Move {
         return "EndBlockPhase{" + "player=" + player + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
+
 }

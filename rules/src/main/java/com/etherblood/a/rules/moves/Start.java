@@ -17,4 +17,9 @@ public class Start implements Move {
         return "Start{" + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return null;
+    }
+
 }

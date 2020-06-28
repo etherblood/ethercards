@@ -68,8 +68,15 @@ public class MoveService {
 
     public List<Move> generate(boolean pruneFriendlyAttacks, boolean pruneSurrender) {
         List<Move> result = new ArrayList<>();
-        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
-            int phase = data.get(player, core.ACTIVE_PLAYER_PHASE);
+        for (int player : data.list(core.PLAYER_INDEX)) {
+            result.addAll(generate(pruneFriendlyAttacks, pruneSurrender, player));
+        }
+        return result;
+    }
+
+    public List<Move> generate(boolean pruneFriendlyAttacks, boolean pruneSurrender, int player) {
+        List<Move> result = new ArrayList<>();
+        data.getOptional(player, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
             switch (phase) {
                 case PlayerPhase.ATTACK: {
                     IntList minions = data.list(core.IN_BATTLE_ZONE);
@@ -136,12 +143,10 @@ public class MoveService {
                 default:
                     throw new AssertionError(phase);
             }
-        }
+        });
         if (!pruneSurrender) {
-            for (int player : data.list(core.PLAYER_INDEX)) {
-                if (canSurrender(player, false)) {
-                    result.add(new Surrender(player));
-                }
+            if (canSurrender(player, false)) {
+                result.add(new Surrender(player));
             }
 
         }

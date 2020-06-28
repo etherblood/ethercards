@@ -4,7 +4,7 @@
         "name": "Dragonlord Atarka",
         "imagePath": "images/cards/dragonlord_atarka.jpg",
         "colors": ["RED", "GREEN"],
-        "description": "Randomly deal 1 damage to an enemy 5 times.",
+        "description": "Randomly deal 1 damage to an enemy 5 times. Trample.",
         "stats": {
             "attack": 8,
             "health": 8

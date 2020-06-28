@@ -115,11 +115,11 @@ class MctsBotWorker implements Runnable, Callable<Void> {
     }
 
     private Move uctSelect(MctsNode node, MctsRaveScores raveScores) {
-        List<Move> moves = simulationGame.generateMoves();
+        int activePlayerIndex = simulationGame.activePlayerIndex();
+        List<Move> moves = simulationGame.generateMoves(activePlayerIndex);
         if (moves.size() == 1) {
             return moves.get(0);
         }
-        int activePlayerIndex = simulationGame.activePlayerIndex();
         List<Move> bestMoves = new ArrayList<>();
         float bestValue = Float.NEGATIVE_INFINITY;
         for (Move move : moves) {

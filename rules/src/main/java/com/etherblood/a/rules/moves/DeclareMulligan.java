@@ -28,4 +28,9 @@ public class DeclareMulligan implements Move {
         return "DeclareMulligan{" + "player=" + player + ", card=" + card + '}';
     }
 
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
+
 }

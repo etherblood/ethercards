@@ -28,4 +28,9 @@ public class Cast implements Move {
     public String toString() {
         return "Cast{" + "player=" + player + ", source=" + source + ", target=" + target + '}';
     }
+
+    @Override
+    public Integer getPlayer() {
+        return player;
+    }
 }
