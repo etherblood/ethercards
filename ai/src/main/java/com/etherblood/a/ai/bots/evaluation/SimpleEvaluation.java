@@ -13,13 +13,28 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
         }
         EntityData data = game.getData();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        IntMap playerMinionCount = new IntMap();
+        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+            if (data.has(minion, core.HERO)) {
+                continue;
+            }
+            int player = data.get(minion, core.OWNED_BY);
+            int count = playerMinionCount.getOrElse(player, 0);
+            count++;
+            playerMinionCount.set(player, count);
+        }
+
         IntMap playerScores = new IntMap();
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             int player = data.get(minion, core.OWNED_BY);
             int score = playerScores.getOrElse(player, 0);
-            score += 10 * data.getOptional(minion, core.ATTACK).orElse(0);
-            score += 10 * data.getOptional(minion, core.HEALTH).orElse(0);
+            score += 10 * (data.getOptional(minion, core.ATTACK).orElse(0) + data.getOptional(minion, core.VENOM).orElse(0));
+            score += 10 * (data.getOptional(minion, core.HEALTH).orElse(0) - data.getOptional(minion, core.POISONED).orElse(0));
             score += 10 * data.getOptional(minion, core.MANA_POOL).orElse(0);
+            int minionCount = playerMinionCount.getOrElse(player, 0);
+            if (minionCount > 1) {
+                score += 10 * (minionCount - 1) * (data.getOptional(minion, core.OWN_MINIONS_HEALTH_AURA).orElse(0) + data.getOptional(minion, core.OWN_MINIONS_VENOM_AURA).orElse(0));
+            }
             playerScores.set(player, score);
         }
         IntMap handCards = new IntMap();
