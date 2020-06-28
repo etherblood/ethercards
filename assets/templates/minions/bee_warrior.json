@@ -6,8 +6,10 @@
         "colors": ["GREEN"]
     },
     "components": {
-        "ATTACK": 2,
-        "HEALTH": 1,
-        "VIGILANCE": true
+        "ATTACK": 0,
+        "HEALTH": 4,
+        "VENOM": 2,
+        "VIGILANCE": true,
+        "FAST_TO_DEFEND": true
     }
 }

@@ -4,7 +4,7 @@
         "name": "Bee Hive",
         "imagePath": "images/cards/bee_hive.jpg",
         "colors": ["GREEN"],
-        "description": "Summon a 0/0 Bee Worker with Venom 1 each turn."
+        "description": "Summon a Bee Worker each turn."
     },
     "onUpkeep": [
         {
