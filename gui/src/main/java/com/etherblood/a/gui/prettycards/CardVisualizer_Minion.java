@@ -22,7 +22,7 @@ public class CardVisualizer_Minion extends CardVisualizer<MinionModel> {
         } else {
             cardPainter.drawMinion_Minified(card.getModel(), back, art, front);
         }
-        if (card.getModel().isHero()) {
+        if (card.getModel().isFoil()) {
             visualization.setFront(back, art, front);
         } else {
             back.paintImage(art, 0, 0, back.getWidth(), back.getHeight());

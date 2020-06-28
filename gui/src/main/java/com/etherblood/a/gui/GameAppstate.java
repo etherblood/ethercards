@@ -159,7 +159,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 }
                 case "fireball": {
                     ColoredSphere sphere = new ColoredSphere(new ColorModel());
-                    sphere.getModel().setColor(ColorRGBA.Yellow);
+                    sphere.getModel().setColor(ColorRGBA.Red);
                     sphere.resetTransformations();
                     sphere.position().setCurrentValue(visualCards.get(particle.source).position().getCurrentValue());
                     board.register(sphere);
@@ -364,7 +364,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 MinionModel minionModel = card.getModel();
                 minionModel.setEntityId(cardEntity);
                 minionModel.setFaceUp(true);
-                minionModel.setHero(data.has(cardEntity, core.HERO));
+                minionModel.setFoil(data.has(cardEntity, core.HERO));
                 minionModel.setAttack(data.getOptional(cardEntity, core.ATTACK).orElse(0));
                 minionModel.setHealth(stats.health(cardEntity));
                 DisplayMinionTemplate template = (DisplayMinionTemplate) game.getTemplates().getMinion(data.get(cardEntity, core.MINION_TEMPLATE));
