@@ -6,7 +6,7 @@
         "colors": ["GREEN"]
     },
     "components": {
-        "ATTACK": 3,
+        "ATTACK": 2,
         "HEALTH": 1,
         "VIGILANCE": true
     }
