@@ -653,7 +653,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
             x = 0;
             x += 3.75f;
-            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(-x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.02f, 0));
+            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(-x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.01f, 0));
             z += ZONE_HEIGHT / 2;
 
             x = 0;

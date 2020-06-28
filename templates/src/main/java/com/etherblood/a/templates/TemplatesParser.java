@@ -9,6 +9,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.CreateCardEffect;
+import com.etherblood.a.rules.templates.effects.DrawCardTemplateEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
 import com.etherblood.a.rules.templates.effects.ParticleEventEffect;
@@ -47,6 +48,7 @@ public class TemplatesParser {
         classes.put("create", CreateCardEffect.class);
         classes.put("targeted", TargetedEffects.class);
         classes.put("particle", ParticleEventEffect.class);
+        classes.put("drawTemplate", DrawCardTemplateEffect.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
@@ -129,7 +131,7 @@ public class TemplatesParser {
                 cast.setAttackCast(castJson.get("attackCast").getAsBoolean());
             }
             if (castJson.has("blockCast")) {
-                cast.setAttackCast(castJson.get("blockCast").getAsBoolean());
+                cast.setBlockCast(castJson.get("blockCast").getAsBoolean());
             }
         }
         int id = registerIfAbsent(cardAliases, alias);

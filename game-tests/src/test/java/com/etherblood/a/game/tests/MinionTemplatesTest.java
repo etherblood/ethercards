@@ -1,5 +1,6 @@
 package com.etherblood.a.game.tests;
 
+import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
@@ -23,7 +24,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth - boomBotDamage, actualHealth);
     }
-    
+
     @Test
     public void grimPatron_onSurvive() {
         int patron = createMinion(player(0), "minions/grim_patron.json");
@@ -35,7 +36,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
         int actualMinionCount = data.list(core.IN_BATTLE_ZONE).size();
         Assertions.assertEquals(previousMinionCount + 1, actualMinionCount);
     }
-    
+
     @Test
     public void grimPatron_death_onSurvive_not_triggered() {
         int patron = createMinion(player(0), "minions/grim_patron.json");
@@ -133,7 +134,7 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
         game.getMoves().apply(new DeclareAttack(player(0), goblinGuide, hero(1)));
         game.getMoves().apply(new EndAttackPhase(player(0)));
-        
+
         Assertions.assertTrue(data.has(orniThopter, core.IN_HAND_ZONE));
     }
 
@@ -154,5 +155,32 @@ public class MinionTemplatesTest extends AbstractGameTest {
 
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth, actualHealth);
+    }
+
+    @Test
+    public void royalJelly_draw_drone() {
+        int royalJelly = createHandCard(player(0), "cards/royal_jelly.json");
+        int queen = createLibraryCard(player(0), "cards/bee_queen.json");
+        int drone = createLibraryCard(player(0), "cards/bee_drone.json");
+
+        data.set(player(0), core.MANA, Integer.MAX_VALUE);
+        game.getMoves().apply(new Cast(player(0), royalJelly, ~0));
+
+        Assertions.assertTrue(data.has(queen, core.IN_LIBRARY_ZONE));
+        Assertions.assertTrue(data.has(drone, core.IN_HAND_ZONE));
+    }
+
+    @Test
+    public void royalJelly_draw_queen() {
+        int royalJelly = createHandCard(player(1), "cards/royal_jelly.json");
+        int queen = createLibraryCard(player(1), "cards/bee_queen.json");
+        int drone = createLibraryCard(player(1), "cards/bee_drone.json");
+        
+        game.getMoves().apply(new EndAttackPhase(player(0)));
+        data.set(player(1), core.MANA, Integer.MAX_VALUE);
+        game.getMoves().apply(new Cast(player(1), royalJelly, ~0));
+
+        Assertions.assertTrue(data.has(queen, core.IN_HAND_ZONE));
+        Assertions.assertTrue(data.has(drone, core.IN_LIBRARY_ZONE));
     }
 }

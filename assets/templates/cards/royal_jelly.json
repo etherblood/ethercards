@@ -1,0 +1,30 @@
+{
+    "alias": "cards/royal_jelly.json",
+    "display": {
+        "name": "Royal Jelly",
+        "imagePath": "images/cards/royal_jelly.jpg",
+        "colors": ["GREEN"],
+        "description": "Attack-Phase: Draw a Bee Drone. Block-Phase: Draw a Bee Queen."
+    },
+    "casts": [{
+            "attackCast": true,
+            "blockCast": false,
+            "manaCost": 2,
+            "effects": [
+                {
+                    "type": "drawTemplate",
+                    "cardId": "cards/bee_drone.json"
+                }
+            ]
+        }, {
+            "attackCast": false,
+            "blockCast": true,
+            "manaCost": 2,
+            "effects": [
+                {
+                    "type": "drawTemplate",
+                    "cardId": "cards/bee_queen.json"
+                }
+            ]
+        }]
+}

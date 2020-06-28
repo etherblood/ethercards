@@ -14,9 +14,8 @@
     ],
     "components": {
         "ATTACK": 0,
-        "HEALTH": 4,
+        "HEALTH": 5,
         "CANNOT_ATTACK": true,
-        "CANNOT_BLOCK": true,
-        "OWN_MINIONS_HEALTH_AURA": 1
+        "CANNOT_BLOCK": true
     }
 }
