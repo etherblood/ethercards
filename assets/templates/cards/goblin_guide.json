@@ -4,7 +4,11 @@
         "name": "Goblin Guide",
         "imagePath": "images/cards/goblin_guide.jpg",
         "colors": ["RED"],
-        "description": "Summon a Fast 2/2 Goblin Guide. The defending player draws 1 card each time it attacks."
+        "description": "Fast to Attack. The defending player draws 1 card each time this attacks.",
+        "stats": {
+            "attack": 2,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 1,

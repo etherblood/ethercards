@@ -4,7 +4,11 @@
         "name": "Grim Patron",
         "imagePath": "images/cards/Grim_Patron_art.jpg",
         "colors": ["RED"],
-        "description": "Summon a 3/3 grim patron which summons a new grim patron whenever it survives damage."
+        "description": "Summon a 3/3 Grim Patron whenever this survives damage.",
+        "stats": {
+            "attack": 3,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 5,

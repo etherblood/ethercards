@@ -4,7 +4,11 @@
         "name": "Frontland Felidar",
         "imagePath": "images/cards/frontland_felidar.jpeg",
         "colors": ["GREEN", "WHITE"],
-        "description": "Summon a 3/5 Frontland Felidar with Vigilance."
+        "description": "Vigilance.",
+        "stats": {
+            "attack": 3,
+            "health": 5
+        }
     },
     "casts": [{
             "manaCost": 4,

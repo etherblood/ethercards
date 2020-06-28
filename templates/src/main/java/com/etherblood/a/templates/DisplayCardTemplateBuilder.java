@@ -9,6 +9,7 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
 
     private String alias, name, flavourText, description, imagePath;
     private List<CardColor> colors;
+    private DisplayStats displayStats;
 
     public void setAlias(String alias) {
         this.alias = alias;
@@ -34,8 +35,12 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
         this.colors = colors;
     }
 
+    public void setDisplayStats(DisplayStats displayStats) {
+        this.displayStats = displayStats;
+    }
+
     @Override
     public DisplayCardTemplate build(int templateId) {
-        return new DisplayCardTemplate(templateId, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), alias, name, flavourText, description, imagePath, colors);
+        return new DisplayCardTemplate(templateId, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), alias, name, flavourText, description, imagePath, colors, displayStats);
     }
 }

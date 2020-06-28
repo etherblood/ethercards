@@ -4,7 +4,11 @@
         "name": "Bee Warrior",
         "imagePath": "images/cards/bee_warrior.gif",
         "colors": ["GREEN"],
-        "description": "Summon a 0/3 Bee Warrior with Vigilance, Venom 1 and Fast Blocker."
+        "description": "Vigilance, Venom 1 and Fast Blocker.",
+        "stats": {
+            "attack": 0,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 1,

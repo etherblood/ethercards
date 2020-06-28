@@ -4,7 +4,10 @@
         "name": "Cobblebrute",
         "imagePath": "images/cards/cobblebrute.jpg",
         "colors": ["RED"],
-        "description": "Summon a 5/2 Cobblebrute."
+        "stats": {
+            "attack": 5,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 3,

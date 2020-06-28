@@ -4,7 +4,11 @@
         "name": "Bee Drone",
         "imagePath": "images/cards/bee_drone.gif",
         "colors": ["GREEN"],
-        "description": "Summon a 2/1 Bee Drone with Venom 1 Aura."
+        "description": "Venom 1 Aura.",
+        "stats": {
+            "attack": 2,
+            "health": 1
+        }
     },
     "casts": [{
             "manaCost": 2,

@@ -4,7 +4,11 @@
         "name": "Malorne",
         "imagePath": "images/cards/Malorne_full.jpg",
         "colors": ["GREEN"],
-        "description": "Summon a 9/7 Malorne which is shuffled into your library when it dies."
+        "description": "Shuffle this into your library when it dies.",
+        "stats": {
+            "attack": 9,
+            "health": 7
+        }
     },
     "casts": [{
             "manaCost": 8,

@@ -4,7 +4,10 @@
         "name": "Orc",
         "imagePath": "images/cards/Orc.png",
         "colors": ["RED"],
-        "description": "Summon a 4/3 orc."
+        "stats": {
+            "attack": 4,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 3,

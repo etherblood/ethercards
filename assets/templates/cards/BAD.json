@@ -4,7 +4,10 @@
         "name": "BAD",
         "imagePath": "images/cards/Goblin.png",
         "colors": ["RED"],
-        "description": "Summon a 1/1 goblin."
+        "stats": {
+            "attack": 1,
+            "health": 1
+        }
     },
     "casts": [{
             "manaCost": 3,

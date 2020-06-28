@@ -4,7 +4,11 @@
         "name": "Coldlight Oracle",
         "imagePath": "images/cards/Coldlight_Oracle_full.jpg",
         "colors": ["BLUE"],
-        "description": "Summon a 2/2 Coldlight Oracle, each player draws 2 cards."
+        "description": "Each player Draws 2 cards.",
+        "stats": {
+            "attack": 2,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 3,

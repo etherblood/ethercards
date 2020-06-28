@@ -6,7 +6,7 @@
         "colors": ["WHITE"]
     },
     "components": {
-        "ATTACK": 1,
+        "ATTACK": 2,
         "HEALTH": 4,
         "CANNOT_ATTACK": true,
         "FAST_TO_DEFEND": true

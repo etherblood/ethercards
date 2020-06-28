@@ -4,7 +4,11 @@
         "name": "Baloth Pup",
         "imagePath": "images/cards/baloth_pup.jpg",
         "colors": ["GREEN"],
-        "description": "Summon a 3/1 Baloth Pup with Trample."
+        "description": "Trample.",
+        "stats": {
+            "attack": 3,
+            "health": 1
+        }
     },
     "casts": [{
             "manaCost": 2,

@@ -4,7 +4,11 @@
         "name": "Isamaru, Hound of Konda",
         "imagePath": "images/cards/isamaru.jpg",
         "colors": ["WHITE"],
-        "description": "Summon a 2/2 Isamaru, Hound of Konda."
+        "flavourText": "The hound sniffed the air and let slip a low growl. General Takeno looked down at the faithful Isamaru and calmed him with a touch. \"Alert the men. The kami are coming.\"",
+        "stats": {
+            "attack": 2,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 1,

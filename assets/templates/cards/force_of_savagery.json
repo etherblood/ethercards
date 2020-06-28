@@ -4,7 +4,11 @@
         "name": "Force of Savagery",
         "imagePath": "images/cards/force_of_savagery.jpeg",
         "colors": ["GREEN"],
-        "description": "Summon a 8/0 Force of Savagery with Trample."
+        "description": "Trample.",
+        "stats": {
+            "attack": 8,
+            "health": 0
+        }
     },
     "casts": [{
             "manaCost": 2,

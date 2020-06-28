@@ -4,7 +4,11 @@
         "name": "Haunted creeper",
         "imagePath": "images/cards/Haunted_Creeper_(art).jpg",
         "colors": ["BLACK"],
-        "description": "Summon a 1/2 haunted creeper which summons two 1/1 spectral spiders when it dies."
+        "description": "Summon two 1/1 spectral spiders when this dies.",
+        "stats": {
+            "attack": 1,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 2,

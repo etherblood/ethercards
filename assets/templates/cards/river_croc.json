@@ -4,7 +4,10 @@
         "name": "River Crocolisk",
         "imagePath": "images/cards/River_Crocolisk_full.png",
         "colors": ["GREEN"],
-        "description": "Summon a 2/3 river crocolisk."
+        "stats": {
+            "attack": 2,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 2,

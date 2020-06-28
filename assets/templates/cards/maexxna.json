@@ -4,7 +4,11 @@
         "name": "Maexxna",
         "imagePath": "images/cards/Maexxna_full.jpg",
         "colors": ["BLACK"],
-        "description": "Summon a 2/8 Maexxna with Venom 4."
+        "description": "Venom 4.",
+        "stats": {
+            "attack": 2,
+            "health": 8
+        }
     },
     "casts": [{
             "manaCost": 6,

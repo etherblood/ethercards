@@ -4,7 +4,10 @@
         "name": "Baby Dragon",
         "imagePath": "images/cards/2785.jpg",
         "colors": ["RED"],
-        "description": "Summon a 1200/700 baby dragon."
+        "stats": {
+            "attack": 1200,
+            "health": 700
+        }
     },
     "casts": [{
             "manaCost": 3,

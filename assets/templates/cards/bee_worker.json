@@ -4,7 +4,11 @@
         "name": "Bee Worker",
         "imagePath": "images/cards/bee_worker.gif",
         "colors": ["GREEN"],
-        "description": "Summon a 0/0 Bee Worker with Venom 1 which dies after battle. Draw 1."
+        "description": "Venom 1. Dies after Battle. Draw 1.",
+        "stats": {
+            "attack": 0,
+            "health": 0
+        }
     },
     "casts": [{
             "manaCost": 1,

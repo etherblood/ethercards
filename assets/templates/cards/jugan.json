@@ -4,7 +4,11 @@
         "name": "Jugan, the Rising Star",
         "imagePath": "images/cards/jugan.jpg",
         "colors": ["GREEN"],
-        "description": "Summon a 5/5 Jugan, the Rising Star which randomly distributes five +1/+1 buffs amongst your minions when it dies."
+        "description": "Randomly distribute five +1/+1 buffs amongst your minions when this dies.",
+        "stats": {
+            "attack": 5,
+            "health": 5
+        }
     },
     "casts": [{
             "manaCost": 6,

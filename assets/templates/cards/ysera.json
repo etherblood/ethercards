@@ -4,7 +4,11 @@
         "name": "Ysera",
         "imagePath": "images/cards/ysera.jpg",
         "colors": ["BLUE"],
-        "description": "Summon a 4/12 Ysera with 1 Draw per Turn."
+        "description": "1 Draw per Turn.",
+        "stats": {
+            "attack": 4,
+            "health": 12
+        }
     },
     "casts": [{
             "manaCost": 9,

@@ -4,7 +4,11 @@
         "name": "Bee Hive",
         "imagePath": "images/cards/bee_hive.jpg",
         "colors": ["GREEN"],
-        "description": "Summon a 0/3 Bee Hive with which can neither attack nor block and summons two Bee Workers each turn."
+        "description": "Can neither attack nor block and summons two 0/0 Bee Workers each turn.",
+        "stats": {
+            "attack": 0,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 2,

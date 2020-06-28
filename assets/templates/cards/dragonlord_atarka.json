@@ -4,7 +4,11 @@
         "name": "Dragonlord Atarka",
         "imagePath": "images/cards/dragonlord_atarka.jpg",
         "colors": ["RED", "GREEN"],
-        "description": "Summon a 8/8 Dragonlord Atarka with Trample, randomly deal 1 damage to an enemy 5 times."
+        "description": "Randomly deal 1 damage to an enemy 5 times.",
+        "stats": {
+            "attack": 8,
+            "health": 8
+        }
     },
     "casts": [{
             "manaCost": 7,

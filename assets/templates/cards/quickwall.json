@@ -4,15 +4,18 @@
         "name": "Quickwall",
         "imagePath": "images/cards/quickwall.png",
         "colors": ["WHITE"],
-        "description": "Summon a Fast 1/4 quickwall that can't attack."
+        "description": "Fast to Block, cannot Attack.",
+        "stats": {
+            "attack": 1,
+            "health": 4
+        }
     },
     "casts": [{
             "manaCost": 2,
             "effects": [
                 {
                     "type": "summon",
-                    "minionId": "minions/quickwall.json",
-                    "fast": true
+                    "minionId": "minions/quickwall.json"
                 }
             ]
         }]

@@ -4,7 +4,11 @@
         "name": "Aerial Responder",
         "imagePath": "images/cards/aerial_responder.png",
         "colors": ["WHITE"],
-        "description": "Summon a 2/3 Aerial Responder with Lifelink and Vigilance."
+        "description": "Lifelink and Vigilance.",
+        "stats": {
+            "attack": 2,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 3,

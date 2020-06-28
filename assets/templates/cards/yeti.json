@@ -4,7 +4,10 @@
         "name": "Yeti",
         "imagePath": "images/cards/Chillwind_Yeti_(art).jpg",
         "colors": ["BLUE"],
-        "description": "Summon a 4/5 yeti."
+        "stats": {
+            "attack": 4,
+            "health": 5
+        }
     },
     "casts": [{
             "manaCost": 4,

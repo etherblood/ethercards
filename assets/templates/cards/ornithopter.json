@@ -4,7 +4,10 @@
         "name": "Ornithopter",
         "imagePath": "images/cards/Thopter.jpg",
         "colors": ["NEUTRAL"],
-        "description": "Summon a 0/2 ornithopter."
+        "stats": {
+            "attack": 0,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 0,

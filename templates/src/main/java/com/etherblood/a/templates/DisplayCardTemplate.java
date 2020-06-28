@@ -9,9 +9,10 @@ import java.util.List;
 public class DisplayCardTemplate extends CardTemplate {
 
     private final String alias, name, flavourText, description, imagePath;
+    private final DisplayStats displayStats;
     private final List<CardColor> colors;
 
-    public DisplayCardTemplate(int templateId, CardCast[] casts, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors) {
+    public DisplayCardTemplate(int templateId, CardCast[] casts, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, DisplayStats displayMinionStats) {
         super(templateId, casts);
         this.alias = alias;
         this.name = name;
@@ -19,6 +20,7 @@ public class DisplayCardTemplate extends CardTemplate {
         this.description = description;
         this.imagePath = imagePath;
         this.colors = Collections.unmodifiableList(new ArrayList<>(colors));
+        this.displayStats = displayMinionStats;
     }
 
     public String getAlias() {
@@ -48,6 +50,10 @@ public class DisplayCardTemplate extends CardTemplate {
     @Override
     public String getTemplateName() {
         return name;
+    }
+
+    public DisplayStats getDisplayStats() {
+        return displayStats;
     }
 
     @Override

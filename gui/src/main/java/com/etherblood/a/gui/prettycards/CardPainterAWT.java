@@ -3,6 +3,7 @@ package com.etherblood.a.gui.prettycards;
 import com.etherblood.a.templates.CardColor;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.DisplayMinionTemplate;
+import com.etherblood.a.templates.DisplayStats;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -133,6 +134,10 @@ public class CardPainterAWT {
 //        } else {
 //            graphics.drawImage(CardImages.getCachedImage("images/cardback.png"), 0, 0, width, height, null);
 //        }
+        DisplayStats stats = cardModel.getTemplate().getDisplayStats();
+        if (stats != null) {
+            drawStats(graphics, stats.getAttack(), stats.getHealth(), false);
+        }
         graphics.dispose();
     }
 
@@ -209,7 +214,7 @@ public class CardPainterAWT {
             drawStringMultiLine(graphics, flavourText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
             tmpY += 18;
         }
-        drawStats(graphics, cardModel);
+        drawStats(graphics, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
 //            List<String> tribes = cardModel.getTribes();
 //            if (tribes.size() > 0) {
 //                String tribesText = "";
@@ -238,26 +243,24 @@ public class CardPainterAWT {
         graphics.drawImage(cardImages.getCachedImage(imageFilePath, 663, 488), -131, 36, null);
         List<CardColor> colors = template.getColors();
         graphics.drawImage(getCardBackgroundImage(colors, width, height, "rect"), 0, 0, null);
-        drawStats(graphics, cardModel);
+        drawStats(graphics, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
         graphics.dispose();
     }
 
-    private void drawStats(Graphics2D graphics, MinionModel cardModel) {
+    private void drawStats(Graphics2D graphics, int attack, int health, boolean damaged) {
         tmpY = 513;
-        int attackDamage = cardModel.getAttack();
         graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 29, 458, 73, 73, null);
-        String attackDamageText = ("" + attackDamage);
+        String attackDamageText = ("" + attack);
         graphics.setFont(FONTSTATS);
         Rectangle2D attackDamageBounds = graphics.getFontMetrics().getStringBounds(attackDamageText, graphics);
         tmpX = (int) (65 - (attackDamageBounds.getWidth() / 2));
         drawOutlinedText(graphics, attackDamageText, tmpX, tmpY, Color.BLACK, Color.WHITE);
-        int lifepoints = cardModel.getHealth();
         graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 298, 458, 73, 73, null);
-        String lifepointsText = ("" + lifepoints);
+        String lifepointsText = ("" + health);
         graphics.setFont(FONTSTATS);
         Rectangle2D lifepointsBounds = graphics.getFontMetrics().getStringBounds(lifepointsText, graphics);
         tmpX = (int) (335 - (lifepointsBounds.getWidth() / 2));
-        drawOutlinedText(graphics, lifepointsText, tmpX, tmpY, Color.BLACK, (cardModel.isDamaged() ? Color.RED : Color.WHITE));
+        drawOutlinedText(graphics, lifepointsText, tmpX, tmpY, Color.BLACK, (damaged ? Color.RED : Color.WHITE));
     }
 
     private void drawOutlinedText(Graphics2D graphics, String text, int x, int y, Color outlineColor, Color textColor) {

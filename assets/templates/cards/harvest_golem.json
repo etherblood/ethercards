@@ -4,7 +4,11 @@
         "name": "Harvest Golem",
         "imagePath": "images/cards/Harvest_Golem_full.jpg",
         "colors": ["BLACK"],
-        "description": "Summon a 2/3 Harvest Golem which summons a 2/1 Damaged Golem when it dies."
+        "description": "Summon a 2/1 Damaged Golem when this dies.",
+        "stats": {
+            "attack": 2,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 3,

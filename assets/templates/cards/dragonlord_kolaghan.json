@@ -4,7 +4,11 @@
         "name": "Dragonlord Kolaghan",
         "imagePath": "images/cards/dragonlord_kolaghan.jpg",
         "colors": ["BLACK", "RED"],
-        "description": "Summon a Fast 6/5 Dragonlord Kolaghan with Haste Aura."
+        "description": "Haste Aura.",
+        "stats": {
+            "attack": 6,
+            "health": 5
+        }
     },
     "casts": [{
             "manaCost": 6,

@@ -107,12 +107,17 @@ public class TemplatesParser {
             if (imagePath != null && !imagePath.isJsonNull()) {
                 builder.setImagePath(imagePath.getAsString());
             }
+            JsonElement stats = display.get("stats");
+            if (stats != null) {
+                builder.setDisplayStats(aliasGson.fromJson(stats, DisplayStats.class));
+            }
         } else {
             builder.setColors(Arrays.asList(CardColor.values()));
             builder.setName("MissingNo #" + alias);
             builder.setDescription("404");
             builder.setFlavourText("Nothing here.");
             builder.setImagePath(null);
+            builder.setDisplayStats(null);
         }
 
         JsonArray casts = cardJson.getAsJsonArray("casts");

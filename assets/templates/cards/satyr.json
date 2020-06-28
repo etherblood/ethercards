@@ -4,7 +4,11 @@
         "name": "Satyr",
         "imagePath": "images/cards/Voyaging Satyr.png",
         "colors": ["GREEN"],
-        "description": "Summon a 1/2 satyr with 1 mana-pool."
+        "description": "1 Mana Pool.",
+        "stats": {
+            "attack": 1,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 2,

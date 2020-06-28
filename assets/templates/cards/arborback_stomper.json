@@ -4,7 +4,11 @@
         "name": "Arborback Stomper",
         "imagePath": "images/cards/arborback_stomper.jpg",
         "colors": ["GREEN"],
-        "description": "Summon a 5/4 Arborback Stomper with Trample, your hero gains 5 health."
+        "description": "Trample, your hero gains 5 health.",
+        "stats": {
+            "attack": 5,
+            "health": 4
+        }
     },
     "casts": [{
             "manaCost": 5,

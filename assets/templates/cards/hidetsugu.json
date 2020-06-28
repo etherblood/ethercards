@@ -4,7 +4,11 @@
         "name": "Heartless Hidetsugu",
         "imagePath": "images/cards/hidetsugu.jpg",
         "colors": ["RED"],
-        "description": "Summon a 4/3 Heartless Hidetsugu and cut each heroes health in half."
+        "description": "Cut each heroes health in half.",
+        "stats": {
+            "attack": 4,
+            "health": 3
+        }
     },
     "casts": [{
             "manaCost": 5,

@@ -4,7 +4,11 @@
         "name": "Dragonlord Dromoka",
         "imagePath": "images/cards/dragonlord_dromoka.jpg",
         "colors": ["GREEN", "WHITE"],
-        "description": "Summon a 5/7 Dragonlord Dromoka with Lifelink."
+        "description": "Lifelink.",
+        "stats": {
+            "attack": 5,
+            "health": 7
+        }
     },
     "casts": [{
             "manaCost": 6,

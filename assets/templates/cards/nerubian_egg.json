@@ -4,7 +4,11 @@
         "name": "Nerubian egg",
         "imagePath": "images/cards/Nerubian_Egg_full.jpg",
         "colors": ["BLACK"],
-        "description": "Summon a 0/2 nerubian egg which cannot attack and summons a 3/3 nerubian when it dies."
+        "description": "Cannot attack, summon a 3/3 Nerubian when this dies.",
+        "stats": {
+            "attack": 0,
+            "health": 2
+        }
     },
     "casts": [{
             "manaCost": 2,
