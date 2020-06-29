@@ -6,6 +6,7 @@
         "colors": ["GREEN"],
         "description": "Randomly distribute five +1/+1 buffs amongst your minions when this dies."
     },
+    "tribes": ["DRAGON"],
     "onDeath": [
         {
             "type": "targeted",
@@ -76,6 +77,7 @@
     ],
     "components": {
         "ATTACK": 5,
-        "HEALTH": 5
+        "HEALTH": 5,
+        "FLYING": true
     }
 }

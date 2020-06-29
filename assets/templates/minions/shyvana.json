@@ -5,6 +5,7 @@
         "imagePath": "images/cards/Shyvana.png",
         "colors": ["RED"]
     },
+    "tribes": ["DRAGON"],
     "components": {
         "ATTACK": 0,
         "HEALTH": 20,

@@ -30,6 +30,9 @@ public class CastEffectDeserializer implements JsonDeserializer<Effect> {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         String typeString = jsonObject.getAsJsonPrimitive("type").getAsString();
         Class<? extends Effect> clazz = classes.get(typeString);
+        if (clazz == null) {
+            throw new NullPointerException("No class found for " + typeString + ".");
+        }
         for (Field field : clazz.getDeclaredFields()) {
             JsonElement fieldJsonValue = jsonObject.get(field.getName());
             if (field.getType() == int.class) {

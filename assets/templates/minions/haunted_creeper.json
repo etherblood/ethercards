@@ -17,6 +17,7 @@
     ],
     "components": {
         "ATTACK": 1,
-        "HEALTH": 2
+        "HEALTH": 2,
+        "REACH": true
     }
 }

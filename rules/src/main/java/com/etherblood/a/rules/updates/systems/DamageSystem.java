@@ -31,7 +31,7 @@ public class DamageSystem implements ActionSystem {
                 if (!data.has(entity, core.DEATH_REQUEST)) {
                     int templateId = data.get(entity, core.MINION_TEMPLATE);
                     MinionTemplate template = templates.getMinion(templateId);
-                    for (Effect onSurviveEffect : template.getOnSurviveEffects()) {
+                    for (Effect onSurviveEffect : template.getOnSelfSurviveEffects()) {
                         onSurviveEffect.apply(data, templates, random, events, entity, value);
                     }
                 }

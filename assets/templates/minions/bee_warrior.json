@@ -10,6 +10,7 @@
         "HEALTH": 3,
         "VENOM": 1,
         "VIGILANCE": true,
-        "FAST_TO_DEFEND": true
+        "FAST_TO_DEFEND": true,
+        "FLYING": true
     }
 }

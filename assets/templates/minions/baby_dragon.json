@@ -5,8 +5,10 @@
         "imagePath": "images/cards/2785.jpg",
         "colors": ["RED"]
     },
+    "tribes": ["DRAGON"],
     "components": {
         "ATTACK": 1200,
-        "HEALTH": 700
+        "HEALTH": 700,
+        "FLYING": true
     }
 }

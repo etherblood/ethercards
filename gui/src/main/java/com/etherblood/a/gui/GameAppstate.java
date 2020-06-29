@@ -380,6 +380,12 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.VIGILANCE)) {
                     keywords.add("Vigilance");
                 }
+                if (data.has(cardEntity, core.FLYING)) {
+                    keywords.add("Flying");
+                }
+                if (data.has(cardEntity, core.REACH)) {
+                    keywords.add("Reach");
+                }
                 if (stats.venom(cardEntity) != 0) {
                     keywords.add("Venom_" + stats.venom(cardEntity));
                 }
@@ -416,10 +422,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 if (data.has(cardEntity, core.OWN_MINIONS_HASTE_AURA)) {
                     keywords.add("Haste_Aura");
                 }
-                if (stats.isFastToAttack(cardEntity)) {
+                if (stats.isFastToAttack(cardEntity) && stats.isFastToDefend(cardEntity)) {
+                    keywords.add("Haste");
+                } else if (stats.isFastToAttack(cardEntity)) {
                     keywords.add("Fast_Attacker");
-                }
-                if (stats.isFastToDefend(cardEntity)) {
+                } else if (stats.isFastToDefend(cardEntity)) {
                     keywords.add("Fast_Blocker");
                 }
                 if (data.has(cardEntity, core.FATIGUE)) {

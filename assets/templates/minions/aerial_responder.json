@@ -10,6 +10,7 @@
         "ATTACK": 2,
         "HEALTH": 3,
         "LIFELINK": true,
-        "VIGILANCE": true
+        "VIGILANCE": true,
+        "FLYING": true
     }
 }

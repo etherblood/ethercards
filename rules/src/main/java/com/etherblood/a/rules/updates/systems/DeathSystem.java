@@ -36,7 +36,7 @@ public class DeathSystem implements ActionSystem {
 
                 int templateId = data.get(entity, core.MINION_TEMPLATE);
                 MinionTemplate template = templates.getMinion(templateId);
-                for (Effect onDeathEffect : template.getOnDeathEffects()) {
+                for (Effect onDeathEffect : template.getOnSelfDeathEffects()) {
                     onDeathEffect.apply(data, templates, random, events, entity, ~0);
                 }
 

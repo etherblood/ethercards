@@ -21,7 +21,6 @@ public class SummonEffect extends Effect {
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int owner = data.get(source, core.OWNED_BY);
-        int summon = SystemsUtil.createMinion(data, templates, random, minionId, owner);
-        data.set(summon, core.SUMMONING_SICKNESS, 1);
+        SystemsUtil.summonMinion(data, templates, random, events, minionId, owner);
     }
 }

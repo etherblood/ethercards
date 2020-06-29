@@ -86,14 +86,14 @@ public class SystemsUtil {
 
         int attackerTemplateId = data.get(attacker, core.MINION_TEMPLATE);
         MinionTemplate attackerTemplate = templates.getMinion(attackerTemplateId);
-        for (Effect afterBattleEffect : attackerTemplate.getAfterBattleEffects()) {
+        for (Effect afterBattleEffect : attackerTemplate.getAfterSelfBattleEffects()) {
             //TODO: blocker & attacker should be passed as arguments after improving targeting
             afterBattleEffect.apply(data, templates, random, events, attacker, attacker);
         }
 
         int blockerTemplateId = data.get(blocker, core.MINION_TEMPLATE);
         MinionTemplate blockerTemplate = templates.getMinion(blockerTemplateId);
-        for (Effect afterBattleEffect : blockerTemplate.getAfterBattleEffects()) {
+        for (Effect afterBattleEffect : blockerTemplate.getAfterSelfBattleEffects()) {
             //TODO: blocker & attacker should be passed as arguments after improving targeting
             afterBattleEffect.apply(data, templates, random, events, blocker, blocker);
         }
@@ -116,6 +116,20 @@ public class SystemsUtil {
         SystemsUtil.increase(data, hero, core.MANA_GROWTH, 1);
         SystemsUtil.increase(data, hero, core.DRAWS_PER_TURN, 1);
         return hero;
+    }
+
+    public static int summonMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int minionTemplate, int owner) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        int minion = createMinion(data, templates, random, minionTemplate, owner);
+        data.set(minion, core.SUMMONING_SICKNESS, 1);
+        for (int other : data.list(core.IN_BATTLE_ZONE)) {
+            int otherTemplateId = data.get(other, core.MINION_TEMPLATE);
+            MinionTemplate otherTemplate = templates.getMinion(otherTemplateId);
+            for (Effect effect : otherTemplate.getOnSummonEffects()) {
+                effect.apply(data, templates, random, events, other, minion);
+            }
+        }
+        return minion;
     }
 
     public static int createMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, int minionTemplate, int owner) {

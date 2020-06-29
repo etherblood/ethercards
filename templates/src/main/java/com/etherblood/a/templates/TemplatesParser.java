@@ -7,6 +7,7 @@ import com.etherblood.a.entities.Components;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
+import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.CreateCardEffect;
 import com.etherblood.a.rules.templates.effects.DrawCardTemplateEffect;
@@ -14,6 +15,7 @@ import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
 import com.etherblood.a.rules.templates.effects.ParticleEventEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
+import com.etherblood.a.rules.templates.effects.LathlissTokenEffect;
 import com.etherblood.a.rules.templates.effects.TakeControlEffect;
 import com.etherblood.a.rules.templates.effects.targeting.TargetFilters;
 import com.etherblood.a.rules.templates.effects.targeting.TargetedEffects;
@@ -44,6 +46,7 @@ public class TemplatesParser {
         this.components = components;
         Map<String, Class<? extends Effect>> classes = new HashMap<>();
         classes.put("summon", SummonEffect.class);
+        classes.put("lathlissToken", LathlissTokenEffect.class);
         classes.put("fractionalDamage", FractionalDamageEffect.class);
         classes.put("buff", BuffEffect.class);
         classes.put("create", CreateCardEffect.class);
@@ -183,6 +186,12 @@ public class TemplatesParser {
             builder.setFlavourText("Nothing here.");
             builder.setImagePath(null);
         }
+        JsonArray tribes = minionJson.getAsJsonArray("tribes");
+        if (tribes != null) {
+            for (JsonElement tribe : tribes) {
+                builder.withTribe(aliasGson.fromJson(tribe, Tribe.class));
+            }
+        }
         JsonArray onDeath = minionJson.getAsJsonArray("onDeath");
         if (onDeath != null) {
             for (JsonElement jsonElement : onDeath) {
@@ -209,6 +218,13 @@ public class TemplatesParser {
             for (JsonElement jsonElement : afterBattle) {
                 JsonObject effectJson = jsonElement.getAsJsonObject();
                 builder.afterBattle(aliasGson.fromJson(effectJson, Effect.class));
+            }
+        }
+        JsonArray onSummon = minionJson.getAsJsonArray("onSummon");
+        if (onSummon != null) {
+            for (JsonElement jsonElement : onSummon) {
+                JsonObject effectJson = jsonElement.getAsJsonObject();
+                builder.onSummon(aliasGson.fromJson(effectJson, Effect.class));
             }
         }
 

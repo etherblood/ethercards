@@ -1,0 +1,22 @@
+{
+    "alias": "cards/lathliss_dragon_queen.json",
+    "display": {
+        "name": "Lathliss, Dragon Queen",
+        "imagePath": "images/cards/lathliss_dragon_queen.jpg",
+        "colors": ["RED"],
+        "description": "Flying. Whenever another nontoken Dragon enters the battlefield under your control, create a 5/5 red Dragon creature token with flying.",
+        "stats": {
+            "attack": 6,
+            "health": 6
+        }
+    },
+    "casts": [{
+            "manaCost": 6,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/lathliss_dragon_queen.json"
+                }
+            ]
+        }]
+}

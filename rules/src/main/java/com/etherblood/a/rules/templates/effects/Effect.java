@@ -7,5 +7,5 @@ import java.util.function.IntUnaryOperator;
 
 public abstract class Effect {
 
-    public abstract void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target);
+    public abstract void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int self, int triggerTarget);
 }

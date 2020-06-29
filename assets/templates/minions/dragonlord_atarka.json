@@ -5,9 +5,11 @@
         "imagePath": "images/cards/dragonlord_atarka.jpg",
         "colors": ["RED", "GREEN"]
     },
+    "tribes": ["DRAGON"],
     "components": {
         "ATTACK": 8,
         "HEALTH": 8,
-        "TRAMPLE": 1
+        "TRAMPLE": 1,
+        "FLYING": true
     }
 }

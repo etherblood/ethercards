@@ -17,6 +17,7 @@
     "components": {
         "ATTACK": 0,
         "HEALTH": 0,
-        "VENOM": 1
+        "VENOM": 1,
+        "FLYING": true
     }
 }

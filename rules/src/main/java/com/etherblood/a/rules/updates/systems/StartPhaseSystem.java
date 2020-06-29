@@ -82,7 +82,7 @@ public class StartPhaseSystem implements ActionSystem {
 
             int templateId = data.get(minion, core.MINION_TEMPLATE);
             MinionTemplate template = templates.getMinion(templateId);
-            for (Effect onUpkeepEffect : template.getOnUpkeepEffects()) {
+            for (Effect onUpkeepEffect : template.getOnSelfUpkeepEffects()) {
                 onUpkeepEffect.apply(data, templates, random, events, minion, ~0);
             }
         }

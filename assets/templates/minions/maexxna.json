@@ -8,6 +8,7 @@
     "components": {
         "ATTACK": 2,
         "HEALTH": 8,
-        "VENOM": 4
+        "VENOM": 4,
+        "REACH": true
     }
 }

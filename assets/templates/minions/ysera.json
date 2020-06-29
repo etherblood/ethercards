@@ -5,9 +5,11 @@
         "imagePath": "images/cards/ysera.jpg",
         "colors": ["BLUE"]
     },
+    "tribes": ["DRAGON"],
     "components": {
         "ATTACK": 4,
         "HEALTH": 12,
-        "DRAWS_PER_TURN": 1
+        "DRAWS_PER_TURN": 1,
+        "FLYING": true
     }
 }

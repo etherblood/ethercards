@@ -5,9 +5,11 @@
         "imagePath": "images/cards/dragonlord_silumgar.jpg",
         "colors": ["BLUE", "BLACK"]
     },
+    "tribes": ["DRAGON"],
     "components": {
         "ATTACK": 3,
         "HEALTH": 5,
-        "VENOM": 5
+        "VENOM": 5,
+        "FLYING": true
     }
 }

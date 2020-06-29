@@ -1,0 +1,14 @@
+{
+    "alias": "minions/dragon_token.json",
+    "display": {
+        "name": "Dragon",
+        "imagePath": "images/cards/dragon_token.png",
+        "colors": ["RED"]
+    },
+    "tribes": ["DRAGON", "TOKEN"],
+    "components": {
+        "ATTACK": 5,
+        "HEALTH": 5,
+        "FLYING": true
+    }
+}

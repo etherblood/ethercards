@@ -302,6 +302,12 @@ public class MoveService {
             }
             return false;
         }
+        if (data.has(target, core.FLYING) && !data.has(attacker, core.FLYING) && !data.has(attacker, core.REACH)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is flying.");
+            }
+            return false;
+        }
         return canDeclareAttack(player, attacker, throwOnFail);
     }
 
@@ -369,6 +375,12 @@ public class MoveService {
         if (data.has(attacker, core.CANNOT_BE_BLOCKED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " can not be blocked.");
+            }
+            return false;
+        }
+        if (data.has(attacker, core.FLYING) && !data.has(blocker, core.FLYING) && !data.has(blocker, core.REACH)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, target #" + attacker + " is flying.");
             }
             return false;
         }
