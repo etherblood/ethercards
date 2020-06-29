@@ -26,11 +26,14 @@ public class LathlissTokenEffect extends Effect {
         if (self == triggerTarget) {
             return;
         }
+        int owner = data.get(self, core.OWNED_BY);
+        if (!data.hasValue(triggerTarget, core.OWNED_BY, owner)) {
+            return;
+        }
         int targetTemplateId = data.get(triggerTarget, core.MINION_TEMPLATE);
         MinionTemplate targetTemplate = templates.getMinion(targetTemplateId);
         Set<Tribe> tribes = targetTemplate.getTribes();
         if (tribes.contains(Tribe.DRAGON) && !tribes.contains(Tribe.TOKEN)) {
-            int owner = data.get(self, core.OWNED_BY);
             SystemsUtil.summonMinion(data, templates, random, events, tokenId, owner);
         }
     }
