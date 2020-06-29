@@ -19,6 +19,7 @@ import com.destrostudios.cardgui.samples.animations.SlamEntryAnimation;
 import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
+import com.destrostudios.cardgui.samples.transformations.relative.HoveringTransformation;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
@@ -569,6 +570,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
             EntityData data = game.getData();
             CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+            card.position().addRelativeTransformation(new HoveringTransformation(0.1f, 4), () -> data.has(myCard, core.FLYING));
             card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> data.has(myCard, core.TIRED));
             card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
         }
