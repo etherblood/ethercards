@@ -1,0 +1,21 @@
+{
+    "alias": "cards/slagwurm_armor.json",
+    "display": {
+        "name": "Slagwurm Armor",
+        "imagePath": "images/cards/slagwurm_armor.jpeg",
+        "colors": ["WHITE"],
+        "description": "Give a minion or hero +0/+6."
+    },
+    "casts": [{
+            "manaCost": 3,
+            "targets": ["OWN_MINION", "OPPONENT_MINION", "OWN_HERO", "OPPONENT_HERO"],
+            "effects": [
+                {
+                    "type": "buff",
+                    "components": {
+                        "HEALTH": 6
+                    }
+                }
+            ]
+        }]
+}

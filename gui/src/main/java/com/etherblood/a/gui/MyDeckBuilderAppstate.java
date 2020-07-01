@@ -72,8 +72,8 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             allCardModels.add(cardModel);
         }
         allCardModels.sort(cardOrder);
-        CardZone collectionZone = new SimpleIntervalZone(new Vector3f(-2, 0, 0), new Vector3f(1, 1, 1.4f));
-        CardZone deckZone = new SimpleIntervalZone(new Vector3f(8.25f, 0, -4.715f), new Vector3f(1, 1, 0.57f));
+        CardZone collectionZone = new SimpleIntervalZone(new Vector3f(-2.3f, 1, 0), new Vector3f(1, 1, 1.4f));
+        CardZone deckZone = new SimpleIntervalZone(new Vector3f(8, 1, -4.715f), new Vector3f(1, 1, 0.57f));
         BoardObjectVisualizer<CardZone> collectionZoneVisualizer = new DebugZoneVisualizer() {
 
             @Override
