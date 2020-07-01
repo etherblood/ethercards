@@ -123,6 +123,9 @@ public class SystemsUtil {
         int minion = createMinion(data, templates, random, minionTemplate, owner);
         data.set(minion, core.SUMMONING_SICKNESS, 1);
         for (int other : data.list(core.IN_BATTLE_ZONE)) {
+            if (minion == other) {
+                continue;
+            }
             int otherTemplateId = data.get(other, core.MINION_TEMPLATE);
             MinionTemplate otherTemplate = templates.getMinion(otherTemplateId);
             for (Effect effect : otherTemplate.getOnSummonEffects()) {

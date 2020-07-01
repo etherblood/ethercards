@@ -23,9 +23,6 @@ public class LathlissTokenEffect extends Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int self, int triggerTarget) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        if (self == triggerTarget) {
-            return;
-        }
         int owner = data.get(self, core.OWNED_BY);
         if (!data.hasValue(triggerTarget, core.OWNED_BY, owner)) {
             return;

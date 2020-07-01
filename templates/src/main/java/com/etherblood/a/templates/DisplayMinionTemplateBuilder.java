@@ -41,6 +41,6 @@ public class DisplayMinionTemplateBuilder extends MinionTemplateBuilder {
     @Override
     public DisplayMinionTemplate build(int templateId) {
         components.set(core.MINION_TEMPLATE, templateId);
-        return new DisplayMinionTemplate(templateId, components, tribes, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, alias, name, flavourText, description, imagePath, colors);
+        return new DisplayMinionTemplate(templateId, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, alias, name, flavourText, description, imagePath, colors);
     }
 }

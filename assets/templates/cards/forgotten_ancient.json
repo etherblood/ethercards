@@ -1,0 +1,22 @@
+{
+    "alias": "cards/forgotten_ancient.json",
+    "display": {
+        "name": "Forgotten Ancient",
+        "imagePath": "images/cards/forgotten_ancient.jpg",
+        "colors": ["GREEN"],
+        "flavourText": "Its blood is life. Its body is growth.",
+        "stats": {
+            "attack": 0,
+            "health": 3
+        }
+    },
+    "casts": [{
+            "manaCost": 4,
+            "effects": [
+                {
+                    "type": "summon",
+                    "minionId": "minions/forgotten_ancient.json"
+                }
+            ]
+        }]
+}

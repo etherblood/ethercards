@@ -14,15 +14,17 @@ public class MinionTemplate implements Iterable<Integer> {
     protected final int id;
     protected final IntMap components;
     protected final Set<Tribe> tribes;
+    protected final List<Effect> onCastEffects;
     protected final List<Effect> onSummonEffects;
     protected final List<Effect> onSelfDeathEffects;
     protected final List<Effect> onSelfSurviveEffects;
     protected final List<Effect> onSelfUpkeepEffects;
     protected final List<Effect> afterSelfBattleEffects;
 
-    public MinionTemplate(int id, IntMap components, Set<Tribe> tribes, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
+    public MinionTemplate(int id, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
         this.id = id;
         this.tribes = Collections.unmodifiableSet(EnumSet.copyOf(tribes));
+        this.onCastEffects = Collections.unmodifiableList(new ArrayList<>(onCastEffects));
         this.onSummonEffects = Collections.unmodifiableList(new ArrayList<>(onSummonEffects));
         this.onSelfDeathEffects = Collections.unmodifiableList(new ArrayList<>(onDeathEffects));
         this.onSelfSurviveEffects = Collections.unmodifiableList(new ArrayList<>(onSurviveEffects));
@@ -48,6 +50,10 @@ public class MinionTemplate implements Iterable<Integer> {
 
     public List<Effect> getOnSummonEffects() {
         return onSummonEffects;
+    }
+
+    public List<Effect> getOnCastEffects() {
+        return onCastEffects;
     }
 
     public List<Effect> getOnSelfDeathEffects() {

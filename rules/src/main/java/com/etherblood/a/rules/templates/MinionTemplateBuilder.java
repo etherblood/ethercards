@@ -13,6 +13,7 @@ public class MinionTemplateBuilder {
     protected final CoreComponents core;
     protected final IntMap components = new IntMap();
     protected final Set<Tribe> tribes = EnumSet.noneOf(Tribe.class);
+    protected final List<Effect> onCastEffects = new ArrayList<>();
     protected final List<Effect> onSummonEffects = new ArrayList<>();
     protected final List<Effect> onDeathEffects = new ArrayList<>();
     protected final List<Effect> onSurviveEffects = new ArrayList<>();
@@ -25,6 +26,10 @@ public class MinionTemplateBuilder {
 
     public void withTribe(Tribe tribe) {
         tribes.add(tribe);
+    }
+
+    public void onCast(Effect effect) {
+        onCastEffects.add(effect);
     }
 
     public void onSummon(Effect effect) {
@@ -57,7 +62,7 @@ public class MinionTemplateBuilder {
 
     public MinionTemplate build(int id) {
         components.set(core.MINION_TEMPLATE, id);
-        return new MinionTemplate(id, components, tribes, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
+        return new MinionTemplate(id, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
     }
 
 }

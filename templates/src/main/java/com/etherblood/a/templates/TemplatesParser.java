@@ -220,6 +220,13 @@ public class TemplatesParser {
                 builder.afterBattle(aliasGson.fromJson(effectJson, Effect.class));
             }
         }
+        JsonArray onCast = minionJson.getAsJsonArray("onCast");
+        if (onCast != null) {
+            for (JsonElement jsonElement : onCast) {
+                JsonObject effectJson = jsonElement.getAsJsonObject();
+                builder.onCast(aliasGson.fromJson(effectJson, Effect.class));
+            }
+        }
         JsonArray onSummon = minionJson.getAsJsonArray("onSummon");
         if (onSummon != null) {
             for (JsonElement jsonElement : onSummon) {
