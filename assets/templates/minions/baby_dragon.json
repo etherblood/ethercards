@@ -2,13 +2,13 @@
     "alias": "minions/baby_dragon.json",
     "display": {
         "name": "Baby Dragon",
-        "imagePath": "images/cards/2785.jpg",
+        "imagePath": "images/cards/baby_dragon.jpg",
         "colors": ["RED"]
     },
     "tribes": ["DRAGON"],
     "components": {
-        "ATTACK": 1200,
-        "HEALTH": 700,
+        "ATTACK": 1,
+        "HEALTH": 1,
         "FLYING": true
     }
 }

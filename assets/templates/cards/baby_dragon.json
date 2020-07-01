@@ -1,20 +1,21 @@
 {
-    "alias": "cards/blue_eyes_white_dragon.json",
+    "alias": "cards/baby_dragon.json",
     "display": {
-        "name": "Blue-Eyes White Dragon",
-        "imagePath": "images/cards/blue_eyes_white_dragon.jpg",
+        "name": "Baby Dragon",
+        "imagePath": "images/cards/baby_dragon.jpg",
         "colors": ["RED"],
+        "description": "Flying.",
         "stats": {
-            "attack": 3000,
-            "health": 2500
+            "attack": 1,
+            "health": 1
         }
     },
     "casts": [{
-            "manaCost": 8,
+            "manaCost": 1,
             "effects": [
                 {
                     "type": "summon",
-                    "minionId": "minions/blue_eyes_white_dragon.json"
+                    "minionId": "minions/baby_dragon.json"
                 }
             ]
         }]
