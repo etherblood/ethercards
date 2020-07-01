@@ -7,6 +7,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.updates.systems.DiscardSystem;
 import com.etherblood.a.rules.updates.systems.DrawSystem;
 import com.etherblood.a.rules.updates.systems.EndPhaseSystem;
 import com.etherblood.a.rules.updates.systems.PlayerResultSystem;
@@ -37,6 +38,7 @@ public class SystemFactory {
                 Arrays.asList(
                         new CastSystem(data, templates, random, events),
                         new DrawSystem(data, random),
+                        new DiscardSystem(data, random),
                         new DamageSystem(data, templates, random, events),
                         new DeathSystem(data, templates, random, events),
                         new PlayerResultSystem(data)

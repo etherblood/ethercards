@@ -31,6 +31,7 @@ public class Main {
         try ( Reader reader = Files.newBufferedReader(Paths.get("config.properties"))) {
             properties.load(reader);
         }
+        int perCardLimit = Integer.parseInt(properties.getProperty("perCardLimit"));
         int initialMutations = Integer.parseInt(properties.getProperty("initialMutations"));
         int agentCount = Integer.parseInt(properties.getProperty("agentCount"));
         int mutationCandidatesCount = Integer.parseInt(properties.getProperty("mutationCandidatesCount"));
@@ -53,7 +54,7 @@ public class Main {
                 throw new RuntimeException(ex);
             }
         };
-        Map<String, Integer> cardPool = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 10));
+        Map<String, Integer> cardPool = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> perCardLimit));
 
         RawLibraryTemplate startLibrary = new RawLibraryTemplate();
         startLibrary.hero = "minions/shyvana.json";

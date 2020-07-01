@@ -13,13 +13,13 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-public class CastEffectDeserializer implements JsonDeserializer<Effect> {
+public class EffectDeserializer implements JsonDeserializer<Effect> {
 
     private final Map<String, Class<? extends Effect>> classes;
     private final ToIntFunction<String> minionAliases;
     private final ToIntFunction<String> cardAliases;
 
-    public CastEffectDeserializer(Map<String, Class<? extends Effect>> classes, ToIntFunction<String> minionAliases, ToIntFunction<String> cardAliases) {
+    public EffectDeserializer(Map<String, Class<? extends Effect>> classes, ToIntFunction<String> minionAliases, ToIntFunction<String> cardAliases) {
         this.classes = classes;
         this.minionAliases = minionAliases;
         this.cardAliases = cardAliases;

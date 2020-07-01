@@ -154,7 +154,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         if (event instanceof ParticleEvent) {
             ParticleEvent particle = (ParticleEvent) event;
             switch (particle.alias) {
-                case "flamestrike": {
+                case "flamestrike":
+                case "deathwing": {
                     board.playAnimation(new CameraShakeAnimation(cameraAppstate.getCamera(), 0.3f, 0.2f));
                     break;
                 }

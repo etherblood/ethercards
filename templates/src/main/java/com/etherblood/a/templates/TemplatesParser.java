@@ -44,21 +44,21 @@ public class TemplatesParser {
 
     public TemplatesParser(Components components) {
         this.components = components;
-        Map<String, Class<? extends Effect>> classes = new HashMap<>();
-        classes.put("summon", SummonEffect.class);
-        classes.put("lathlissToken", LathlissTokenEffect.class);
-        classes.put("fractionalDamage", FractionalDamageEffect.class);
-        classes.put("buff", BuffEffect.class);
-        classes.put("create", CreateCardEffect.class);
-        classes.put("targeted", TargetedEffects.class);
-        classes.put("particle", ParticleEventEffect.class);
-        classes.put("drawTemplate", DrawCardTemplateEffect.class);
-        classes.put("takeControl", TakeControlEffect.class);
+        Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
+        effectClasses.put("summon", SummonEffect.class);
+        effectClasses.put("lathlissToken", LathlissTokenEffect.class);
+        effectClasses.put("fractionalDamage", FractionalDamageEffect.class);
+        effectClasses.put("buff", BuffEffect.class);
+        effectClasses.put("create", CreateCardEffect.class);
+        effectClasses.put("targeted", TargetedEffects.class);
+        effectClasses.put("particle", ParticleEventEffect.class);
+        effectClasses.put("drawTemplate", DrawCardTemplateEffect.class);
+        effectClasses.put("takeControl", TakeControlEffect.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
         aliasGson = new GsonBuilder()
-                .registerTypeAdapter(Effect.class, new CastEffectDeserializer(classes, x -> registerIfAbsent(minionAliases, x), x -> registerIfAbsent(cardAliases, x)))
+                .registerTypeAdapter(Effect.class, new EffectDeserializer(effectClasses, x -> registerIfAbsent(minionAliases, x), x -> registerIfAbsent(cardAliases, x)))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases::get))
                 .create();
     }

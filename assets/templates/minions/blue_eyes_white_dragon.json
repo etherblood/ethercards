@@ -1,0 +1,14 @@
+{
+    "alias": "minions/blue_eyes_white_dragon.json",
+    "display": {
+        "name": "Blue-Eyes White Dragon",
+        "imagePath": "images/cards/blue_eyes_white_dragon.jpg",
+        "colors": ["BLUE"]
+    },
+    "tribes": ["DRAGON"],
+    "components": {
+        "ATTACK": 3000,
+        "HEALTH": 2500,
+        "FLYING": true
+    }
+}
