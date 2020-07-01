@@ -1,0 +1,16 @@
+{
+    "alias": "minions/dragonite_delta.json",
+    "display": {
+        "name": "Dragonite",
+        "imagePath": "images/cards/dragonite_delta.png",
+        "colors": ["WHITE", "BLUE"]
+    },
+    "tribes": ["DRAGON"],
+    "components": {
+        "ATTACK": 7,
+        "HEALTH": 10,
+        "VIGILANCE": true,
+        "TRAMPLE": true,
+        "FLYING": true
+    }
+}

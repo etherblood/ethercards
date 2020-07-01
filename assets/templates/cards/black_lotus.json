@@ -1,0 +1,27 @@
+{
+    "alias": "cards/black_lotus.json",
+    "display": {
+        "name": "Black Lotus",
+        "imagePath": "images/cards/black_lotus.jpg",
+        "colors": ["BLACK"],
+        "description": "Gain 3 Mana."
+    },
+    "casts": [{
+            "manaCost": 0,
+            "effects": [
+                {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWNER"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "MANA": 3
+                            }
+                        }
+                    ]
+                }
+            ]
+        }]
+}
