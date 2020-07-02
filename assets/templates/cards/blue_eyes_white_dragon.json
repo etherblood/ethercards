@@ -6,12 +6,12 @@
         "colors": ["BLUE"],
         "description": "Flying.",
         "stats": {
-            "attack": 5,
-            "health": 4
+            "attack": 10,
+            "health": 8
         }
     },
     "casts": [{
-            "manaCost": 5,
+            "manaCost": 8,
             "effects": [
                 {
                     "type": "summon",

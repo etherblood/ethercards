@@ -7,8 +7,8 @@
     },
     "tribes": ["DRAGON"],
     "components": {
-        "ATTACK": 5,
-        "HEALTH": 4,
+        "ATTACK": 10,
+        "HEALTH": 8,
         "FLYING": true
     }
 }

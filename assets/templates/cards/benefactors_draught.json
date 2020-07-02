@@ -1,0 +1,39 @@
+{
+    "alias": "cards/benefactors_draught.json",
+    "display": {
+        "name": "Benefactor's Draught",
+        "imagePath": "images/cards/benefactors_draught.png",
+        "colors": ["GREEN"],
+        "description": "Untap all creatures. Draw a card."
+    },
+    "casts": [{
+            "manaCost": 2,
+            "effects": [
+                {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWN_HERO", "OPPONENT_HERO", "OWN_MINION", "OPPONENT_MINION"],
+                    "effects": [
+                        {
+                            "type": "debuff",
+                            "components": {
+                                "TIRED": 1
+                            }
+                        }
+                    ]
+                }, {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWNER"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "DRAW_CARDS_REQUEST": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+        }]
+}

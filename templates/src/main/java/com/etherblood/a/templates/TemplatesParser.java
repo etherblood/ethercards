@@ -10,6 +10,7 @@ import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
 import com.etherblood.a.rules.templates.effects.CreateCardEffect;
+import com.etherblood.a.rules.templates.effects.DebuffEffect;
 import com.etherblood.a.rules.templates.effects.DrawCardTemplateEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
@@ -49,6 +50,7 @@ public class TemplatesParser {
         effectClasses.put("lathlissToken", LathlissTokenEffect.class);
         effectClasses.put("fractionalDamage", FractionalDamageEffect.class);
         effectClasses.put("buff", BuffEffect.class);
+        effectClasses.put("debuff", DebuffEffect.class);
         effectClasses.put("create", CreateCardEffect.class);
         effectClasses.put("targeted", TargetedEffects.class);
         effectClasses.put("particle", ParticleEventEffect.class);
