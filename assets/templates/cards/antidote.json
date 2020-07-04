@@ -1,0 +1,41 @@
+{
+    "alias": "cards/antidote.json",
+    "display": {
+        "name": "Antidote",
+        "imagePath": "images/cards/antidote.png",
+        "colors": ["WHITE"],
+        "description": "Cure Poisoned, draw a card."
+    },
+    "casts": [{
+            "manaCost": 2,
+            "targets": ["OWN_MINION", "OPPONENT_MINION", "OWN_HERO", "OPPONENT_HERO"],
+            "effects": [
+                {
+                    "type": "debuff",
+                    "components": {
+                        "POISONED": 1000000
+                    }
+                },
+                {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": [
+                        "OWNER"
+                    ],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "DRAW_CARDS_REQUEST": 1
+                            }
+                        }
+                    ]
+                }, {
+                    "type": "particle",
+                    "alias": "antidote"
+                }, {
+                    "type": "selfDiscard"
+                }
+            ]
+        }]
+}

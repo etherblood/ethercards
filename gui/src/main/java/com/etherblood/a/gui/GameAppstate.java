@@ -92,8 +92,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private Board board;
     private final QueueEventListener events;
     private final Map<Integer, PlayerZones> playerZones = new HashMap<>();
-//    private final Map<Integer, Card<CardModel>> visualCards = new HashMap<>();
-    private final Map<Integer, Card<CardModel>> visualMinions = new HashMap<>();
+    private final Map<Integer, Card<CardModel>> visualCards = new HashMap<>();
     private final Map<BoardObject<?>, Integer> objectEntities = new HashMap<>();
     private final Map<Integer, ColoredConnectionArrow> arrows = new HashMap<>();
     private final int userControlledPlayer;
@@ -161,6 +160,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Black);
                     break;
                 }
+                case "antidote":
                 case "armadillo_cloak":
                 case "blessing_of_wisdom":
                 case "slagwurm_armor": {
@@ -175,9 +175,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         ColoredSphere sphere = new ColoredSphere(new ColorModel());
         sphere.getModel().setColor(color);
         sphere.resetTransformations();
-        sphere.position().setCurrentValue(visualMinions.get(source).position().getCurrentValue());
+        sphere.position().setCurrentValue(visualCards.get(source).position().getCurrentValue());
         board.register(sphere);
-        TargetedArcAnimation animation = new TargetedArcAnimation(sphere, visualMinions.get(target), 1, 0.6f);
+        TargetedArcAnimation animation = new TargetedArcAnimation(sphere, visualCards.get(target), 1, 0.6f);
         board.playAnimation(animation);
         particleMap.put(animation, sphere);
     }
@@ -208,7 +208,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         stateManager.detach(stateManager.getState(BoardAppState.class));
 
         playerZones.clear();
-        visualMinions.clear();
+        visualCards.clear();
         objectEntities.clear();
         arrows.clear();
         board = null;
@@ -289,7 +289,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             ColoredConnectionArrow arrow = arrows.get(blocker);
             if (arrow == null) {
                 ColorRGBA color = new ColorRGBA(0.25f, 0.25f, 1, 0.75f);
-                arrow = new ColoredConnectionArrow(visualMinions.get(blocker), visualMinions.get(target), color);
+                arrow = new ColoredConnectionArrow(visualCards.get(blocker), visualCards.get(target), color);
                 arrows.put(blocker, arrow);
                 board.register(arrow);
             }
@@ -304,7 +304,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 color = new ColorRGBA(1, 0.25f, 0.25f, 0.75f);
             }
             if (arrow == null) {
-                arrow = new ColoredConnectionArrow(visualMinions.get(attacker), visualMinions.get(target), color);
+                arrow = new ColoredConnectionArrow(visualCards.get(attacker), visualCards.get(target), color);
                 arrows.put(attacker, arrow);
                 board.register(arrow);
             } else {
@@ -337,7 +337,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 cardZone.removeCard(card);
                 board.unregister(card);
                 objectEntities.remove(card);
-                visualMinions.remove(entity);
+                visualCards.remove(entity);
             }
         }
         if (game.isGameOver()) {
@@ -462,13 +462,13 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private Card<CardModel> getOrCreateMinion(int myCard) {
-        Card<CardModel> card = visualMinions.get(myCard);
+        Card<CardModel> card = visualCards.get(myCard);
         if (card == null) {
             EntityData data = game.getData();
             CoreComponents core = data.getComponents().getModule(CoreComponents.class);
             Card<CardModel> inner = new Card<>(new CardModel(myCard, (DisplayCardTemplate) game.getTemplates().getCard(data.get(myCard, core.CARD_TEMPLATE))));
             card = inner;
-            visualMinions.put(myCard, card);
+            visualCards.put(myCard, card);
             objectEntities.put(card, myCard);
 
             card.position().addRelativeTransformation(new HoveringTransformation(0.1f, 4), () -> data.has(myCard, core.IN_BATTLE_ZONE) && data.has(myCard, core.FLYING));

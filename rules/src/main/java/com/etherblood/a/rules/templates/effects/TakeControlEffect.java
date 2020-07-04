@@ -13,5 +13,6 @@ public class TakeControlEffect extends Effect {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int owner = data.get(source, core.OWNED_BY);
         data.set(target, core.OWNED_BY, owner);
+        data.set(target, core.SUMMONING_SICKNESS, 1);
     }
 }
