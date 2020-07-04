@@ -1,22 +1,31 @@
 {
-    "alias": "cards/grim_patron.json",
-    "display": {
-        "name": "Grim Patron",
-        "imagePath": "images/cards/Grim_Patron_art.jpg",
-        "colors": ["RED"],
-        "description": "Summon a 3/3 Grim Patron whenever this survives damage.",
-        "stats": {
-            "attack": 3,
-            "health": 3
+  "alias": "cards/grim_patron.json",
+  "display": {
+    "name": "Grim Patron",
+    "imagePath": "images/cards/Grim_Patron_art.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Summon a 3/3 Grim Patron whenever this survives damage."
+  },
+  "casts": [
+    {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 5,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/grim_patron.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 3
+  },
+  "onSurvive": [
+    {
+      "type": "summon",
+      "minionId": "cards/grim_patron.json"
+    }
+  ]
 }

@@ -1,23 +1,32 @@
 {
-    "alias": "cards/dragonlord_kolaghan.json",
-    "display": {
-        "name": "Dragonlord Kolaghan",
-        "imagePath": "images/cards/dragonlord_kolaghan.jpg",
-        "colors": ["BLACK", "RED"],
-        "description": "Haste Aura.",
-        "stats": {
-            "attack": 6,
-            "health": 5
+  "alias": "cards/dragonlord_kolaghan.json",
+  "display": {
+    "name": "Dragonlord Kolaghan",
+    "imagePath": "images/cards/dragonlord_kolaghan.jpg",
+    "colors": [
+      "BLACK",
+      "RED"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 6,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/dragonlord_kolaghan.json",
-                    "fast": true
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 6,
+    "HEALTH": 5,
+    "OWN_MINIONS_HASTE_AURA": true,
+    "FAST_TO_ATTACK": true,
+    "FAST_TO_DEFEND": true,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

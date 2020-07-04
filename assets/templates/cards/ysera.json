@@ -1,22 +1,29 @@
 {
-    "alias": "cards/ysera.json",
-    "display": {
-        "name": "Ysera",
-        "imagePath": "images/cards/ysera.jpg",
-        "colors": ["BLUE"],
-        "description": "1 Draw per Turn.",
-        "stats": {
-            "attack": 4,
-            "health": 12
+  "alias": "cards/ysera.json",
+  "display": {
+    "name": "Ysera",
+    "imagePath": "images/cards/ysera.jpg",
+    "colors": [
+      "BLUE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 9,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 9,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/ysera.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 12,
+    "DRAWS_PER_TURN": 1,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

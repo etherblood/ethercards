@@ -1,22 +1,25 @@
 {
-    "alias": "cards/baloth_pup.json",
-    "display": {
-        "name": "Baloth Pup",
-        "imagePath": "images/cards/baloth_pup.jpg",
-        "colors": ["GREEN"],
-        "description": "Trample.",
-        "stats": {
-            "attack": 3,
-            "health": 1
+  "alias": "cards/baloth_pup.json",
+  "display": {
+    "name": "Baloth Pup",
+    "imagePath": "images/cards/baloth_pup.jpg",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 2,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/baloth_pup.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 1,
+    "TRAMPLE": 1
+  }
 }

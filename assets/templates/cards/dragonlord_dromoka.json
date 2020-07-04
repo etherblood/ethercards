@@ -1,22 +1,30 @@
 {
-    "alias": "cards/dragonlord_dromoka.json",
-    "display": {
-        "name": "Dragonlord Dromoka",
-        "imagePath": "images/cards/dragonlord_dromoka.jpg",
-        "colors": ["GREEN", "WHITE"],
-        "description": "Lifelink.",
-        "stats": {
-            "attack": 5,
-            "health": 7
+  "alias": "cards/dragonlord_dromoka.json",
+  "display": {
+    "name": "Dragonlord Dromoka",
+    "imagePath": "images/cards/dragonlord_dromoka.jpg",
+    "colors": [
+      "GREEN",
+      "WHITE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 6,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/dragonlord_dromoka.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 5,
+    "HEALTH": 7,
+    "LIFELINK": 1,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

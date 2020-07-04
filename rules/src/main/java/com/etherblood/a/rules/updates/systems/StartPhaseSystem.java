@@ -5,7 +5,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.templates.MinionTemplate;
+import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ActionSystem;
@@ -80,8 +80,8 @@ public class StartPhaseSystem implements ActionSystem {
                 continue;
             }
 
-            int templateId = data.get(minion, core.MINION_TEMPLATE);
-            MinionTemplate template = templates.getMinion(templateId);
+            int templateId = data.get(minion, core.CARD_TEMPLATE);
+            CardTemplate template = templates.getCard(templateId);
             for (Effect onUpkeepEffect : template.getOnSelfUpkeepEffects()) {
                 onUpkeepEffect.apply(data, templates, random, events, minion, ~0);
             }

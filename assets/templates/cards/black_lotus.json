@@ -4,7 +4,7 @@
         "name": "Black Lotus",
         "imagePath": "images/cards/black_lotus.jpg",
         "colors": ["BLACK"],
-        "description": "Gain 3 Mana."
+        "description": "Gain 3 Mana. Your hero gains 3 Poisoned."
     },
     "casts": [{
             "manaCost": 0,
@@ -21,6 +21,20 @@
                             }
                         }
                     ]
+                }, {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWN_HERO"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "POISONED": 3
+                            }
+                        }
+                    ]
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

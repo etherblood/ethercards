@@ -700,7 +700,7 @@ public class MoveService {
             if (!data.has(minion, core.OWNED_BY)) {
                 throw new IllegalStateException("Minion without owner in battle zone.");
             }
-            if (!data.has(minion, core.MINION_TEMPLATE)) {
+            if (!data.has(minion, core.CARD_TEMPLATE)) {
                 throw new IllegalStateException("Minion without template in battle zone.");
             }
         }

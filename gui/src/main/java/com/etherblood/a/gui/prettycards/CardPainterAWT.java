@@ -2,8 +2,6 @@ package com.etherblood.a.gui.prettycards;
 
 import com.etherblood.a.templates.CardColor;
 import com.etherblood.a.templates.DisplayCardTemplate;
-import com.etherblood.a.templates.DisplayMinionTemplate;
-import com.etherblood.a.templates.DisplayStats;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -45,9 +43,8 @@ public class CardPainterAWT {
         this.cardImages = cardImages;
     }
 
-    public void drawCard(Graphics2D graphics, CardModel cardModel, int width, int height) {
+    public void drawCard(Graphics2D back, Graphics2D art, Graphics2D front, CardModel cardModel, int width, int height) {
         DisplayCardTemplate template = cardModel.getTemplate();
-        graphics = (Graphics2D) graphics.create();
 //        if (cardModel.isFaceUp()) {
 //            List<String> drawnKeywords = new LinkedList<>();
 //            drawnKeywords.addAll(cardModel.getKeywords());
@@ -55,47 +52,59 @@ public class CardPainterAWT {
 //            if (castDescription != null) {
 //                drawnKeywords.add("Cast");
 //            }
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(35, 68, 329, 242);
+        back.setColor(Color.BLACK);
+        back.fillRect(35, 68, 329, 242);
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
-        graphics.drawImage(cardImages.getCachedImage(imageFilePath, 329, 242), 35, 68, null);
+        Image cachedImage = cardImages.getCachedImage(imageFilePath, 329, 242);
+        art.drawImage(cachedImage, 35, 68, null);
         List<CardColor> colors = template.getColors();
-        graphics.drawImage(getCardBackgroundImage(colors, width, height, "full"), 0, 0, null);
-        graphics.setFont(FONTTITLE);
-        graphics.setColor(Color.BLACK);
+        back.drawImage(getCardBackgroundImage(colors, width, height, "full"), 0, 0, null);
+        front.setFont(FONTTITLE);
+        front.setColor(Color.BLACK);
         String title = template.getName();
         int textStartX = 45;
         if (title != null) {
-            graphics.drawString(title, 35, 57);
+            front.drawString(title, 35, 57);
         }
 //        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 314, 7, 73, 73, null);
-        graphics.setFont(FONTSTATS);
-        drawCardCostManaAmount(graphics, template.getAttackPhaseCast() != null ? template.getAttackPhaseCast().getManaCost() : template.getBlockPhaseCast().getManaCost(), (width - textStartX + 20), (46 + 15), FONTSTATS);
+        front.setFont(FONTSTATS);
+        Integer manaCost = null;
+        if (template.getAttackPhaseCast() != null) {
+            manaCost = template.getAttackPhaseCast().getManaCost();
+        } else if (template.getBlockPhaseCast() != null) {
+            manaCost = template.getBlockPhaseCast().getManaCost();
+        }
+        if (manaCost != null) {
+            drawCardCostManaAmount(front, manaCost, (width - textStartX + 20), (46 + 15), FONTSTATS);
+        }
         tmpY = 370;
-//            if (drawnKeywords.size() > 0) {
-//                String keywordsText = "";
-//                for (int i = 0; i < drawnKeywords.size(); i++) {
-//                    if (i != 0) {
-//                        keywordsText += " ";
-//                    }
-//                    String keyword = drawnKeywords.get(i);
-//                    keywordsText += keyword + (keyword.equals("Cast") ? ":" : ".");
-//                }
-//                graphics.setFont(FONTKEYWORDS);
-//                tmpX = textStartX;
-//                drawStringMultiLine(graphics, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
+        front.setColor(Color.BLACK);
+        List<String> drawnKeywords = new ArrayList<>(cardModel.getKeywords());
+        drawnKeywords.sort(Comparator.naturalOrder());
+        if (drawnKeywords.size() > 0) {
+            String keywordsText = "";
+            for (int i = 0; i < drawnKeywords.size(); i++) {
+                if (i != 0) {
+                    keywordsText += " ";
+                }
+                String keyword = drawnKeywords.get(i);
+                keywordsText += keyword;
+            }
+            front.setFont(FONTKEYWORDS);
+            tmpX = textStartX;
+            drawStringMultiLine(front, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
 //                if (castDescription != null) {
 //                    tmpX += 3;
 //                    drawSpellDescription(graphics, castDescription, LINEWIDTH, tmpX, textStartX, tmpY);
 //                }
-//                tmpY += 18;
-//            }
-        graphics.setColor(Color.BLACK);
+            tmpY += 18;
+        }
+        front.setColor(Color.BLACK);
         String description = template.getDescription();
         if (description != null) {
-            graphics.setFont(FONTDESCRIPTION);
+            front.setFont(FONTDESCRIPTION);
             tmpX = textStartX;
-            drawStringMultiLine(graphics, description, LINEWIDTH, tmpX, textStartX, tmpY, -2);
+            drawStringMultiLine(front, description, LINEWIDTH, tmpX, textStartX, tmpY, -2);
             tmpY += 18;
         }
 //            List<Spell> spells = cardModel.getSpells();
@@ -113,8 +122,8 @@ public class CardPainterAWT {
         String flavourText = template.getFlavourText();
         if (flavourText != null) {
             tmpX = textStartX;
-            graphics.setFont(FONTFLAVORTEXT);
-            drawStringMultiLine(graphics, flavourText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
+            front.setFont(FONTFLAVORTEXT);
+            drawStringMultiLine(front, flavourText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
             tmpY += 18;
         }
 //        drawStats(graphics, cardModel);
@@ -127,22 +136,18 @@ public class CardPainterAWT {
 //                    }
 //                    tribesText += tribes.get(i);
 //                }
-        graphics.setFont(FONTTRIBES);
-        graphics.setColor(Color.BLACK);
-        graphics.drawString(template.getAttackPhaseCast() != null ? "Sorcery" : "Instant", textStartX, 334);
+        front.setFont(FONTTRIBES);
+        front.setColor(Color.BLACK);
+//        graphics.drawString(template.getAttackPhaseCast() != null ? "Sorcery" : "Instant", textStartX, 334);
 //            }
 //        } else {
 //            graphics.drawImage(CardImages.getCachedImage("images/cardback.png"), 0, 0, width, height, null);
 //        }
-        DisplayStats stats = cardModel.getTemplate().getDisplayStats();
-        if (stats != null) {
-            drawStats(graphics, stats.getAttack(), stats.getHealth(), false);
-        }
-        graphics.dispose();
+        drawStats(front, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
     }
 
-    public void drawMinion_Full(Graphics2D back, Graphics2D art, Graphics2D front, MinionModel cardModel, int width, int height) {
-        DisplayMinionTemplate template = cardModel.getTemplate();
+    public void drawMinion_Full(Graphics2D back, Graphics2D art, Graphics2D front, CardModel cardModel, int width, int height) {
+        DisplayCardTemplate template = cardModel.getTemplate();
 //        if (cardModel.isFaceUp()) {
 //            List<String> drawnKeywords = new LinkedList<>();
 //            drawnKeywords.addAll(cardModel.getKeywords());
@@ -233,8 +238,8 @@ public class CardPainterAWT {
 //        }
     }
 
-    public void drawMinion_Minified(Graphics2D back, Graphics2D art, Graphics2D front, MinionModel cardModel, int width, int height) {
-        DisplayMinionTemplate template = cardModel.getTemplate();
+    public void drawMinion_Minified(Graphics2D back, Graphics2D art, Graphics2D front, CardModel cardModel, int width, int height) {
+        DisplayCardTemplate template = cardModel.getTemplate();
         back.setColor(Color.BLACK);
         back.fillRect(36, 36, 328, 488);
         String imageFilePath = cardImages.getCardImageFilePath(cardModel);
@@ -245,20 +250,24 @@ public class CardPainterAWT {
         drawStats(front, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
     }
 
-    private void drawStats(Graphics2D graphics, int attack, int health, boolean damaged) {
+    private void drawStats(Graphics2D graphics, Integer attack, Integer health, boolean damaged) {
         tmpY = 513;
-        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 29, 458, 73, 73, null);
-        String attackDamageText = ("" + attack);
-        graphics.setFont(FONTSTATS);
-        Rectangle2D attackDamageBounds = graphics.getFontMetrics().getStringBounds(attackDamageText, graphics);
-        tmpX = (int) (65 - (attackDamageBounds.getWidth() / 2));
-        drawOutlinedText(graphics, attackDamageText, tmpX, tmpY, Color.BLACK, Color.WHITE);
-        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 298, 458, 73, 73, null);
-        String lifepointsText = ("" + health);
-        graphics.setFont(FONTSTATS);
-        Rectangle2D lifepointsBounds = graphics.getFontMetrics().getStringBounds(lifepointsText, graphics);
-        tmpX = (int) (335 - (lifepointsBounds.getWidth() / 2));
-        drawOutlinedText(graphics, lifepointsText, tmpX, tmpY, Color.BLACK, (damaged ? Color.RED : Color.WHITE));
+        if (attack != null) {
+            graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 29, 458, 73, 73, null);
+            String attackDamageText = ("" + attack);
+            graphics.setFont(FONTSTATS);
+            Rectangle2D attackDamageBounds = graphics.getFontMetrics().getStringBounds(attackDamageText, graphics);
+            tmpX = (int) (65 - (attackDamageBounds.getWidth() / 2));
+            drawOutlinedText(graphics, attackDamageText, tmpX, tmpY, Color.BLACK, Color.WHITE);
+        }
+        if (health != null) {
+            graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 298, 458, 73, 73, null);
+            String lifepointsText = ("" + health);
+            graphics.setFont(FONTSTATS);
+            Rectangle2D lifepointsBounds = graphics.getFontMetrics().getStringBounds(lifepointsText, graphics);
+            tmpX = (int) (335 - (lifepointsBounds.getWidth() / 2));
+            drawOutlinedText(graphics, lifepointsText, tmpX, tmpY, Color.BLACK, (damaged ? Color.RED : Color.WHITE));
+        }
     }
 
     private void drawOutlinedText(Graphics2D graphics, String text, int x, int y, Color outlineColor, Color textColor) {

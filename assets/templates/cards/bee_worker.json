@@ -1,34 +1,50 @@
 {
-    "alias": "cards/bee_worker.json",
-    "display": {
-        "name": "Bee Worker",
-        "imagePath": "images/cards/bee_worker.gif",
-        "colors": ["GREEN"],
-        "description": "Venom 1. Dies after Battle. Draw 1.",
-        "stats": {
-            "attack": 0,
-            "health": 0
+  "alias": "cards/bee_worker.json",
+  "display": {
+    "name": "Bee Worker",
+    "imagePath": "images/cards/bee_worker.gif",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Dies after Battle. Draw 1."
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWNER"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 1
+              }
+            }
+          ]
         }
-    },
-    "casts": [{
-            "manaCost": 1,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/bee_worker.json"
-                }, {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OWNER"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "DRAW_CARDS_REQUEST": 1
-                            }
-                        }
-                    ]
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 0,
+    "VENOM": 1,
+    "FLYING": true
+  },
+  "afterBattle": [
+    {
+      "type": "buff",
+      "components": {
+        "DEATH_REQUEST": true
+      }
+    }
+  ]
 }

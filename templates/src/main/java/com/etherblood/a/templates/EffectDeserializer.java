@@ -2,7 +2,6 @@ package com.etherblood.a.templates;
 
 import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
 import com.etherblood.a.rules.templates.effects.Effect;
-import com.etherblood.a.rules.templates.effects.filedtypes.MinionId;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -16,12 +15,10 @@ import java.util.function.ToIntFunction;
 public class EffectDeserializer implements JsonDeserializer<Effect> {
 
     private final Map<String, Class<? extends Effect>> classes;
-    private final ToIntFunction<String> minionAliases;
     private final ToIntFunction<String> cardAliases;
 
-    public EffectDeserializer(Map<String, Class<? extends Effect>> classes, ToIntFunction<String> minionAliases, ToIntFunction<String> cardAliases) {
+    public EffectDeserializer(Map<String, Class<? extends Effect>> classes, ToIntFunction<String> cardAliases) {
         this.classes = classes;
-        this.minionAliases = minionAliases;
         this.cardAliases = cardAliases;
     }
 
@@ -36,9 +33,7 @@ public class EffectDeserializer implements JsonDeserializer<Effect> {
         for (Field field : clazz.getDeclaredFields()) {
             JsonElement fieldJsonValue = jsonObject.get(field.getName());
             if (field.getType() == int.class) {
-                if (field.getAnnotation(MinionId.class) != null) {
-                    jsonObject.addProperty(field.getName(), minionAliases.applyAsInt(fieldJsonValue.getAsString()));
-                } else if (field.getAnnotation(CardId.class) != null) {
+                if (field.getAnnotation(CardId.class) != null) {
                     jsonObject.addProperty(field.getName(), cardAliases.applyAsInt(fieldJsonValue.getAsString()));
                 }
             }

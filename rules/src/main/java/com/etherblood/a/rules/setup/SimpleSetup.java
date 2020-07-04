@@ -27,16 +27,17 @@ public class SimpleSetup {
                 data.set(player, core.DRAW_CARDS_REQUEST, 3);
             } else {
                 data.set(player, core.DRAW_CARDS_REQUEST, 4);
+                //TODO: replace this mana with a coin?
+                data.set(player, core.MANA, 1);
             }
 
-            int hero = SystemsUtil.createHero(data, game.getTemplates(), x -> 0, heroes[i], player);
+            int hero = SystemsUtil.createHero(data, game.getTemplates().getCard(heroes[i]), player);
             data.set(hero, core.SUMMONING_SICKNESS, 1);
 
             for (int cardTemplate : libraries[i]) {
-                int card = data.createEntity();
+                int card = SystemsUtil.createCard(data, game.getTemplates().getCard(cardTemplate));
                 data.set(card, core.IN_LIBRARY_ZONE, 1);
                 data.set(card, core.OWNED_BY, player);
-                data.set(card, core.CARD_TEMPLATE, cardTemplate);
             }
         }
     }

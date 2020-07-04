@@ -22,29 +22,26 @@ public class EffectiveStatsService {
     }
 
     public int health(int minion) {
-        assert data.has(minion, core.IN_BATTLE_ZONE);
         int health = data.getOptional(minion, core.HEALTH).orElse(0);
-        if (!data.has(minion, core.HERO)) {
+        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
             health += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_HEALTH_AURA);
         }
         return health;
     }
 
     public int venom(int minion) {
-        assert data.has(minion, core.IN_BATTLE_ZONE);
         int venom = data.getOptional(minion, core.VENOM).orElse(0);
-        if (!data.has(minion, core.HERO)) {
+        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
             venom += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_VENOM_AURA);
         }
         return venom;
     }
 
     public boolean isFastToAttack(int minion) {
-        assert data.has(minion, core.IN_BATTLE_ZONE);
         if (data.has(minion, core.FAST_TO_ATTACK)) {
             return true;
         }
-        if (!data.has(minion, core.HERO)) {
+        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
             if (hasOwnerOtherMinionWithComponent(minion, core.OWN_MINIONS_HASTE_AURA)) {
                 return true;
             }
@@ -53,11 +50,10 @@ public class EffectiveStatsService {
     }
 
     public boolean isFastToDefend(int minion) {
-        assert data.has(minion, core.IN_BATTLE_ZONE);
         if (data.has(minion, core.FAST_TO_DEFEND)) {
             return true;
         }
-        if (!data.has(minion, core.HERO)) {
+        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
             if (hasOwnerOtherMinionWithComponent(minion, core.OWN_MINIONS_HASTE_AURA)) {
                 return true;
             }

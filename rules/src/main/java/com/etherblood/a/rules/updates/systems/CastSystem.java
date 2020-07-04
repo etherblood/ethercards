@@ -7,7 +7,6 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.MinionTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
 import java.util.function.IntUnaryOperator;
@@ -64,8 +63,8 @@ public class CastSystem implements ActionSystem {
                 data.set(owner, core.MANA, mana);
             }
             for (int other : data.list(core.IN_BATTLE_ZONE)) {
-                int otherTemplateId = data.get(other, core.MINION_TEMPLATE);
-                MinionTemplate otherTemplate = templates.getMinion(otherTemplateId);
+                int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
+                CardTemplate otherTemplate = templates.getCard(otherTemplateId);
                 for (Effect effect : otherTemplate.getOnCastEffects()) {
                     effect.apply(data, templates, random, events, other, target);
                 }
@@ -75,9 +74,9 @@ public class CastSystem implements ActionSystem {
             }
 
             data.remove(castSource, core.CAST_TARGET);
-            data.remove(castSource, core.IN_HAND_ZONE);
-            data.remove(castSource, core.CARD_TEMPLATE);
-            data.remove(castSource, core.OWNED_BY);
+//            data.remove(castSource, core.IN_HAND_ZONE);
+//            data.remove(castSource, core.CARD_TEMPLATE);
+//            data.remove(castSource, core.OWNED_BY);
         }
     }
 }

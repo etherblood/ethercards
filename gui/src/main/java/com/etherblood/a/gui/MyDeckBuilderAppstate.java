@@ -9,16 +9,19 @@ import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderDeckCardMo
 import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderSettings;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
+import com.etherblood.a.entities.Components;
+import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.prettycards.CardPainterJME;
-import com.etherblood.a.gui.prettycards.CardVisualizer_Card;
+import com.etherblood.a.gui.prettycards.MyCardVisualizer;
+import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.rules.templates.CardCast;
+import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.DisplayCardTemplate;
-import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.etherblood.a.templates.RawLibraryTemplate;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -56,7 +59,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private final Geometry saveLibraryButton;
     private final Node rootNode;
 
-    public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, List<DisplayMinionTemplate> minions, CardImages cardImages, Node rootNode, RawLibraryTemplate presetLibrary) {
+    public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, RawLibraryTemplate presetLibrary, Components components) {
         this.presetLibrary = presetLibrary;
         this.rootNode = rootNode;
 
@@ -64,11 +67,12 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         cardOrder = cardOrder.thenComparing(x -> x.getTemplate().getName());
         cardOrder = cardOrder.thenComparingInt(x -> x.getTemplate().getId());
 
+        EntityData data = new SimpleEntityData(components);
+        
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
-            CardModel cardModel = new CardModel();
-            cardModel.setFaceUp(true);
-            cardModel.setTemplate(card);
+            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card), card);
+            cardModel.updateFrom(data);
             allCardModels.add(cardModel);
         }
         allCardModels.sort(cardOrder);
@@ -104,7 +108,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             }
         };
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
-        BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new CardVisualizer_Card(cardPainterJME);
+        BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new MyCardVisualizer(cardPainterJME);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
         DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
                 .allCardModels(allCardModels)

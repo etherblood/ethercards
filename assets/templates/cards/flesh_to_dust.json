@@ -4,7 +4,7 @@
         "name": "Flesh to Dust",
         "imagePath": "images/cards/flesh_to_dust.jpg",
         "colors": ["BLACK"],
-        "description": "Choose a minion, destroy it."
+        "description": "Destroy a minion."
     },
     "casts": [{
             "manaCost": 5,
@@ -18,6 +18,8 @@
                 }, {
                     "type": "particle",
                     "alias": "flesh_to_dust"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

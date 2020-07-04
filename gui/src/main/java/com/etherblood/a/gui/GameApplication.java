@@ -1,6 +1,7 @@
 package com.etherblood.a.gui;
 
 import com.etherblood.a.client.GameClient;
+import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
@@ -72,8 +73,9 @@ public class GameApplication extends SimpleApplication {
         stateManager.getState(HudTextAppstate.class).setText("Create your library.");
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
+        Components components = componentsBuilder.build();
 
-        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/" + x, JsonElement.class), new TemplatesParser(componentsBuilder.build()));
+        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/" + x, JsonElement.class), new TemplatesParser(components));
         String[] cardAliases = load("templates/card_pool.json", String[].class);
         Map<String, Integer> cardAliasToId = new LinkedHashMap<>();
         for (String card : cardAliases) {
@@ -86,10 +88,10 @@ public class GameApplication extends SimpleApplication {
         RawLibraryTemplate presetLibrary = LibraryIO.load("library.json");
         if (presetLibrary == null) {
             presetLibrary = new RawLibraryTemplate();
-            presetLibrary.hero = "minions/elderwood_ahri.json";
+            presetLibrary.hero = "cards/elderwood_ahri.json";
             presetLibrary.cards = new HashMap<>();
         }
-        deckBuilderAppstate = new MyDeckBuilderAppstate(cards, null, cardImages, rootNode, presetLibrary);
+        deckBuilderAppstate = new MyDeckBuilderAppstate(cards, cardImages, rootNode, presetLibrary, components);
         stateManager.attach(deckBuilderAppstate);
     }
 

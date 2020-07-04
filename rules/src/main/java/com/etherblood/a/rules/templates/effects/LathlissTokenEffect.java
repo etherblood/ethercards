@@ -1,19 +1,19 @@
 package com.etherblood.a.rules.templates.effects;
 
-import com.etherblood.a.rules.templates.effects.filedtypes.MinionId;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.MinionTemplate;
+import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Tribe;
+import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.Set;
 import java.util.function.IntUnaryOperator;
 
 public class LathlissTokenEffect extends Effect {
 
-    @MinionId
+    @CardId
     public final int tokenId;
 
     public LathlissTokenEffect(int tokenId) {
@@ -27,8 +27,8 @@ public class LathlissTokenEffect extends Effect {
         if (!data.hasValue(triggerTarget, core.OWNED_BY, owner)) {
             return;
         }
-        int targetTemplateId = data.get(triggerTarget, core.MINION_TEMPLATE);
-        MinionTemplate targetTemplate = templates.getMinion(targetTemplateId);
+        int targetTemplateId = data.get(triggerTarget, core.CARD_TEMPLATE);
+        CardTemplate targetTemplate = templates.getCard(targetTemplateId);
         Set<Tribe> tribes = targetTemplate.getTribes();
         if (tribes.contains(Tribe.DRAGON) && !tribes.contains(Tribe.TOKEN)) {
             SystemsUtil.summonMinion(data, templates, random, events, tokenId, owner);

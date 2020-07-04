@@ -5,7 +5,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.DamageEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.MinionTemplate;
+import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
 import com.etherblood.a.rules.updates.Modifier;
@@ -28,8 +28,8 @@ public class DamageSystem implements ActionSystem {
         this.triggers = new Trigger[]{
             (entity, value) -> {
                 if (!data.has(entity, core.DEATH_REQUEST)) {
-                    int templateId = data.get(entity, core.MINION_TEMPLATE);
-                    MinionTemplate template = templates.getMinion(templateId);
+                    int templateId = data.get(entity, core.CARD_TEMPLATE);
+                    CardTemplate template = templates.getCard(templateId);
                     for (Effect onSurviveEffect : template.getOnSelfSurviveEffects()) {
                         onSurviveEffect.apply(data, templates, random, events, entity, value);
                     }

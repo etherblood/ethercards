@@ -1,22 +1,25 @@
 {
-    "alias": "cards/force_of_savagery.json",
-    "display": {
-        "name": "Force of Savagery",
-        "imagePath": "images/cards/force_of_savagery.jpeg",
-        "colors": ["GREEN"],
-        "description": "Trample.",
-        "stats": {
-            "attack": 8,
-            "health": 0
+  "alias": "cards/force_of_savagery.json",
+  "display": {
+    "name": "Force of Savagery",
+    "imagePath": "images/cards/force_of_savagery.jpeg",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 2,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/force_of_savagery.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 8,
+    "HEALTH": 0,
+    "TRAMPLE": true
+  }
 }

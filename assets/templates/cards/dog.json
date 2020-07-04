@@ -1,0 +1,14 @@
+{
+  "alias": "cards/dog.json",
+  "display": {
+    "name": "Dog",
+    "imagePath": "images/cards/omfgdogs.gif",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 1
+  }
+}

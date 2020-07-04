@@ -1,0 +1,18 @@
+{
+  "alias": "cards/shyvana.json",
+  "display": {
+    "name": "Shyvana",
+    "imagePath": "images/cards/Shyvana.png",
+    "colors": [
+      "RED"
+    ]
+  },
+  "tribes": [
+    "DRAGON"
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 20,
+    "CANNOT_ATTACK": true
+  }
+}

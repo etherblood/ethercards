@@ -1,22 +1,28 @@
 {
-    "alias": "cards/blue_eyes_white_dragon.json",
-    "display": {
-        "name": "Blue-Eyes White Dragon",
-        "imagePath": "images/cards/blue_eyes_white_dragon.jpg",
-        "colors": ["BLUE"],
-        "description": "Flying.",
-        "stats": {
-            "attack": 10,
-            "health": 8
+  "alias": "cards/blue_eyes_white_dragon.json",
+  "display": {
+    "name": "Blue-Eyes White Dragon",
+    "imagePath": "images/cards/blue_eyes_white_dragon.jpg",
+    "colors": [
+      "BLUE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 8,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 8,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/blue_eyes_white_dragon.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 10,
+    "HEALTH": 8,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

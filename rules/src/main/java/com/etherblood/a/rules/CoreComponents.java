@@ -28,6 +28,7 @@ public class CoreComponents implements ComponentsModule {
     public final int IN_BATTLE_ZONE;
     public final int IN_HAND_ZONE;
     public final int IN_LIBRARY_ZONE;
+    public final int IN_GRAVEYARD_ZONE;
     public final int BLOCKS_ATTACKER;
     public final int CANNOT_ATTACK;
     public final int CANNOT_BLOCK;
@@ -46,7 +47,6 @@ public class CoreComponents implements ComponentsModule {
     public final int TIRED;
     public final int SUMMONING_SICKNESS;
     public final int CARD_TEMPLATE;
-    public final int MINION_TEMPLATE;
     public final int HERO;
     public final int MULLIGAN;
     public final int POISONED;
@@ -82,6 +82,7 @@ public class CoreComponents implements ComponentsModule {
         IN_BATTLE_ZONE = register.applyAsInt("IN_BATTLE_ZONE");
         IN_HAND_ZONE = register.applyAsInt("IN_HAND_ZONE");
         IN_LIBRARY_ZONE = register.applyAsInt("IN_LIBRARY_ZONE");
+        IN_GRAVEYARD_ZONE = register.applyAsInt("IN_GRAVEYARD_ZONE");
         CANNOT_ATTACK = register.applyAsInt("CANNOT_ATTACK");
         CANNOT_BLOCK = register.applyAsInt("CANNOT_BLOCK");
         CANNOT_BE_BLOCKED = register.applyAsInt("CANNOT_BE_BLOCKED");
@@ -104,7 +105,6 @@ public class CoreComponents implements ComponentsModule {
         TIRED = register.applyAsInt("TIRED");
         SUMMONING_SICKNESS = register.applyAsInt("SUMMONING_SICKNESS");
         CARD_TEMPLATE = register.applyAsInt("CARD_TEMPLATE");
-        MINION_TEMPLATE = register.applyAsInt("MINION_TEMPLATE");
         HERO = register.applyAsInt("HERO");
         MULLIGAN = register.applyAsInt("MULLIGAN");
         POISONED = register.applyAsInt("POISONED");

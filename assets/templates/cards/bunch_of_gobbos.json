@@ -11,15 +11,17 @@
             "effects": [
                 {
                     "type": "summon",
-                    "minionId": "minions/goblin.json"
+                    "minionId": "cards/goblin.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/goblin.json"
+                    "minionId": "cards/goblin.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/goblin.json"
+                    "minionId": "cards/goblin.json"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

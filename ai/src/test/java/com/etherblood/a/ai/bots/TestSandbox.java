@@ -102,7 +102,7 @@ public class TestSandbox {
         TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components));
 
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
-        rawLibrary.hero = "minions/lots_of_health.json";
+        rawLibrary.hero = "cards/lots_of_health.json";
         rawLibrary.cards = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
 
         LibraryTemplate lib0 = loader.parseLibrary(rawLibrary);

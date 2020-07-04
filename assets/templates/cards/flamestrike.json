@@ -24,6 +24,8 @@
                 }, {
                     "type": "particle",
                     "alias": "flamestrike"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

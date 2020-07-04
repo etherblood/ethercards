@@ -1,34 +1,41 @@
 {
-    "alias": "cards/coldlight_oracle.json",
-    "display": {
-        "name": "Coldlight Oracle",
-        "imagePath": "images/cards/Coldlight_Oracle_full.jpg",
-        "colors": ["BLUE"],
-        "description": "Each player Draws 2 cards.",
-        "stats": {
-            "attack": 2,
-            "health": 2
+  "alias": "cards/coldlight_oracle.json",
+  "display": {
+    "name": "Coldlight Oracle",
+    "imagePath": "images/cards/Coldlight_Oracle_full.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Each player Draws 2 cards."
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWNER",
+            "OPPONENT"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 2
+              }
+            }
+          ]
         }
-    },
-    "casts": [{
-            "manaCost": 3,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/coldlight_oracle.json"
-                }, {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OWNER", "OPPONENT"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "DRAW_CARDS_REQUEST": 2
-                            }
-                        }
-                    ]
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 2
+  }
 }

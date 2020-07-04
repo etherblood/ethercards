@@ -1,22 +1,27 @@
 {
-    "alias": "cards/bee_queen.json",
-    "display": {
-        "name": "Bee Queen",
-        "imagePath": "images/cards/bee_queen.gif",
-        "colors": ["GREEN"],
-        "description": "Venom 2 and 1 Health Aura.",
-        "stats": {
-            "attack": 0,
-            "health": 3
+  "alias": "cards/bee_queen.json",
+  "display": {
+    "name": "Bee Queen",
+    "imagePath": "images/cards/bee_queen.gif",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 2,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/bee_queen.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 3,
+    "VENOM": 1,
+    "OWN_MINIONS_HEALTH_AURA": 1,
+    "FLYING": true
+  }
 }

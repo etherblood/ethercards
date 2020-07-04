@@ -4,7 +4,7 @@
         "name": "Fireball",
         "imagePath": "images/cards/fireball.jpg",
         "colors": ["RED"],
-        "description": "Deal 6 damage to the selected target."
+        "description": "Deal 6 damage to the selected minion or hero."
     },
     "casts": [{
             "manaCost": 4,
@@ -18,6 +18,8 @@
                 }, {
                     "type": "particle",
                     "alias": "fireball"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

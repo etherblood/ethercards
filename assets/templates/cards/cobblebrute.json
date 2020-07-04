@@ -1,21 +1,24 @@
 {
-    "alias": "cards/cobblebrute.json",
-    "display": {
-        "name": "Cobblebrute",
-        "imagePath": "images/cards/cobblebrute.jpg",
-        "colors": ["RED"],
-        "stats": {
-            "attack": 5,
-            "health": 2
+  "alias": "cards/cobblebrute.json",
+  "display": {
+    "name": "Cobblebrute",
+    "imagePath": "images/cards/cobblebrute.jpg",
+    "colors": [
+      "RED"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 3,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/cobblebrute.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 5,
+    "HEALTH": 2
+  }
 }

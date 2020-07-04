@@ -1,33 +1,40 @@
 {
-    "alias": "cards/hidetsugu.json",
-    "display": {
-        "name": "Heartless Hidetsugu",
-        "imagePath": "images/cards/hidetsugu.jpg",
-        "colors": ["RED"],
-        "description": "Cut each heroes health in half.",
-        "stats": {
-            "attack": 4,
-            "health": 3
+  "alias": "cards/hidetsugu.json",
+  "display": {
+    "name": "Heartless Hidetsugu",
+    "imagePath": "images/cards/hidetsugu.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Cut each heroes health in half."
+  },
+  "casts": [
+    {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWN_HERO",
+            "OPPONENT_HERO"
+          ],
+          "effects": [
+            {
+              "type": "fractionalDamage",
+              "quotient": 1,
+              "divident": 2
+            }
+          ]
         }
-    },
-    "casts": [{
-            "manaCost": 5,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/hidetsugu.json"
-                }, {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OWN_HERO", "OPPONENT_HERO"],
-                    "effects": [
-                        {
-                            "type": "fractionalDamage",
-                            "quotient": 1,
-                            "divident": 2
-                        }
-                    ]
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 3
+  }
 }

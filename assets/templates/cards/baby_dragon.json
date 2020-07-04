@@ -1,22 +1,28 @@
 {
-    "alias": "cards/baby_dragon.json",
-    "display": {
-        "name": "Baby Dragon",
-        "imagePath": "images/cards/baby_dragon.jpg",
-        "colors": ["RED"],
-        "description": "Flying.",
-        "stats": {
-            "attack": 1,
-            "health": 1
+  "alias": "cards/baby_dragon.json",
+  "display": {
+    "name": "Baby Dragon",
+    "imagePath": "images/cards/baby_dragon.jpg",
+    "colors": [
+      "RED"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 1,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/baby_dragon.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 1,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

@@ -1,16 +1,16 @@
 package com.etherblood.a.rules.templates.effects;
 
-import com.etherblood.a.rules.templates.effects.filedtypes.MinionId;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
 public class SummonEffect extends Effect {
 
-    @MinionId
+    @CardId
     public final int minionId;
 
     public SummonEffect(int minionId) {

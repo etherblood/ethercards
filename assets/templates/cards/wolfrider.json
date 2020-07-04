@@ -1,22 +1,25 @@
 {
-    "alias": "cards/wolfrider.json",
-    "display": {
-        "name": "Wolfrider",
-        "imagePath": "images/cards/Wolfrider_full.jpg",
-        "colors": ["RED"],
-        "description": "Fast to Attack.",
-        "stats": {
-            "attack": 3,
-            "health": 1
+  "alias": "cards/wolfrider.json",
+  "display": {
+    "name": "Wolfrider",
+    "imagePath": "images/cards/Wolfrider_full.jpg",
+    "colors": [
+      "RED"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 3,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/wolfrider.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 1,
+    "FAST_TO_ATTACK": true
+  }
 }

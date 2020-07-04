@@ -15,6 +15,11 @@
                     "components": {
                         "HEALTH": 6
                     }
+                }, {
+                    "type": "particle",
+                    "alias": "slagwurm_armor"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

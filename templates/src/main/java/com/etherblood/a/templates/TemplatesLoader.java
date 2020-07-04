@@ -26,11 +26,8 @@ public class TemplatesLoader {
     }
 
     private void resolveReferences() {
-        Set<String> cards, minions;
-        while (!(cards = parser.unresolvedCards()).isEmpty() | !(minions = parser.unresolvedMinions()).isEmpty()) {
-            for (String minion : minions) {
-                parser.parseMinion(load(minion));
-            }
+        Set<String> cards;
+        while (!(cards = parser.unresolvedCards()).isEmpty()) {
             for (String card : cards) {
                 parser.parseCard(load(card));
             }
@@ -39,10 +36,6 @@ public class TemplatesLoader {
     
     public int registerCardAlias(String alias) {
         return parser.registerCardAlias(alias);
-    }
-    
-    public int registerMinionAlias(String alias) {
-        return parser.registerMinionAlias(alias);
     }
 
     private JsonObject load(String alias) {

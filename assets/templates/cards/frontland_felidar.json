@@ -1,22 +1,26 @@
 {
-    "alias": "cards/frontland_felidar.json",
-    "display": {
-        "name": "Frontland Felidar",
-        "imagePath": "images/cards/frontland_felidar.jpeg",
-        "colors": ["GREEN", "WHITE"],
-        "description": "Vigilance.",
-        "stats": {
-            "attack": 3,
-            "health": 5
+  "alias": "cards/frontland_felidar.json",
+  "display": {
+    "name": "Frontland Felidar",
+    "imagePath": "images/cards/frontland_felidar.jpeg",
+    "colors": [
+      "GREEN",
+      "WHITE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 4,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/frontland_felidar.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 5,
+    "VIGILANCE": true
+  }
 }

@@ -1,22 +1,111 @@
 {
-    "alias": "cards/jugan.json",
-    "display": {
-        "name": "Jugan, the Rising Star",
-        "imagePath": "images/cards/jugan.jpg",
-        "colors": ["GREEN"],
-        "description": "Randomly distribute five +1/+1 buffs amongst your minions when this dies.",
-        "stats": {
-            "attack": 5,
-            "health": 5
+  "alias": "cards/jugan.json",
+  "display": {
+    "name": "Jugan, the Rising Star",
+    "imagePath": "images/cards/jugan.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Randomly distribute five +1/+1 buffs amongst your minions when this dies."
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 5,
+    "HEALTH": 5,
+    "FLYING": true
+  },
+  "onDeath": [
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1
+          }
+        }
+      ]
     },
-    "casts": [{
-            "manaCost": 6,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/jugan.json"
-                }
-            ]
-        }]
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1
+          }
+        }
+      ]
+    }
+  ],
+  "tribes": [
+    "DRAGON"
+  ]
 }

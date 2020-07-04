@@ -11,15 +11,17 @@
             "effects": [
                 {
                     "type": "summon",
-                    "minionId": "minions/dog.json"
+                    "minionId": "cards/dog.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/dog.json"
+                    "minionId": "cards/dog.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/dog.json"
+                    "minionId": "cards/dog.json"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

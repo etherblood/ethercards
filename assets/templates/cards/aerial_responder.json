@@ -1,22 +1,27 @@
 {
-    "alias": "cards/aerial_responder.json",
-    "display": {
-        "name": "Aerial Responder",
-        "imagePath": "images/cards/aerial_responder.png",
-        "colors": ["WHITE"],
-        "description": "Lifelink and Vigilance.",
-        "stats": {
-            "attack": 2,
-            "health": 3
+  "alias": "cards/aerial_responder.json",
+  "display": {
+    "name": "Aerial Responder",
+    "imagePath": "images/cards/aerial_responder.png",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 3,
+    "LIFELINK": true,
+    "VIGILANCE": true,
+    "FLYING": true
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 3,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/aerial_responder.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ]
 }

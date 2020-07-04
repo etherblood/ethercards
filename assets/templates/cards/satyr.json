@@ -1,22 +1,25 @@
 {
-    "alias": "cards/satyr.json",
-    "display": {
-        "name": "Satyr",
-        "imagePath": "images/cards/Voyaging Satyr.png",
-        "colors": ["GREEN"],
-        "description": "1 Mana Pool.",
-        "stats": {
-            "attack": 1,
-            "health": 2
+  "alias": "cards/satyr.json",
+  "display": {
+    "name": "Satyr",
+    "imagePath": "images/cards/Voyaging Satyr.png",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 2,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/satyr.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 2,
+    "MANA_POOL": 1
+  }
 }

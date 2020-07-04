@@ -1,22 +1,37 @@
 {
-    "alias": "cards/bee_hive.json",
-    "display": {
-        "name": "Bee Hive",
-        "imagePath": "images/cards/bee_hive.jpg",
-        "colors": ["GREEN"],
-        "description": "Can neither attack nor block and summons two 0/0 Bee Workers each turn.",
-        "stats": {
-            "attack": 0,
-            "health": 3
+  "alias": "cards/bee_hive.json",
+  "display": {
+    "name": "Bee Hive",
+    "imagePath": "images/cards/bee_hive.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Summons two 0/0 Bee Workers each turn."
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 3,
+    "CANNOT_ATTACK": true,
+    "CANNOT_BLOCK": true
+  },
+  "onUpkeep": [
+    {
+      "type": "summon",
+      "minionId": "cards/bee_worker.json"
     },
-    "casts": [{
-            "manaCost": 2,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/bee_hive.json"
-                }
-            ]
-        }]
+    {
+      "type": "summon",
+      "minionId": "cards/bee_worker.json"
+    }
+  ]
 }

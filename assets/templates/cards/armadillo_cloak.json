@@ -18,6 +18,11 @@
                         "TRAMPLE": 1,
                         "LIFELINK": 1
                     }
+                }, {
+                    "type": "particle",
+                    "alias": "armadillo_cloak"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

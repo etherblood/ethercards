@@ -1,25 +1,38 @@
 {
-    "alias": "cards/dragonlord_silumgar.json",
-    "display": {
-        "name": "Dragonlord Silumgar",
-        "imagePath": "images/cards/dragonlord_silumgar.jpg",
-        "colors": ["BLUE", "BLACK"],
-        "description": "Take Control of target minion. Venom 5.",
-        "stats": {
-            "attack": 3,
-            "health": 5
+  "alias": "cards/dragonlord_silumgar.json",
+  "display": {
+    "name": "Dragonlord Silumgar",
+    "imagePath": "images/cards/dragonlord_silumgar.jpg",
+    "colors": [
+      "BLUE",
+      "BLACK"
+    ],
+    "description": "Take Control of a minion."
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "targets": [
+        "OWN_HERO",
+        "OPPONENT_MINION"
+      ],
+      "effects": [
+        {
+          "type": "takeControl"
+        },
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 6,
-            "targets": ["OWN_HERO", "OPPONENT_MINION"],
-            "effects": [
-                {
-                    "type": "takeControl"
-                }, {
-                    "type": "summon",
-                    "minionId": "minions/dragonlord_silumgar.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 5,
+    "VENOM": 5,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

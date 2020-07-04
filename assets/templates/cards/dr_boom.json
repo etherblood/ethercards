@@ -1,30 +1,33 @@
 {
-    "alias": "cards/dr_boom.json",
-    "display": {
-        "name": "Dr. Boom",
-        "imagePath": "images/cards/dr_boom.png",
-        "colors": ["RED"],
-        "description": "Summon two 1/1 Boombots which deal 2 damage to a random enemy when they die.",
-        "stats": {
-            "attack": 7,
-            "health": 7
+  "alias": "cards/dr_boom.json",
+  "display": {
+    "name": "Dr. Boom",
+    "imagePath": "images/cards/dr_boom.png",
+    "colors": [
+      "RED"
+    ],
+    "description": "Summon two 1/1 Boombots which deal 2 damage to a random enemy when they die."
+  },
+  "casts": [
+    {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "summon",
+          "minionId": "cards/boombot.json"
+        },
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "summon",
+          "minionId": "cards/boombot.json"
         }
-    },
-    "casts": [{
-            "manaCost": 7,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/boombot.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "minions/dr_boom.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "minions/boombot.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 7,
+    "HEALTH": 7
+  }
 }

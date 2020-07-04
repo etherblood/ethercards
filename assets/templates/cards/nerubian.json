@@ -1,0 +1,14 @@
+{
+  "alias": "cards/nerubian.json",
+  "display": {
+    "name": "Nerubian",
+    "imagePath": "images/cards/Nerubian_full.jpg",
+    "colors": [
+      "BLACK"
+    ]
+  },
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 3
+  }
+}

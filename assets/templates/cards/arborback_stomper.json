@@ -1,34 +1,41 @@
 {
-    "alias": "cards/arborback_stomper.json",
-    "display": {
-        "name": "Arborback Stomper",
-        "imagePath": "images/cards/arborback_stomper.jpg",
-        "colors": ["GREEN"],
-        "description": "Trample, your hero gains 5 health.",
-        "stats": {
-            "attack": 5,
-            "health": 4
+  "alias": "cards/arborback_stomper.json",
+  "display": {
+    "name": "Arborback Stomper",
+    "imagePath": "images/cards/arborback_stomper.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Your hero gains 5 health."
+  },
+  "casts": [
+    {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "targeting": "ANY",
+          "targets": [
+            "OWN_HERO"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "HEALTH": 5
+              }
+            }
+          ]
         }
-    },
-    "casts": [{
-            "manaCost": 5,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/arborback_stomper.json"
-                }, {
-                    "type": "targeted",
-                    "targeting": "ANY",
-                    "targets": ["OWN_HERO"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "HEALTH": 5
-                            }
-                        }
-                    ]
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 5,
+    "HEALTH": 4,
+    "TRAMPLE": 1
+  }
 }

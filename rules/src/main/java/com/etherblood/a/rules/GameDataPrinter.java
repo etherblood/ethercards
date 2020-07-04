@@ -12,7 +12,6 @@ import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.MinionTemplate;
 
 public class GameDataPrinter {
 
@@ -63,11 +62,11 @@ public class GameDataPrinter {
     }
 
     public String toMinionString(int minion) {
-        if (!game.getData().has(minion, core.MINION_TEMPLATE)) {
+        if (!game.getData().has(minion, core.CARD_TEMPLATE)) {
             return "Null";
         }
-        int templateId = game.getData().get(minion, core.MINION_TEMPLATE);
-        MinionTemplate template = game.getTemplates().getMinion(templateId);
+        int templateId = game.getData().get(minion, core.CARD_TEMPLATE);
+        CardTemplate template = game.getTemplates().getCard(templateId);
         return "#" + minion + " " + template.getTemplateName() + " (" + game.getData().getOptional(minion, core.ATTACK).orElse(0) + ", " + game.getData().getOptional(minion, core.HEALTH).orElse(0) + ")";
     }
 

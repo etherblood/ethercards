@@ -1,22 +1,31 @@
 {
-    "alias": "cards/dragonite_delta.json",
-    "display": {
-        "name": "Dragonite",
-        "imagePath": "images/cards/dragonite_delta.png",
-        "colors": ["WHITE", "BLUE"],
-        "description": "Flying, Vigilance, Trample.",
-        "stats": {
-            "attack": 7,
-            "health": 10
+  "alias": "cards/dragonite_delta.json",
+  "display": {
+    "name": "Dragonite",
+    "imagePath": "images/cards/dragonite_delta.png",
+    "colors": [
+      "WHITE",
+      "BLUE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 7,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/dragonite_delta.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 7,
+    "HEALTH": 10,
+    "VIGILANCE": true,
+    "TRAMPLE": true,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

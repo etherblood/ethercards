@@ -1,49 +1,65 @@
 {
-    "alias": "cards/deathwing.json",
-    "display": {
-        "name": "Deathwing",
-        "imagePath": "images/cards/deathwing.jpg",
-        "colors": ["RED", "BLACK"],
-        "description": "Flying. Destroy all other minions and discard your hand.",
-        "stats": {
-            "attack": 12,
-            "health": 12
+  "alias": "cards/deathwing.json",
+  "display": {
+    "name": "Deathwing",
+    "imagePath": "images/cards/deathwing.jpg",
+    "colors": [
+      "RED",
+      "BLACK"
+    ],
+    "description": "Destroy all other minions and discard your hand."
+  },
+  "casts": [
+    {
+      "manaCost": 10,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OPPONENT_MINION",
+            "OWN_MINION"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "particle",
+          "alias": "deathwing"
+        },
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWNER"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DISCARD_CARDS_REQUEST": 1000000
+              }
+            }
+          ]
         }
-    },
-    "casts": [{
-            "manaCost": 10,
-            "effects": [
-                {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OPPONENT_MINION", "OWN_MINION"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "DEATH_REQUEST": true
-                            }
-                        }
-                    ]
-                }, {
-                    "type": "particle",
-                    "alias": "deathwing"
-                }, {
-                    "type": "summon",
-                    "minionId": "minions/deathwing.json"
-                }, {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OWNER"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "DISCARD_CARDS_REQUEST": 1000000
-                            }
-                        }
-                    ]
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 12,
+    "HEALTH": 12,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
 }

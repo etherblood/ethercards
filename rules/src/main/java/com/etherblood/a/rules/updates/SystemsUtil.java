@@ -7,7 +7,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.BattleEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.MinionTemplate;
+import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
 
 import java.util.function.IntUnaryOperator;
@@ -84,15 +84,15 @@ public class SystemsUtil {
             increase(data, attacker, core.POISONED, blockerVenom);
         }
 
-        int attackerTemplateId = data.get(attacker, core.MINION_TEMPLATE);
-        MinionTemplate attackerTemplate = templates.getMinion(attackerTemplateId);
+        int attackerTemplateId = data.get(attacker, core.CARD_TEMPLATE);
+        CardTemplate attackerTemplate = templates.getCard(attackerTemplateId);
         for (Effect afterBattleEffect : attackerTemplate.getAfterSelfBattleEffects()) {
             //TODO: blocker & attacker should be passed as arguments after improving targeting
             afterBattleEffect.apply(data, templates, random, events, attacker, attacker);
         }
 
-        int blockerTemplateId = data.get(blocker, core.MINION_TEMPLATE);
-        MinionTemplate blockerTemplate = templates.getMinion(blockerTemplateId);
+        int blockerTemplateId = data.get(blocker, core.CARD_TEMPLATE);
+        CardTemplate blockerTemplate = templates.getCard(blockerTemplateId);
         for (Effect afterBattleEffect : blockerTemplate.getAfterSelfBattleEffects()) {
             //TODO: blocker & attacker should be passed as arguments after improving targeting
             afterBattleEffect.apply(data, templates, random, events, blocker, blocker);
@@ -107,11 +107,20 @@ public class SystemsUtil {
         increase(data, target, core.DAMAGE_REQUEST, damage);
     }
 
-    public static int createHero(EntityData data, GameTemplates templates, IntUnaryOperator random, int minionTemplate, int owner) {
+    public static int createCard(EntityData data, CardTemplate template) {
+        int card = data.createEntity();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int hero = data.createEntity();
+        data.set(card, core.CARD_TEMPLATE, template.getId());
+        for (int component : template.components()) {
+            data.set(card, component, template.get(component));
+        }
+        return card;
+    }
+
+    public static int createHero(EntityData data, CardTemplate template, int owner) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        int hero = createMinion(data, template, owner);
         data.set(hero, core.HERO, 1);
-        applyTemplate(data, templates, random, minionTemplate, hero, owner);
         //TODO: mana growth & draws should be somehow added to the player, not their hero
         SystemsUtil.increase(data, hero, core.MANA_GROWTH, 1);
         SystemsUtil.increase(data, hero, core.DRAWS_PER_TURN, 1);
@@ -120,14 +129,14 @@ public class SystemsUtil {
 
     public static int summonMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int minionTemplate, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int minion = createMinion(data, templates, random, minionTemplate, owner);
+        int minion = createMinion(data, templates.getCard(minionTemplate), owner);
         data.set(minion, core.SUMMONING_SICKNESS, 1);
         for (int other : data.list(core.IN_BATTLE_ZONE)) {
             if (minion == other) {
                 continue;
             }
-            int otherTemplateId = data.get(other, core.MINION_TEMPLATE);
-            MinionTemplate otherTemplate = templates.getMinion(otherTemplateId);
+            int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
+            CardTemplate otherTemplate = templates.getCard(otherTemplateId);
             for (Effect effect : otherTemplate.getOnSummonEffects()) {
                 effect.apply(data, templates, random, events, other, minion);
             }
@@ -135,20 +144,12 @@ public class SystemsUtil {
         return minion;
     }
 
-    public static int createMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, int minionTemplate, int owner) {
-        int minion = data.createEntity();
-        applyTemplate(data, templates, random, minionTemplate, minion, owner);
-        return minion;
-    }
-
-    private static void applyTemplate(EntityData data, GameTemplates templates, IntUnaryOperator random, int minionTemplate, int minion, int owner) {
+    public static int createMinion(EntityData data, CardTemplate template, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        MinionTemplate template = templates.getMinion(minionTemplate);
+        int minion = createCard(data, template);
         data.set(minion, core.OWNED_BY, owner);
         data.set(minion, core.IN_BATTLE_ZONE, 1);
-        for (int component : template) {
-            data.set(minion, component, template.get(component));
-        }
+        return minion;
     }
 
     public static int randomHero(EntityData data, IntUnaryOperator random, int player) {

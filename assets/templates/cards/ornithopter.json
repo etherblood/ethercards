@@ -1,21 +1,25 @@
 {
-    "alias": "cards/ornithopter.json",
-    "display": {
-        "name": "Ornithopter",
-        "imagePath": "images/cards/Thopter.jpg",
-        "colors": ["NEUTRAL"],
-        "stats": {
-            "attack": 0,
-            "health": 2
+  "alias": "cards/ornithopter.json",
+  "display": {
+    "name": "Ornithopter",
+    "imagePath": "images/cards/Thopter.jpg",
+    "colors": [
+      "NEUTRAL"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 0,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 0,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/ornithopter.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 2,
+    "FLYING": true
+  }
 }

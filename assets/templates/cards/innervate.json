@@ -4,7 +4,7 @@
         "name": "Innervate",
         "imagePath": "images/cards/innervate.jpg",
         "colors": ["BLUE"],
-        "description": "Gain 2 Mana."
+        "description": "Gain 2 Mana. Your hero gains 2 Poisoned."
     },
     "casts": [{
             "manaCost": 0,
@@ -21,6 +21,20 @@
                             }
                         }
                     ]
+                }, {
+                    "type": "targeted",
+                    "targeting": "ALL",
+                    "targets": ["OWN_HERO"],
+                    "effects": [
+                        {
+                            "type": "buff",
+                            "components": {
+                                "POISONED": 2
+                            }
+                        }
+                    ]
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

@@ -46,12 +46,4 @@ public class CardImages {
         }
         return "images/cards/other.png";
     }
-
-    public String getCardImageFilePath(MinionModel cardModel) {
-        String imagePath = cardModel.getTemplate().getImagePath();
-        if (imagePath != null) {
-            return imagePath;
-        }
-        return "images/cards/other.png";
-    }
 }

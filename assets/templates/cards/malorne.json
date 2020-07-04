@@ -1,22 +1,34 @@
 {
-    "alias": "cards/malorne.json",
-    "display": {
-        "name": "Malorne",
-        "imagePath": "images/cards/Malorne_full.jpg",
-        "colors": ["GREEN"],
-        "description": "Shuffle this into your library when it dies.",
-        "stats": {
-            "attack": 9,
-            "health": 7
+  "alias": "cards/malorne.json",
+  "display": {
+    "name": "Malorne",
+    "imagePath": "images/cards/Malorne_full.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Shuffle this into your library when it dies."
+  },
+  "casts": [
+    {
+      "manaCost": 8,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 8,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/malorne.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 9,
+    "HEALTH": 7
+  },
+  "onDeath": [
+    {
+      "type": "create",
+      "cardId": "cards/malorne.json",
+      "components": {
+        "IN_LIBRARY_ZONE": 1
+      }
+    }
+  ]
 }

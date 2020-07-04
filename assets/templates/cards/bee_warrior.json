@@ -1,22 +1,28 @@
 {
-    "alias": "cards/bee_warrior.json",
-    "display": {
-        "name": "Bee Warrior",
-        "imagePath": "images/cards/bee_warrior.gif",
-        "colors": ["GREEN"],
-        "description": "Vigilance, Venom 1 and Fast Blocker.",
-        "stats": {
-            "attack": 0,
-            "health": 3
+  "alias": "cards/bee_warrior.json",
+  "display": {
+    "name": "Bee Warrior",
+    "imagePath": "images/cards/bee_warrior.gif",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 1,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/bee_warrior.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 3,
+    "VENOM": 1,
+    "VIGILANCE": true,
+    "FAST_TO_DEFEND": true,
+    "FLYING": true
+  }
 }

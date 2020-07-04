@@ -12,8 +12,9 @@
             "effects": [
                 {
                     "type": "summon",
-                    "minionId": "minions/druid_of_the_claw_bear.json",
-                    "fast": true
+                    "minionId": "cards/druid_of_the_claw_bear.json"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }, {
@@ -22,8 +23,9 @@
             "effects": [
                 {
                     "type": "summon",
-                    "minionId": "minions/druid_of_the_claw_cat.json",
-                    "fast": true
+                    "minionId": "cards/druid_of_the_claw_cat.json"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

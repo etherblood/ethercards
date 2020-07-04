@@ -1,22 +1,32 @@
 {
-    "alias": "cards/nerubian_egg.json",
-    "display": {
-        "name": "Nerubian egg",
-        "imagePath": "images/cards/Nerubian_Egg_full.jpg",
-        "colors": ["BLACK"],
-        "description": "Cannot attack, summon a 3/3 Nerubian when this dies.",
-        "stats": {
-            "attack": 0,
-            "health": 2
+  "alias": "cards/nerubian_egg.json",
+  "display": {
+    "name": "Nerubian egg",
+    "imagePath": "images/cards/Nerubian_Egg_full.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "Summon a 3/3 Nerubian when this dies."
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 2,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/nerubian_egg.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 2,
+    "CANNOT_ATTACK": true
+  },
+  "onDeath": [
+    {
+      "type": "summon",
+      "minionId": "cards/nerubian.json"
+    }
+  ]
 }

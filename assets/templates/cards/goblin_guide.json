@@ -1,22 +1,27 @@
 {
-    "alias": "cards/goblin_guide.json",
-    "display": {
-        "name": "Goblin Guide",
-        "imagePath": "images/cards/goblin_guide.jpg",
-        "colors": ["RED"],
-        "description": "Fast to Attack. The defending player draws 1 card each time this attacks.",
-        "stats": {
-            "attack": 2,
-            "health": 2
+  "alias": "cards/goblin_guide.json",
+  "display": {
+    "name": "Goblin Guide",
+    "imagePath": "images/cards/goblin_guide.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "The defending player draws 1 card each time this attacks."
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 1,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/goblin_guide.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 2,
+    "GIVE_DRAWS_ON_ATTACK": 1,
+    "FAST_TO_ATTACK": true
+  }
 }

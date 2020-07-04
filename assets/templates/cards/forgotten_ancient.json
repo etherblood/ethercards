@@ -1,22 +1,43 @@
 {
-    "alias": "cards/forgotten_ancient.json",
-    "display": {
-        "name": "Forgotten Ancient",
-        "imagePath": "images/cards/forgotten_ancient.jpg",
-        "colors": ["GREEN"],
-        "flavourText": "Its blood is life. Its body is growth.",
-        "stats": {
-            "attack": 0,
-            "health": 3
+  "alias": "cards/forgotten_ancient.json",
+  "display": {
+    "name": "Forgotten Ancient",
+    "imagePath": "images/cards/forgotten_ancient.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "flavourText": "Its blood is life. Its body is growth."
+  },
+  "casts": [
+    {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 4,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/forgotten_ancient.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 3
+  },
+  "onCast": [
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "SOURCE"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1
+          }
+        }
+      ]
+    }
+  ]
 }

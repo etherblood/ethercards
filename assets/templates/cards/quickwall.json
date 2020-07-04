@@ -1,22 +1,27 @@
 {
-    "alias": "cards/quickwall.json",
-    "display": {
-        "name": "Quickwall",
-        "imagePath": "images/cards/quickwall.png",
-        "colors": ["WHITE"],
-        "description": "Fast to Block, cannot Attack.",
-        "stats": {
-            "attack": 2,
-            "health": 4
+  "alias": "cards/quickwall.json",
+  "display": {
+    "name": "Quickwall",
+    "imagePath": "images/cards/quickwall.png",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-    },
-    "casts": [{
-            "manaCost": 2,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "minions/quickwall.json"
-                }
-            ]
-        }]
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 4,
+    "CANNOT_ATTACK": true,
+    "FAST_TO_DEFEND": true,
+    "REACH": true
+  }
 }

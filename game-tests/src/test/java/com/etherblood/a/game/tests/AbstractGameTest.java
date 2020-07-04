@@ -13,6 +13,7 @@ import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.setup.SimpleSetup;
+import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.RawLibraryTemplate;
 import com.etherblood.a.templates.TemplatesLoader;
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractGameTest {
 
-    private static final String DEFAULT_HERO = "minions/lots_of_health.json";
+    private static final String DEFAULT_HERO = "cards/lots_of_health.json";
     private final TemplatesLoader loader;
     public final GameSettings settings;
     public final CoreComponents core;
@@ -57,7 +58,7 @@ public abstract class AbstractGameTest {
         for (String card : cardPool) {
             loader.registerCardAlias(card);
         }
-        loader.registerMinionAlias(DEFAULT_HERO);
+        loader.registerCardAlias(DEFAULT_HERO);
 
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
         rawLibrary.hero = DEFAULT_HERO;
@@ -77,8 +78,8 @@ public abstract class AbstractGameTest {
         SimpleSetup setup = new SimpleSetup(2);
         setup.setLibrary(0, new IntList());
         setup.setLibrary(1, new IntList());
-        setup.setHero(0, getMinionId(DEFAULT_HERO));
-        setup.setHero(1, getMinionId(DEFAULT_HERO));
+        setup.setHero(0, getCardId(DEFAULT_HERO));
+        setup.setHero(1, getCardId(DEFAULT_HERO));
 
         setup.apply(game);
         for (int player : data.list(core.DRAW_CARDS_REQUEST)) {
@@ -111,8 +112,8 @@ public abstract class AbstractGameTest {
     }
 
     public int createLibraryCard(int owner, int cardTemplate) {
-        int card = data.createEntity();
-        data.set(card, core.CARD_TEMPLATE, cardTemplate);
+        CardTemplate template = game.getTemplates().getCard(cardTemplate);
+        int card = SystemsUtil.createCard(data, template);
         data.set(card, core.OWNED_BY, owner);
         data.set(card, core.IN_LIBRARY_ZONE, 1);
         return card;
@@ -123,26 +124,22 @@ public abstract class AbstractGameTest {
     }
 
     public int createHandCard(int owner, int cardTemplate) {
-        int card = data.createEntity();
-        data.set(card, core.CARD_TEMPLATE, cardTemplate);
+        CardTemplate template = game.getTemplates().getCard(cardTemplate);
+        int card = SystemsUtil.createCard(data, template);
         data.set(card, core.OWNED_BY, owner);
         data.set(card, core.IN_HAND_ZONE, 1);
         return card;
     }
 
     public int createMinion(int owner, String minionTemplate) {
-        return createMinion(owner, getMinionId(minionTemplate));
+        return createMinion(owner, getCardId(minionTemplate));
     }
 
     public int createMinion(int owner, int minionTemplate) {
-        return SystemsUtil.createMinion(data, game.getTemplates(), game.getMoves().getRandom(), minionTemplate, owner);
+        return SystemsUtil.createMinion(data, game.getTemplates().getCard(minionTemplate), owner);
     }
 
     public int getCardId(String alias) {
         return loader.registerCardAlias(alias);
-    }
-
-    public int getMinionId(String alias) {
-        return loader.registerMinionAlias(alias);
     }
 }

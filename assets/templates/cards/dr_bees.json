@@ -11,23 +11,25 @@
             "effects": [
                 {
                     "type": "summon",
-                    "minionId": "minions/bee_worker.json"
+                    "minionId": "cards/bee_worker.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/bee_worker.json"
+                    "minionId": "cards/bee_worker.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/bee_worker.json"
+                    "minionId": "cards/bee_worker.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/bee_worker.json"
+                    "minionId": "cards/bee_worker.json"
                 },
                 {
                     "type": "summon",
-                    "minionId": "minions/bee_worker.json"
+                    "minionId": "cards/bee_worker.json"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

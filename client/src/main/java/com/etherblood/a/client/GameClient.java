@@ -25,7 +25,7 @@ public class GameClient {
     private final AtomicReference<CompletableFuture<GameReplayService>> gameRequest = new AtomicReference<>(null);
 
     public GameClient(Function<String, JsonElement> assetLoader) {
-        client = new Client();
+        client = new Client(1024 * 1024, 1024 * 1024);
         NetworkUtil.init(client.getKryo());
         client.addListener(new Listener() {
             @Override

@@ -34,12 +34,10 @@ import com.etherblood.a.gui.particles.ColorModel;
 import com.etherblood.a.gui.particles.ColoredSphere;
 import com.etherblood.a.gui.particles.ColoredSphereVisualizer;
 import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.prettycards.CardPainterJME;
-import com.etherblood.a.gui.prettycards.CardVisualizer_Card;
-import com.etherblood.a.gui.prettycards.CardVisualizer_Minion;
-import com.etherblood.a.gui.prettycards.MinionModel;
+import com.etherblood.a.gui.prettycards.MyCardVisualizer;
+import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
@@ -56,9 +54,7 @@ import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.templates.DisplayCardTemplate;
-import com.etherblood.a.templates.DisplayMinionTemplate;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -78,11 +74,9 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 import org.slf4j.Logger;
@@ -98,8 +92,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private Board board;
     private final QueueEventListener events;
     private final Map<Integer, PlayerZones> playerZones = new HashMap<>();
-    private final Map<Integer, Card<CardModel>> visualCards = new HashMap<>();
-    private final Map<Integer, Card<MinionModel>> visualMinions = new HashMap<>();
+//    private final Map<Integer, Card<CardModel>> visualCards = new HashMap<>();
+    private final Map<Integer, Card<CardModel>> visualMinions = new HashMap<>();
     private final Map<BoardObject<?>, Integer> objectEntities = new HashMap<>();
     private final Map<Integer, ColoredConnectionArrow> arrows = new HashMap<>();
     private final int userControlledPlayer;
@@ -160,18 +154,32 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     break;
                 }
                 case "fireball": {
-                    ColoredSphere sphere = new ColoredSphere(new ColorModel());
-                    sphere.getModel().setColor(ColorRGBA.Red);
-                    sphere.resetTransformations();
-                    sphere.position().setCurrentValue(visualCards.get(particle.source).position().getCurrentValue());
-                    board.register(sphere);
-                    TargetedArcAnimation animation = new TargetedArcAnimation(sphere, visualMinions.get(particle.target), 1, 0.6f);
-                    board.playAnimation(animation);
-                    particleMap.put(animation, sphere);
+                    shootColorSphere(particle.source, particle.target, ColorRGBA.Red);
+                    break;
+                }
+                case "flesh_to_dust": {
+                    shootColorSphere(particle.source, particle.target, ColorRGBA.Black);
+                    break;
+                }
+                case "armadillo_cloak":
+                case "blessing_of_wisdom":
+                case "slagwurm_armor": {
+                    shootColorSphere(particle.source, particle.target, ColorRGBA.White);
                     break;
                 }
             }
         }
+    }
+
+    private void shootColorSphere(int source, int target, ColorRGBA color) {
+        ColoredSphere sphere = new ColoredSphere(new ColorModel());
+        sphere.getModel().setColor(color);
+        sphere.resetTransformations();
+        sphere.position().setCurrentValue(visualMinions.get(source).position().getCurrentValue());
+        board.register(sphere);
+        TargetedArcAnimation animation = new TargetedArcAnimation(sphere, visualMinions.get(target), 1, 0.6f);
+        board.playAnimation(animation);
+        particleMap.put(animation, sphere);
     }
 
     @Override
@@ -200,7 +208,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         stateManager.detach(stateManager.getState(BoardAppState.class));
 
         playerZones.clear();
-        visualCards.clear();
         visualMinions.clear();
         objectEntities.clear();
         arrows.clear();
@@ -330,136 +337,42 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 cardZone.removeCard(card);
                 board.unregister(card);
                 objectEntities.remove(card);
-                visualCards.remove(entity);
                 visualMinions.remove(entity);
             }
         }
         if (game.isGameOver()) {
             return;
         }
-        List<Move> moves = game.getMoves().generate(false, false);
-        int index = 0;
+        List<Move> moves = game.getMoves().generate(false, false, userControlledPlayer);
         for (int cardEntity : cards) {
-            if (data.has(cardEntity, core.CARD_TEMPLATE)) {
-                Card<CardModel> card = getOrCreateCard(cardEntity);
-                CardModel cardModel = card.getModel();
-                cardModel.setEntityId(cardEntity);
-                cardModel.setFaceUp(!data.has(cardEntity, core.IN_LIBRARY_ZONE));
-                cardModel.setTemplate((DisplayCardTemplate) game.getTemplates().getCard(data.get(cardEntity, core.CARD_TEMPLATE)));
-
-                if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
-                        .anyMatch(cast -> cast.player == userControlledPlayer && cast.source == cardEntity)) {
-                    card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
-                    cardModel.setGlow(ColorRGBA.Yellow);
-                } else if (moves.stream().filter(DeclareMulligan.class::isInstance).map(DeclareMulligan.class::cast)
-                        .anyMatch(mulligan -> mulligan.player == userControlledPlayer && mulligan.card == cardEntity)) {
-                    card.setInteractivity(mulliganInteractivity(userControlledPlayer, cardEntity));
-                    cardModel.setGlow(ColorRGBA.Red);
-                } else {
-                    card.clearInteractivity();
-                    cardModel.setGlow(null);
-                }
-                board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index)));
-            } else if (data.has(cardEntity, core.MINION_TEMPLATE)) {
-                EffectiveStatsService stats = new EffectiveStatsService(data);
-                Card<MinionModel> card = getOrCreateMinion(cardEntity);
-                MinionModel minionModel = card.getModel();
-                minionModel.setEntityId(cardEntity);
-                minionModel.setFaceUp(true);
-                minionModel.setFoil(data.has(cardEntity, core.HERO));
-                minionModel.setAttack(data.getOptional(cardEntity, core.ATTACK).orElse(0));
-                minionModel.setHealth(stats.health(cardEntity));
-                DisplayMinionTemplate template = (DisplayMinionTemplate) game.getTemplates().getMinion(data.get(cardEntity, core.MINION_TEMPLATE));
-                minionModel.setTemplate(template);
-                minionModel.setDamaged(minionModel.getHealth() < template.get(core.HEALTH));
-                Set<String> keywords = new HashSet<>();
-                if (data.has(cardEntity, core.TRAMPLE)) {
-                    keywords.add("Trample");
-                }
-                if (data.has(cardEntity, core.LIFELINK)) {
-                    keywords.add("Lifelink");
-                }
-                if (data.has(cardEntity, core.VIGILANCE)) {
-                    keywords.add("Vigilance");
-                }
-                if (data.has(cardEntity, core.FLYING)) {
-                    keywords.add("Flying");
-                }
-                if (data.has(cardEntity, core.REACH)) {
-                    keywords.add("Reach");
-                }
-                if (stats.venom(cardEntity) != 0) {
-                    keywords.add("Venom_" + stats.venom(cardEntity));
-                }
-                if (data.has(cardEntity, core.POISONED)) {
-                    keywords.add("Poisoned_" + data.get(cardEntity, core.POISONED));
-                }
-                if (data.has(cardEntity, core.MANA_POOL)) {
-                    keywords.add("Mana_Pool_" + data.get(cardEntity, core.MANA_POOL));
-                }
-                if (data.has(cardEntity, core.MANA_GROWTH)) {
-                    keywords.add("Mana_Growth_" + data.get(cardEntity, core.MANA_GROWTH));
-                }
-                if (data.has(cardEntity, core.DRAWS_PER_TURN)) {
-                    keywords.add("Draws_per_Turn_" + data.get(cardEntity, core.DRAWS_PER_TURN));
-                }
-                if (data.has(cardEntity, core.DRAWS_ON_ATTACK)) {
-                    keywords.add("Draws_on_Attack_" + data.get(cardEntity, core.DRAWS_ON_ATTACK));
-                }
-                if (data.has(cardEntity, core.GIVE_DRAWS_ON_ATTACK)) {
-                    keywords.add("Opponent_Draws_on_Attack_" + data.get(cardEntity, core.GIVE_DRAWS_ON_ATTACK));
-                }
-                if (data.has(cardEntity, core.DRAWS_ON_BLOCK)) {
-                    keywords.add("Draws_on_Block_" + data.get(cardEntity, core.DRAWS_ON_BLOCK));
-                }
-                if (data.has(cardEntity, core.CANNOT_ATTACK)) {
-                    keywords.add("Cannot_attack");
-                }
-                if (data.has(cardEntity, core.CANNOT_BLOCK)) {
-                    keywords.add("Cannot_block");
-                }
-                if (data.has(cardEntity, core.CANNOT_BE_BLOCKED)) {
-                    keywords.add("Cannot_be_blocked");
-                }
-                if (data.has(cardEntity, core.OWN_MINIONS_HASTE_AURA)) {
-                    keywords.add("Haste_Aura");
-                }
-                if (stats.isFastToAttack(cardEntity) && stats.isFastToDefend(cardEntity)) {
-                    keywords.add("Haste");
-                } else if (stats.isFastToAttack(cardEntity)) {
-                    keywords.add("Fast_Attacker");
-                } else if (stats.isFastToDefend(cardEntity)) {
-                    keywords.add("Fast_Blocker");
-                }
-                if (data.has(cardEntity, core.FATIGUE)) {
-                    keywords.add("Fatigue_" + data.get(cardEntity, core.FATIGUE));
-                }
-                if (data.has(cardEntity, core.OWN_MINIONS_HEALTH_AURA)) {
-                    keywords.add("Health_Aura_" + data.get(cardEntity, core.OWN_MINIONS_HEALTH_AURA));
-                }
-                if (data.has(cardEntity, core.OWN_MINIONS_VENOM_AURA)) {
-                    keywords.add("Venom_Aura_" + data.get(cardEntity, core.OWN_MINIONS_VENOM_AURA));
-                }
-                minionModel.setKeywords(keywords);
-
-                if (moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
-                        .anyMatch(attack -> attack.player == userControlledPlayer && attack.source == cardEntity)) {
-                    card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));
-                    minionModel.setGlow(ColorRGBA.Red);
-                } else if (moves.stream().filter(DeclareBlock.class::isInstance).map(DeclareBlock.class::cast)
-                        .anyMatch(block -> block.player == userControlledPlayer && block.source == cardEntity)) {
-                    card.setInteractivity(blockInteractivity(userControlledPlayer, cardEntity));
-                    minionModel.setGlow(ColorRGBA.Blue);
-                } else {
-                    card.clearInteractivity();
-                    minionModel.setGlow(null);
-                }
-                if (card.getZonePosition().getZone() != cardZone) {
-                    board.playAnimation(new SlamEntryAnimation(card, 0.3f));
-                }
-                board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index)));
+            Card<CardModel> card = getOrCreateMinion(cardEntity);
+            CardModel minionModel = card.getModel();
+            minionModel.updateFrom(data);
+            if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
+                    .anyMatch(cast -> cast.source == cardEntity)) {
+                card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(ColorRGBA.Yellow);
+            } else if (moves.stream().filter(DeclareMulligan.class::isInstance).map(DeclareMulligan.class::cast)
+                    .anyMatch(mulligan -> mulligan.card == cardEntity)) {
+                card.setInteractivity(mulliganInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(ColorRGBA.Red);
+            } else if (moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
+                    .anyMatch(attack -> attack.source == cardEntity)) {
+                card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(ColorRGBA.Red);
+            } else if (moves.stream().filter(DeclareBlock.class::isInstance).map(DeclareBlock.class::cast)
+                    .anyMatch(block -> block.source == cardEntity)) {
+                card.setInteractivity(blockInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(ColorRGBA.Blue);
+            } else {
+                card.clearInteractivity();
+                minionModel.setGlow(null);
             }
-            index++;
+            if (!cardZone.getCards().contains(card)) {
+                board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(cardZone.getCards().size())));
+            } else {
+                card.getZonePosition().setPosition(interval.mult(cardZone.getCards().indexOf(card)));
+            }
         }
     }
 
@@ -548,30 +461,17 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         };
     }
 
-    private Card<CardModel> getOrCreateCard(int myCard) {
-        Card<CardModel> card = visualCards.get(myCard);
+    private Card<CardModel> getOrCreateMinion(int myCard) {
+        Card<CardModel> card = visualMinions.get(myCard);
         if (card == null) {
-            Card<CardModel> inner = new Card<>(new CardModel());
-            card = inner;
-            visualCards.put(myCard, card);
-            objectEntities.put(card, myCard);
-
-            card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
-        }
-        return card;
-    }
-
-    private Card<MinionModel> getOrCreateMinion(int myCard) {
-        Card<MinionModel> card = visualMinions.get(myCard);
-        if (card == null) {
-            Card<MinionModel> inner = new Card<>(new MinionModel());
+            EntityData data = game.getData();
+            CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+            Card<CardModel> inner = new Card<>(new CardModel(myCard, (DisplayCardTemplate) game.getTemplates().getCard(data.get(myCard, core.CARD_TEMPLATE))));
             card = inner;
             visualMinions.put(myCard, card);
             objectEntities.put(card, myCard);
 
-            EntityData data = game.getData();
-            CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-            card.position().addRelativeTransformation(new HoveringTransformation(0.1f, 4), () -> data.has(myCard, core.FLYING));
+            card.position().addRelativeTransformation(new HoveringTransformation(0.1f, 4), () -> data.has(myCard, core.IN_BATTLE_ZONE) && data.has(myCard, core.FLYING));
             card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> data.has(myCard, core.TIRED));
             card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
         }
@@ -624,8 +524,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             }
         });
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
-        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new CardVisualizer_Card(cardPainterJME));
-        board.registerVisualizer(card -> card.getModel() instanceof MinionModel, new CardVisualizer_Minion(cardPainterJME));
+        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardPainterJME));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
                 .color(new ColorRGBA(1, 1, 1, 0.8f))
                 .width(0.5f)

@@ -16,6 +16,11 @@
                         "DRAWS_ON_BLOCK": 1,
                         "DRAWS_ON_ATTACK": 1
                     }
+                }, {
+                    "type": "particle",
+                    "alias": "blessing_of_wisdom"
+                }, {
+                    "type": "selfDiscard"
                 }
             ]
         }]

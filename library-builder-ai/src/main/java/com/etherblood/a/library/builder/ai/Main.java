@@ -57,7 +57,7 @@ public class Main {
         Map<String, Integer> cardPool = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> perCardLimit));
 
         RawLibraryTemplate startLibrary = new RawLibraryTemplate();
-        startLibrary.hero = "minions/shyvana.json";
+        startLibrary.hero = "cards/elderwood_ahri.json";
         startLibrary.cards = new HashMap<>();
 
         Paths.get("agents").toFile().mkdir();
