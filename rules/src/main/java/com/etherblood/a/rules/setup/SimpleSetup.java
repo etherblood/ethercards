@@ -31,13 +31,12 @@ public class SimpleSetup {
                 data.set(player, core.MANA, 1);
             }
 
-            int hero = SystemsUtil.createHero(data, game.getTemplates().getCard(heroes[i]), player);
+            int hero = SystemsUtil.createHero(data, game.getTemplates(), heroes[i], player);
             data.set(hero, core.SUMMONING_SICKNESS, 1);
 
             for (int cardTemplate : libraries[i]) {
-                int card = SystemsUtil.createCard(data, game.getTemplates().getCard(cardTemplate));
+                int card = SystemsUtil.createCard(data, cardTemplate, player);
                 data.set(card, core.IN_LIBRARY_ZONE, 1);
-                data.set(card, core.OWNED_BY, player);
             }
         }
     }

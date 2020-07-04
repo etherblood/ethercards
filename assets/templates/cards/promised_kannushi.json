@@ -1,0 +1,30 @@
+{
+  "alias": "cards/promised_kannushi.json",
+  "manaCost": 1,
+  "display": {
+    "name": "Promised Kannushi",
+    "imagePath": "images/cards/promised_kannushi.jpg",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 1
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 7
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "alias": "cards/forked_branch_garami.json",
+  "manaCost": 5,
+  "display": {
+    "name": "Forked-Branch Garami",
+    "imagePath": "images/cards/forked_branch_garami.jpg",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 4
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 4
+    },
+    {
+      "type": "soulshift",
+      "power": 4
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

@@ -3,6 +3,11 @@ package com.etherblood.a.entities;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import java.util.OptionalInt;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.LongStream;
+import java.util.stream.StreamSupport;
 
 /**
  *
@@ -72,6 +77,21 @@ public class SimpleEntityData implements EntityData {
         if (list.size() > 1) {
             list.sort();
         }
+        return list;
+    }
+
+    @Override
+    public IntList listInValueOrder(int component) {
+        IntMap componentMaps = component(component);
+        if (componentMaps.isEmpty()) {
+            return new IntList(0);
+        }
+
+        PrimitiveIterator.OfLong packedKeyValueIterator = componentMaps.packedKeyValueIterator();
+        Spliterator.OfLong spliterator = Spliterators.spliterator(packedKeyValueIterator, componentMaps.size(), Spliterator.NONNULL);
+        LongStream stream = StreamSupport.longStream(spliterator, false);
+        IntList list = new IntList();
+        stream.sorted().mapToInt(x -> (int) x).forEachOrdered(list::add);
         return list;
     }
 

@@ -19,7 +19,7 @@ import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
-import com.etherblood.a.rules.templates.CardCast;
+import com.etherblood.a.rules.updates.BattleZoneService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.RawLibraryTemplate;
@@ -68,10 +68,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         cardOrder = cardOrder.thenComparingInt(x -> x.getTemplate().getId());
 
         EntityData data = new SimpleEntityData(components);
-        
+
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
-            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card), card);
+            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card.getId(), 0), card);
             cardModel.updateFrom(data);
             allCardModels.add(cardModel);
         }
@@ -141,15 +141,11 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     }
 
     private int getManaCost(CardModel card) {
-        CardCast attackPhaseCast = card.getTemplate().getAttackPhaseCast();
-        CardCast blockPhaseCast = card.getTemplate().getBlockPhaseCast();
-        if (attackPhaseCast != null) {
-            if (blockPhaseCast != null) {
-                return Math.min(attackPhaseCast.getManaCost(), blockPhaseCast.getManaCost());
-            }
-            return attackPhaseCast.getManaCost();
+        Integer manaCost = card.getTemplate().getManaCost();
+        if (manaCost == null) {
+            return 0;
         }
-        return blockPhaseCast.getManaCost();
+        return manaCost;
     }
 
     @Override

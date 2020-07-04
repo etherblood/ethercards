@@ -29,5 +29,7 @@ public interface EntityData {
 
     IntList list(int component);
     
+    IntList listInValueOrder(int component);
+    
     Components getComponents();
 }

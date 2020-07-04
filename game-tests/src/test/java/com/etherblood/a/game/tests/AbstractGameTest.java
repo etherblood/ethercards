@@ -13,7 +13,6 @@ import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.setup.SimpleSetup;
-import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.RawLibraryTemplate;
 import com.etherblood.a.templates.TemplatesLoader;
@@ -112,9 +111,7 @@ public abstract class AbstractGameTest {
     }
 
     public int createLibraryCard(int owner, int cardTemplate) {
-        CardTemplate template = game.getTemplates().getCard(cardTemplate);
-        int card = SystemsUtil.createCard(data, template);
-        data.set(card, core.OWNED_BY, owner);
+        int card = SystemsUtil.createCard(data, cardTemplate, owner);
         data.set(card, core.IN_LIBRARY_ZONE, 1);
         return card;
     }
@@ -124,9 +121,7 @@ public abstract class AbstractGameTest {
     }
 
     public int createHandCard(int owner, int cardTemplate) {
-        CardTemplate template = game.getTemplates().getCard(cardTemplate);
-        int card = SystemsUtil.createCard(data, template);
-        data.set(card, core.OWNED_BY, owner);
+        int card = SystemsUtil.createCard(data, cardTemplate, owner);
         data.set(card, core.IN_HAND_ZONE, 1);
         return card;
     }
@@ -136,7 +131,7 @@ public abstract class AbstractGameTest {
     }
 
     public int createMinion(int owner, int minionTemplate) {
-        return SystemsUtil.createMinion(data, game.getTemplates().getCard(minionTemplate), owner);
+        return SystemsUtil.createMinion(data, game.getTemplates(), minionTemplate, owner);
     }
 
     public int getCardId(String alias) {

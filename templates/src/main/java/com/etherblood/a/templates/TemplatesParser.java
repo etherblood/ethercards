@@ -18,6 +18,7 @@ import com.etherblood.a.rules.templates.effects.SummonEffect;
 import com.etherblood.a.rules.templates.effects.LathlissTokenEffect;
 import com.etherblood.a.rules.templates.effects.SelfDiscardEffect;
 import com.etherblood.a.rules.templates.effects.SelfSummonEffect;
+import com.etherblood.a.rules.templates.effects.SoulshiftEffect;
 import com.etherblood.a.rules.templates.effects.TakeControlEffect;
 import com.etherblood.a.rules.templates.effects.targeting.TargetFilters;
 import com.etherblood.a.rules.templates.effects.targeting.TargetedEffects;
@@ -55,6 +56,7 @@ public class TemplatesParser {
         effectClasses.put("particle", ParticleEventEffect.class);
         effectClasses.put("drawTemplate", DrawCardTemplateEffect.class);
         effectClasses.put("takeControl", TakeControlEffect.class);
+        effectClasses.put("soulshift", SoulshiftEffect.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
@@ -126,7 +128,10 @@ public class TemplatesParser {
             for (JsonElement castElement : casts) {
                 JsonObject castJson = castElement.getAsJsonObject();
                 CardCastBuilder cast = builder.newCast();
-                cast.setManaCost(castJson.getAsJsonPrimitive("manaCost").getAsInt());
+                JsonPrimitive manaCost = castJson.getAsJsonPrimitive("manaCost");
+                if (manaCost != null) {
+                    builder.setManaCost(manaCost.getAsInt());
+                }
                 if (castJson.has("targets")) {
                     cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
                 }
@@ -141,6 +146,10 @@ public class TemplatesParser {
                     cast.setBlockCast(castJson.get("blockCast").getAsBoolean());
                 }
             }
+        }
+        JsonElement manaCost = cardJson.get("manaCost");
+        if (manaCost != null) {
+            builder.setManaCost(manaCost.getAsInt());
         }
         JsonArray tribes = cardJson.getAsJsonArray("tribes");
         if (tribes != null) {

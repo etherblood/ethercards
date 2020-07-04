@@ -43,7 +43,7 @@ public class TargetUtil {
         IntList availableTargets = new IntList();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int sourceOwner = data.get(source, core.OWNED_BY);
-        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+        for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (data.has(minion, core.DEATH_REQUEST)) {
                 continue;
             }

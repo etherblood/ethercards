@@ -14,7 +14,7 @@ public class EffectiveStatsService {
     }
 
     public void killHealthless() {
-        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+        for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (health(minion) <= 0) {
                 data.set(minion, core.DEATH_REQUEST, 1);
             }

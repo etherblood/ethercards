@@ -110,6 +110,7 @@ public class GameApplication extends SimpleApplication {
         cardImages = new CardImages(assetManager);
 
         getInputManager().addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
+        getInputManager().addMapping("f1", new KeyTrigger(KeyInput.KEY_F1));
         startDeckbuilder();
     }
 

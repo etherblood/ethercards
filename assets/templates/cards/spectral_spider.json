@@ -7,9 +7,22 @@
       "BLACK"
     ]
   },
+  "casts": [
+    {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
   "components": {
     "ATTACK": 1,
     "HEALTH": 1,
     "REACH": true
-  }
+  },
+  "tribes": [
+    "SPIRIT"
+  ]
 }

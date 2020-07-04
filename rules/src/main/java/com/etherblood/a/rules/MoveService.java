@@ -522,7 +522,7 @@ public class MoveService {
             }
             return false;
         }
-        if (cast.getManaCost() > data.getOptional(player, core.MANA).orElse(0)) {
+        if (template.getManaCost() != null && template.getManaCost() > data.getOptional(player, core.MANA).orElse(0)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, castable #" + castable + ", player #" + player + " does not have enough mana.");
             }

@@ -1,0 +1,33 @@
+{
+  "alias": "cards/thousand_legged_kami.json",
+  "manaCost": 7,
+  "display": {
+    "name": "Thousand-legged Kami",
+    "imagePath": "images/cards/thousand_legged_kami.jpg",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "components": {
+    "ATTACK": 6,
+    "HEALTH": 6
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 6
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

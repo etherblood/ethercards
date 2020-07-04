@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class CardTemplateBuilder {
 
+    protected Integer manaCost;
     protected final List<CardCastBuilder> casts = new ArrayList<>();
     protected final IntMap components = new IntMap();
     protected final Set<Tribe> tribes = EnumSet.noneOf(Tribe.class);
@@ -23,6 +24,10 @@ public class CardTemplateBuilder {
         CardCastBuilder cast = new CardCastBuilder();
         casts.add(cast);
         return cast;
+    }
+
+    public void setManaCost(Integer manaCost) {
+        this.manaCost = manaCost;
     }
 
     public void withTribe(Tribe tribe) {
@@ -62,7 +67,7 @@ public class CardTemplateBuilder {
     }
 
     public CardTemplate build(int id) {
-        return new CardTemplate(id, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
+        return new CardTemplate(id, manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
     }
 
 }

@@ -53,8 +53,8 @@ public class CastSystem implements ActionSystem {
             } else {
                 cast = template.getBlockPhaseCast();
             }
-            int manaCost = cast.getManaCost();
-            if (manaCost != 0) {
+            Integer manaCost = template.getManaCost();
+            if (manaCost != null && manaCost != 0) {
                 int mana = data.get(owner, core.MANA);
                 mana -= manaCost;
                 if (mana < 0) {
@@ -62,7 +62,7 @@ public class CastSystem implements ActionSystem {
                 }
                 data.set(owner, core.MANA, mana);
             }
-            for (int other : data.list(core.IN_BATTLE_ZONE)) {
+            for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
                 int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
                 CardTemplate otherTemplate = templates.getCard(otherTemplateId);
                 for (Effect effect : otherTemplate.getOnCastEffects()) {
@@ -74,9 +74,6 @@ public class CastSystem implements ActionSystem {
             }
 
             data.remove(castSource, core.CAST_TARGET);
-//            data.remove(castSource, core.IN_HAND_ZONE);
-//            data.remove(castSource, core.CARD_TEMPLATE);
-//            data.remove(castSource, core.OWNED_BY);
         }
     }
 }

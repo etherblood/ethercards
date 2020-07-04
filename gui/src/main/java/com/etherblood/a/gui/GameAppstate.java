@@ -42,6 +42,7 @@ import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.moves.DeclareBlock;
@@ -55,6 +56,8 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.templates.DisplayCardTemplate;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -122,7 +125,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
 
-        app.getInputManager().addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
         app.getInputManager().addListener(this, "space");
     }
 
@@ -201,10 +203,12 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
         ButtonAppstate buttonAppstate = stateManager.getState(ButtonAppstate.class);
         buttonAppstate.registerButton(endPhaseButton, () -> onAction("space", true, 0), ColorRGBA.Gray, ColorRGBA.LightGray, ColorRGBA.White);
+        stateManager.getApplication().getInputManager().addListener(this, "space", "f1");
     }
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
+        stateManager.getApplication().getInputManager().removeListener(this);
         stateManager.detach(stateManager.getState(BoardAppState.class));
 
         playerZones.clear();
@@ -272,7 +276,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         }
 
         IntList handCards = data.list(core.IN_HAND_ZONE);
-        IntList battleCards = data.list(core.IN_BATTLE_ZONE);
+        IntList battleCards = data.listInValueOrder(core.IN_BATTLE_ZONE);
         IntList libraryCards = data.list(core.IN_LIBRARY_ZONE);
         for (int player : players) {
             PlayerZones zones = playerZones.get(player);
@@ -344,6 +348,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             return;
         }
         List<Move> moves = game.getMoves().generate(false, false, userControlledPlayer);
+        int index = 0;
         for (int cardEntity : cards) {
             Card<CardModel> card = getOrCreateMinion(cardEntity);
             CardModel minionModel = card.getModel();
@@ -368,11 +373,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 card.clearInteractivity();
                 minionModel.setGlow(null);
             }
-            if (!cardZone.getCards().contains(card)) {
-                board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(cardZone.getCards().size())));
-            } else {
-                card.getZonePosition().setPosition(interval.mult(cardZone.getCards().indexOf(card)));
-            }
+            board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index++)));
         }
     }
 
@@ -616,6 +617,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                         break;
                 }
             });
+        } else if ("f1".equals(name) && isPressed) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            System.out.println(gson.toJson(EntityUtil.toMap(game.getData())));
         }
     }
 

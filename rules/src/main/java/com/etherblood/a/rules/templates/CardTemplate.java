@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.PrimitiveIterator;
 import java.util.Set;
 
 public class CardTemplate {
 
     private final int id;
+    private final Integer manaCost;
     private final CardCast[] casts;
     protected final IntMap components;
     protected final Set<Tribe> tribes;
@@ -24,8 +23,9 @@ public class CardTemplate {
     protected final List<Effect> onSelfUpkeepEffects;
     protected final List<Effect> afterSelfBattleEffects;
 
-    protected CardTemplate(int id, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
+    protected CardTemplate(int id, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
         this.id = id;
+        this.manaCost = manaCost;
         this.casts = casts;
         this.tribes = Collections.unmodifiableSet(EnumSet.copyOf(tribes));
         this.onCastEffects = Collections.unmodifiableList(new ArrayList<>(onCastEffects));
@@ -42,6 +42,10 @@ public class CardTemplate {
 
     public int getId() {
         return id;
+    }
+
+    public Integer getManaCost() {
+        return manaCost;
     }
 
     public CardCast getAttackPhaseCast() {

@@ -1,5 +1,6 @@
 package com.etherblood.a.gui.prettycards;
 
+import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.templates.CardColor;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import java.awt.AlphaComposite;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class CardPainterAWT {
 
@@ -68,12 +70,7 @@ public class CardPainterAWT {
         }
 //        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 314, 7, 73, 73, null);
         front.setFont(FONTSTATS);
-        Integer manaCost = null;
-        if (template.getAttackPhaseCast() != null) {
-            manaCost = template.getAttackPhaseCast().getManaCost();
-        } else if (template.getBlockPhaseCast() != null) {
-            manaCost = template.getBlockPhaseCast().getManaCost();
-        }
+        Integer manaCost = template.getManaCost();
         if (manaCost != null) {
             drawCardCostManaAmount(front, manaCost, (width - textStartX + 20), (46 + 15), FONTSTATS);
         }
@@ -127,17 +124,19 @@ public class CardPainterAWT {
             tmpY += 18;
         }
 //        drawStats(graphics, cardModel);
-//            List<String> tribes = cardModel.getTribes();
-//            if (tribes.size() > 0) {
-//                String tribesText = "";
-//                for (int i = 0; i < tribes.size(); i++) {
-//                    if (i != 0) {
-//                        tribesText += ", ";
-//                    }
-//                    tribesText += tribes.get(i);
-//                }
-        front.setFont(FONTTRIBES);
-        front.setColor(Color.BLACK);
+        Set<Tribe> tribes = cardModel.getTemplate().getTribes();
+        if (!tribes.isEmpty()) {
+            String tribesText = "";
+            for (Tribe tribe : tribes) {
+                if (!tribesText.isEmpty()) {
+                    tribesText += ", ";
+                }
+                tribesText += tribe;
+            }
+            front.setFont(FONTTRIBES);
+            front.setColor(Color.BLACK);
+            front.drawString(tribesText, textStartX, 334);
+        }
 //        graphics.drawString(template.getAttackPhaseCast() != null ? "Sorcery" : "Instant", textStartX, 334);
 //            }
 //        } else {
@@ -220,19 +219,19 @@ public class CardPainterAWT {
             tmpY += 18;
         }
         drawStats(front, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
-//            List<String> tribes = cardModel.getTribes();
-//            if (tribes.size() > 0) {
-//                String tribesText = "";
-//                for (int i = 0; i < tribes.size(); i++) {
-//                    if (i != 0) {
-//                        tribesText += ", ";
-//                    }
-//                    tribesText += tribes.get(i);
-//                }
-//                graphics.setFont(fontTribes);
-//                graphics.setColor(Color.BLACK);
-//                graphics.drawString(tribesText, textStartX, 334);
-//            }
+        Set<Tribe> tribes = cardModel.getTemplate().getTribes();
+        if (!tribes.isEmpty()) {
+            String tribesText = "";
+            for (Tribe tribe : tribes) {
+                if (!tribesText.isEmpty()) {
+                    tribesText += ", ";
+                }
+                tribesText += tribe;
+            }
+            front.setFont(FONTTRIBES);
+            front.setColor(Color.BLACK);
+            front.drawString(tribesText, textStartX, 334);
+        }
 //        } else {
 //            graphics.drawImage(CardImages.getCachedImage("images/cardback.png"), 0, 0, width, height, null);
 //        }

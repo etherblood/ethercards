@@ -226,43 +226,6 @@ public class IntMap implements Iterable<Integer> {
         Arrays.fill(data, FREE_KEYVALUE);
     }
 
-    IntKeyValueIterator keyValueIterator() {
-        return new IntKeyValueIterator() {
-            boolean useFreeKey = hasFreeKey;
-            private int i = -1;
-            private int key, value;
-
-            @Override
-            public boolean next() {
-                if (useFreeKey) {
-                    key = FREE_KEY;
-                    value = freeValue;
-                    useFreeKey = false;
-                    return true;
-                }
-                while (++i < data.length) {
-                    long keyValue = data[i];
-                    if (keyValue != FREE_KEYVALUE) {
-                        key = IntMap.key(keyValue);
-                        value = IntMap.value(keyValue);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public int key() {
-                return key;
-            }
-
-            @Override
-            public int value() {
-                return value;
-            }
-        };
-    }
-
     private static int key(long keyValue) {
         return (int) keyValue;
     }
@@ -307,6 +270,43 @@ public class IntMap implements Iterable<Integer> {
         return size() == 0;
     }
 
+    IntKeyValueIterator keyValueIterator() {
+        return new IntKeyValueIterator() {
+            boolean useFreeKey = hasFreeKey;
+            private int i = -1;
+            private int key, value;
+
+            @Override
+            public boolean next() {
+                if (useFreeKey) {
+                    key = FREE_KEY;
+                    value = freeValue;
+                    useFreeKey = false;
+                    return true;
+                }
+                while (++i < data.length) {
+                    long keyValue = data[i];
+                    if (keyValue != FREE_KEYVALUE) {
+                        key = IntMap.key(keyValue);
+                        value = IntMap.value(keyValue);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public int key() {
+                return key;
+            }
+
+            @Override
+            public int value() {
+                return value;
+            }
+        };
+    }
+
     @Override
     public PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
@@ -338,6 +338,32 @@ public class IntMap implements Iterable<Integer> {
                 } else {
                     nextKey = null;
                 }
+            }
+        };
+    }
+
+    public PrimitiveIterator.OfLong packedKeyValueIterator() {
+        return new PrimitiveIterator.OfLong() {
+            int remaining = count;
+            int index = -1;
+
+            @Override
+            public long nextLong() {
+                assert remaining > 0;
+                remaining--;
+                if (hasFreeKey) {
+                    return dataValue(freeValue) | dataKey(FREE_KEY);
+                }
+                long keyValue;
+                do {
+                    index++;
+                } while ((keyValue = data[index]) == FREE_KEYVALUE);
+                return keyValue;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return remaining != 0;
             }
         };
     }

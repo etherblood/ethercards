@@ -107,19 +107,17 @@ public class SystemsUtil {
         increase(data, target, core.DAMAGE_REQUEST, damage);
     }
 
-    public static int createCard(EntityData data, CardTemplate template) {
+    public static int createCard(EntityData data, int templateId, int owner) {
         int card = data.createEntity();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        data.set(card, core.CARD_TEMPLATE, template.getId());
-        for (int component : template.components()) {
-            data.set(card, component, template.get(component));
-        }
+        data.set(card, core.CARD_TEMPLATE, templateId);
+        data.set(card, core.OWNED_BY, owner);
         return card;
     }
 
-    public static int createHero(EntityData data, CardTemplate template, int owner) {
+    public static int createHero(EntityData data, GameTemplates templates, int templateId, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int hero = createMinion(data, template, owner);
+        int hero = createMinion(data, templates, templateId, owner);
         data.set(hero, core.HERO, 1);
         //TODO: mana growth & draws should be somehow added to the player, not their hero
         SystemsUtil.increase(data, hero, core.MANA_GROWTH, 1);
@@ -129,9 +127,9 @@ public class SystemsUtil {
 
     public static int summonMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int minionTemplate, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int minion = createMinion(data, templates.getCard(minionTemplate), owner);
+        int minion = createMinion(data, templates, minionTemplate, owner);
         data.set(minion, core.SUMMONING_SICKNESS, 1);
-        for (int other : data.list(core.IN_BATTLE_ZONE)) {
+        for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (minion == other) {
                 continue;
             }
@@ -144,11 +142,9 @@ public class SystemsUtil {
         return minion;
     }
 
-    public static int createMinion(EntityData data, CardTemplate template, int owner) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int minion = createCard(data, template);
-        data.set(minion, core.OWNED_BY, owner);
-        data.set(minion, core.IN_BATTLE_ZONE, 1);
+    public static int createMinion(EntityData data, GameTemplates templates, int templateId, int owner) {
+        int minion = createCard(data, templateId, owner);
+        new BattleZoneService(data, templates).addToBattle(minion);
         return minion;
     }
 

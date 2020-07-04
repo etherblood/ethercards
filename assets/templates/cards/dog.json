@@ -10,5 +10,14 @@
   "components": {
     "ATTACK": 1,
     "HEALTH": 1
-  }
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ]
 }

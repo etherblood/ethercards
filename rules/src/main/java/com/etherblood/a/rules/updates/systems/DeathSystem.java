@@ -1,6 +1,5 @@
 package com.etherblood.a.rules.updates.systems;
 
-import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.DeathEvent;
@@ -10,6 +9,7 @@ import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
+import com.etherblood.a.rules.updates.BattleZoneService;
 import com.etherblood.a.rules.updates.Modifier;
 import com.etherblood.a.rules.updates.Trigger;
 import java.util.function.IntUnaryOperator;
@@ -18,12 +18,14 @@ public class DeathSystem implements ActionSystem {
 
     private final EntityData data;
     private final CoreComponents core;
+    private final GameTemplates templates;
     private final Modifier[] modifiers;
     private final Trigger[] triggers;
 
     public DeathSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
         this.core = data.getComponents().getModule(CoreComponents.class);
+        this.templates = templates;
         this.modifiers = new Modifier[]{
             (entity, value) -> data.has(entity, core.IN_BATTLE_ZONE) ? value : 0
         };
@@ -83,13 +85,8 @@ public class DeathSystem implements ActionSystem {
                 trigger.trigger(entity, death);
             }
             data.remove(entity, core.DEATH_ACTION);
-            clearMinionEntity(entity);
-        }
-    }
-
-    private void clearMinionEntity(int entity) {
-        for (ComponentMeta meta : data.getComponents().getMetas()) {
-            data.remove(entity, meta.id);
+            new BattleZoneService(data, templates).removedFromBattle(entity);
+            data.set(entity, core.IN_GRAVEYARD_ZONE, 1);
         }
     }
 }

@@ -8,13 +8,8 @@ import java.util.List;
 public class CardCastBuilder {
 
     private boolean attackCast = true, blockCast = true;
-    private int manaCost;
     private TargetFilters[] targets;
     private final List<Effect> effects = new ArrayList<>();
-
-    public void setManaCost(int manaCost) {
-        this.manaCost = manaCost;
-    }
 
     public void setTargets(TargetFilters[] targets) {
         this.targets = targets;
@@ -36,7 +31,7 @@ public class CardCastBuilder {
         if (effects.isEmpty()) {
             return null;
         }
-        return new CardCast(manaCost, targets, effects, attackCast, blockCast);
+        return new CardCast(targets, effects, attackCast, blockCast);
     }
 
 }

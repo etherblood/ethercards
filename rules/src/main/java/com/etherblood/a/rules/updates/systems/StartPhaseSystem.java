@@ -53,7 +53,7 @@ public class StartPhaseSystem implements ActionSystem {
     private void startAttackPhase(int player) {
         int mana = 0;
         int draws = data.getOptional(player, core.DRAW_CARDS_REQUEST).orElse(0);
-        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+        for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (!data.hasValue(minion, core.OWNED_BY, player)) {
                 continue;
             }
@@ -75,7 +75,7 @@ public class StartPhaseSystem implements ActionSystem {
 
         draws = Math.max(draws, 0);
         data.set(player, core.DRAW_CARDS_REQUEST, draws);
-        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+        for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (!data.hasValue(minion, core.OWNED_BY, player)) {
                 continue;
             }

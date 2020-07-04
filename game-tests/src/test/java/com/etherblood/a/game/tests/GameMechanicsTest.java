@@ -1,7 +1,6 @@
 package com.etherblood.a.game.tests;
 
 import com.etherblood.a.rules.moves.DeclareBlock;
-import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
 import com.etherblood.a.rules.moves.EndAttackPhase;
 import com.etherblood.a.rules.moves.EndBlockPhase;

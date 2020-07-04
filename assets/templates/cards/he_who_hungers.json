@@ -1,0 +1,34 @@
+{
+  "alias": "cards/he_who_hungers.json",
+  "manaCost": 3,
+  "display": {
+    "name": "He Who Hungers",
+    "imagePath": "images/cards/he_who_hungers.jpg",
+    "colors": [
+      "BLACK"
+    ]
+  },
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 2,
+    "FLYING": true
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 2
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

@@ -15,8 +15,8 @@ public class DisplayCardTemplate extends CardTemplate {
     private final String alias, name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayCardTemplate(int templateId, CardCast[] casts, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
-        super(templateId, casts, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
+    public DisplayCardTemplate(int templateId, Integer manaCost, CardCast[] casts, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
+        super(templateId, manaCost, casts, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
         this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;
