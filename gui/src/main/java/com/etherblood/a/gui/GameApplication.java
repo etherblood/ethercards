@@ -90,6 +90,8 @@ public class GameApplication extends SimpleApplication {
             presetLibrary = new RawLibraryTemplate();
             presetLibrary.hero = "cards/elderwood_ahri.json";
             presetLibrary.cards = new HashMap<>();
+        } else if (presetLibrary.hero.startsWith("minions")) {
+            presetLibrary.hero = "cards/elderwood_ahri.json";
         }
         deckBuilderAppstate = new MyDeckBuilderAppstate(cards, cardImages, rootNode, presetLibrary, components);
         stateManager.attach(deckBuilderAppstate);
