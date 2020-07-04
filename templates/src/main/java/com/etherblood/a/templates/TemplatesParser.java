@@ -8,6 +8,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.effects.BuffEffect;
+import com.etherblood.a.rules.templates.effects.CardDestructionEffect;
 import com.etherblood.a.rules.templates.effects.CreateCardEffect;
 import com.etherblood.a.rules.templates.effects.DebuffEffect;
 import com.etherblood.a.rules.templates.effects.DrawCardTemplateEffect;
@@ -57,6 +58,7 @@ public class TemplatesParser {
         effectClasses.put("drawTemplate", DrawCardTemplateEffect.class);
         effectClasses.put("takeControl", TakeControlEffect.class);
         effectClasses.put("soulshift", SoulshiftEffect.class);
+        effectClasses.put("cardDestruction", CardDestructionEffect.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }

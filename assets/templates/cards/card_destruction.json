@@ -1,0 +1,19 @@
+{
+    "alias": "cards/card_destruction.json",
+    "display": {
+        "name": "Card Destruction",
+        "imagePath": "images/cards/card_destruction.jpg",
+        "colors": ["BLACK", "BLUE"],
+        "description": "Both players discard as many cards as possible from their hands, then each player draws the same number of cards they discarded."
+    },
+    "manaCost": 3,
+    "casts": [{
+            "effects": [
+                {
+                    "type": "selfDiscard"
+                }, {
+                    "type": "cardDestruction"
+                }
+            ]
+        }]
+}
