@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dragonlord_silumgar.json",
+  "alias": "dragonlord_silumgar",
   "display": {
     "name": "Dragonlord Silumgar",
-    "imagePath": "images/cards/dragonlord_silumgar.jpg",
+    "imagePath": "dragonlord_silumgar.jpg",
     "colors": [
       "BLUE",
       "BLACK"

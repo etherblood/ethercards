@@ -1,8 +1,8 @@
 {
-  "alias": "cards/ysera.json",
+  "alias": "ysera",
   "display": {
     "name": "Ysera",
-    "imagePath": "images/cards/ysera.jpg",
+    "imagePath": "ysera.jpg",
     "colors": [
       "BLUE"
     ]

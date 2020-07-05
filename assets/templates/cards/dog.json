@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dog.json",
+  "alias": "dog",
   "display": {
     "name": "Dog",
-    "imagePath": "images/cards/omfgdogs.gif",
+    "imagePath": "omfgdogs.gif",
     "colors": [
       "WHITE"
     ]

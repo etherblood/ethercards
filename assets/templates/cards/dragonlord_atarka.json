@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dragonlord_atarka.json",
+  "alias": "dragonlord_atarka",
   "display": {
     "name": "Dragonlord Atarka",
-    "imagePath": "images/cards/dragonlord_atarka.jpg",
+    "imagePath": "dragonlord_atarka.jpg",
     "colors": [
       "RED",
       "GREEN"

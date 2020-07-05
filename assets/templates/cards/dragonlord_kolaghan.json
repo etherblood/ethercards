@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dragonlord_kolaghan.json",
+  "alias": "dragonlord_kolaghan",
   "display": {
     "name": "Dragonlord Kolaghan",
-    "imagePath": "images/cards/dragonlord_kolaghan.jpg",
+    "imagePath": "dragonlord_kolaghan.jpg",
     "colors": [
       "BLACK",
       "RED"

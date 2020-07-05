@@ -9,7 +9,7 @@ public class GrimPatronTest extends AbstractGameTest {
 
     @Test
     public void grimPatron_onSurvive() {
-        int patron = createMinion(player(0), "cards/grim_patron.json");
+        int patron = createMinion(player(0), "grim_patron");
         int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
 
         data.set(patron, core.DAMAGE_REQUEST, 1);
@@ -21,7 +21,7 @@ public class GrimPatronTest extends AbstractGameTest {
 
     @Test
     public void grimPatron_death_onSurvive_not_triggered() {
-        int patron = createMinion(player(0), "cards/grim_patron.json");
+        int patron = createMinion(player(0), "grim_patron");
         int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
 
         data.set(patron, core.DAMAGE_REQUEST, 3);

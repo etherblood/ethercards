@@ -52,7 +52,7 @@ public class GameApplication extends SimpleApplication {
     }
 
     private void requestGame() {
-        Function<String, JsonElement> assetLoader = x -> load("templates/" + x, JsonElement.class);
+        Function<String, JsonElement> assetLoader = x -> load("templates/cards/" + x + ".json", JsonElement.class);
 
         client = new GameClient(assetLoader);
         try {
@@ -75,7 +75,7 @@ public class GameApplication extends SimpleApplication {
         componentsBuilder.registerModule(CoreComponents::new);
         Components components = componentsBuilder.build();
 
-        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/" + x, JsonElement.class), new TemplatesParser(components));
+        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/cards/" + x + ".json", JsonElement.class), new TemplatesParser(components));
         String[] cardAliases = load("templates/card_pool.json", String[].class);
         Map<String, Integer> cardAliasToId = new LinkedHashMap<>();
         for (String card : cardAliases) {
@@ -88,13 +88,27 @@ public class GameApplication extends SimpleApplication {
         RawLibraryTemplate presetLibrary = LibraryIO.load("library.json");
         if (presetLibrary == null) {
             presetLibrary = new RawLibraryTemplate();
-            presetLibrary.hero = "cards/elderwood_ahri.json";
+            presetLibrary.hero = "elderwood_ahri";
             presetLibrary.cards = new HashMap<>();
-        } else if (presetLibrary.hero.startsWith("minions")) {
-            presetLibrary.hero = "cards/elderwood_ahri.json";
+        } else {
+            presetLibrary.hero = cleanAlias("elderwood_ahri");
+            presetLibrary.cards = presetLibrary.cards.entrySet().stream().collect(Collectors.toMap(x -> cleanAlias(x.getKey()), x -> x.getValue()));
         }
         deckBuilderAppstate = new MyDeckBuilderAppstate(cards, cardImages, rootNode, presetLibrary, components);
         stateManager.attach(deckBuilderAppstate);
+    }
+
+    private static String cleanAlias(String alias) {
+        if (alias.endsWith(".json")) {
+            alias = alias.substring(0, alias.length() - ".json".length());
+        }
+        if (alias.startsWith("minions/")) {
+            alias = alias.substring("minions/".length());
+        }
+        if (alias.startsWith("cards/")) {
+            alias = alias.substring("cards/".length());
+        }
+        return alias;
     }
 
     @Override

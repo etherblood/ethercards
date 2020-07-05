@@ -18,19 +18,13 @@ import com.etherblood.a.templates.RawLibraryTemplate;
 import com.etherblood.a.templates.TemplatesLoader;
 import com.etherblood.a.templates.TemplatesParser;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.function.Function;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractGameTest {
 
-    private static final String DEFAULT_HERO = "cards/lots_of_health.json";
+    private static final String DEFAULT_HERO = "lots_of_health";
     private final TemplatesLoader loader;
     public final GameSettings settings;
     public final CoreComponents core;
@@ -40,20 +34,12 @@ public abstract class AbstractGameTest {
     public Game game;
 
     public AbstractGameTest() {
-        Function<String, JsonElement> assetLoader = x -> {
-            try ( Reader reader = Files.newBufferedReader(Paths.get("../assets/templates/" + x))) {
-                return new Gson().fromJson(reader, JsonElement.class);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        };
-
         GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components));
-        String[] cardPool = new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class);
+        loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components));
+        String[] cardPool = new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class);
         for (String card : cardPool) {
             loader.registerCardAlias(card);
         }

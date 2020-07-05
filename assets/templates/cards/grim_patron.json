@@ -1,8 +1,8 @@
 {
-  "alias": "cards/grim_patron.json",
+  "alias": "grim_patron",
   "display": {
     "name": "Grim Patron",
-    "imagePath": "images/cards/Grim_Patron_art.jpg",
+    "imagePath": "Grim_Patron_art.jpg",
     "colors": [
       "RED"
     ],
@@ -25,7 +25,7 @@
   "onSurvive": [
     {
       "type": "summon",
-      "minionId": "cards/grim_patron.json"
+      "minionId": "grim_patron"
     }
   ]
 }

@@ -1,9 +1,9 @@
 {
-  "alias": "cards/promised_kannushi.json",
+  "alias": "promised_kannushi",
   "manaCost": 1,
   "display": {
     "name": "Promised Kannushi",
-    "imagePath": "images/cards/promised_kannushi.jpg",
+    "imagePath": "promised_kannushi.jpg",
     "colors": [
       "GREEN"
     ]

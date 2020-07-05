@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dragon_token.json",
+  "alias": "dragon_token",
   "display": {
     "name": "Dragon",
-    "imagePath": "images/cards/dragon_token.png",
+    "imagePath": "dragon_token.png",
     "colors": [
       "RED"
     ]

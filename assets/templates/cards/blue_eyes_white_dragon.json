@@ -1,8 +1,8 @@
 {
-  "alias": "cards/blue_eyes_white_dragon.json",
+  "alias": "blue_eyes_white_dragon",
   "display": {
     "name": "Blue-Eyes White Dragon",
-    "imagePath": "images/cards/blue_eyes_white_dragon.jpg",
+    "imagePath": "blue_eyes_white_dragon.jpg",
     "colors": [
       "BLUE"
     ]

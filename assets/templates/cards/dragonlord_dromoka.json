@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dragonlord_dromoka.json",
+  "alias": "dragonlord_dromoka",
   "display": {
     "name": "Dragonlord Dromoka",
-    "imagePath": "images/cards/dragonlord_dromoka.jpg",
+    "imagePath": "dragonlord_dromoka.jpg",
     "colors": [
       "GREEN",
       "WHITE"

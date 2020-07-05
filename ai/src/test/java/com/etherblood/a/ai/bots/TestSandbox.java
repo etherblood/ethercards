@@ -92,18 +92,11 @@ public class TestSandbox {
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        Function<String, JsonElement> assetLoader = x -> {
-            try ( Reader reader = Files.newBufferedReader(Paths.get("../assets/templates/" + x))) {
-                return new Gson().fromJson(reader, JsonElement.class);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        };
-        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components));
+        TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components));
 
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
-        rawLibrary.hero = "cards/lots_of_health.json";
-        rawLibrary.cards = Arrays.stream(new Gson().fromJson(assetLoader.apply("card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
+        rawLibrary.hero = "lots_of_health";
+        rawLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
 
         LibraryTemplate lib0 = loader.parseLibrary(rawLibrary);
         LibraryTemplate lib1 = lib0;

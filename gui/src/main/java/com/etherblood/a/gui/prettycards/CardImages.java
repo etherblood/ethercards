@@ -42,7 +42,7 @@ public class CardImages {
     public String getCardImageFilePath(CardModel cardModel) {
         String imagePath = cardModel.getTemplate().getImagePath();
         if (imagePath != null) {
-            return imagePath;
+            return "images/cards/" + imagePath;
         }
         return "images/cards/other.png";
     }

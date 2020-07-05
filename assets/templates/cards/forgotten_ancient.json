@@ -1,8 +1,8 @@
 {
-  "alias": "cards/forgotten_ancient.json",
+  "alias": "forgotten_ancient",
   "display": {
     "name": "Forgotten Ancient",
-    "imagePath": "images/cards/forgotten_ancient.jpg",
+    "imagePath": "forgotten_ancient.jpg",
     "colors": [
       "GREEN"
     ],

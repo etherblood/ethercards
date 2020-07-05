@@ -1,26 +1,37 @@
 {
-    "alias": "cards/fireball.json",
-    "display": {
-        "name": "Fireball",
-        "imagePath": "images/cards/fireball.jpg",
-        "colors": ["RED"],
-        "description": "Deal 6 damage to the selected minion or hero."
-    },
-    "casts": [{
-            "manaCost": 4,
-            "targets": ["OWN_MINION", "OWN_HERO", "OPPONENT_MINION", "OPPONENT_HERO"],
-            "effects": [
-                {
-                    "type": "buff",
-                    "components": {
-                        "DAMAGE_REQUEST": 6
-                    }
-                }, {
-                    "type": "particle",
-                    "alias": "fireball"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "fireball",
+  "display": {
+    "name": "Fireball",
+    "imagePath": "fireball.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Deal 6 damage to the selected minion or hero."
+  },
+  "casts": [
+    {
+      "manaCost": 4,
+      "targets": [
+        "OWN_MINION",
+        "OWN_HERO",
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 6
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "fireball"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

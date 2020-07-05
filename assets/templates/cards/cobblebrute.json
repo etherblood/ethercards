@@ -1,8 +1,8 @@
 {
-  "alias": "cards/cobblebrute.json",
+  "alias": "cobblebrute",
   "display": {
     "name": "Cobblebrute",
-    "imagePath": "images/cards/cobblebrute.jpg",
+    "imagePath": "cobblebrute.jpg",
     "colors": [
       "RED"
     ]

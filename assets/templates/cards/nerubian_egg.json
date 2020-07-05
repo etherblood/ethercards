@@ -1,8 +1,8 @@
 {
-  "alias": "cards/nerubian_egg.json",
+  "alias": "nerubian_egg",
   "display": {
     "name": "Nerubian egg",
-    "imagePath": "images/cards/Nerubian_Egg_full.jpg",
+    "imagePath": "Nerubian_Egg_full.jpg",
     "colors": [
       "BLACK"
     ],
@@ -26,7 +26,7 @@
   "onDeath": [
     {
       "type": "summon",
-      "minionId": "cards/nerubian.json"
+      "minionId": "nerubian"
     }
   ]
 }

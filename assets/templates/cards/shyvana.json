@@ -1,8 +1,8 @@
 {
-  "alias": "cards/shyvana.json",
+  "alias": "shyvana",
   "display": {
     "name": "Shyvana",
-    "imagePath": "images/cards/Shyvana.png",
+    "imagePath": "Shyvana.png",
     "colors": [
       "RED"
     ]

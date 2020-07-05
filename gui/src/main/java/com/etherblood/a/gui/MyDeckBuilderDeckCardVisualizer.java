@@ -25,7 +25,7 @@ public class MyDeckBuilderDeckCardVisualizer extends SimpleDeckBuilderDeckCardVi
     protected PaintableImage paintActualCard(CardModel cardModel) {
         PaintableImage image = new PaintableImage(400, 57);
         image.setBackground(Color.BLACK);
-        String imagePath = cardModel.getTemplate().getImagePath();
+        String imagePath = images.getCardImageFilePath(cardModel);
         Image img = images.getCachedImage(imagePath, (image.getWidth() - amountPixelWidth), image.getHeight());
         image.paintImage(toBufferedImage(img), amountPixelWidth, 0);
         paintText(image, amountPixelWidth + 20, (image.getHeight() / 2), false, true, cardModel.getTemplate().getName());

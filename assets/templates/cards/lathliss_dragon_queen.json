@@ -1,8 +1,8 @@
 {
-  "alias": "cards/lathliss_dragon_queen.json",
+  "alias": "lathliss_dragon_queen",
   "display": {
     "name": "Lathliss, Dragon Queen",
-    "imagePath": "images/cards/lathliss_dragon_queen.jpg",
+    "imagePath": "lathliss_dragon_queen.jpg",
     "colors": [
       "RED"
     ],
@@ -26,7 +26,7 @@
   "onSummon": [
     {
       "type": "lathlissToken",
-      "tokenId": "cards/dragon_token.json"
+      "tokenId": "dragon_token"
     }
   ],
   "tribes": [

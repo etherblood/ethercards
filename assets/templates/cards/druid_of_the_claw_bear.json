@@ -1,8 +1,8 @@
 {
-  "alias": "cards/druid_of_the_claw_bear.json",
+  "alias": "druid_of_the_claw_bear",
   "display": {
     "name": "Druid of the Claw",
-    "imagePath": "images/cards/Bear_Form_(art).jpg",
+    "imagePath": "Bear_Form_(art).jpg",
     "colors": [
       "GREEN"
     ]

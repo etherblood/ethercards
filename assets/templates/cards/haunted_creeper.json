@@ -1,8 +1,8 @@
 {
-  "alias": "cards/haunted_creeper.json",
+  "alias": "haunted_creeper",
   "display": {
     "name": "Haunted creeper",
-    "imagePath": "images/cards/Haunted_Creeper_(art).jpg",
+    "imagePath": "Haunted_Creeper_(art).jpg",
     "colors": [
       "BLACK"
     ],
@@ -26,11 +26,11 @@
   "onDeath": [
     {
       "type": "summon",
-      "minionId": "cards/spectral_spider.json"
+      "minionId": "spectral_spider"
     },
     {
       "type": "summon",
-      "minionId": "cards/spectral_spider.json"
+      "minionId": "spectral_spider"
     }
   ]
 }

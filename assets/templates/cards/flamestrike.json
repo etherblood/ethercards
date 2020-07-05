@@ -1,32 +1,40 @@
 {
-    "alias": "cards/flamestrike.json",
-    "display": {
-        "name": "Flamestrike",
-        "imagePath": "images/cards/Flamestrike_full.jpg",
-        "colors": ["RED"],
-        "description": "Deal 4 damage to all enemy minions."
-    },
-    "casts": [{
-            "manaCost": 8,
-            "effects": [
-                {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OPPONENT_MINION"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "DAMAGE_REQUEST": 4
-                            }
-                        }
-                    ]
-                }, {
-                    "type": "particle",
-                    "alias": "flamestrike"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "flamestrike",
+  "display": {
+    "name": "Flamestrike",
+    "imagePath": "Flamestrike_full.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Deal 4 damage to all enemy minions."
+  },
+  "casts": [
+    {
+      "manaCost": 8,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OPPONENT_MINION"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "particle",
+          "alias": "flamestrike"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

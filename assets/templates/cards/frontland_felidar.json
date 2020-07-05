@@ -1,8 +1,8 @@
 {
-  "alias": "cards/frontland_felidar.json",
+  "alias": "frontland_felidar",
   "display": {
     "name": "Frontland Felidar",
-    "imagePath": "images/cards/frontland_felidar.jpeg",
+    "imagePath": "frontland_felidar.jpeg",
     "colors": [
       "GREEN",
       "WHITE"

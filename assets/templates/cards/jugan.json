@@ -1,8 +1,8 @@
 {
-  "alias": "cards/jugan.json",
+  "alias": "jugan",
   "display": {
     "name": "Jugan, the Rising Star",
-    "imagePath": "images/cards/jugan.jpg",
+    "imagePath": "jugan.jpg",
     "colors": [
       "GREEN"
     ],

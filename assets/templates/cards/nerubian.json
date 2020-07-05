@@ -1,8 +1,8 @@
 {
-  "alias": "cards/nerubian.json",
+  "alias": "nerubian",
   "display": {
     "name": "Nerubian",
-    "imagePath": "images/cards/Nerubian_full.jpg",
+    "imagePath": "Nerubian_full.jpg",
     "colors": [
       "BLACK"
     ]

@@ -1,36 +1,41 @@
 {
-    "alias": "cards/dr_bees.json",
-    "display": {
-        "name": "Dr. Bees",
-        "imagePath": "images/cards/dr_bees.gif",
-        "colors": ["GREEN"],
-        "description": "Summon five 0/0 Bee Workers with Venom 1 which die after battle."
-    },
-    "casts": [{
-            "manaCost": 4,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "cards/bee_worker.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "cards/bee_worker.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "cards/bee_worker.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "cards/bee_worker.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "cards/bee_worker.json"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "dr_bees",
+  "display": {
+    "name": "Dr. Bees",
+    "imagePath": "dr_bees.gif",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Summon five 0/0 Bee Workers with Venom 1 which die after battle."
+  },
+  "casts": [
+    {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "summon",
+          "minionId": "bee_worker"
+        },
+        {
+          "type": "summon",
+          "minionId": "bee_worker"
+        },
+        {
+          "type": "summon",
+          "minionId": "bee_worker"
+        },
+        {
+          "type": "summon",
+          "minionId": "bee_worker"
+        },
+        {
+          "type": "summon",
+          "minionId": "bee_worker"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

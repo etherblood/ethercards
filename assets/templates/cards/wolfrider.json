@@ -1,8 +1,8 @@
 {
-  "alias": "cards/wolfrider.json",
+  "alias": "wolfrider",
   "display": {
     "name": "Wolfrider",
-    "imagePath": "images/cards/Wolfrider_full.jpg",
+    "imagePath": "Wolfrider_full.jpg",
     "colors": [
       "RED"
     ]

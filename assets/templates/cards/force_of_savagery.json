@@ -1,8 +1,8 @@
 {
-  "alias": "cards/force_of_savagery.json",
+  "alias": "force_of_savagery",
   "display": {
     "name": "Force of Savagery",
-    "imagePath": "images/cards/force_of_savagery.jpeg",
+    "imagePath": "force_of_savagery.jpeg",
     "colors": [
       "GREEN"
     ]

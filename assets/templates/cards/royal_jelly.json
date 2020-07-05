@@ -1,34 +1,41 @@
 {
-    "alias": "cards/royal_jelly.json",
-    "display": {
-        "name": "Royal Jelly",
-        "imagePath": "images/cards/royal_jelly.jpg",
-        "colors": ["GREEN"],
-        "description": "Attack-Phase: Draw a Bee Drone. Block-Phase: Draw a Bee Queen."
+  "alias": "royal_jelly",
+  "display": {
+    "name": "Royal Jelly",
+    "imagePath": "royal_jelly.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Attack-Phase: Draw a Bee Drone. Block-Phase: Draw a Bee Queen."
+  },
+  "casts": [
+    {
+      "attackCast": true,
+      "blockCast": false,
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "drawTemplate",
+          "cardId": "bee_drone"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
     },
-    "casts": [{
-            "attackCast": true,
-            "blockCast": false,
-            "manaCost": 1,
-            "effects": [
-                {
-                    "type": "drawTemplate",
-                    "cardId": "cards/bee_drone.json"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }, {
-            "attackCast": false,
-            "blockCast": true,
-            "manaCost": 1,
-            "effects": [
-                {
-                    "type": "drawTemplate",
-                    "cardId": "cards/bee_queen.json"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+    {
+      "attackCast": false,
+      "blockCast": true,
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "drawTemplate",
+          "cardId": "bee_queen"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

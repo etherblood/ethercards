@@ -1,8 +1,8 @@
 {
-  "alias": "cards/goblin.json",
+  "alias": "goblin",
   "display": {
     "name": "Goblin",
-    "imagePath": "images/cards/Goblin.png",
+    "imagePath": "Goblin.png",
     "colors": [
       "RED"
     ]

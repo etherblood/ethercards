@@ -1,8 +1,8 @@
 {
-  "alias": "cards/bee_worker.json",
+  "alias": "bee_worker",
   "display": {
     "name": "Bee Worker",
-    "imagePath": "images/cards/bee_worker.gif",
+    "imagePath": "bee_worker.gif",
     "colors": [
       "GREEN"
     ],

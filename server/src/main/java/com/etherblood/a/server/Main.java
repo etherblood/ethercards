@@ -1,14 +1,16 @@
 package com.etherblood.a.server;
 
 import com.etherblood.a.network.api.jwt.JwtParser;
+import com.etherblood.a.templates.RawLibraryTemplate;
+import com.etherblood.a.templates.TemplatesLoader;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Properties;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -19,6 +21,7 @@ public class Main {
         }
         String jwtPubKeyPath = props.getProperty("jwtPubKeyPath");
         String jwtUrl = props.getProperty("jwtUrl");
+        String assetsPath = props.getProperty("assets");
 
         JwtParser jwtParser;
         if (jwtPubKeyPath != null) {
@@ -29,13 +32,9 @@ public class Main {
             throw new IllegalStateException("Jwt verification not initialized.");
         }
 
-        Function<String, JsonElement> assetLoader = x -> {
-            try ( Reader reader = Files.newBufferedReader(Paths.get(props.getProperty("assets") + "templates/" + x))) {
-                return new Gson().fromJson(reader, JsonElement.class);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        };
-        new GameServer(jwtParser, assetLoader).start();
+        RawLibraryTemplate botLibrary = new RawLibraryTemplate();
+        botLibrary.hero = "elderwood_ahri";
+        botLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile(assetsPath + "templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
+        new GameServer(jwtParser, x -> TemplatesLoader.loadFile(assetsPath + "templates/cards/" + x + ".json"), botLibrary).start();
     }
 }

@@ -1,8 +1,8 @@
 {
-  "alias": "cards/yeti.json",
+  "alias": "yeti",
   "display": {
     "name": "Yeti",
-    "imagePath": "images/cards/Chillwind_Yeti_(art).jpg",
+    "imagePath": "Chillwind_Yeti_(art).jpg",
     "colors": [
       "BLUE"
     ]

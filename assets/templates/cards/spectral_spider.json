@@ -1,8 +1,8 @@
 {
-  "alias": "cards/spectral_spider.json",
+  "alias": "spectral_spider",
   "display": {
     "name": "Spectral spider",
-    "imagePath": "images/cards/Spectral_Spider_full.jpg",
+    "imagePath": "Spectral_Spider_full.jpg",
     "colors": [
       "BLACK"
     ]

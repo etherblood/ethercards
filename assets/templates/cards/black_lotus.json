@@ -1,41 +1,51 @@
 {
-    "alias": "cards/black_lotus.json",
-    "display": {
-        "name": "Black Lotus",
-        "imagePath": "images/cards/black_lotus.jpg",
-        "colors": ["BLACK"],
-        "description": "Gain 3 Mana. Your hero gains 3 Poisoned."
-    },
-    "casts": [{
-            "manaCost": 0,
-            "effects": [
-                {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OWNER"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "MANA": 3
-                            }
-                        }
-                    ]
-                }, {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OWN_HERO"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "POISONED": 3
-                            }
-                        }
-                    ]
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "black_lotus",
+  "display": {
+    "name": "Black Lotus",
+    "imagePath": "black_lotus.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "Gain 3 Mana. Your hero gains 3 Poisoned."
+  },
+  "casts": [
+    {
+      "manaCost": 0,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWNER"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWN_HERO"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "POISONED": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

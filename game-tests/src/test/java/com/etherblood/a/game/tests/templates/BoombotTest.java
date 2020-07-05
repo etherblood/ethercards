@@ -9,7 +9,7 @@ public class BoombotTest extends AbstractGameTest {
 
     @Test
     public void boombot_deathrattle() {
-        int boombot = createMinion(player(0), "cards/boombot.json");
+        int boombot = createMinion(player(0), "boombot");
         int boomBotDamage = 2;
         int previousHealth = data.get(hero(1), core.HEALTH);
 

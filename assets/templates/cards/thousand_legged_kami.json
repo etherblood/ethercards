@@ -1,9 +1,9 @@
 {
-  "alias": "cards/thousand_legged_kami.json",
+  "alias": "thousand_legged_kami",
   "manaCost": 7,
   "display": {
     "name": "Thousand-legged Kami",
-    "imagePath": "images/cards/thousand_legged_kami.jpg",
+    "imagePath": "thousand_legged_kami.jpg",
     "colors": [
       "GREEN"
     ]

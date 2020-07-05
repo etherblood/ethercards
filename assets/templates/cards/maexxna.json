@@ -1,8 +1,8 @@
 {
-  "alias": "cards/maexxna.json",
+  "alias": "maexxna",
   "display": {
     "name": "Maexxna",
-    "imagePath": "images/cards/Maexxna_full.jpg",
+    "imagePath": "Maexxna_full.jpg",
     "colors": [
       "BLACK"
     ]

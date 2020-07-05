@@ -1,8 +1,8 @@
 {
-  "alias": "cards/harvest_golem.json",
+  "alias": "harvest_golem",
   "display": {
     "name": "Harvest Golem",
-    "imagePath": "images/cards/Harvest_Golem_full.jpg",
+    "imagePath": "Harvest_Golem_full.jpg",
     "colors": [
       "BLACK"
     ],
@@ -25,7 +25,7 @@
   "onDeath": [
     {
       "type": "summon",
-      "minionId": "cards/damaged_golem.json"
+      "minionId": "damaged_golem"
     }
   ]
 }

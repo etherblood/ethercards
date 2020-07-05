@@ -1,8 +1,8 @@
 {
-  "alias": "cards/malorne.json",
+  "alias": "malorne",
   "display": {
     "name": "Malorne",
-    "imagePath": "images/cards/Malorne_full.jpg",
+    "imagePath": "Malorne_full.jpg",
     "colors": [
       "GREEN"
     ],
@@ -25,7 +25,7 @@
   "onDeath": [
     {
       "type": "create",
-      "cardId": "cards/malorne.json",
+      "cardId": "malorne",
       "components": {
         "IN_LIBRARY_ZONE": 1
       }

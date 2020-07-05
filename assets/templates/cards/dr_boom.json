@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dr_boom.json",
+  "alias": "dr_boom",
   "display": {
     "name": "Dr. Boom",
-    "imagePath": "images/cards/dr_boom.png",
+    "imagePath": "dr_boom.png",
     "colors": [
       "RED"
     ],
@@ -14,14 +14,14 @@
       "effects": [
         {
           "type": "summon",
-          "minionId": "cards/boombot.json"
+          "minionId": "boombot"
         },
         {
           "type": "selfSummon"
         },
         {
           "type": "summon",
-          "minionId": "cards/boombot.json"
+          "minionId": "boombot"
         }
       ]
     }

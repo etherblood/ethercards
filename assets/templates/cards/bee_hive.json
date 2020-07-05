@@ -1,8 +1,8 @@
 {
-  "alias": "cards/bee_hive.json",
+  "alias": "bee_hive",
   "display": {
     "name": "Bee Hive",
-    "imagePath": "images/cards/bee_hive.jpg",
+    "imagePath": "bee_hive.jpg",
     "colors": [
       "GREEN"
     ],
@@ -27,11 +27,11 @@
   "onUpkeep": [
     {
       "type": "summon",
-      "minionId": "cards/bee_worker.json"
+      "minionId": "bee_worker"
     },
     {
       "type": "summon",
-      "minionId": "cards/bee_worker.json"
+      "minionId": "bee_worker"
     }
   ]
 }

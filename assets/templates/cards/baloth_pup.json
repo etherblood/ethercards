@@ -1,8 +1,8 @@
 {
-  "alias": "cards/baloth_pup.json",
+  "alias": "baloth_pup",
   "display": {
     "name": "Baloth Pup",
-    "imagePath": "images/cards/baloth_pup.jpg",
+    "imagePath": "baloth_pup.jpg",
     "colors": [
       "GREEN"
     ]

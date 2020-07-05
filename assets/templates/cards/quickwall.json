@@ -1,8 +1,8 @@
 {
-  "alias": "cards/quickwall.json",
+  "alias": "quickwall",
   "display": {
     "name": "Quickwall",
-    "imagePath": "images/cards/quickwall.png",
+    "imagePath": "quickwall.png",
     "colors": [
       "WHITE"
     ]

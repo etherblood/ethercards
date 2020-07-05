@@ -1,8 +1,8 @@
 {
-  "alias": "cards/deathwing.json",
+  "alias": "deathwing",
   "display": {
     "name": "Deathwing",
-    "imagePath": "images/cards/deathwing.jpg",
+    "imagePath": "deathwing.jpg",
     "colors": [
       "RED",
       "BLACK"

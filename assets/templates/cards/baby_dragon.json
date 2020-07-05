@@ -1,8 +1,8 @@
 {
-  "alias": "cards/baby_dragon.json",
+  "alias": "baby_dragon",
   "display": {
     "name": "Baby Dragon",
-    "imagePath": "images/cards/baby_dragon.jpg",
+    "imagePath": "baby_dragon.jpg",
     "colors": [
       "RED"
     ]

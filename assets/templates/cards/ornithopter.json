@@ -1,8 +1,8 @@
 {
-  "alias": "cards/ornithopter.json",
+  "alias": "ornithopter",
   "display": {
     "name": "Ornithopter",
-    "imagePath": "images/cards/Thopter.jpg",
+    "imagePath": "Thopter.jpg",
     "colors": [
       "NEUTRAL"
     ]

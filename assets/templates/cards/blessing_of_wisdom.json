@@ -1,27 +1,36 @@
 {
-    "alias": "cards/blessing_of_wisdom.json",
-    "display": {
-        "name": "Blessing of wisdom",
-        "imagePath": "images/cards/Blessing_of_Wisdom_(art).jpg",
-        "colors": ["WHITE"],
-        "description": "Choose a minion, whenever it blocks or attacks it's owner draws a card."
-    },
-    "casts": [{
-            "manaCost": 1,
-            "targets": ["OWN_MINION", "OPPONENT_MINION"],
-            "effects": [
-                {
-                    "type": "buff",
-                    "components": {
-                        "DRAWS_ON_BLOCK": 1,
-                        "DRAWS_ON_ATTACK": 1
-                    }
-                }, {
-                    "type": "particle",
-                    "alias": "blessing_of_wisdom"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "blessing_of_wisdom",
+  "display": {
+    "name": "Blessing of wisdom",
+    "imagePath": "Blessing_of_Wisdom_(art).jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "Choose a minion, its owner draws a card whenever it blocks or attacks."
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "targets": [
+        "OWN_MINION",
+        "OPPONENT_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DRAWS_ON_BLOCK": 1,
+            "DRAWS_ON_ATTACK": 1
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "blessing_of_wisdom"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

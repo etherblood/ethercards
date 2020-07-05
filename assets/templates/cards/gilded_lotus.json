@@ -1,29 +1,36 @@
 {
-    "alias": "cards/gilded_lotus.json",
-    "display": {
-        "name": "Gilded Lotus",
-        "imagePath": "images/cards/gilded_lotus.jpg",
-        "colors": ["GREEN"],
-        "description": "Gain 3 Mana Pool."
-    },
-    "casts": [{
-            "manaCost": 5,
-            "effects": [
-                {
-                    "type": "targeted",
-                    "targeting": "ALL",
-                    "targets": ["OWN_HERO"],
-                    "effects": [
-                        {
-                            "type": "buff",
-                            "components": {
-                                "MANA_POOL": 3
-                            }
-                        }
-                    ]
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "gilded_lotus",
+  "display": {
+    "name": "Gilded Lotus",
+    "imagePath": "gilded_lotus.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Gain 3 Mana Pool."
+  },
+  "casts": [
+    {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWN_HERO"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA_POOL": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

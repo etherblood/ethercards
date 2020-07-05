@@ -1,28 +1,33 @@
 {
-    "alias": "cards/omfg_dogs.json",
-    "display": {
-        "name": "Omfg dogs",
-        "imagePath": "images/cards/omfgdogs.gif",
-        "colors": ["WHITE"],
-        "description": "Summon 3 1/1 dogs."
-    },
-    "casts": [{
-            "manaCost": 3,
-            "effects": [
-                {
-                    "type": "summon",
-                    "minionId": "cards/dog.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "cards/dog.json"
-                },
-                {
-                    "type": "summon",
-                    "minionId": "cards/dog.json"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "omfg_dogs",
+  "display": {
+    "name": "Omfg dogs",
+    "imagePath": "omfgdogs.gif",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "Summon 3 1/1 dogs."
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "summon",
+          "minionId": "dog"
+        },
+        {
+          "type": "summon",
+          "minionId": "dog"
+        },
+        {
+          "type": "summon",
+          "minionId": "dog"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

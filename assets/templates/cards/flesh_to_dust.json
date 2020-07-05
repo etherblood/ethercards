@@ -1,26 +1,35 @@
 {
-    "alias": "cards/flesh_to_dust.json",
-    "display": {
-        "name": "Flesh to Dust",
-        "imagePath": "images/cards/flesh_to_dust.jpg",
-        "colors": ["BLACK"],
-        "description": "Destroy a minion."
-    },
-    "casts": [{
-            "manaCost": 5,
-            "targets": ["OWN_MINION", "OPPONENT_MINION"],
-            "effects": [
-                {
-                    "type": "buff",
-                    "components": {
-                        "DEATH_REQUEST": 1
-                    }
-                }, {
-                    "type": "particle",
-                    "alias": "flesh_to_dust"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "flesh_to_dust",
+  "display": {
+    "name": "Flesh to Dust",
+    "imagePath": "flesh_to_dust.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "Destroy a minion."
+  },
+  "casts": [
+    {
+      "manaCost": 5,
+      "targets": [
+        "OWN_MINION",
+        "OPPONENT_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": 1
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "flesh_to_dust"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

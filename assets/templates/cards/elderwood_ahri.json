@@ -1,8 +1,8 @@
 {
-  "alias": "cards/elderwood_ahri.json",
+  "alias": "elderwood_ahri",
   "display": {
     "name": "Ahri",
-    "imagePath": "images/cards/elderwood_ahri.jpg",
+    "imagePath": "elderwood_ahri.jpg",
     "colors": [
       "GREEN"
     ]

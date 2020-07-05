@@ -12,8 +12,8 @@ public class DragonlordAtarkaTest extends AbstractGameTest {
 
     @Test
     public void dragonlordAtarka_trample_through_ornithopter() {
-        int atarka = createMinion(player(0), "cards/dragonlord_atarka.json");
-        int ornithopter = createMinion(player(1), "cards/ornithopter.json");
+        int atarka = createMinion(player(0), "dragonlord_atarka");
+        int ornithopter = createMinion(player(1), "ornithopter");
 
         int previousHealth = data.get(hero(1), core.HEALTH);
         int atarkaAttack = data.get(atarka, core.ATTACK);
@@ -32,8 +32,8 @@ public class DragonlordAtarkaTest extends AbstractGameTest {
 
     @Test
     public void dragonlordAtarka_trample_blocked_by_killing_attacker() {
-        int attackingAtarka = createMinion(player(0), "cards/dragonlord_atarka.json");
-        int blockingAtarka = createMinion(player(1), "cards/dragonlord_atarka.json");
+        int attackingAtarka = createMinion(player(0), "dragonlord_atarka");
+        int blockingAtarka = createMinion(player(1), "dragonlord_atarka");
 
         int previousHealth = data.get(hero(1), core.HEALTH);
 

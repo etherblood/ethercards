@@ -1,8 +1,8 @@
 {
-  "alias": "cards/aerial_responder.json",
+  "alias": "aerial_responder",
   "display": {
     "name": "Aerial Responder",
-    "imagePath": "images/cards/aerial_responder.png",
+    "imagePath": "aerial_responder.png",
     "colors": [
       "WHITE"
     ]

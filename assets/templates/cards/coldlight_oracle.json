@@ -1,8 +1,8 @@
 {
-  "alias": "cards/coldlight_oracle.json",
+  "alias": "coldlight_oracle",
   "display": {
     "name": "Coldlight Oracle",
-    "imagePath": "images/cards/Coldlight_Oracle_full.jpg",
+    "imagePath": "Coldlight_Oracle_full.jpg",
     "colors": [
       "BLUE"
     ],

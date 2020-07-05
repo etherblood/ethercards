@@ -19,7 +19,6 @@ import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
-import com.etherblood.a.rules.updates.BattleZoneService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.RawLibraryTemplate;
@@ -123,7 +122,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .collectionRowsPerPage(7)
                 .boardSettings(BoardSettings.builder()
                         .dragProjectionZ(0.9975f)
-                        .hoverInspectionDelay(0.3f)
+                        .hoverInspectionDelay(0.5f)
                         .isInspectable(x -> collectionZone.getCards().contains(x))
                         .build())
                 .build();

@@ -1,29 +1,39 @@
 {
-    "alias": "cards/armadillo_cloak.json",
-    "display": {
-        "name": "Armadillo Cloak",
-        "imagePath": "images/cards/armadillo_cloak.jpg",
-        "colors": ["GREEN", "WHITE"],
-        "description": "Give a minion +2/+2, Trample and Lifelink."
-    },
-    "casts": [{
-            "manaCost": 3,
-            "targets": ["OWN_MINION", "OPPONENT_MINION"],
-            "effects": [
-                {
-                    "type": "buff",
-                    "components": {
-                        "ATTACK": 2,
-                        "HEALTH": 2,
-                        "TRAMPLE": 1,
-                        "LIFELINK": 1
-                    }
-                }, {
-                    "type": "particle",
-                    "alias": "armadillo_cloak"
-                }, {
-                    "type": "selfDiscard"
-                }
-            ]
-        }]
+  "alias": "armadillo_cloak",
+  "display": {
+    "name": "Armadillo Cloak",
+    "imagePath": "armadillo_cloak.jpg",
+    "colors": [
+      "GREEN",
+      "WHITE"
+    ],
+    "description": "Give a minion +2/+2, Trample and Lifelink."
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "targets": [
+        "OWN_MINION",
+        "OPPONENT_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 2,
+            "HEALTH": 2,
+            "TRAMPLE": 1,
+            "LIFELINK": 1
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "armadillo_cloak"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
 }

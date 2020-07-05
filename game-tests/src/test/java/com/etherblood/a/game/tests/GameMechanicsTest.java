@@ -11,8 +11,8 @@ public class GameMechanicsTest extends AbstractGameTest {
 
     @Test
     public void blocking_protects_attackTarget() {
-        int attacker = createMinion(player(0), "cards/satyr.json");
-        int blocker = createMinion(player(1), "cards/satyr.json");
+        int attacker = createMinion(player(0), "satyr");
+        int blocker = createMinion(player(1), "satyr");
 
         int previousHealth = data.get(hero(1), core.HEALTH);
 

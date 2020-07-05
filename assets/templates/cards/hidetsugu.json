@@ -1,8 +1,8 @@
 {
-  "alias": "cards/hidetsugu.json",
+  "alias": "hidetsugu",
   "display": {
     "name": "Heartless Hidetsugu",
-    "imagePath": "images/cards/hidetsugu.jpg",
+    "imagePath": "hidetsugu.jpg",
     "colors": [
       "RED"
     ],

@@ -1,8 +1,8 @@
 {
-  "alias": "cards/bee_drone.json",
+  "alias": "bee_drone",
   "display": {
     "name": "Bee Drone",
-    "imagePath": "images/cards/bee_drone.gif",
+    "imagePath": "bee_drone.gif",
     "colors": [
       "GREEN"
     ]

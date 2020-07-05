@@ -11,7 +11,7 @@ public class DragonlordDromokaTest extends AbstractGameTest {
 
     @Test
     public void dragonlordDromoka_lifelink() {
-        int atarka = createMinion(player(0), "cards/dragonlord_dromoka.json");
+        int atarka = createMinion(player(0), "dragonlord_dromoka");
 
         int previousHealth = data.get(hero(0), core.HEALTH);
         int dromokaAttack = data.get(atarka, core.ATTACK);

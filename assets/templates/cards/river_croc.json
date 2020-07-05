@@ -1,8 +1,8 @@
 {
-  "alias": "cards/river_croc.json",
+  "alias": "river_croc",
   "display": {
     "name": "River Crocolisk",
-    "imagePath": "images/cards/River_Crocolisk_full.png",
+    "imagePath": "River_Crocolisk_full.png",
     "colors": [
       "GREEN"
     ]

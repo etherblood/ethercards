@@ -1,8 +1,8 @@
 {
-  "alias": "cards/orc.json",
+  "alias": "orc",
   "display": {
     "name": "Orc",
-    "imagePath": "images/cards/Orc.png",
+    "imagePath": "Orc.png",
     "colors": [
       "RED"
     ]

@@ -1,8 +1,8 @@
 {
-  "alias": "cards/satyr.json",
+  "alias": "satyr",
   "display": {
     "name": "Satyr",
-    "imagePath": "images/cards/Voyaging Satyr.png",
+    "imagePath": "Voyaging Satyr.png",
     "colors": [
       "GREEN"
     ]

@@ -1,8 +1,8 @@
 {
-  "alias": "cards/dragonite_delta.json",
+  "alias": "dragonite_delta",
   "display": {
     "name": "Dragonite",
-    "imagePath": "images/cards/dragonite_delta.png",
+    "imagePath": "dragonite_delta.png",
     "colors": [
       "WHITE",
       "BLUE"

@@ -1,9 +1,9 @@
 {
-  "alias": "cards/he_who_hungers.json",
+  "alias": "he_who_hungers",
   "manaCost": 3,
   "display": {
     "name": "He Who Hungers",
-    "imagePath": "images/cards/he_who_hungers.jpg",
+    "imagePath": "he_who_hungers.jpg",
     "colors": [
       "BLACK"
     ]

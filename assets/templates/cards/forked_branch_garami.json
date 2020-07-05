@@ -1,9 +1,9 @@
 {
-  "alias": "cards/forked_branch_garami.json",
+  "alias": "forked_branch_garami",
   "manaCost": 5,
   "display": {
     "name": "Forked-Branch Garami",
-    "imagePath": "images/cards/forked_branch_garami.jpg",
+    "imagePath": "forked_branch_garami.jpg",
     "colors": [
       "GREEN"
     ]

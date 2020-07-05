@@ -1,8 +1,8 @@
 {
-  "alias": "cards/arborback_stomper.json",
+  "alias": "arborback_stomper",
   "display": {
     "name": "Arborback Stomper",
-    "imagePath": "images/cards/arborback_stomper.jpg",
+    "imagePath": "arborback_stomper.jpg",
     "colors": [
       "GREEN"
     ],

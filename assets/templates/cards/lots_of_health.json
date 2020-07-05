@@ -1,8 +1,8 @@
 {
-  "alias": "cards/lots_of_health.json",
+  "alias": "lots_of_health",
   "display": {
     "name": "Tanky Shyvana",
-    "imagePath": "images/cards/Shyvana.png",
+    "imagePath": "Shyvana.png",
     "colors": [
       "RED"
     ]

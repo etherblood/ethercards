@@ -1,8 +1,8 @@
 {
-  "alias": "cards/damaged_golem.json",
+  "alias": "damaged_golem",
   "display": {
     "name": "Damaged Golem",
-    "imagePath": "images/cards/Damaged_Golem_full.png",
+    "imagePath": "Damaged_Golem_full.png",
     "colors": [
       "BLACK"
     ]

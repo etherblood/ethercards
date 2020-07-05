@@ -1,8 +1,8 @@
 {
-  "alias": "cards/boombot.json",
+  "alias": "boombot",
   "display": {
     "name": "Boombot",
-    "imagePath": "images/cards/boombot.png",
+    "imagePath": "boombot.png",
     "colors": [
       "RED"
     ],
