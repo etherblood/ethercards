@@ -9,7 +9,7 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Tribe;
 import java.util.function.IntUnaryOperator;
 
-public class SoulshiftEffect extends Effect {
+public class SoulshiftEffect implements Effect {
 
     public final int power;
 

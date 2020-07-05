@@ -57,10 +57,11 @@ public class SystemsUtil {
     }
 
     public static void fight(EntityData data, GameTemplates templates, IntUnaryOperator random, int attacker, int blocker, GameEventListener events) {
+        EffectiveStatsService stats = new EffectiveStatsService(data, templates);
         events.fire(new BattleEvent(attacker, blocker));
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int attackerDamage = data.getOptional(attacker, core.ATTACK).orElse(0);
-        int blockerDamage = data.getOptional(blocker, core.ATTACK).orElse(0);
+        int attackerDamage = stats.attack(attacker);
+        int blockerDamage = stats.attack(blocker);
 
         damage(data, blocker, attackerDamage);
         damage(data, attacker, blockerDamage);
@@ -74,7 +75,6 @@ public class SystemsUtil {
             increase(data, randomHero(data, random, blockerOwner), core.HEALTH, blockerDamage);
         }
 
-        EffectiveStatsService stats = new EffectiveStatsService(data);
         int attackerVenom = stats.venom(attacker);
         if (attackerVenom != 0) {
             increase(data, blocker, core.POISONED, attackerVenom);

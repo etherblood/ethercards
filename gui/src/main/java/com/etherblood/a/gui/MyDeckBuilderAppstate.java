@@ -19,6 +19,7 @@ import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.DisplayCardTemplate;
 import com.etherblood.a.templates.RawLibraryTemplate;
@@ -42,6 +43,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
@@ -67,11 +69,12 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         cardOrder = cardOrder.thenComparingInt(x -> x.getTemplate().getId());
 
         EntityData data = new SimpleEntityData(components);
+        GameTemplates gameTemplates = new GameTemplates(cards.stream().collect(Collectors.toMap(x -> x.getId(), x -> x)));
 
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
             CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card.getId(), 0), card);
-            cardModel.updateFrom(data);
+            cardModel.updateFrom(data, gameTemplates);
             allCardModels.add(cardModel);
         }
         allCardModels.sort(cardOrder);

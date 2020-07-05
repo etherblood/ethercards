@@ -34,8 +34,12 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
         this.colors = colors;
     }
 
+    public String getAlias() {
+        return alias;
+    }
+
     @Override
     public DisplayCardTemplate build(int id) {
-        return new DisplayCardTemplate(id, manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), alias, name, flavourText, description, imagePath, colors, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects);
+        return new DisplayCardTemplate(id, manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), alias, name, flavourText, description, imagePath, colors, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, attackModifiers, healthModifiers);
     }
 }

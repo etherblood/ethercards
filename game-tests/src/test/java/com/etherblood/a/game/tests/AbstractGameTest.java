@@ -92,23 +92,14 @@ public abstract class AbstractGameTest {
         return data.list(core.HERO).stream().filter(x -> data.hasValue(x, core.OWNED_BY, player)).findAny().getAsInt();
     }
 
-    public int createLibraryCard(int owner, String cardTemplate) {
-        return createLibraryCard(owner, getCardId(cardTemplate));
+    public int createCard(int owner, String cardTemplate, int zone) {
+        return createCard(owner, getCardId(cardTemplate), zone);
     }
 
-    public int createLibraryCard(int owner, int cardTemplate) {
+    public int createCard(int owner, int cardTemplate, int zone) {
+        assert zone == core.IN_HAND_ZONE || zone == core.IN_GRAVEYARD_ZONE || zone == core.IN_LIBRARY_ZONE;
         int card = SystemsUtil.createCard(data, cardTemplate, owner);
-        data.set(card, core.IN_LIBRARY_ZONE, 1);
-        return card;
-    }
-
-    public int createHandCard(int owner, String cardTemplate) {
-        return createHandCard(owner, getCardId(cardTemplate));
-    }
-
-    public int createHandCard(int owner, int cardTemplate) {
-        int card = SystemsUtil.createCard(data, cardTemplate, owner);
-        data.set(card, core.IN_HAND_ZONE, 1);
+        data.set(card, zone, 1);
         return card;
     }
 

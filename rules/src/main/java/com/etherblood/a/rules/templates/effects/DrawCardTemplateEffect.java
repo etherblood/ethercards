@@ -7,7 +7,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
 import java.util.function.IntUnaryOperator;
 
-public class DrawCardTemplateEffect extends Effect {
+public class DrawCardTemplateEffect implements Effect {
 
     @CardId
     public final int cardId;

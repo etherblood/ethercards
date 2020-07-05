@@ -5,7 +5,6 @@ import com.etherblood.a.rules.updates.systems.DeathSystem;
 import com.etherblood.a.rules.updates.systems.CastSystem;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.systems.DiscardSystem;
 import com.etherblood.a.rules.updates.systems.DrawSystem;
@@ -43,7 +42,7 @@ public class SystemFactory {
                         new DeathSystem(data, templates, random, events),
                         new PlayerResultSystem(data)
                 ),
-                new EffectiveStatsService(data)
+                new EffectiveStatsService(data, templates)
         );
     }
 }

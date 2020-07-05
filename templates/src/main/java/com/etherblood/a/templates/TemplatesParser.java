@@ -14,15 +14,18 @@ import com.etherblood.a.rules.templates.effects.DebuffEffect;
 import com.etherblood.a.rules.templates.effects.DrawCardTemplateEffect;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.FractionalDamageEffect;
+import com.etherblood.a.rules.templates.effects.KolaghanDamageEffect;
 import com.etherblood.a.rules.templates.effects.ParticleEventEffect;
 import com.etherblood.a.rules.templates.effects.SummonEffect;
 import com.etherblood.a.rules.templates.effects.LathlissTokenEffect;
+import com.etherblood.a.rules.templates.effects.ResurrectRandomEffect;
 import com.etherblood.a.rules.templates.effects.SelfDiscardEffect;
 import com.etherblood.a.rules.templates.effects.SelfSummonEffect;
 import com.etherblood.a.rules.templates.effects.SoulshiftEffect;
 import com.etherblood.a.rules.templates.effects.TakeControlEffect;
 import com.etherblood.a.rules.templates.effects.targeting.TargetFilters;
 import com.etherblood.a.rules.templates.effects.targeting.TargetedEffects;
+import com.etherblood.a.templates.instances.KodamaOfTheCenterTree;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -59,6 +62,8 @@ public class TemplatesParser {
         effectClasses.put("takeControl", TakeControlEffect.class);
         effectClasses.put("soulshift", SoulshiftEffect.class);
         effectClasses.put("cardDestruction", CardDestructionEffect.class);
+        effectClasses.put("resurrectRandom", ResurrectRandomEffect.class);
+        effectClasses.put("kolaghanDamage", KolaghanDamageEffect.class);
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
@@ -66,6 +71,7 @@ public class TemplatesParser {
                 .registerTypeAdapter(Effect.class, new EffectDeserializer(effectClasses, x -> registerIfAbsent(cardAliases, x)))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases::get))
                 .create();
+        register(KodamaOfTheCenterTree.builder(components, cardAliases));
     }
 
     public GameTemplates buildGameTemplates() {
@@ -156,7 +162,7 @@ public class TemplatesParser {
         JsonArray tribes = cardJson.getAsJsonArray("tribes");
         if (tribes != null) {
             for (JsonElement tribe : tribes) {
-                builder.withTribe(aliasGson.fromJson(tribe, Tribe.class));
+                builder.addTribe(aliasGson.fromJson(tribe, Tribe.class));
             }
         }
         JsonArray onDeath = cardJson.getAsJsonArray("onDeath");
@@ -241,11 +247,15 @@ public class TemplatesParser {
                 throw new UnsupportedOperationException(value.toString());
             }
         }
-        int id = registerIfAbsent(cardAliases, alias);
+        return register(builder);
+    }
+
+    public DisplayCardTemplate register(DisplayCardTemplateBuilder builder) {
+        int id = registerIfAbsent(cardAliases, builder.getAlias());
         DisplayCardTemplate card = builder.build(id);
         DisplayCardTemplate previous = cards.put(id, card);
         if (previous != null) {
-            throw new IllegalStateException("Multiple cards registered to same alias: " + alias);
+            throw new IllegalStateException("Multiple cards registered to same alias: " + builder.getAlias());
         }
         return card;
     }

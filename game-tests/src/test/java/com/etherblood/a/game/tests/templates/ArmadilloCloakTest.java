@@ -14,7 +14,7 @@ public class ArmadilloCloakTest extends AbstractGameTest {
         int armadilloCloakAttack = 2;
 
         int ornithopter = createMinion(player(0), "ornithopter");
-        int armadillo_cloak = createHandCard(player(0), "armadillo_cloak");
+        int armadillo_cloak = createCard(player(0), "armadillo_cloak", core.IN_HAND_ZONE);
 
         int previousHealth = data.get(ornithopter, core.HEALTH);
         int previousAttack = data.get(ornithopter, core.ATTACK);

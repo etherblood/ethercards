@@ -6,7 +6,7 @@ import com.etherblood.a.game.events.api.events.ParticleEvent;
 import com.etherblood.a.rules.GameTemplates;
 import java.util.function.IntUnaryOperator;
 
-public class ParticleEventEffect extends Effect {
+public class ParticleEventEffect implements Effect {
 
     public final String alias;
 

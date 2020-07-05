@@ -1,0 +1,33 @@
+{
+  "alias": "proclamation_of_rebirth",
+  "display": {
+    "name": "Proclamation of Rebirth",
+    "imagePath": "proclamation_of_rebirth.jpeg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "Return up to three random minions with mana cost 1 or less from your graveyard to the battlefield."
+  },
+  "manaCost": 3,
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "resurrectRandom",
+          "maxManaCost": 1
+        },
+        {
+          "type": "resurrectRandom",
+          "maxManaCost": 1
+        },
+        {
+          "type": "resurrectRandom",
+          "maxManaCost": 1
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}

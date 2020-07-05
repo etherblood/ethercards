@@ -352,7 +352,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         for (int cardEntity : cards) {
             Card<CardModel> card = getOrCreateMinion(cardEntity);
             CardModel minionModel = card.getModel();
-            minionModel.updateFrom(data);
+            minionModel.updateFrom(data, game.getTemplates());
             if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
                     .anyMatch(cast -> cast.source == cardEntity)) {
                 card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));

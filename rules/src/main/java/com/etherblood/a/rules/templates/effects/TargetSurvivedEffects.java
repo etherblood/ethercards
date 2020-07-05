@@ -6,7 +6,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import java.util.function.IntUnaryOperator;
 
-public class TargetSurvivedEffects extends Effect {
+public class TargetSurvivedEffects implements Effect {
 
     public final Effect[] effects;
 

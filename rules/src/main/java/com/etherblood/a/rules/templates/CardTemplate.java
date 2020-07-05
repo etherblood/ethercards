@@ -2,6 +2,7 @@ package com.etherblood.a.rules.templates;
 
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.templates.effects.Effect;
+import com.etherblood.a.rules.templates.effects.SelfSummonEffect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,8 +23,10 @@ public class CardTemplate {
     protected final List<Effect> onSelfSurviveEffects;
     protected final List<Effect> onSelfUpkeepEffects;
     protected final List<Effect> afterSelfBattleEffects;
+    protected final List<StatModifier> attackModifiers;
+    protected final List<StatModifier> healthModifiers;
 
-    protected CardTemplate(int id, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects) {
+    protected CardTemplate(int id, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<StatModifier> attackModifiers, List<StatModifier> healthModifiers) {
         this.id = id;
         this.manaCost = manaCost;
         this.casts = casts;
@@ -38,6 +41,8 @@ public class CardTemplate {
         for (int key : components) {
             this.components.set(key, components.get(key));
         }
+        this.attackModifiers = attackModifiers;
+        this.healthModifiers = healthModifiers;
     }
 
     public int getId() {
@@ -104,7 +109,20 @@ public class CardTemplate {
         return afterSelfBattleEffects;
     }
 
+    public List<StatModifier> getAttackModifiers() {
+        return attackModifiers;
+    }
+
+    public List<StatModifier> getHealthModifiers() {
+        return healthModifiers;
+    }
+
     public Set<Tribe> getTribes() {
         return tribes;
+    }
+    
+    public boolean isMinion() {
+        //TODO: this should be a simple boolean
+        return Arrays.stream(casts).anyMatch(x -> x.getEffects().stream().anyMatch(SelfSummonEffect.class::isInstance));
     }
 }

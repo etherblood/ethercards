@@ -7,7 +7,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
-public class CardDestructionEffect extends Effect {
+public class CardDestructionEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {

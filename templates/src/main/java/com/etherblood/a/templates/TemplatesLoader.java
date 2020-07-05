@@ -1,6 +1,7 @@
 package com.etherblood.a.templates;
 
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.templates.instances.KodamaOfTheCenterTree;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,7 +26,7 @@ public class TemplatesLoader {
         resolveReferences();
         return parser.buildGameTemplates();
     }
-    
+
     public LibraryTemplate parseLibrary(RawLibraryTemplate raw) {
         return parser.parseLibrary(raw);
     }
@@ -38,7 +39,7 @@ public class TemplatesLoader {
             }
         }
     }
-    
+
     public int registerCardAlias(String alias) {
         return parser.registerCardAlias(alias);
     }
@@ -46,7 +47,7 @@ public class TemplatesLoader {
     private JsonObject load(String alias) {
         return assetLoader.apply(alias).getAsJsonObject();
     }
-    
+
     public static JsonElement loadFile(String file) {
         try ( Reader reader = Files.newBufferedReader(Paths.get(file))) {
             return new Gson().fromJson(reader, JsonElement.class);

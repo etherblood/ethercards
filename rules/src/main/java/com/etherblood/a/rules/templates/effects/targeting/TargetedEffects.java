@@ -7,7 +7,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.effects.Effect;
 import java.util.function.IntUnaryOperator;
 
-public class TargetedEffects extends Effect {
+public class TargetedEffects implements Effect {
 
     public final TargetingType targeting;
     public final TargetFilters[] targets;

@@ -11,7 +11,7 @@ public class GoblinGuideTest extends AbstractGameTest {
     @Test
     public void goblinGuide_give_draw() {
         int goblinGuide = createMinion(player(0), "goblin_guide");
-        int orniThopter = createLibraryCard(player(1), "ornithopter");
+        int orniThopter = createCard(player(1), "ornithopter", core.IN_LIBRARY_ZONE);
 
         game.getMoves().apply(new DeclareAttack(player(0), goblinGuide, hero(1)));
         game.getMoves().apply(new EndAttackPhase(player(0)));

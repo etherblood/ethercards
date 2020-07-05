@@ -8,7 +8,7 @@ import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.templates.effects.filedtypes.ComponentsMap;
 import java.util.function.IntUnaryOperator;
 
-public class DebuffEffect extends Effect {
+public class DebuffEffect implements Effect {
 
     @ComponentsMap
     public final IntMap components;

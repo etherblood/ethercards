@@ -9,7 +9,7 @@ import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
 import com.etherblood.a.rules.templates.effects.filedtypes.ComponentsMap;
 import java.util.function.IntUnaryOperator;
 
-public class CreateCardEffect extends Effect {
+public class CreateCardEffect implements Effect {
 
     @CardId
     public final int cardId;

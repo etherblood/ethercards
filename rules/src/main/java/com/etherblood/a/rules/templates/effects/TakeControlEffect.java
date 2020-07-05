@@ -6,7 +6,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import java.util.function.IntUnaryOperator;
 
-public class TakeControlEffect extends Effect {
+public class TakeControlEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {

@@ -8,7 +8,7 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.updates.BattleZoneService;
 import java.util.function.IntUnaryOperator;
 
-public class SelfSummonEffect extends Effect {
+public class SelfSummonEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {

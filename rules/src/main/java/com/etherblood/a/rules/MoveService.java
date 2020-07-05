@@ -59,7 +59,7 @@ public class MoveService {
         } else {
             this.history = null;
         }
-        this.effectiveStats = new EffectiveStatsService(data);
+        this.effectiveStats = new EffectiveStatsService(data, settings.templates);
     }
 
     public List<MoveReplay> getHistory() {

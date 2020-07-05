@@ -7,7 +7,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
-public class FractionalDamageEffect extends Effect {
+public class FractionalDamageEffect implements Effect {
 
     public final int quotient, divident;
 

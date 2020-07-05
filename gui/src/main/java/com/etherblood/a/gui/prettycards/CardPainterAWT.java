@@ -69,7 +69,6 @@ public class CardPainterAWT {
             front.drawString(title, 35, 57);
         }
 //        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 314, 7, 73, 73, null);
-        front.setFont(FONTSTATS);
         Integer manaCost = template.getManaCost();
         if (manaCost != null) {
             drawCardCostManaAmount(front, manaCost, (width - textStartX + 20), (46 + 15), FONTSTATS);
@@ -169,7 +168,10 @@ public class CardPainterAWT {
             front.drawString(title, 35, 57);
 //            graphics.drawString(title, 45, 54);
         }
-//        drawCardCostManaAmount(graphics, template.getAttackPhaseCast() != null ? template.getAttackPhaseCast().getManaCost() : template.getBlockPhaseCast().getManaCost(), (width - textStartX - CARDCOSTICONSIZE), (46 - (CARDCOSTICONSIZE / 2)));
+        Integer manaCost = template.getManaCost();
+        if (manaCost != null) {
+            drawCardCostManaAmount(front, manaCost, (width - textStartX + 20), (46 + 15), FONTSTATS);
+        }
         tmpY = 370;
         List<String> drawnKeywords = new ArrayList<>(cardModel.getKeywords());
         drawnKeywords.sort(Comparator.naturalOrder());
@@ -182,6 +184,7 @@ public class CardPainterAWT {
                 String keyword = drawnKeywords.get(i);
                 keywordsText += keyword;
             }
+            front.setColor(Color.BLACK);
             front.setFont(FONTKEYWORDS);
             tmpX = textStartX;
             drawStringMultiLine(front, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
@@ -361,6 +364,7 @@ public class CardPainterAWT {
     }
 
     private void drawCardCostManaAmount(Graphics2D graphics, int manaCost, int endX, int y, Font font) {
+        graphics.setFont(font);
         int startX = (int) (endX - font.getStringBounds(Integer.toString(manaCost), graphics.getFontRenderContext()).getWidth());
         drawOutlinedText(graphics, Integer.toString(manaCost), startX, y, Color.BLACK, Color.WHITE);
 //        tmpX = endX;

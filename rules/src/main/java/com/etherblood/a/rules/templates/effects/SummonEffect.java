@@ -8,7 +8,7 @@ import com.etherblood.a.rules.templates.effects.filedtypes.CardId;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
-public class SummonEffect extends Effect {
+public class SummonEffect implements Effect {
 
     @CardId
     public final int minionId;

@@ -4,6 +4,7 @@ import com.destrostudios.cardgui.BoardObjectModel;
 import com.destrostudios.cardgui.annotations.IsBoardObjectInspected;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.effects.Effect;
 import com.etherblood.a.rules.templates.effects.SoulshiftEffect;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
@@ -32,7 +33,7 @@ public class CardModel extends BoardObjectModel {
         this.template = Objects.requireNonNull(template);
     }
 
-    public void updateFrom(EntityData data) {
+    public void updateFrom(EntityData data, GameTemplates templates) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         if (data.has(entityId, core.IN_BATTLE_ZONE)) {
             setZone(BoardZone.BATTLE);
@@ -48,17 +49,16 @@ public class CardModel extends BoardObjectModel {
 
         List<String> keywords = new ArrayList<>();
         if (getZone() == BoardZone.BATTLE) {
-            EffectiveStatsService stats = new EffectiveStatsService(data);
+            EffectiveStatsService stats = new EffectiveStatsService(data, templates);
             setFoil(data.has(entityId, core.HERO));
             if (data.has(entityId, core.ATTACK)) {
-                setAttack(data.get(entityId, core.ATTACK));
+                setAttack(stats.attack(entityId));
             } else {
                 setAttack(null);
             }
             if (data.has(entityId, core.HEALTH)) {
-                int health = stats.health(entityId);
-                setHealth(health);
-                setDamaged(health < template.get(core.HEALTH));
+                setHealth(stats.health(entityId));
+                setDamaged(data.get(entityId, core.HEALTH) < template.get(core.HEALTH));
             } else {
                 setHealth(null);
                 setDamaged(false);

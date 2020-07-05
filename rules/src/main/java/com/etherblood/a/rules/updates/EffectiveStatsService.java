@@ -2,15 +2,20 @@ package com.etherblood.a.rules.updates;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.templates.StatModifier;
 
 public class EffectiveStatsService {
 
     private final EntityData data;
     private final CoreComponents core;
+    private final GameTemplates templates;
 
-    public EffectiveStatsService(EntityData data) {
+    public EffectiveStatsService(EntityData data, GameTemplates templates) {
         this.data = data;
         this.core = data.getComponents().getModule(CoreComponents.class);
+        this.templates = templates;
     }
 
     public void killHealthless() {
@@ -21,8 +26,21 @@ public class EffectiveStatsService {
         }
     }
 
+    public int attack(int minion) {
+        int attack = data.getOptional(minion, core.ATTACK).orElse(0);
+        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
+        for (StatModifier attackModifier : template.getAttackModifiers()) {
+            attack = attackModifier.modify(data, templates, minion, attack);
+        }
+        return attack;
+    }
+
     public int health(int minion) {
         int health = data.getOptional(minion, core.HEALTH).orElse(0);
+        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
+        for (StatModifier healthModifier : template.getHealthModifiers()) {
+            health = healthModifier.modify(data, templates, minion, health);
+        }
         if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
             health += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_HEALTH_AURA);
         }

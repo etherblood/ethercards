@@ -6,7 +6,8 @@
     "colors": [
       "BLACK",
       "RED"
-    ]
+    ],
+    "description": "Whenever an opponent summons a creature with the same name as a card in their graveyard, that player loses 10 life."
   },
   "casts": [
     {
@@ -16,6 +17,12 @@
           "type": "selfSummon"
         }
       ]
+    }
+  ],
+  "onSummon": [
+    {
+      "type": "kolaghanDamage",
+      "damage": "10"
     }
   ],
   "components": {

@@ -11,7 +11,7 @@ import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.Set;
 import java.util.function.IntUnaryOperator;
 
-public class LathlissTokenEffect extends Effect {
+public class LathlissTokenEffect implements Effect {
 
     @CardId
     public final int tokenId;

@@ -14,8 +14,8 @@ public class LathlissDragonQueenTest extends AbstractGameTest {
         data.set(player(1), core.MANA, Integer.MAX_VALUE);
 
         int lathliss = createMinion(player(0), "lathliss_dragon_queen");
-        int babyDragon0 = createHandCard(player(0), "baby_dragon");
-        int babyDragon1 = createHandCard(player(1), "baby_dragon");
+        int babyDragon0 = createCard(player(0), "baby_dragon", core.IN_HAND_ZONE);
+        int babyDragon1 = createCard(player(1), "baby_dragon", core.IN_HAND_ZONE);
 
         Assertions.assertEquals(3, data.list(core.IN_BATTLE_ZONE).size());
 

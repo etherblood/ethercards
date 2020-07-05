@@ -10,9 +10,9 @@ public class RoyalJellyTest extends AbstractGameTest {
 
     @Test
     public void royalJelly_draw_drone() {
-        int royalJelly = createHandCard(player(0), "royal_jelly");
-        int queen = createLibraryCard(player(0), "bee_queen");
-        int drone = createLibraryCard(player(0), "bee_drone");
+        int royalJelly = createCard(player(0), "royal_jelly", core.IN_HAND_ZONE);
+        int queen = createCard(player(0), "bee_queen", core.IN_LIBRARY_ZONE);
+        int drone = createCard(player(0), "bee_drone", core.IN_LIBRARY_ZONE);
 
         data.set(player(0), core.MANA, Integer.MAX_VALUE);
         game.getMoves().apply(new Cast(player(0), royalJelly, ~0));
@@ -23,9 +23,9 @@ public class RoyalJellyTest extends AbstractGameTest {
 
     @Test
     public void royalJelly_draw_queen() {
-        int royalJelly = createHandCard(player(1), "royal_jelly");
-        int queen = createLibraryCard(player(1), "bee_queen");
-        int drone = createLibraryCard(player(1), "bee_drone");
+        int royalJelly = createCard(player(1), "royal_jelly", core.IN_HAND_ZONE);
+        int queen = createCard(player(1), "bee_queen", core.IN_LIBRARY_ZONE);
+        int drone = createCard(player(1), "bee_drone", core.IN_LIBRARY_ZONE);
 
         game.getMoves().apply(new EndAttackPhase(player(0)));
         data.set(player(1), core.MANA, Integer.MAX_VALUE);
