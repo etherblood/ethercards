@@ -1,8 +1,8 @@
 package com.etherblood.a.rules.templates;
 
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.templates.effects.Effect;
-import com.etherblood.a.rules.templates.effects.SelfSummonEffect;
+import com.etherblood.a.rules.templates.instances.effects.Effect;
+import com.etherblood.a.rules.templates.instances.effects.SelfSummonEffect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

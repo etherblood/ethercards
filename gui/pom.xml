@@ -90,7 +90,7 @@
         </dependency>
         <dependency>
             <groupId>com.etherblood.a</groupId>
-            <artifactId>templates</artifactId>
+            <artifactId>templates-api</artifactId>
             <version>0.1.0</version>
         </dependency>
         <dependency>

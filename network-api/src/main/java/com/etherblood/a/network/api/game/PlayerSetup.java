@@ -1,6 +1,6 @@
 package com.etherblood.a.network.api.game;
 
-import com.etherblood.a.templates.RawLibraryTemplate;
+import com.etherblood.a.templates.api.RawLibraryTemplate;
 
 public class PlayerSetup {
 

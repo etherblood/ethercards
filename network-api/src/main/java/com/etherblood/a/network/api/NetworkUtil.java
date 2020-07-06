@@ -23,7 +23,7 @@ import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
-import com.etherblood.a.templates.RawLibraryTemplate;
+import com.etherblood.a.templates.api.RawLibraryTemplate;
 import com.google.gson.internal.LinkedTreeMap;
 import java.util.HashMap;
 

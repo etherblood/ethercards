@@ -8,7 +8,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.MoveAvailabilityService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.effects.Effect;
+import com.etherblood.a.rules.templates.instances.effects.Effect;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ActionSystem;
 import com.etherblood.a.rules.updates.Trigger;

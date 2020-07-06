@@ -25,7 +25,7 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
-import com.etherblood.a.templates.RawLibraryTemplate;
+import com.etherblood.a.templates.api.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.security.SecureRandom;
 import java.util.ArrayList;

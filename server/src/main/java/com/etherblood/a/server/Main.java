@@ -1,8 +1,8 @@
 package com.etherblood.a.server;
 
 import com.etherblood.a.network.api.jwt.JwtParser;
-import com.etherblood.a.templates.RawLibraryTemplate;
-import com.etherblood.a.templates.TemplatesLoader;
+import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.TemplatesLoader;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.Reader;

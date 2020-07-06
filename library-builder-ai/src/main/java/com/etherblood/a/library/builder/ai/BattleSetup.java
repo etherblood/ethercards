@@ -17,10 +17,10 @@ import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.setup.SimpleSetup;
-import com.etherblood.a.templates.LibraryTemplate;
-import com.etherblood.a.templates.RawLibraryTemplate;
-import com.etherblood.a.templates.TemplatesLoader;
-import com.etherblood.a.templates.TemplatesParser;
+import com.etherblood.a.templates.api.LibraryTemplate;
+import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.TemplatesLoader;
+import com.etherblood.a.templates.api.TemplatesParser;
 import com.google.gson.JsonElement;
 import java.util.function.Function;
 

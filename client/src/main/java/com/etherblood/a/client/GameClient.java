@@ -10,7 +10,7 @@ import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.network.api.matchmaking.OpponentType;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.templates.RawLibraryTemplate;
+import com.etherblood.a.templates.api.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;

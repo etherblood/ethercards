@@ -1,8 +1,8 @@
 package com.etherblood.a.gui.prettycards;
 
 import com.etherblood.a.rules.templates.Tribe;
-import com.etherblood.a.templates.CardColor;
-import com.etherblood.a.templates.DisplayCardTemplate;
+import com.etherblood.a.templates.api.CardColor;
+import com.etherblood.a.templates.api.DisplayCardTemplate;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;

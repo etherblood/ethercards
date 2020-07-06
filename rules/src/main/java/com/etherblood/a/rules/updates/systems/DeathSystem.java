@@ -7,7 +7,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.effects.Effect;
+import com.etherblood.a.rules.templates.instances.effects.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
 import com.etherblood.a.rules.updates.BattleZoneService;
 import com.etherblood.a.rules.updates.Modifier;

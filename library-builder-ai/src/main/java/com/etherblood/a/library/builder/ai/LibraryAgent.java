@@ -1,6 +1,6 @@
 package com.etherblood.a.library.builder.ai;
 
-import com.etherblood.a.templates.RawLibraryTemplate;
+import com.etherblood.a.templates.api.RawLibraryTemplate;
 import java.nio.file.Path;
 import java.util.Arrays;
 

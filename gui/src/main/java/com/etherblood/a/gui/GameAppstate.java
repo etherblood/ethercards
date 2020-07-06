@@ -54,7 +54,7 @@ import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.templates.DisplayCardTemplate;
+import com.etherblood.a.templates.api.DisplayCardTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jme3.app.Application;
