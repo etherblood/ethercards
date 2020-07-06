@@ -1,6 +1,5 @@
-package com.etherblood.a.game.tests.templates;
+package com.etherblood.a.templates.implementation;
 
-import com.etherblood.a.game.tests.AbstractGameTest;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.instances.effects.KolaghanDamageEffect;

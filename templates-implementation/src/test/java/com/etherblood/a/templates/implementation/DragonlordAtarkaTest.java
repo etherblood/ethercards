@@ -1,6 +1,5 @@
-package com.etherblood.a.game.tests.templates;
+package com.etherblood.a.templates.implementation;
 
-import com.etherblood.a.game.tests.*;
 import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.DeclareAttack;
 import com.etherblood.a.rules.moves.EndAttackPhase;

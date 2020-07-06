@@ -1,6 +1,5 @@
-package com.etherblood.a.game.tests.templates;
+package com.etherblood.a.templates.implementation;
 
-import com.etherblood.a.game.tests.AbstractGameTest;
 import com.etherblood.a.rules.moves.Update;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
