@@ -17,7 +17,7 @@ import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.instances.effects.targeting.TargetUtil;
+import com.etherblood.a.rules.targeting.TargetUtil;
 import com.etherblood.a.rules.updates.SystemFactory;
 import java.util.ArrayList;
 import java.util.Collections;

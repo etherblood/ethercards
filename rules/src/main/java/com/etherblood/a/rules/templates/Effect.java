@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.templates.instances.effects;
+package com.etherblood.a.rules.templates;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;

@@ -1,10 +1,11 @@
 package com.etherblood.a.rules.templates.instances.effects;
 
+import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.instances.effects.filedtypes.CardId;
+import com.etherblood.a.rules.templates.filedtypes.CardId;
 import java.util.function.IntUnaryOperator;
 
 public class DrawCardTemplateEffect implements Effect {

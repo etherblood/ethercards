@@ -7,7 +7,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.instances.effects.Effect;
+import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
 import java.util.function.IntUnaryOperator;
 

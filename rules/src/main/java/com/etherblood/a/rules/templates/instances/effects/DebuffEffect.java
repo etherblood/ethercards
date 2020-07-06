@@ -1,11 +1,12 @@
 package com.etherblood.a.rules.templates.instances.effects;
 
+import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
-import com.etherblood.a.rules.templates.instances.effects.filedtypes.ComponentsMap;
+import com.etherblood.a.rules.templates.filedtypes.ComponentsMap;
 import java.util.function.IntUnaryOperator;
 
 public class DebuffEffect implements Effect {

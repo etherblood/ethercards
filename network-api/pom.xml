@@ -39,14 +39,5 @@
             <artifactId>bcprov-jdk16</artifactId>
             <version>1.46</version>
         </dependency>
-        
-        <dependency>
-            <!-- dependency only included for build order -->
-            <!-- run game-tests before building network related project -->
-            <groupId>com.etherblood.a</groupId>
-            <artifactId>game-tests</artifactId>
-            <version>0.1.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>

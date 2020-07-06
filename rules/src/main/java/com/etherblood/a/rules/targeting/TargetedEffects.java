@@ -1,10 +1,10 @@
-package com.etherblood.a.rules.templates.instances.effects.targeting;
+package com.etherblood.a.rules.targeting;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.instances.effects.Effect;
+import com.etherblood.a.rules.templates.Effect;
 import java.util.function.IntUnaryOperator;
 
 public class TargetedEffects implements Effect {

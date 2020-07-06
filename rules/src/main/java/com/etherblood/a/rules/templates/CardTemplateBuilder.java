@@ -1,7 +1,6 @@
 package com.etherblood.a.rules.templates;
 
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.templates.instances.effects.Effect;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;

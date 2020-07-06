@@ -1,7 +1,6 @@
 package com.etherblood.a.rules.templates;
 
-import com.etherblood.a.rules.templates.instances.effects.Effect;
-import com.etherblood.a.rules.templates.instances.effects.targeting.TargetFilters;
+import com.etherblood.a.rules.targeting.TargetFilters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -5,7 +5,7 @@ import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.Tribe;
-import com.etherblood.a.rules.templates.instances.effects.Effect;
+import com.etherblood.a.rules.templates.Effect;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

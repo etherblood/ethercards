@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.templates.instances.effects.targeting;
+package com.etherblood.a.rules.targeting;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;

@@ -1,5 +1,6 @@
 package com.etherblood.a.rules.templates.instances.effects;
 
+import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
