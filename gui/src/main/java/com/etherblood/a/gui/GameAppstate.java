@@ -15,7 +15,6 @@ import com.destrostudios.cardgui.events.MoveCardEvent;
 import com.destrostudios.cardgui.interactivities.AimToTargetInteractivity;
 import com.destrostudios.cardgui.interactivities.DragToPlayInteractivity;
 import com.destrostudios.cardgui.samples.animations.CameraShakeAnimation;
-import com.destrostudios.cardgui.samples.animations.SlamEntryAnimation;
 import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
@@ -62,9 +61,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -347,7 +344,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         if (game.isGameOver()) {
             return;
         }
-        List<Move> moves = game.getMoves().generate(false, false, userControlledPlayer);
+        List<Move> moves = game.getMoves().generate(false, userControlledPlayer);
         int index = 0;
         for (int cardEntity : cards) {
             Card<CardModel> card = getOrCreateMinion(cardEntity);
@@ -383,7 +380,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             public boolean isValid(BoardObject target) {
                 if (target instanceof Card) {
                     int targetId = objectEntities.get(target);
-                    List<Move> moves = game.getMoves().generate(false, false);
+                    List<Move> moves = game.getMoves().generate(false);
                     return moves.stream().anyMatch(new DeclareAttack(player, attacker, targetId)::equals);
                 }
                 return false;
@@ -404,7 +401,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             public boolean isValid(BoardObject target) {
                 if (target instanceof Card) {
                     int targetId = objectEntities.get(target);
-                    List<Move> moves = game.getMoves().generate(false, false);
+                    List<Move> moves = game.getMoves().generate(false);
                     return moves.stream().anyMatch(new DeclareBlock(player, blocker, targetId)::equals);
                 }
                 return false;
@@ -430,7 +427,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 public boolean isValid(BoardObject target) {
                     if (target instanceof Card) {
                         int targetId = objectEntities.get(target);
-                        List<Move> moves = game.getMoves().generate(false, false);
+                        List<Move> moves = game.getMoves().generate(false);
                         return moves.stream().anyMatch(new Cast(player, castable, targetId)::equals);
                     }
                     return false;

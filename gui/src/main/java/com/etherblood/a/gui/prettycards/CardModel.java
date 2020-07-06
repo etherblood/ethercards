@@ -114,6 +114,9 @@ public class CardModel extends BoardObjectModel {
             if (data.has(entityId, core.OWN_MINIONS_HASTE_AURA)) {
                 keywords.add("Haste_Aura");
             }
+            if (data.has(entityId, core.RAGE)) {
+                keywords.add("Rage");
+            }
             if (stats.isFastToAttack(entityId) && stats.isFastToDefend(entityId)) {
                 keywords.add("Haste");
             } else if (stats.isFastToAttack(entityId)) {
@@ -193,6 +196,9 @@ public class CardModel extends BoardObjectModel {
             }
             if (template.has(core.OWN_MINIONS_HASTE_AURA)) {
                 keywords.add("Haste_Aura");
+            }
+            if (template.has(core.RAGE)) {
+                keywords.add("Rage");
             }
             if (template.has(core.FAST_TO_ATTACK) && template.has(core.FAST_TO_DEFEND)) {
                 keywords.add("Haste");

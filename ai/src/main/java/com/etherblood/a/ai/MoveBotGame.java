@@ -9,20 +9,18 @@ import java.util.stream.Collectors;
 
 public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
-    public boolean pruneFriendlyAttacks = true;
-
     public MoveBotGame(Game game) {
         super(game);
     }
 
     @Override
     public List<Move> generateMoves() {
-        return game.getMoves().generate(pruneFriendlyAttacks, true);
+        return game.getMoves().generate(true);
     }
 
     @Override
     public List<Move> generateMoves(int playerIndex) {
-        return game.getMoves().generate(pruneFriendlyAttacks, true, getGame().findPlayerByIndex(playerIndex));
+        return game.getMoves().generate(true, getGame().findPlayerByIndex(playerIndex));
     }
 
     @Override

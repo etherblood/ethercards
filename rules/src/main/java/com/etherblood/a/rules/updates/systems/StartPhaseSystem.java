@@ -1,9 +1,11 @@
 package com.etherblood.a.rules.updates.systems;
 
 import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.MoveAvailabilityService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.effects.Effect;
@@ -20,6 +22,7 @@ public class StartPhaseSystem implements ActionSystem {
     private final IntUnaryOperator random;
     private final GameEventListener events;
     private final Trigger[] triggers;
+    private final MoveAvailabilityService moveAvailibility;
 
     public StartPhaseSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
@@ -48,6 +51,7 @@ public class StartPhaseSystem implements ActionSystem {
                     }
                 }
             }};
+        this.moveAvailibility = new MoveAvailabilityService(data, templates);
     }
 
     private void startAttackPhase(int player) {
@@ -86,6 +90,27 @@ public class StartPhaseSystem implements ActionSystem {
                 onUpkeepEffect.apply(data, templates, random, events, minion, ~0);
             }
         }
+        
+        for (int rager : data.list(core.RAGE)) {
+            declareRandomAttackIfAble(rager);
+        }
+    }
+
+    private void declareRandomAttackIfAble(int attacker) {
+        int owner = data.get(attacker, core.OWNED_BY);
+        if (!moveAvailibility.canDeclareAttack(owner, attacker, false)) {
+            return;
+        }
+        IntList candidates = new IntList();
+        for (int candidate : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
+            if (moveAvailibility.canDeclareAttack(owner, attacker, candidate, false)) {
+                candidates.add(candidate);
+            }
+        }
+        if (candidates.isEmpty()) {
+            return;
+        }
+        data.set(attacker, core.ATTACKS_TARGET, candidates.getRandomItem(random));
     }
 
     private void startBattlePhase(int player) {

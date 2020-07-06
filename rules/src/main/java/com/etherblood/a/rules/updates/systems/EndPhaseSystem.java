@@ -1,10 +1,12 @@
 package com.etherblood.a.rules.updates.systems;
 
 import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.MoveAvailabilityService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ActionSystem;
@@ -127,9 +129,6 @@ public class EndPhaseSystem implements ActionSystem {
 
     @Override
     public void apply() {
-        for (int player : data.list(core.END_PHASE_ACTION)) {
-            data.remove(player, core.ACTIVE_PLAYER_PHASE);
-        }
     }
 
     @Override
@@ -142,6 +141,7 @@ public class EndPhaseSystem implements ActionSystem {
                 trigger.trigger(player, phase);
             }
             data.remove(player, core.END_PHASE_ACTION);
+            data.remove(player, core.ACTIVE_PLAYER_PHASE);
         }
 
         //mulligan logic
