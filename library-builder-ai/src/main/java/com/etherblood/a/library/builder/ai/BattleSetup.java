@@ -21,6 +21,7 @@ import com.etherblood.a.templates.api.LibraryTemplate;
 import com.etherblood.a.templates.api.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
+import com.etherblood.a.templates.implementation.TemplateAliasMaps;
 import com.google.gson.JsonElement;
 import java.util.function.Function;
 
@@ -65,7 +66,8 @@ public class BattleSetup {
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
 
-        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components));
+        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
+        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
 
         LibraryTemplate lib0 = loader.parseLibrary(a);
         LibraryTemplate lib1 = loader.parseLibrary(b);

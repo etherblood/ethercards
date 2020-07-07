@@ -1,7 +1,6 @@
 package com.etherblood.a.rules.templates;
 
 import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.templates.instances.effects.SelfSummonEffect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,6 +11,7 @@ import java.util.Set;
 public class CardTemplate {
 
     private final int id;
+    private final boolean isMinion;
     private final Integer manaCost;
     private final CardCast[] casts;
     protected final IntMap components;
@@ -25,8 +25,9 @@ public class CardTemplate {
     protected final List<StatModifier> attackModifiers;
     protected final List<StatModifier> healthModifiers;
 
-    protected CardTemplate(int id, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<StatModifier> attackModifiers, List<StatModifier> healthModifiers) {
+    protected CardTemplate(int id, boolean isMinion, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<StatModifier> attackModifiers, List<StatModifier> healthModifiers) {
         this.id = id;
+        this.isMinion = isMinion;
         this.manaCost = manaCost;
         this.casts = casts;
         this.tribes = Collections.unmodifiableSet(EnumSet.copyOf(tribes));
@@ -121,7 +122,6 @@ public class CardTemplate {
     }
     
     public boolean isMinion() {
-        //TODO: this should be a simple boolean
-        return Arrays.stream(casts).anyMatch(x -> x.getEffects().stream().anyMatch(SelfSummonEffect.class::isInstance));
+        return isMinion;
     }
 }

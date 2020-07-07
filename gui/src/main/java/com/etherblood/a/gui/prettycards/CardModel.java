@@ -6,7 +6,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.templates.instances.effects.SoulshiftEffect;
+import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.templates.api.DisplayCardTemplate;
 import com.jme3.math.ColorRGBA;

@@ -8,25 +8,8 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.Tribe;
-import com.etherblood.a.rules.templates.instances.effects.BuffEffect;
-import com.etherblood.a.rules.templates.instances.effects.CardDestructionEffect;
-import com.etherblood.a.rules.templates.instances.effects.CreateCardEffect;
-import com.etherblood.a.rules.templates.instances.effects.DebuffEffect;
-import com.etherblood.a.rules.templates.instances.effects.DrawCardTemplateEffect;
 import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.templates.instances.effects.FractionalDamageEffect;
-import com.etherblood.a.rules.templates.instances.effects.KolaghanDamageEffect;
-import com.etherblood.a.rules.templates.instances.effects.ParticleEventEffect;
-import com.etherblood.a.rules.templates.instances.effects.SummonEffect;
-import com.etherblood.a.rules.templates.instances.effects.LathlissTokenEffect;
-import com.etherblood.a.rules.templates.instances.effects.ResurrectRandomEffect;
-import com.etherblood.a.rules.templates.instances.effects.SelfDiscardEffect;
-import com.etherblood.a.rules.templates.instances.effects.SelfSummonEffect;
-import com.etherblood.a.rules.templates.instances.effects.SoulshiftEffect;
-import com.etherblood.a.rules.templates.instances.effects.TakeControlEffect;
 import com.etherblood.a.rules.targeting.TargetFilters;
-import com.etherblood.a.rules.targeting.TargetedEffects;
-import com.etherblood.a.rules.templates.instances.statmodifiers.AddSpiritCountModifier;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -47,27 +30,7 @@ public class TemplatesParser {
     private final Map<String, Integer> componentAliases = new HashMap<>();
     private final Gson aliasGson;
 
-    public TemplatesParser(Components components) {
-        Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
-        effectClasses.put("summon", SummonEffect.class);
-        effectClasses.put("selfSummon", SelfSummonEffect.class);
-        effectClasses.put("selfDiscard", SelfDiscardEffect.class);
-        effectClasses.put("lathlissToken", LathlissTokenEffect.class);
-        effectClasses.put("fractionalDamage", FractionalDamageEffect.class);
-        effectClasses.put("buff", BuffEffect.class);
-        effectClasses.put("debuff", DebuffEffect.class);
-        effectClasses.put("create", CreateCardEffect.class);
-        effectClasses.put("targeted", TargetedEffects.class);
-        effectClasses.put("particle", ParticleEventEffect.class);
-        effectClasses.put("drawTemplate", DrawCardTemplateEffect.class);
-        effectClasses.put("takeControl", TakeControlEffect.class);
-        effectClasses.put("soulshift", SoulshiftEffect.class);
-        effectClasses.put("spiritCountSoulshift", SoulshiftEffect.class);
-        effectClasses.put("cardDestruction", CardDestructionEffect.class);
-        effectClasses.put("resurrectRandom", ResurrectRandomEffect.class);
-        effectClasses.put("kolaghanDamage", KolaghanDamageEffect.class);
-        Map<String, Class<? extends StatModifier>> modifierClasses = new HashMap<>();
-        modifierClasses.put("addSpiritCount", AddSpiritCountModifier.class);
+    public TemplatesParser(Components components, Map<String, Class<? extends Effect>> effectClasses, Map<String, Class<? extends StatModifier>> modifierClasses) {
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }

@@ -40,6 +40,6 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
 
     @Override
     public DisplayCardTemplate build(int id) {
-        return new DisplayCardTemplate(id, manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), alias, name, flavourText, description, imagePath, colors, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, attackModifiers, healthModifiers);
+        return new DisplayCardTemplate(id, !components.isEmpty(), manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), alias, name, flavourText, description, imagePath, colors, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, attackModifiers, healthModifiers);
     }
 }

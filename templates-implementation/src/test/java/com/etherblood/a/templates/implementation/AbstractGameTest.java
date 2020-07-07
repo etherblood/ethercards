@@ -22,9 +22,6 @@ import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-/*
- * TODO: this is a duplicate from game-tests, fix this with proper dependencies
- */
 public abstract class AbstractGameTest {
 
     private static final String DEFAULT_HERO = "lots_of_health";
@@ -37,11 +34,12 @@ public abstract class AbstractGameTest {
     public Game game;
 
     public AbstractGameTest() {
+        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
         GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components));
+        loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
         String[] cardPool = new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class);
         for (String card : cardPool) {
             loader.registerCardAlias(card);

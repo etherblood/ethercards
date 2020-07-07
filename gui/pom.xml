@@ -85,16 +85,6 @@
     <dependencies>
         <dependency>
             <groupId>com.etherblood.a</groupId>
-            <artifactId>rules</artifactId>
-            <version>0.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.etherblood.a</groupId>
-            <artifactId>templates-api</artifactId>
-            <version>0.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.etherblood.a</groupId>
             <artifactId>client</artifactId>
             <version>0.1.0</version>
         </dependency>

@@ -23,6 +23,7 @@ import com.etherblood.a.templates.api.LibraryTemplate;
 import com.etherblood.a.templates.api.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
+import com.etherblood.a.templates.implementation.TemplateAliasMaps;
 import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.Random;
@@ -87,7 +88,8 @@ public class TestSandbox {
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components));
+        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
+        TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
 
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
         rawLibrary.hero = "lots_of_health";

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
 import com.etherblood.a.game.events.api.GameEventListener;
+import com.etherblood.a.templates.implementation.TemplateAliasMaps;
 
 public class GameReplayService {
 
@@ -49,7 +50,8 @@ public class GameReplayService {
         componentsBuilder.registerModule(CoreComponents::new);
         Components components = componentsBuilder.build();
 
-        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components));
+        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
+        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
 
         GameSetup setup = replay.setup;
         SimpleSetup simpleSetup = new SimpleSetup(setup.players.length);

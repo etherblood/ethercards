@@ -30,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>com.etherblood.a</groupId>
-            <artifactId>templates-api</artifactId>
+            <artifactId>templates-implementation</artifactId>
             <version>0.1.0</version>
         </dependency>
         
