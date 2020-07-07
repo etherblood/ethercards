@@ -17,27 +17,26 @@ public class UpdateService {
     public void run() {
         do {
             for (ActionSystem phaseSystem : phaseSystems) {
-                phaseSystem.modify();
+                phaseSystem.before();
             }
             for (ActionSystem phaseSystem : phaseSystems) {
-                phaseSystem.apply();
+                phaseSystem.run();
             }
             for (ActionSystem phaseSystem : phaseSystems) {
-                phaseSystem.triggerAndClean();
+                phaseSystem.after();
             }
             while (actionSystems.stream().anyMatch(ActionSystem::isActive)) {
                 for (ActionSystem actionSystem : actionSystems) {
-                    actionSystem.modify();
+                    actionSystem.before();
                 }
                 for (ActionSystem actionSystem : actionSystems) {
-                    actionSystem.apply();
+                    actionSystem.run();
+                }
+                for (ActionSystem actionSystem : actionSystems) {
+                    actionSystem.after();
                 }
 
                 stats.killHealthless();
-
-                for (ActionSystem actionSystem : actionSystems) {
-                    actionSystem.triggerAndClean();
-                }
             }
         } while (phaseSystems.stream().anyMatch(ActionSystem::isActive));
     }

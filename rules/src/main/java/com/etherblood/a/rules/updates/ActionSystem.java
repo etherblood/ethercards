@@ -8,9 +8,9 @@ public interface ActionSystem {
 
     boolean isActive();
 
-    void modify();
+    void before();
 
-    void apply();
+    void run();
 
-    void triggerAndClean();
+    void after();
 }

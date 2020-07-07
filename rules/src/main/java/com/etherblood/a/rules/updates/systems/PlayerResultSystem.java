@@ -30,7 +30,7 @@ public class PlayerResultSystem implements ActionSystem {
     }
 
     @Override
-    public void modify() {
+    public void before() {
         for (int entity : data.list(core.PLAYER_RESULT_REQUEST)) {
             int result = data.get(entity, core.PLAYER_RESULT_REQUEST);
             for (int i = 0; result > 0 && i < modifiers.length; i++) {
@@ -42,35 +42,21 @@ public class PlayerResultSystem implements ActionSystem {
     }
 
     @Override
-    public void apply() {
-        IntList playerResultActions = data.list(core.PLAYER_RESULT_ACTION);
-        for (int player : playerResultActions) {
+    public void run() {
+        for (int player : data.list(core.PLAYER_RESULT_ACTION)) {
             int result = data.get(player, core.PLAYER_RESULT_ACTION);
-            data.set(player, core.PLAYER_RESULT, result);
-        }
-        if (playerResultActions.nonEmpty()) {
-            //TODO: improve game result logic
-            for (int player : data.list(core.PLAYER_INDEX)) {
-                if (!data.has(player, core.PLAYER_RESULT)) {
-                    data.set(player, core.PLAYER_RESULT_REQUEST, PlayerResult.WIN);
-                }
+            for (Trigger trigger : triggers) {
+                trigger.trigger(player, result);
             }
         }
     }
 
-//        updatePlayerResults();
-//
-//        for (int player : data.list(core.PLAYER_RESULT)) {
-//            if (data.has(player, core.ACTIVE_PLAYER_PHASE)) {
-//                nextTurn(player);
-//                data.remove(player, core.ACTIVE_PLAYER_PHASE);
-//                data.remove(player, core.END_PHASE_REQUEST);
-//            }
-//        }
     @Override
-    public void triggerAndClean() {
-        for (int player : data.list(core.PLAYER_RESULT_ACTION)) {
+    public void after() {
+        IntList playerResultActions = data.list(core.PLAYER_RESULT_ACTION);
+        for (int player : playerResultActions) {
             int result = data.get(player, core.PLAYER_RESULT_ACTION);
+            data.set(player, core.PLAYER_RESULT, result);
 
             if (data.has(player, core.ACTIVE_PLAYER_PHASE)) {
                 nextTurn(player);
@@ -78,10 +64,31 @@ public class PlayerResultSystem implements ActionSystem {
                 data.remove(player, core.END_PHASE_REQUEST);
             }
 
-            for (Trigger trigger : triggers) {
-                trigger.trigger(player, result);
-            }
             data.remove(player, core.PLAYER_RESULT_ACTION);
+        }
+        if (playerResultActions.nonEmpty()) {
+            int wins = 0;
+            int losses = 0;
+            IntList undecided = new IntList();
+            for (int player : data.list(core.PLAYER_INDEX)) {
+                if (data.hasValue(player, core.PLAYER_RESULT, PlayerResult.WIN)) {
+                    wins++;
+                } else if (data.hasValue(player, core.PLAYER_RESULT, PlayerResult.LOSS)) {
+                    losses++;
+                } else {
+                    undecided.add(player);
+                }
+            }
+            if (wins == 0 && undecided.size() == 1) {
+                int player = undecided.get(0);
+                data.set(player, core.PLAYER_RESULT_REQUEST, PlayerResult.WIN);
+            } else if (wins != 0) {
+                for (int player : undecided) {
+                    data.set(player, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
+                }
+            } else {
+                // multiple active players without winner, game is still undecided
+            }
         }
     }
 
@@ -89,41 +96,6 @@ public class PlayerResultSystem implements ActionSystem {
         Integer bestPlayer = SystemsUtil.nextPlayer(data, player);
         if (bestPlayer != null) {
             data.set(bestPlayer, core.START_PHASE_REQUEST, PlayerPhase.BLOCK);
-        }
-    }
-
-    private void updatePlayerResults() {
-        IntList players = data.list(core.PLAYER_INDEX);
-        IntList alive = new IntList();
-        for (int minion : data.list(core.HERO)) {
-            if (!data.has(minion, core.IN_BATTLE_ZONE)) {
-                continue;
-            }
-            int owner = data.get(minion, core.OWNED_BY);
-            if (data.hasValue(owner, core.PLAYER_RESULT, PlayerResult.LOSS)) {
-                continue;
-            }
-            if (!alive.contains(owner)) {
-                alive.add(owner);
-            }
-        }
-        IntList dead = new IntList();
-        for (int player : players) {
-            if (!alive.contains(player)) {
-                dead.add(player);
-            }
-        }
-
-        if (alive.size() == 1) {
-            int winner = alive.get(0);
-            if (!data.hasValue(winner, core.PLAYER_RESULT, PlayerResult.WIN)) {
-                data.set(winner, core.PLAYER_RESULT_REQUEST, PlayerResult.WIN);
-            }
-        }
-        for (int loser : dead) {
-            if (!data.hasValue(loser, core.PLAYER_RESULT, PlayerResult.LOSS)) {
-                data.set(loser, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
-            }
         }
     }
 

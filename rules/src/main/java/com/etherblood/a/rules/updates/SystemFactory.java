@@ -11,6 +11,7 @@ import com.etherblood.a.rules.updates.systems.DrawSystem;
 import com.etherblood.a.rules.updates.systems.EndPhaseSystem;
 import com.etherblood.a.rules.updates.systems.PlayerResultSystem;
 import com.etherblood.a.rules.updates.systems.StartPhaseSystem;
+import com.etherblood.a.rules.updates.systems.SurvivalSystem;
 import java.util.Arrays;
 import java.util.function.IntUnaryOperator;
 
@@ -40,6 +41,7 @@ public class SystemFactory {
                         new DrawSystem(data, random),
                         new DamageSystem(data, templates, random, events),
                         new DeathSystem(data, templates, random, events),
+                        new SurvivalSystem(data, templates, random, events),
                         new PlayerResultSystem(data)
                 ),
                 new EffectiveStatsService(data, templates)

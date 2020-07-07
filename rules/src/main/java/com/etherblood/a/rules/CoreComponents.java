@@ -13,6 +13,8 @@ public class CoreComponents implements ComponentsModule {
     public final int DAMAGE_ACTION;
     public final int DEATH_REQUEST;
     public final int DEATH_ACTION;
+    public final int DAMAGE_SURVIVAL_REQUEST;
+    public final int DAMAGE_SURVIVAL_ACTION;
     public final int DRAW_CARDS_REQUEST;
     public final int DRAW_CARDS_ACTION;
     public final int DISCARD_CARDS_REQUEST;
@@ -121,5 +123,7 @@ public class CoreComponents implements ComponentsModule {
         OWN_MINIONS_HASTE_AURA = register.applyAsInt("OWN_MINIONS_HASTE_AURA");
         OWN_MINIONS_HEALTH_AURA = register.applyAsInt("OWN_MINIONS_HEALTH_AURA");
         OWN_MINIONS_VENOM_AURA = register.applyAsInt("OWN_MINIONS_VENOM_AURA");
+        DAMAGE_SURVIVAL_REQUEST = register.applyAsInt("DAMAGE_SURVIVAL_REQUEST");
+        DAMAGE_SURVIVAL_ACTION = register.applyAsInt("DAMAGE_SURVIVAL_ACTION");
     }
 }

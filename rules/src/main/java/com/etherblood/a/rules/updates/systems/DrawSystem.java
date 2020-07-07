@@ -30,7 +30,7 @@ public class DrawSystem implements ActionSystem {
     }
     
     @Override
-    public void modify() {
+    public void before() {
         for (int entity : data.list(core.DRAW_CARDS_REQUEST)) {
             int cards = data.get(entity, core.DRAW_CARDS_REQUEST);
             for (int i = 0; cards > 0 && i < modifiers.length; i++) {
@@ -44,21 +44,20 @@ public class DrawSystem implements ActionSystem {
     }
     
     @Override
-    public void apply() {
-        for (int player : data.list(core.DRAW_CARDS_ACTION)) {
-            int cards = data.get(player, core.DRAW_CARDS_ACTION);
-            SystemsUtil.drawCards(data, cards, random, player);
-        }
-        
-    }
-    
-    @Override
-    public void triggerAndClean() {
+    public void run() {
         for (int player : data.list(core.DRAW_CARDS_ACTION)) {
             int cards = data.get(player, core.DRAW_CARDS_ACTION);
             for (Trigger trigger : triggers) {
                 trigger.trigger(player, cards);
             }
+        }
+    }
+    
+    @Override
+    public void after() {
+        for (int player : data.list(core.DRAW_CARDS_ACTION)) {
+            int cards = data.get(player, core.DRAW_CARDS_ACTION);
+            SystemsUtil.drawCards(data, cards, random, player);
             data.remove(player, core.DRAW_CARDS_ACTION);
         }
         

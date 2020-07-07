@@ -53,7 +53,7 @@ public class DeathSystem implements ActionSystem {
     }
 
     @Override
-    public void modify() {
+    public void before() {
         for (int entity : data.list(core.DEATH_REQUEST)) {
             int death = data.get(entity, core.DEATH_REQUEST);
             for (int i = 0; death > 0 && i < modifiers.length; i++) {
@@ -67,20 +67,20 @@ public class DeathSystem implements ActionSystem {
     }
 
     @Override
-    public void apply() {
-        for (int entity : data.list(core.DEATH_ACTION)) {
-            data.remove(entity, core.ATTACKS_TARGET);
-            data.remove(entity, core.BLOCKS_ATTACKER);
-        }
-    }
-
-    @Override
-    public void triggerAndClean() {
+    public void run() {
         for (int entity : data.list(core.DEATH_ACTION)) {
             int death = data.get(entity, core.DEATH_ACTION);
             for (Trigger trigger : triggers) {
                 trigger.trigger(entity, death);
             }
+        }
+    }
+
+    @Override
+    public void after() {
+        for (int entity : data.list(core.DEATH_ACTION)) {
+            data.remove(entity, core.ATTACKS_TARGET);
+            data.remove(entity, core.BLOCKS_ATTACKER);
             data.remove(entity, core.DEATH_ACTION);
             new BattleZoneService(data, templates).removeFromBattle(entity);
             data.set(entity, core.IN_GRAVEYARD_ZONE, 1);

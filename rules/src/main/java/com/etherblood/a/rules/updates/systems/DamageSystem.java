@@ -6,7 +6,6 @@ import com.etherblood.a.game.events.api.events.DamageEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
 import com.etherblood.a.rules.updates.Modifier;
 import com.etherblood.a.rules.updates.Trigger;
@@ -27,12 +26,10 @@ public class DamageSystem implements ActionSystem {
         };
         this.triggers = new Trigger[]{
             (entity, value) -> {
-                if (!data.has(entity, core.DEATH_REQUEST)) {
-                    int templateId = data.get(entity, core.CARD_TEMPLATE);
-                    CardTemplate template = templates.getCard(templateId);
-                    for (Effect onSurviveEffect : template.getOnSelfSurviveEffects()) {
-                        onSurviveEffect.apply(data, templates, random, events, entity, value);
-                    }
+                int templateId = data.get(entity, core.CARD_TEMPLATE);
+                CardTemplate template = templates.getCard(templateId);
+                if (!template.getOnSelfSurviveEffects().isEmpty()) {
+                    data.set(entity, core.DAMAGE_SURVIVAL_REQUEST, value);
                 }
                 events.fire(new DamageEvent(entity, value));
             }
@@ -45,7 +42,7 @@ public class DamageSystem implements ActionSystem {
     }
 
     @Override
-    public void modify() {
+    public void before() {
         for (int entity : data.list(core.DAMAGE_REQUEST)) {
             int damage = data.get(entity, core.DAMAGE_REQUEST);
             for (int i = 0; damage > 0 && i < modifiers.length; i++) {
@@ -59,23 +56,23 @@ public class DamageSystem implements ActionSystem {
     }
 
     @Override
-    public void apply() {
+    public void run() {
+        for (int entity : data.list(core.DAMAGE_ACTION)) {
+            int damage = data.get(entity, core.DAMAGE_ACTION);
+            for (Trigger trigger : triggers) {
+                trigger.trigger(entity, damage);
+            }
+        }
+    }
+
+    @Override
+    public void after() {
         for (int entity : data.list(core.DAMAGE_ACTION)) {
             int damage = data.get(entity, core.DAMAGE_ACTION);
             assert data.has(entity, core.IN_BATTLE_ZONE);
 
             int previous = data.getOptional(entity, core.HEALTH).orElse(0);
             data.set(entity, core.HEALTH, previous - damage);
-        }
-    }
-
-    @Override
-    public void triggerAndClean() {
-        for (int entity : data.list(core.DAMAGE_ACTION)) {
-            int damage = data.get(entity, core.DAMAGE_ACTION);
-            for (Trigger trigger : triggers) {
-                trigger.trigger(entity, damage);
-            }
             data.remove(entity, core.DAMAGE_ACTION);
         }
     }

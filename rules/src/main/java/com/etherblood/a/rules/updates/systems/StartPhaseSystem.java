@@ -143,35 +143,33 @@ public class StartPhaseSystem implements ActionSystem {
     }
 
     @Override
-    public void modify() {
-        for (int entity : data.list(core.START_PHASE_REQUEST)) {
-            int phase = data.get(entity, core.START_PHASE_REQUEST);
-            data.remove(entity, core.START_PHASE_REQUEST);
+    public void before() {
+        for (int player : data.list(core.START_PHASE_REQUEST)) {
+            int phase = data.get(player, core.START_PHASE_REQUEST);
+            data.remove(player, core.START_PHASE_REQUEST);
 
-            //modifiers here
-            if (data.has(entity, core.PLAYER_RESULT)) {
+            if (data.has(player, core.PLAYER_RESULT)) {
                 continue;
             }
 
-            data.set(entity, core.START_PHASE_ACTION, phase);
-        }
-    }
-
-    @Override
-    public void apply() {
-        for (int player : data.list(core.START_PHASE_ACTION)) {
-            int phase = data.get(player, core.START_PHASE_ACTION);
+            data.set(player, core.START_PHASE_ACTION, phase);
             data.set(player, core.ACTIVE_PLAYER_PHASE, phase);
         }
     }
 
     @Override
-    public void triggerAndClean() {
+    public void run() {
         for (int player : data.list(core.START_PHASE_ACTION)) {
             int phase = data.get(player, core.START_PHASE_ACTION);
             for (Trigger trigger : triggers) {
                 trigger.trigger(player, phase);
             }
+        }
+    }
+
+    @Override
+    public void after() {
+        for (int player : data.list(core.START_PHASE_ACTION)) {
             data.remove(player, core.START_PHASE_ACTION);
         }
     }

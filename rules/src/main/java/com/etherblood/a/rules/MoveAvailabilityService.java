@@ -330,6 +330,24 @@ public class MoveAvailabilityService {
             }
             return false;
         }
+        int requiredCards = 1;
+        for (int mulliganedCard : data.list(core.MULLIGAN)) {
+            if (data.hasValue(mulliganedCard, core.OWNED_BY, player)) {
+                requiredCards++;
+            }
+        }
+        for (int availableCard : data.list(core.IN_LIBRARY_ZONE)) {
+            if (data.hasValue(availableCard, core.OWNED_BY, player)) {
+                requiredCards--;
+            }
+        }
+        if(requiredCards > 0) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare mulligan, player #" + player + " does not have enough remaining cards in their library.");
+            }
+            return false;
+        }
+
         return true;
     }
 

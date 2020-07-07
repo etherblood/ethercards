@@ -1,12 +1,10 @@
 package com.etherblood.a.rules.updates.systems;
 
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.MoveAvailabilityService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ActionSystem;
@@ -118,7 +116,7 @@ public class EndPhaseSystem implements ActionSystem {
     }
 
     @Override
-    public void modify() {
+    public void before() {
         for (int entity : data.list(core.END_PHASE_REQUEST)) {
             int phase = data.get(entity, core.END_PHASE_REQUEST);
             //modifiers here
@@ -128,18 +126,21 @@ public class EndPhaseSystem implements ActionSystem {
     }
 
     @Override
-    public void apply() {
+    public void run() {
+        for (int player : data.list(core.END_PHASE_ACTION)) {
+            int phase = data.get(player, core.END_PHASE_ACTION);
+            for (Trigger trigger : triggers) {
+                trigger.trigger(player, phase);
+            }
+        }
     }
 
     @Override
-    public void triggerAndClean() {
+    public void after() {
         boolean mulliganEnded = false;
         for (int player : data.list(core.END_PHASE_ACTION)) {
             int phase = data.get(player, core.END_PHASE_ACTION);
             mulliganEnded |= phase == PlayerPhase.MULLIGAN;
-            for (Trigger trigger : triggers) {
-                trigger.trigger(player, phase);
-            }
             data.remove(player, core.END_PHASE_ACTION);
             data.remove(player, core.ACTIVE_PLAYER_PHASE);
         }

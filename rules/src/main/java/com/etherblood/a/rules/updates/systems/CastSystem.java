@@ -33,15 +33,25 @@ public class CastSystem implements ActionSystem {
     }
 
     @Override
-    public void modify() {
+    public void before() {
     }
 
     @Override
-    public void triggerAndClean() {
+    public void run() {
+        for (int castSource : data.list(core.CAST_TARGET)) {
+            int target = data.get(castSource, core.CAST_TARGET);
+            for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
+                int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
+                CardTemplate otherTemplate = templates.getCard(otherTemplateId);
+                for (Effect effect : otherTemplate.getOnCastEffects()) {
+                    effect.apply(data, templates, random, events, other, target);
+                }
+            }
+        }
     }
 
     @Override
-    public void apply() {
+    public void after() {
         for (int castSource : data.list(core.CAST_TARGET)) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
@@ -61,13 +71,6 @@ public class CastSystem implements ActionSystem {
                     throw new IllegalStateException();
                 }
                 data.set(owner, core.MANA, mana);
-            }
-            for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-                int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
-                CardTemplate otherTemplate = templates.getCard(otherTemplateId);
-                for (Effect effect : otherTemplate.getOnCastEffects()) {
-                    effect.apply(data, templates, random, events, other, target);
-                }
             }
             for (Effect effect : cast.getEffects()) {
                 effect.apply(data, templates, random, events, castSource, target);

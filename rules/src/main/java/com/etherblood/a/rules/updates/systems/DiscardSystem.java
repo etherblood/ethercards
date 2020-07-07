@@ -30,7 +30,7 @@ public class DiscardSystem implements ActionSystem {
     }
 
     @Override
-    public void modify() {
+    public void before() {
         for (int entity : data.list(core.DISCARD_CARDS_REQUEST)) {
             int cards = data.get(entity, core.DISCARD_CARDS_REQUEST);
             for (int i = 0; cards > 0 && i < modifiers.length; i++) {
@@ -44,7 +44,17 @@ public class DiscardSystem implements ActionSystem {
     }
 
     @Override
-    public void apply() {
+    public void run() {
+        for (int player : data.list(core.DISCARD_CARDS_ACTION)) {
+            int cards = data.get(player, core.DISCARD_CARDS_ACTION);
+            for (Trigger trigger : triggers) {
+                trigger.trigger(player, cards);
+            }
+        }
+    }
+
+    @Override
+    public void after() {
         for (int player : data.list(core.DISCARD_CARDS_ACTION)) {
             int cards = data.get(player, core.DISCARD_CARDS_ACTION);
             IntList handCards = data.list(core.IN_HAND_ZONE);
@@ -59,17 +69,6 @@ public class DiscardSystem implements ActionSystem {
                 data.remove(card, core.IN_HAND_ZONE);
                 data.remove(card, core.CARD_TEMPLATE);
                 data.remove(card, core.OWNED_BY);
-            }
-        }
-
-    }
-
-    @Override
-    public void triggerAndClean() {
-        for (int player : data.list(core.DISCARD_CARDS_ACTION)) {
-            int cards = data.get(player, core.DISCARD_CARDS_ACTION);
-            for (Trigger trigger : triggers) {
-                trigger.trigger(player, cards);
             }
             data.remove(player, core.DISCARD_CARDS_ACTION);
         }
