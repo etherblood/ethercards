@@ -16,6 +16,7 @@ import com.etherblood.a.templates.implementation.effects.ResurrectRandomEffect;
 import com.etherblood.a.templates.implementation.effects.SelfDiscardEffect;
 import com.etherblood.a.templates.implementation.effects.SelfSummonEffect;
 import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
+import com.etherblood.a.templates.implementation.effects.SpiritCountSoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SummonEffect;
 import com.etherblood.a.templates.implementation.effects.TakeControlEffect;
 import com.etherblood.a.templates.implementation.statmodifiers.AddSpiritCountModifier;
@@ -39,7 +40,7 @@ public class TemplateAliasMaps {
         effectClasses.put("drawTemplate", DrawCardTemplateEffect.class);
         effectClasses.put("takeControl", TakeControlEffect.class);
         effectClasses.put("soulshift", SoulshiftEffect.class);
-        effectClasses.put("spiritCountSoulshift", SoulshiftEffect.class);
+        effectClasses.put("spiritCountSoulshift", SpiritCountSoulshiftEffect.class);
         effectClasses.put("cardDestruction", CardDestructionEffect.class);
         effectClasses.put("resurrectRandom", ResurrectRandomEffect.class);
         effectClasses.put("kolaghanDamage", KolaghanDamageEffect.class);

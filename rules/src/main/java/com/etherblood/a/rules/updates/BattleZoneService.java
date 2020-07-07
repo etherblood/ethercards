@@ -28,7 +28,9 @@ public class BattleZoneService {
         data.set(entity, core.IN_BATTLE_ZONE, data.createEntity());
     }
 
-    public void removedFromBattle(int entity) {
+    public void removeFromBattle(int entity) {
+        assert data.has(entity, core.IN_BATTLE_ZONE);
+        data.remove(entity, core.IN_BATTLE_ZONE);
         //TODO: use a blacklist instead
         IntList whiteList = new IntList(core.CARD_TEMPLATE, core.OWNED_BY);
         for (ComponentMeta meta : data.getComponents().getMetas()) {

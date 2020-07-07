@@ -12,6 +12,7 @@ import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.setup.SimpleSetup;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.api.RawLibraryTemplate;
@@ -28,6 +29,7 @@ public abstract class AbstractGameTest {
     private final TemplatesLoader loader;
     public final GameSettings settings;
     public final CoreComponents core;
+    public final GameTemplates templates;
 
     public EntityData data;
     public MoveService moves;
@@ -45,11 +47,12 @@ public abstract class AbstractGameTest {
             loader.registerCardAlias(card);
         }
         loader.registerCardAlias(DEFAULT_HERO);
+        templates = loader.buildGameTemplates();
 
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
         rawLibrary.hero = DEFAULT_HERO;
         rawLibrary.cards = Collections.emptyMap();
-        settingsBuilder.templates = loader.buildGameTemplates();
+        settingsBuilder.templates = templates;
         settings = settingsBuilder.build();
 
         core = settings.components.getModule(CoreComponents.class);
@@ -109,7 +112,7 @@ public abstract class AbstractGameTest {
     }
 
     public int createMinion(int owner, int minionTemplate) {
-        return SystemsUtil.createMinion(data, game.getTemplates(), minionTemplate, owner);
+        return SystemsUtil.createMinion(data, templates, minionTemplate, owner);
     }
 
     public int getCardId(String alias) {

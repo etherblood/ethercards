@@ -69,9 +69,6 @@ public class DeathSystem implements ActionSystem {
     @Override
     public void apply() {
         for (int entity : data.list(core.DEATH_ACTION)) {
-            assert data.has(entity, core.IN_BATTLE_ZONE);
-            data.remove(entity, core.IN_BATTLE_ZONE);
-
             data.remove(entity, core.ATTACKS_TARGET);
             data.remove(entity, core.BLOCKS_ATTACKER);
         }
@@ -85,7 +82,7 @@ public class DeathSystem implements ActionSystem {
                 trigger.trigger(entity, death);
             }
             data.remove(entity, core.DEATH_ACTION);
-            new BattleZoneService(data, templates).removedFromBattle(entity);
+            new BattleZoneService(data, templates).removeFromBattle(entity);
             data.set(entity, core.IN_GRAVEYARD_ZONE, 1);
         }
     }
