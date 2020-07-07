@@ -7,7 +7,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Tribe;
-import com.etherblood.a.rules.templates.filedtypes.CardId;
+import com.etherblood.a.templates.api.filedtypes.CardId;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.Set;
 import java.util.function.IntUnaryOperator;

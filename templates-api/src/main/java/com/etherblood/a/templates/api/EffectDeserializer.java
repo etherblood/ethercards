@@ -1,6 +1,6 @@
 package com.etherblood.a.templates.api;
 
-import com.etherblood.a.rules.templates.filedtypes.CardId;
+import com.etherblood.a.templates.api.filedtypes.CardId;
 import com.etherblood.a.rules.templates.Effect;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

@@ -6,8 +6,8 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.filedtypes.CardId;
-import com.etherblood.a.rules.templates.filedtypes.ComponentsMap;
+import com.etherblood.a.templates.api.filedtypes.CardId;
+import com.etherblood.a.templates.api.filedtypes.ComponentsMap;
 import java.util.function.IntUnaryOperator;
 
 public class CreateCardEffect implements Effect {
