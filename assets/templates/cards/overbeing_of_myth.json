@@ -12,7 +12,7 @@
   },
   "casts": [
     {
-      "manaCost": 5,
+      "manaCost": 7,
       "effects": [
         {
           "type": "selfSummon"

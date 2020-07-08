@@ -1,0 +1,31 @@
+{
+  "alias": "slifer_the_sky_dragon",
+  "display": {
+    "name": "Slifer the Sky Dragon",
+    "imagePath": "slifer_the_sky_dragon.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Slifer the Sky Dragon's power and toughness are each equal to the number of cards in your hand."
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 0,
+    "FLYING": true
+  },
+  "attackModifiers": [{"type": "addOwnHandCardCount"}],
+  "healthModifiers": [{"type": "addOwnHandCardCount"}],
+  "tribes": [
+    "DRAGON"
+  ]
+}
