@@ -1,0 +1,33 @@
+{
+  "alias": "nightsoil_kami",
+  "manaCost": 6,
+  "display": {
+    "name": "Nightsoil Kami",
+    "imagePath": "nightsoil_kami.jpg",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "components": {
+    "ATTACK": 6,
+    "HEALTH": 4
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 5
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

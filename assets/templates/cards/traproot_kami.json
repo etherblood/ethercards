@@ -1,0 +1,29 @@
+{
+  "alias": "traproot_kami",
+  "display": {
+    "name": "Traproot Kami",
+    "imagePath": "traproot_kami.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Traproot Kami's toughness is equal to your Mana Pool."
+  },
+  "manaCost": 1,
+  "tribes": ["SPIRIT"],
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "healthModifiers": [{"type": "addOwnManaPool"}],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 0,
+    "CANNOT_ATTACK": true,
+    "REACH": true
+  }
+}

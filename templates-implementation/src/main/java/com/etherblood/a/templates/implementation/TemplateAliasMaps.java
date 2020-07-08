@@ -19,8 +19,12 @@ import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SpiritCountSoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SummonEffect;
 import com.etherblood.a.templates.implementation.effects.TakeControlEffect;
+import com.etherblood.a.templates.implementation.statmodifiers.AddFractionalModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOnOpponentThresholdModifier;
-import com.etherblood.a.templates.implementation.statmodifiers.AddSpiritCountModifier;
+import com.etherblood.a.templates.implementation.statmodifiers.AddOnOwnTurnModifier;
+import com.etherblood.a.templates.implementation.statmodifiers.AddOwnHandCardCountModifier;
+import com.etherblood.a.templates.implementation.statmodifiers.AddOwnManaPoolModifier;
+import com.etherblood.a.templates.implementation.statmodifiers.AddOwnSpiritCountModifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,8 +54,12 @@ public class TemplateAliasMaps {
 
     public Map<String, Class<? extends StatModifier>> getStatModifiers() {
         Map<String, Class<? extends StatModifier>> modifierClasses = new HashMap<>();
-        modifierClasses.put("addSpiritCount", AddSpiritCountModifier.class);
+        modifierClasses.put("addOwnSpiritCount", AddOwnSpiritCountModifier.class);
+        modifierClasses.put("addOwnManaPool", AddOwnManaPoolModifier.class);
+        modifierClasses.put("addOwnHandCardCount", AddOwnHandCardCountModifier.class);
         modifierClasses.put("addOnOpponentThreshold", AddOnOpponentThresholdModifier.class);
+        modifierClasses.put("addOnOwnTurn", AddOnOwnTurnModifier.class);
+        modifierClasses.put("addFractional", AddFractionalModifier.class);
         return modifierClasses;
     }
 }

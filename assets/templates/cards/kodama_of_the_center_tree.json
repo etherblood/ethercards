@@ -24,8 +24,8 @@
       "type": "spiritCountSoulshift"
     }
   ],
-  "attackModifiers": [{"type": "addSpiritCount"}],
-  "healthModifiers": [{"type": "addSpiritCount"}],
+  "attackModifiers": [{"type": "addOwnSpiritCount"}],
+  "healthModifiers": [{"type": "addOwnSpiritCount"}],
   "components": {
     "ATTACK": 0,
     "HEALTH": 0

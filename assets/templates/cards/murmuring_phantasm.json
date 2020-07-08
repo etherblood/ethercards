@@ -1,0 +1,35 @@
+{
+  "alias": "murmuring_phantasm",
+  "display": {
+    "name": "Murmuring Phantasm",
+    "imagePath": "murmuring_phantasm.png",
+    "colors": [
+      "BLUE"
+    ],
+    "flavourText": "\"The most insidious thing in the world is nonsense that sounds just plausible enough to listen to.\"\n—Lazav"
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 5,
+    "CANNOT_ATTACK": true
+  },
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 1
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

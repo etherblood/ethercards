@@ -1,0 +1,45 @@
+{
+  "alias": "carven_caryatid",
+  "display": {
+    "name": "Carven Caryatid",
+    "imagePath": "carven_caryatid.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "When Carven Caryatid enters the battlefield, draw a card.",
+    "flavourText": "So-called \"old wood\" is rare in deforested Ravnica. Statues carved from it are said to house the last of the ancient nature spirits."
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWNER"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 5,
+    "CANNOT_ATTACK": true
+  },
+  "tribes": [
+    "SPIRIT"
+  ]
+}

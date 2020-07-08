@@ -1,0 +1,31 @@
+{
+  "alias": "masumaro_first_to_live",
+  "display": {
+    "name": "Masumaro, First to Live",
+    "imagePath": "masumaro_first_to_live.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Masumaro, First to Live's power and toughness are each equal to twice the number of cards in your hand.",
+    "flavourText": "\"In the waning moments of war, humanity's most ancient ancestors return. But whose side shall they make their own?\"\n—Isao, Enlightened Bushi"
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 0
+  },
+  "attackModifiers": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}],
+  "healthModifiers": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

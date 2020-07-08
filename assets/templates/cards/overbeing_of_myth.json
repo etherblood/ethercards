@@ -1,0 +1,33 @@
+{
+  "alias": "overbeing_of_myth",
+  "display": {
+    "name": "Overbeing of Myth",
+    "imagePath": "overbeing_of_myth.jpg",
+    "colors": [
+      "GREEN",
+      "BLUE"
+    ],
+    "description": "Overbeing of Myth's power and toughness are each equal to the number of cards in your hand.",
+    "flavourText": "\"She walks among us unseen, learning from our imperfections.\"\n—The Seer's Parables"
+  },
+  "casts": [
+    {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 0,
+    "DRAWS_PER_TURN": 1
+  },
+  "attackModifiers": [{"type": "addOwnHandCardCount"}],
+  "healthModifiers": [{"type": "addOwnHandCardCount"}],
+  "tribes": [
+    "SPIRIT"
+  ]
+}
