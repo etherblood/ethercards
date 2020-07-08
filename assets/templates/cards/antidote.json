@@ -6,7 +6,7 @@
     "colors": [
       "WHITE"
     ],
-    "description": "Cure Poisoned, draw a card."
+    "description": "Cure up to 5 Poisoned, draw a card."
   },
   "casts": [
     {
@@ -21,7 +21,7 @@
         {
           "type": "debuff",
           "components": {
-            "POISONED": 1000000
+            "POISONED": 5
           }
         },
         {
