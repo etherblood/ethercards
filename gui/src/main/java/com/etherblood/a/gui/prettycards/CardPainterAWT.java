@@ -44,7 +44,7 @@ public class CardPainterAWT {
     public CardPainterAWT(CardImages cardImages) {
         this.cardImages = cardImages;
     }
-
+    
     public void drawCard(Graphics2D back, Graphics2D art, Graphics2D front, CardModel cardModel, int width, int height) {
         DisplayCardTemplate template = cardModel.getTemplate();
 //        if (cardModel.isFaceUp()) {
