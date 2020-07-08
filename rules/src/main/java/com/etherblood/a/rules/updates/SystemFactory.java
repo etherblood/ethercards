@@ -41,9 +41,9 @@ public class SystemFactory {
                         new DrawSystem(data, random),
                         new DamageSystem(data, templates, random, events),
                         new DeathSystem(data, templates, random, events),
-                        new SurvivalSystem(data, templates, random, events),
                         new PlayerResultSystem(data)
                 ),
+                new SurvivalSystem(data, templates, random, events),
                 new EffectiveStatsService(data, templates)
         );
     }

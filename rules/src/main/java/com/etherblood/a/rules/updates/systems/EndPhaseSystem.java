@@ -165,7 +165,10 @@ public class EndPhaseSystem implements ActionSystem {
             for (int player : data.list(core.PLAYER_INDEX)) {
                 if (data.hasValue(player, core.PLAYER_INDEX, 0)) {
                     startingPlayer = player;
-                    break;
+                } else {
+                    //TODO: get coin template id somehow...
+//                    int coin = SystemsUtil.createCard(data, coinTemplateId, player);
+//                    data.set(coin, core.IN_HAND_ZONE, 1);
                 }
             }
             data.set(startingPlayer, core.START_PHASE_REQUEST, PlayerPhase.ATTACK);

@@ -27,8 +27,6 @@ public class SimpleSetup {
                 data.set(player, core.DRAW_CARDS_REQUEST, 3);
             } else {
                 data.set(player, core.DRAW_CARDS_REQUEST, 4);
-                //TODO: replace this mana with a coin?
-                data.set(player, core.MANA, 1);
             }
 
             int hero = SystemsUtil.createHero(data, game.getTemplates(), heroes[i], player);

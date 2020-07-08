@@ -1,0 +1,36 @@
+{
+  "alias": "the_coin",
+  "display": {
+    "name": "The Coin",
+    "imagePath": "the_coin.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Gain 1 Mana."
+  },
+  "casts": [
+    {
+      "manaCost": 0,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWNER"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}
