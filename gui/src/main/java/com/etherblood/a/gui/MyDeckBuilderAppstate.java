@@ -54,7 +54,23 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
     private final ActionListener saveLibraryListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
-            completeResult();
+            if (isPressed) {
+                completeResult();
+            }
+        }
+    };
+    private final ActionListener nextPage = new ActionListener() {
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (isPressed && deckBuilderAppState.getCollectionPage() + 1 < deckBuilderAppState.getCollectionPagesCount()) {
+                deckBuilderAppState.goToNextColletionPage();
+            }
+        }
+    };
+    private final ActionListener previousPage = new ActionListener() {
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (isPressed && deckBuilderAppState.getCollectionPage() > 0) {
+                deckBuilderAppState.goToPreviousCollectionPage();
+            }
         }
     };
     private final Geometry saveLibraryButton;
@@ -78,7 +94,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             allCardModels.add(cardModel);
         }
         allCardModels.sort(cardOrder);
-        CardZone collectionZone = new SimpleIntervalZone(new Vector3f(-2.3f, 1, 0), new Vector3f(1, 1, 1.4f));
+        CardZone collectionZone = new SimpleIntervalZone(new Vector3f(-0.5f, 10f, 1), new Vector3f(0.9f, 1, 1.2f));
         CardZone deckZone = new SimpleIntervalZone(new Vector3f(8, 1, -4.715f), new Vector3f(1, 1, 0.57f));
         BoardObjectVisualizer<CardZone> collectionZoneVisualizer = new DebugZoneVisualizer() {
 
@@ -121,8 +137,8 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .collectionCardVisualizer(collectionCardVisualizer)
                 .deckCardVisualizer(deckCardVisualizer)
                 .deckCardOrder(cardOrder)
-                .collectionCardsPerRow(16)
-                .collectionRowsPerPage(7)
+                .collectionCardsPerRow(5)
+                .collectionRowsPerPage(3)
                 .boardSettings(BoardSettings.builder()
                         .dragProjectionZ(0.9975f)
                         .hoverInspectionDelay(0.5f)
@@ -155,6 +171,8 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         stateManager.attach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
         inputManager.addListener(saveLibraryListener, "space");
+        inputManager.addListener(nextPage, "right");
+        inputManager.addListener(previousPage, "left");
         stateManager.getState(CameraAppState.class).moveTo(new Vector3f(-0.25036395f, 15.04817f, 1), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
         stateManager.attach(new ForestBoardAppstate(0));
 
@@ -173,6 +191,8 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         stateManager.detach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
         inputManager.removeListener(saveLibraryListener);
+        inputManager.removeListener(nextPage);
+        inputManager.removeListener(previousPage);
         stateManager.detach(stateManager.getState(ForestBoardAppstate.class));
 
         stateManager.getState(ButtonAppstate.class).unregisterButton(saveLibraryButton);

@@ -71,7 +71,7 @@ public class GameApplication extends SimpleApplication {
     }
 
     private void startDeckbuilder() {
-        stateManager.getState(HudTextAppstate.class).setText("Create your library.");
+        stateManager.getState(HudTextAppstate.class).setText("Create your library.\nPress LEFT & RIGHT to navigate pages.");
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         Components components = componentsBuilder.build();
@@ -127,6 +127,8 @@ public class GameApplication extends SimpleApplication {
 
         getInputManager().addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
         getInputManager().addMapping("f1", new KeyTrigger(KeyInput.KEY_F1));
+        getInputManager().addMapping("right", new KeyTrigger(KeyInput.KEY_RIGHT));
+        getInputManager().addMapping("left", new KeyTrigger(KeyInput.KEY_LEFT));
         startDeckbuilder();
     }
 
