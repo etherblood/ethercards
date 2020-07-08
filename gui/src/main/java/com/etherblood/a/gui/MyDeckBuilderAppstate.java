@@ -38,7 +38,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -48,7 +47,7 @@ import java.util.stream.Collectors;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
-    private static final int CARD_COPIES_LIMIT = 3;
+    private static final int CARD_COPIES_LIMIT = 100;
     private RawLibraryTemplate result = null;
     private final RawLibraryTemplate presetLibrary;
 
