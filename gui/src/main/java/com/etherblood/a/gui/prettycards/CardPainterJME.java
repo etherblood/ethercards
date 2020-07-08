@@ -1,8 +1,7 @@
 package com.etherblood.a.gui.prettycards;
 
 import com.destrostudios.cardgui.samples.visualization.PaintableImage;
-
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class CardPainterJME {

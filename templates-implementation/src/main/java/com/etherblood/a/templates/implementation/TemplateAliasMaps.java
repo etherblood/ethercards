@@ -19,6 +19,7 @@ import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SpiritCountSoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SummonEffect;
 import com.etherblood.a.templates.implementation.effects.TakeControlEffect;
+import com.etherblood.a.templates.implementation.statmodifiers.AddOnOpponentThresholdModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddSpiritCountModifier;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +51,7 @@ public class TemplateAliasMaps {
     public Map<String, Class<? extends StatModifier>> getStatModifiers() {
         Map<String, Class<? extends StatModifier>> modifierClasses = new HashMap<>();
         modifierClasses.put("addSpiritCount", AddSpiritCountModifier.class);
+        modifierClasses.put("addOnOpponentThreshold", AddOnOpponentThresholdModifier.class);
         return modifierClasses;
     }
 }
