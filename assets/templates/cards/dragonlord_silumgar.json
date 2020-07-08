@@ -29,7 +29,7 @@
   "components": {
     "ATTACK": 3,
     "HEALTH": 5,
-    "VENOM": 5,
+    "VENOM": 3,
     "FLYING": true
   },
   "tribes": [
