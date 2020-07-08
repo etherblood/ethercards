@@ -4,7 +4,6 @@ import com.destrostudios.cardgui.samples.visualization.PaintableImage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.function.Consumer;
 
 public class CardPainterJME {
 
