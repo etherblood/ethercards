@@ -126,7 +126,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             }
         };
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
-        BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new MyCardVisualizer(cardPainterJME);
+        BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new MyCardVisualizer(cardPainterJME, false);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
         DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
                 .allCardModels(allCardModels)

@@ -240,7 +240,7 @@ public class CardPainterAWT {
 //        }
     }
 
-    public void drawMinion_Minified(Graphics2D back, Graphics2D art, Graphics2D front, CardModel cardModel, int width, int height) {
+    public void drawMinion_Minified_Border(Graphics2D back, Graphics2D art, Graphics2D front, CardModel cardModel, int width, int height) {
         DisplayCardTemplate template = cardModel.getTemplate();
         back.setColor(Color.BLACK);
         back.fillRect(36, 36, 328, 488);
@@ -249,6 +249,15 @@ public class CardPainterAWT {
         art.drawImage(cachedImage, 36, 36, 364, 524, 167, 0, 364 - 36 + 167, 524 - 36 + 0, null);
         List<CardColor> colors = template.getColors();
         back.drawImage(getCardBackgroundImage(colors, width, height, "rect"), 0, 0, null);
+        drawStats(front, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
+    }
+
+    public void drawMinion_Minified_FullArt(Graphics2D back, Graphics2D art, Graphics2D front, CardModel cardModel) {
+        back.setColor(Color.BLACK);
+        back.fillRect(0, 0, 400, 560);
+        String imageFilePath = cardImages.getCardImageFilePath(cardModel);
+        Image cachedImage = cardImages.getCachedImage(imageFilePath, 761, 560);
+        art.drawImage(cachedImage, -181, 0, null);
         drawStats(front, cardModel.getAttack(), cardModel.getHealth(), cardModel.isDamaged());
     }
 

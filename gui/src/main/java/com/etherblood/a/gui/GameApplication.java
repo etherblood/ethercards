@@ -38,6 +38,7 @@ public class GameApplication extends SimpleApplication {
     private final JwtAuthentication authentication;
     private final String assetsPath;
     private final String hostUrl;
+    private final boolean battleFullArt;
     private CardImages cardImages;
     private MyDeckBuilderAppstate deckBuilderAppstate;
     private Future<GameReplayService> futureGameReplayService;
@@ -46,10 +47,11 @@ public class GameApplication extends SimpleApplication {
     private Integer selectedStrength;
     private RawLibraryTemplate selectedLibrary;
 
-    public GameApplication(Properties properties, JwtAuthentication authentication) throws Exception {
+    public GameApplication(Properties properties, JwtAuthentication authentication) {
         this.authentication = authentication;
         this.assetsPath = properties.getProperty("assets");
         this.hostUrl = properties.getProperty("hostUrl");
+        this.battleFullArt = Boolean.parseBoolean(properties.getProperty("battleFullArt"));
     }
 
     private void requestGame() {
@@ -175,7 +177,7 @@ public class GameApplication extends SimpleApplication {
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
-            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode));
+            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode, battleFullArt));
             futureGameReplayService = null;
         }
     }
