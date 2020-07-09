@@ -1,6 +1,6 @@
 {
   "alias": "nightsoil_kami",
-  "manaCost": 6,
+  "manaCost": 5,
   "display": {
     "name": "Nightsoil Kami",
     "imagePath": "nightsoil_kami.jpg",
@@ -24,7 +24,7 @@
   "onDeath": [
     {
       "type": "soulshift",
-      "power": 5
+      "power": 4
     }
   ],
   "tribes": [

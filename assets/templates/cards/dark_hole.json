@@ -1,0 +1,41 @@
+{
+  "alias": "dark_hole",
+  "display": {
+    "name": "Dark Hole",
+    "imagePath": "dark_hole.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "Kill all minions."
+  },
+  "casts": [
+    {
+      "manaCost": 8,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWN_MINION",
+            "OPPONENT_MINION"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "particle",
+          "alias": "dark_hole"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}
