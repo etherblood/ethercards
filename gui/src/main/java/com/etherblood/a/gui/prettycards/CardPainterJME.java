@@ -29,9 +29,9 @@ public class CardPainterJME {
         backGraphics.dispose();
         artGraphics.dispose();
         frontGraphics.dispose();
-        back.loadImage(backImage, false);
-        art.loadImage(artImage, false);
-        front.loadImage(frontImage, false);
+        back.loadImage(backImage);
+        art.loadImage(artImage);
+        front.loadImage(frontImage);
     }
 
     public void drawMinion_Minified(CardModel cardModel, PaintableImage back, PaintableImage art, PaintableImage front) {
@@ -45,9 +45,9 @@ public class CardPainterJME {
         backGraphics.dispose();
         artGraphics.dispose();
         frontGraphics.dispose();
-        back.loadImage(backImage, false);
-        art.loadImage(artImage, false);
-        front.loadImage(frontImage, false);
+        back.loadImage(backImage);
+        art.loadImage(artImage);
+        front.loadImage(frontImage);
     }
 
     public void drawCard(CardModel cardModel, PaintableImage back, PaintableImage art, PaintableImage front) {
@@ -61,8 +61,8 @@ public class CardPainterJME {
         backGraphics.dispose();
         artGraphics.dispose();
         frontGraphics.dispose();
-        back.loadImage(backImage, false);
-        art.loadImage(artImage, false);
-        front.loadImage(frontImage, false);
+        back.loadImage(backImage);
+        art.loadImage(artImage);
+        front.loadImage(frontImage);
     }
 }

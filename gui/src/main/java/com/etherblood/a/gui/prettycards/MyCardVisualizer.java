@@ -39,8 +39,8 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
             if (card.getModel().isFoil()) {
                 visualization.setFront(back, art, front);
             } else {
-                back.paintImage(art, 0, 0, back.getWidth(), back.getHeight());
-                back.paintImage(front, 0, 0, back.getWidth(), back.getHeight());
+                back.paintSameSizeImage(art);
+                back.paintSameSizeImage(front);
                 visualization.setCardFront(back);
                 FULL_CARD_CACHE.put(card.getModel().getTemplate().getAlias(), back);
                 back.flipY();
