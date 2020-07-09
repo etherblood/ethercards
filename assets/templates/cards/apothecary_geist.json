@@ -1,0 +1,55 @@
+{
+  "alias": "apothecary_geist",
+  "manaCost": 4,
+  "display": {
+    "name": "Apothecary Geist",
+    "imagePath": "apothecary_geist.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "When Apothecary Geist enters the battlefield, if you control another Spirit, you gain 3 life.",
+    "flavourText": "For some customers, the old apothecary shop still opens its doors."
+  },
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 3,
+    "FLYING": true
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "tribeActivated",
+          "tribe": "SPIRIT",
+          "effects": [{
+          "type": "targeted",
+          "targeting": "ANY",
+          "targets": [
+            "OWN_HERO"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "HEALTH": 3
+              }
+            }
+          ]
+        }]
+        }
+      ]
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 3
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

@@ -1,6 +1,6 @@
 package com.etherblood.a.templates.implementation;
 
-import com.etherblood.a.rules.targeting.TargetedEffects;
+import com.etherblood.a.templates.implementation.effects.TargetedEffects;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.templates.implementation.effects.BuffEffect;
@@ -19,6 +19,7 @@ import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SpiritCountSoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SummonEffect;
 import com.etherblood.a.templates.implementation.effects.TakeControlEffect;
+import com.etherblood.a.templates.implementation.effects.TribeActivatedEffects;
 import com.etherblood.a.templates.implementation.statmodifiers.AddFractionalModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOnOpponentThresholdModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOnOwnTurnModifier;
@@ -49,6 +50,7 @@ public class TemplateAliasMaps {
         effectClasses.put("cardDestruction", CardDestructionEffect.class);
         effectClasses.put("resurrectRandom", ResurrectRandomEffect.class);
         effectClasses.put("kolaghanDamage", KolaghanDamageEffect.class);
+        effectClasses.put("tribeActivated", TribeActivatedEffects.class);
         return effectClasses;
     }
 

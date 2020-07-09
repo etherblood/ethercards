@@ -1,9 +1,12 @@
-package com.etherblood.a.rules.targeting;
+package com.etherblood.a.templates.implementation.effects;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.targeting.TargetFilters;
+import com.etherblood.a.rules.targeting.TargetUtil;
+import com.etherblood.a.rules.targeting.TargetingType;
 import com.etherblood.a.rules.templates.Effect;
 import java.util.function.IntUnaryOperator;
 
