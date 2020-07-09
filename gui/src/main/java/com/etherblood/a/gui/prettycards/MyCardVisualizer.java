@@ -42,8 +42,10 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
                 back.paintSameSizeImage(art);
                 back.paintSameSizeImage(front);
                 visualization.setCardFront(back);
-                FULL_CARD_CACHE.put(card.getModel().getTemplate().getAlias(), back);
-                back.flipY();
+                if (card.getModel().getZone() != BoardZone.BATTLE) {
+                    FULL_CARD_CACHE.put(card.getModel().getTemplate().getAlias(), back);
+                    back.flipY();
+                }
             }
         }
 
