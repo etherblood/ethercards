@@ -1,31 +1,36 @@
 {
-  "alias": "gilded_lotus",
+  "alias": "dark_hole",
   "display": {
-    "name": "Gilded Lotus",
-    "imagePath": "gilded_lotus.jpg",
+    "name": "Dark Hole",
+    "imagePath": "dark_hole.jpg",
     "colors": [
-      "GREEN"
+      "BLACK"
     ],
-    "description": "Gain 3 Mana Pool."
+    "description": "Kill all minions."
   },
   "casts": [
     {
-      "manaCost": 5,
+      "manaCost": 8,
       "effects": [
         {
           "type": "targeted",
           "targeting": "ALL",
           "targets": [
-            "OWNER"
+            "OWN_MINION",
+            "OPPONENT_MINION"
           ],
           "effects": [
             {
               "type": "buff",
               "components": {
-                "MANA_POOL": 3
+                "DEATH_REQUEST": true
               }
             }
           ]
+        },
+        {
+          "type": "particle",
+          "alias": "dark_hole"
         },
         {
           "type": "selfDiscard"

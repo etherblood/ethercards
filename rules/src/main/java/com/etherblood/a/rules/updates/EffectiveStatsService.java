@@ -18,6 +18,16 @@ public class EffectiveStatsService {
         this.templates = templates;
     }
 
+    public int manaPool(int player) {
+        int manaPool = data.getOptional(player, core.MANA_POOL).orElse(0);
+        for (int minion : data.list(core.MANA_POOL_AURA)) {
+            if(data.hasValue(minion, core.OWNED_BY, player)) {
+                manaPool += data.get(minion, core.MANA_POOL_AURA);
+            }
+        }
+        return manaPool;
+    }
+
     public void killHealthless() {
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (health(minion) <= 0) {

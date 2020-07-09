@@ -11,7 +11,7 @@
   },
   "casts": [
     {
-      "manaCost": 5,
+      "manaCost": 4,
       "effects": [
         {
           "type": "selfSummon"
@@ -22,7 +22,7 @@
   "onDeath": [
     {
       "type": "soulshift",
-      "power": 4
+      "power": 3
     }
   ],
   "attackModifiers": [{"type": "addOnOwnTurn", "value": 2}],

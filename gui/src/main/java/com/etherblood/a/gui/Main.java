@@ -40,6 +40,7 @@ public class Main {
         settings.setHeight(900);
         settings.setTitle("a");
         settings.setFrameRate(60);
+        settings.setAudioRenderer(null);
         app.setSettings(settings);
         app.setShowSettings(false);
         app.start();

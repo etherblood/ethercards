@@ -1,31 +1,35 @@
 {
-  "alias": "gilded_lotus",
+  "alias": "raigeki",
   "display": {
-    "name": "Gilded Lotus",
-    "imagePath": "gilded_lotus.jpg",
+    "name": "Raigeki",
+    "imagePath": "raigeki.jpg",
     "colors": [
-      "GREEN"
+      "RED"
     ],
-    "description": "Gain 3 Mana Pool."
+    "description": "Kill all enemy minions."
   },
   "casts": [
     {
-      "manaCost": 5,
+      "manaCost": 12,
       "effects": [
         {
           "type": "targeted",
           "targeting": "ALL",
           "targets": [
-            "OWNER"
+            "OPPONENT_MINION"
           ],
           "effects": [
             {
               "type": "buff",
               "components": {
-                "MANA_POOL": 3
+                "DEATH_REQUEST": true
               }
             }
           ]
+        },
+        {
+          "type": "particle",
+          "alias": "raigeki"
         },
         {
           "type": "selfDiscard"

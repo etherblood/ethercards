@@ -84,11 +84,11 @@ public class CardModel extends BoardObjectModel {
             if (data.has(entityId, core.POISONED)) {
                 keywords.add("Poisoned_" + data.get(entityId, core.POISONED));
             }
-            if (data.has(entityId, core.MANA_POOL)) {
-                keywords.add("Mana_Pool_" + data.get(entityId, core.MANA_POOL));
+            if (data.has(entityId, core.MANA_POOL_AURA)) {
+                keywords.add("Mana_Pool_" + data.get(entityId, core.MANA_POOL_AURA));
             }
-            if (data.has(entityId, core.MANA_GROWTH)) {
-                keywords.add("Mana_Growth_" + data.get(entityId, core.MANA_GROWTH));
+            if (data.has(entityId, core.MANA_POOL_AURA_GROWTH)) {
+                keywords.add("Mana_Growth_" + data.get(entityId, core.MANA_POOL_AURA_GROWTH));
             }
             if (data.has(entityId, core.DRAWS_PER_TURN)) {
                 keywords.add("Draws_per_Turn_" + data.get(entityId, core.DRAWS_PER_TURN));
@@ -167,11 +167,11 @@ public class CardModel extends BoardObjectModel {
             if (template.has(core.POISONED)) {
                 keywords.add("Poisoned_" + template.get(core.POISONED));
             }
-            if (template.has(core.MANA_POOL)) {
-                keywords.add("Mana_Pool_" + template.get(core.MANA_POOL));
+            if (template.has(core.MANA_POOL_AURA)) {
+                keywords.add("Mana_Pool_" + template.get(core.MANA_POOL_AURA));
             }
-            if (template.has(core.MANA_GROWTH)) {
-                keywords.add("Mana_Growth_" + template.get(core.MANA_GROWTH));
+            if (template.has(core.MANA_POOL_AURA_GROWTH)) {
+                keywords.add("Mana_Growth_" + template.get(core.MANA_POOL_AURA_GROWTH));
             }
             if (template.has(core.DRAWS_PER_TURN)) {
                 keywords.add("Draws_per_Turn_" + template.get(core.DRAWS_PER_TURN));

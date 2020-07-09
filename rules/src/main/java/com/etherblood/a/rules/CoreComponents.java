@@ -39,7 +39,8 @@ public class CoreComponents implements ComponentsModule {
     public final int CAST_TARGET;
     public final int MANA;
     public final int MANA_POOL;
-    public final int MANA_GROWTH;
+    public final int MANA_POOL_AURA;
+    public final int MANA_POOL_AURA_GROWTH;
     public final int DRAWS_PER_TURN;
     public final int DRAWS_ON_ATTACK;
     public final int GIVE_DRAWS_ON_ATTACK;
@@ -94,7 +95,8 @@ public class CoreComponents implements ComponentsModule {
         CAST_TARGET = register.applyAsInt("CAST_TARGET");
         MANA = register.applyAsInt("MANA");
         MANA_POOL = register.applyAsInt("MANA_POOL");
-        MANA_GROWTH = register.applyAsInt("MANA_GROWTH");
+        MANA_POOL_AURA = register.applyAsInt("MANA_POOL_AURA");
+        MANA_POOL_AURA_GROWTH = register.applyAsInt("MANA_POOL_AURA_GROWTH");
         DRAW_CARDS_REQUEST = register.applyAsInt("DRAW_CARDS_REQUEST");
         DRAW_CARDS_ACTION = register.applyAsInt("DRAW_CARDS_ACTION");
         DISCARD_CARDS_REQUEST = register.applyAsInt("DISCARD_CARDS_REQUEST");
