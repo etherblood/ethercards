@@ -1,0 +1,34 @@
+{
+  "alias": "kindercatch",
+  "display": {
+    "name": "Kindercatch",
+    "imagePath": "kindercatch.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "flavourText": "In the forest villages of Kessig, parents feed their children wormwood and other bitter herbs, hoping to make them less palatable to things that roam the night."
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 6,
+    "HEALTH": 6
+  },
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 5
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}
