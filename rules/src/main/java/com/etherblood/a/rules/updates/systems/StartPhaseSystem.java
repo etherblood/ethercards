@@ -11,6 +11,7 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ActionSystem;
+import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.Trigger;
 import java.util.function.IntUnaryOperator;
 
@@ -55,7 +56,6 @@ public class StartPhaseSystem implements ActionSystem {
     }
 
     private void startAttackPhase(int player) {
-        int mana = 0;
         int draws = data.getOptional(player, core.DRAW_CARDS_REQUEST).orElse(0);
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (!data.hasValue(minion, core.OWNED_BY, player)) {
@@ -64,17 +64,16 @@ public class StartPhaseSystem implements ActionSystem {
 
             SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.SUMMONING_SICKNESS, 1);
             SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.TIRED, 1);
-            data.getOptional(minion, core.MANA_GROWTH).ifPresent(growth -> {
-                SystemsUtil.increase(data, minion, core.MANA_POOL, growth);
+            data.getOptional(minion, core.MANA_POOL_AURA_GROWTH).ifPresent(growth -> {
+                SystemsUtil.increase(data, minion, core.MANA_POOL_AURA, growth);
             });
             data.getOptional(minion, core.POISONED).ifPresent(poison -> {
                 SystemsUtil.damage(data, minion, poison);
                 SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.POISONED, 1);
             });
-            mana += data.getOptional(minion, core.MANA_POOL).orElse(0);
             draws += data.getOptional(minion, core.DRAWS_PER_TURN).orElse(0);
         }
-        mana = Math.max(mana, 0);
+        int mana = new EffectiveStatsService(data, templates).manaPool(player);
         data.set(player, core.MANA, mana);
 
         draws = Math.max(draws, 0);

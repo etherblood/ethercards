@@ -120,7 +120,7 @@ public class SystemsUtil {
         int hero = createMinion(data, templates, templateId, owner);
         data.set(hero, core.HERO, 1);
         //TODO: mana growth & draws should be somehow added to the player, not their hero
-        SystemsUtil.increase(data, hero, core.MANA_GROWTH, 1);
+        SystemsUtil.increase(data, hero, core.MANA_POOL_AURA_GROWTH, 1);
         SystemsUtil.increase(data, hero, core.DRAWS_PER_TURN, 1);
         return hero;
     }

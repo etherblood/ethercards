@@ -20,6 +20,6 @@
   "components": {
     "ATTACK": 1,
     "HEALTH": 2,
-    "MANA_POOL": 1
+    "MANA_POOL_AURA": 1
   }
 }

@@ -16,7 +16,7 @@
           "type": "targeted",
           "targeting": "ALL",
           "targets": [
-            "OWN_HERO"
+            "OWNER"
           ],
           "effects": [
             {

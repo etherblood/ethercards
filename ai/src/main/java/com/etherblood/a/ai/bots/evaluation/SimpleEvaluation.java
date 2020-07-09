@@ -25,12 +25,15 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
         }
 
         IntMap playerScores = new IntMap();
+        for (int player : data.list(core.MANA_POOL)) {
+            playerScores.set(player, 10 * data.get(player, core.MANA_POOL));
+        }
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             int player = data.get(minion, core.OWNED_BY);
             int score = playerScores.getOrElse(player, 0);
             score += 10 * (data.getOptional(minion, core.ATTACK).orElse(0) + data.getOptional(minion, core.VENOM).orElse(0));
             score += 10 * (data.getOptional(minion, core.HEALTH).orElse(0) - data.getOptional(minion, core.POISONED).orElse(0));
-            score += 10 * data.getOptional(minion, core.MANA_POOL).orElse(0);
+            score += 10 * data.getOptional(minion, core.MANA_POOL_AURA).orElse(0);
             int minionCount = playerMinionCount.getOrElse(player, 0);
             if (minionCount > 1) {
                 score += 10 * (minionCount - 1) * (data.getOptional(minion, core.OWN_MINIONS_HEALTH_AURA).orElse(0) + data.getOptional(minion, core.OWN_MINIONS_VENOM_AURA).orElse(0));
