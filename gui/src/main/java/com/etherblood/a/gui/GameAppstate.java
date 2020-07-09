@@ -97,8 +97,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final Map<Integer, ColoredConnectionArrow> arrows = new HashMap<>();
     private final int userControlledPlayer;
     private final CardImages cardImages;
-
     private final Node rootNode;
+    private final boolean battleFullArt;
 
     private CameraAppState cameraAppstate;
     private HudTextAppstate hudAppstate;
@@ -108,7 +108,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private final Map<Animation, BoardObject> particleMap = new HashMap<>();
 
-    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode) {
+    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode, boolean battleFullArt) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
         events = new QueueEventListener();
@@ -116,6 +116,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         this.userControlledPlayer = game.findPlayerByIndex(gameReplayService.getPlayerIndex(authentication.user.id));
         this.cardImages = cardImages;
         this.rootNode = rootNode;
+        this.battleFullArt = battleFullArt;
     }
 
     @Override
@@ -524,7 +525,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             }
         });
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
-        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardPainterJME));
+        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardPainterJME, battleFullArt));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
                 .color(new ColorRGBA(1, 1, 1, 0.8f))
                 .width(0.5f)

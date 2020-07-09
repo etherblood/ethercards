@@ -12,9 +12,11 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
     // TODO: replace this with better optimizations which don't assume staticness
     private static final Map<String, PaintableImage> FULL_CARD_CACHE = new ConcurrentHashMap<>();
     private final CardPainterJME cardPainter;
+    private final boolean battleFullArt;
 
-    public MyCardVisualizer(CardPainterJME cardPainter) {
+    public MyCardVisualizer(CardPainterJME cardPainter, boolean battleFullArt) {
         this.cardPainter = cardPainter;
+        this.battleFullArt = battleFullArt;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
                 if (card.getModel().isInspected()) {
                     cardPainter.drawMinion_Full(card.getModel(), back, art, front);
                 } else {
-                    cardPainter.drawMinion_Minified(card.getModel(), back, art, front);
+                    cardPainter.drawMinion_Minified(card.getModel(), back, art, front, battleFullArt);
                 }
             } else {
                 cardPainter.drawCard(card.getModel(), back, art, front);

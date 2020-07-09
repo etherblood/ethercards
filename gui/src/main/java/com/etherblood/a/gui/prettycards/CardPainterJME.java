@@ -34,14 +34,18 @@ public class CardPainterJME {
         front.loadImage(frontImage);
     }
 
-    public void drawMinion_Minified(CardModel cardModel, PaintableImage back, PaintableImage art, PaintableImage front) {
+    public void drawMinion_Minified(CardModel cardModel, PaintableImage back, PaintableImage art, PaintableImage front, boolean fullArt) {
         BufferedImage backImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D backGraphics = (Graphics2D) backImage.getGraphics();
         BufferedImage artImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D artGraphics = (Graphics2D) artImage.getGraphics();
         BufferedImage frontImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D frontGraphics = (Graphics2D) frontImage.getGraphics();
-        cardPainterAWT.drawMinion_Minified(backGraphics, artGraphics, frontGraphics, cardModel, width, height);
+        if (fullArt) {
+            cardPainterAWT.drawMinion_Minified_FullArt(backGraphics, artGraphics, frontGraphics, cardModel);
+        } else {
+            cardPainterAWT.drawMinion_Minified_Border(backGraphics, artGraphics, frontGraphics, cardModel, width, height);
+        }
         backGraphics.dispose();
         artGraphics.dispose();
         frontGraphics.dispose();
