@@ -19,11 +19,11 @@ public class CardPainterJME {
     }
 
     public void drawMinion_Full(CardModel cardModel, PaintableImage back, PaintableImage art, PaintableImage front) {
-        BufferedImage backImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage backImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D backGraphics = (Graphics2D) backImage.getGraphics();
-        BufferedImage artImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage artImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D artGraphics = (Graphics2D) artImage.getGraphics();
-        BufferedImage frontImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage frontImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D frontGraphics = (Graphics2D) frontImage.getGraphics();
         cardPainterAWT.drawMinion_Full(backGraphics, artGraphics, frontGraphics, cardModel, width, height);
         backGraphics.dispose();
@@ -35,11 +35,11 @@ public class CardPainterJME {
     }
 
     public void drawMinion_Minified(CardModel cardModel, PaintableImage back, PaintableImage art, PaintableImage front) {
-        BufferedImage backImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage backImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D backGraphics = (Graphics2D) backImage.getGraphics();
-        BufferedImage artImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage artImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D artGraphics = (Graphics2D) artImage.getGraphics();
-        BufferedImage frontImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage frontImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D frontGraphics = (Graphics2D) frontImage.getGraphics();
         cardPainterAWT.drawMinion_Minified(backGraphics, artGraphics, frontGraphics, cardModel, width, height);
         backGraphics.dispose();
@@ -51,11 +51,11 @@ public class CardPainterJME {
     }
 
     public void drawCard(CardModel cardModel, PaintableImage back, PaintableImage art, PaintableImage front) {
-        BufferedImage backImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage backImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D backGraphics = (Graphics2D) backImage.getGraphics();
-        BufferedImage artImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage artImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D artGraphics = (Graphics2D) artImage.getGraphics();
-        BufferedImage frontImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage frontImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D frontGraphics = (Graphics2D) frontImage.getGraphics();
         cardPainterAWT.drawCard(backGraphics, artGraphics, frontGraphics, cardModel, width, height);
         backGraphics.dispose();
