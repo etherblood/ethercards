@@ -1,0 +1,40 @@
+{
+  "alias": "fabi_raigeki",
+  "display": {
+    "name": "Raigeki",
+    "imagePath": "raigeki.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Kill all enemy minions."
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OPPONENT_MINION"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "particle",
+          "alias": "raigeki"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}

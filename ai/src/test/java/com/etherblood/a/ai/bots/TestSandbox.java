@@ -76,7 +76,6 @@ public class TestSandbox {
                 result[0] += 0.5f;
                 result[1] += 0.5f;
             }
-            System.out.println("Result: " + Arrays.toString(result));
         }
     }
 

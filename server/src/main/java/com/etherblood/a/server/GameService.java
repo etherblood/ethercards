@@ -189,6 +189,7 @@ public class GameService {
                     human.id = jwt.user.id;
                     human.name = jwt.user.login;
                     human.library = request.library;
+                    applyPlayerEasterEggs(human);
 
                     PlayerSetup bot = new PlayerSetup();
                     bot.id = botId;
@@ -241,6 +242,7 @@ public class GameService {
             player0.id = jwt0.user.id;
             player0.name = jwt0.user.login;
             player0.library = request0.library;
+            applyPlayerEasterEggs(player0);
 
             GameRequest request1 = entry1.getValue();
             PlayerSetup player1 = new PlayerSetup();
@@ -248,6 +250,7 @@ public class GameService {
             player1.id = jwt1.user.id;
             player1.name = jwt1.user.login;
             player1.library = request1.library;
+            applyPlayerEasterEggs(player1);
 
             GameSetup setup = new GameSetup();
             setup.players = shuffle(new PlayerSetup[]{player0, player1});
@@ -266,6 +269,18 @@ public class GameService {
 
             connectionGameRequests.remove(connection0.getID());
             connectionGameRequests.remove(connection1.getID());
+        }
+    }
+
+    private void applyPlayerEasterEggs(PlayerSetup player) {
+        if (player.name.equalsIgnoreCase("yalee")) {
+            replaceCard(player.library, "raigeki", "fabi_raigeki");
+        }
+    }
+
+    private void replaceCard(RawLibraryTemplate library, String toRemove, String replacement) {
+        if (library.cards.containsKey(toRemove)) {
+            library.cards.put(replacement, library.cards.remove(toRemove));
         }
     }
 
