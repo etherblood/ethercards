@@ -7,7 +7,7 @@
       "BLUE",
       "BLACK"
     ],
-    "description": "Take Control of a minion."
+    "description": "When Dragonlord Silumgar enters the battlefield, gain control of target minion for as long as you control Dragonlord Silumgar."
   },
   "casts": [
     {
@@ -18,7 +18,7 @@
       ],
       "effects": [
         {
-          "type": "takeControl"
+          "type": "bindControl"
         },
         {
           "type": "selfSummon"

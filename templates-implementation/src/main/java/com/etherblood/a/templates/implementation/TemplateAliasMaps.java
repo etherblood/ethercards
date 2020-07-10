@@ -3,6 +3,7 @@ package com.etherblood.a.templates.implementation;
 import com.etherblood.a.templates.implementation.effects.TargetedEffects;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.StatModifier;
+import com.etherblood.a.templates.implementation.effects.BindControlEffect;
 import com.etherblood.a.templates.implementation.effects.BuffEffect;
 import com.etherblood.a.templates.implementation.effects.CardDestructionEffect;
 import com.etherblood.a.templates.implementation.effects.CreateCardEffect;
@@ -49,6 +50,7 @@ public class TemplateAliasMaps {
         effectClasses.put("particle", ParticleEventEffect.class);
         effectClasses.put("drawTemplate", DrawCardTemplateEffect.class);
         effectClasses.put("takeControl", TakeControlEffect.class);
+        effectClasses.put("bindControl", BindControlEffect.class);
         effectClasses.put("soulshift", SoulshiftEffect.class);
         effectClasses.put("spiritCountSoulshift", SpiritCountSoulshiftEffect.class);
         effectClasses.put("cardDestruction", CardDestructionEffect.class);

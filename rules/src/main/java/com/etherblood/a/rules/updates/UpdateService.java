@@ -39,6 +39,7 @@ public class UpdateService {
                 }
 
                 stats.killHealthless();
+                stats.unbindFreedMinions();
                 if (actionSystems.stream().noneMatch(ActionSystem::isActive)) {
                     survivalSystem.before();
                     survivalSystem.run();

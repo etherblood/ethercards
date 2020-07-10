@@ -36,6 +36,17 @@ public class EffectiveStatsService {
         }
     }
 
+    public void unbindFreedMinions() {
+        for (int minion : data.listInValueOrder(core.BOUND_TO)) {
+            int bindTarget = data.get(minion, core.BOUND_TO);
+            if(!data.has(bindTarget, core.IN_BATTLE_ZONE)) {
+                data.set(minion, core.OWNED_BY, data.get(minion, core.ORIGINALLY_OWNED_BY));
+                data.remove(minion, core.ORIGINALLY_OWNED_BY);
+                data.remove(minion, core.BOUND_TO);
+            }
+        }
+    }
+
     public int attack(int minion) {
         int attack = data.getOptional(minion, core.ATTACK).orElse(0);
         attack += data.getOptional(minion, core.TEMPORARY_ATTACK).orElse(0);

@@ -29,6 +29,8 @@ public class CoreComponents implements ComponentsModule {
     public final int TEMPORARY_HEALTH;
     public final int TEMPORARY_ATTACK;
     public final int OWNED_BY;
+    public final int ORIGINALLY_OWNED_BY;
+    public final int BOUND_TO;
     public final int IN_BATTLE_ZONE;
     public final int IN_HAND_ZONE;
     public final int IN_LIBRARY_ZONE;
@@ -90,6 +92,8 @@ public class CoreComponents implements ComponentsModule {
         TEMPORARY_HEALTH = register.applyAsInt("TEMPORARY_HEALTH");
         TEMPORARY_ATTACK = register.applyAsInt("TEMPORARY_ATTACK");
         OWNED_BY = register.applyAsInt("OWNED_BY");
+        ORIGINALLY_OWNED_BY = register.applyAsInt("ORIGINALLY_OWNED_BY");
+        BOUND_TO = register.applyAsInt("BOUND_TO");
         IN_BATTLE_ZONE = register.applyAsInt("IN_BATTLE_ZONE");
         IN_HAND_ZONE = register.applyAsInt("IN_HAND_ZONE");
         IN_LIBRARY_ZONE = register.applyAsInt("IN_LIBRARY_ZONE");
