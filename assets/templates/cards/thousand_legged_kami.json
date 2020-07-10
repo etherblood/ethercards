@@ -9,8 +9,8 @@
     ]
   },
   "components": {
-    "ATTACK": 6,
-    "HEALTH": 6
+    "ATTACK": 7,
+    "HEALTH": 7
   },
   "casts": [
     {

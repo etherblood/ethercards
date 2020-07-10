@@ -1,0 +1,26 @@
+{
+  "alias": "fierce_witchstalker",
+  "display": {
+    "name": "Fierce Witchstalker",
+    "imagePath": "fierce_witchstalker.png",
+    "colors": [
+      "GREEN"
+    ],
+    "flavourText": "While the realm has laws, in the wilds there are other ways of balancing power."
+  },
+  "casts": [
+    {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 4,
+    "TRAMPLE": true
+  }
+}

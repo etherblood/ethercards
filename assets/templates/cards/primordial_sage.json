@@ -1,0 +1,57 @@
+{
+  "alias": "primordial_sage",
+  "display": {
+    "name": "Primordial Sage",
+    "imagePath": "primordial_sage.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Whenever you summon a creature, you may draw a card.",
+    "flavourText": "For each creature that arrives in its audience, the sage imparts another piece of ancient wisdom for all to hear."
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 5
+  },
+  "onSummon": [
+    {
+      "type": "targetOwnedActivated",
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ALL",
+          "targets": [
+            "OWNER"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 5
+    }
+  ]
+}

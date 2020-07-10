@@ -1,0 +1,59 @@
+{
+  "alias": "pelakka_wurm",
+  "display": {
+    "name": "Pelakka Wurm",
+    "imagePath": "pelakka_wurm.png",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "When Pelakka Wurm enters the battlefield, you gain 7 life.\nWhen Pelakka Wurm dies, draw a card.",
+    "flavourText": "It eats what it wants to eat\n—which is anything that moves."
+  },
+  "casts": [
+    {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "targeting": "ANY",
+          "targets": [
+            "OWN_HERO"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "HEALTH": 7
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DRAW_CARDS_REQUEST": 1
+          }
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 7,
+    "HEALTH": 7,
+    "TRAMPLE": true
+  }
+}
