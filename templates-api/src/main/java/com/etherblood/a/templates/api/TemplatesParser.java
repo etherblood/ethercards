@@ -35,7 +35,7 @@ public class TemplatesParser {
             componentAliases.put(component.name, component.id);
         }
         aliasGson = new GsonBuilder()
-                .registerTypeAdapter(Effect.class, new EffectDeserializer(effectClasses, x -> registerIfAbsent(cardAliases, x)))
+                .registerTypeAdapter(Effect.class, new EffectDeserializer(effectClasses, x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(StatModifier.class, new StatModifierDeserializer(modifierClasses))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases::get))
                 .create();

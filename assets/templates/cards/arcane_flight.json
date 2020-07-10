@@ -1,0 +1,38 @@
+{
+  "alias": "arcane_flight",
+  "display": {
+    "name": "Arcane Flight",
+    "imagePath": "arcane_flight.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Enchanted minion gets +1/+1 and has flying.",
+    "flavourText": "The Tolarian Academies are known for their magical research, powerful sorcerers, and accidental destruction of ecosystems."
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "targets": [
+        "OWN_MINION",
+        "OPPONENT_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1,
+            "FLYING": true
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "arcane_flight"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}

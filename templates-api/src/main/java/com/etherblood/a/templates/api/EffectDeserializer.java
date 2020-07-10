@@ -2,6 +2,7 @@ package com.etherblood.a.templates.api;
 
 import com.etherblood.a.templates.api.filedtypes.CardId;
 import com.etherblood.a.rules.templates.Effect;
+import com.etherblood.a.templates.api.filedtypes.ComponentId;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -16,10 +17,12 @@ public class EffectDeserializer implements JsonDeserializer<Effect> {
 
     private final Map<String, Class<? extends Effect>> classes;
     private final ToIntFunction<String> cardAliases;
+    private final ToIntFunction<String> componentAliases;
 
-    public EffectDeserializer(Map<String, Class<? extends Effect>> classes, ToIntFunction<String> cardAliases) {
+    public EffectDeserializer(Map<String, Class<? extends Effect>> classes, ToIntFunction<String> cardAliases, ToIntFunction<String> componentAliases) {
         this.classes = classes;
         this.cardAliases = cardAliases;
+        this.componentAliases = componentAliases;
     }
 
     @Override
@@ -35,6 +38,8 @@ public class EffectDeserializer implements JsonDeserializer<Effect> {
             if (field.getType() == int.class) {
                 if (field.getAnnotation(CardId.class) != null) {
                     jsonObject.addProperty(field.getName(), cardAliases.applyAsInt(fieldJsonValue.getAsString()));
+                } else if (field.getAnnotation(ComponentId.class) != null) {
+                    jsonObject.addProperty(field.getName(), componentAliases.applyAsInt(fieldJsonValue.getAsString()));
                 }
             }
         }

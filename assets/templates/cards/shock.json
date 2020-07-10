@@ -1,0 +1,37 @@
+{
+  "alias": "shock",
+  "display": {
+    "name": "Shock",
+    "imagePath": "shock.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Deal 2 damage to the selected minion or hero."
+  },
+  "casts": [
+    {
+      "manaCost": 1,
+      "targets": [
+        "OWN_MINION",
+        "OWN_HERO",
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 2
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "shock"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}

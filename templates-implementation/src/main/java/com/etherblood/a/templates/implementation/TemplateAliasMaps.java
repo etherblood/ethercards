@@ -19,6 +19,7 @@ import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SpiritCountSoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SummonEffect;
 import com.etherblood.a.templates.implementation.effects.TakeControlEffect;
+import com.etherblood.a.templates.implementation.effects.TargetComponentActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.TargetOwnedActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.TribeActivatedEffects;
 import com.etherblood.a.templates.implementation.statmodifiers.AddFractionalModifier;
@@ -53,6 +54,7 @@ public class TemplateAliasMaps {
         effectClasses.put("kolaghanDamage", KolaghanDamageEffect.class);
         effectClasses.put("tribeActivated", TribeActivatedEffects.class);
         effectClasses.put("targetOwnedActivated", TargetOwnedActivatedEffects.class);
+        effectClasses.put("targetComponentActivated", TargetComponentActivatedEffects.class);
         return effectClasses;
     }
 

@@ -154,12 +154,18 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     board.playAnimation(new CameraShakeAnimation(cameraAppstate.getCamera(), 0.3f, 0.2f));
                     break;
                 }
+                case "shock":
                 case "fireball": {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Red);
                     break;
                 }
+                case "stingerfling_spider":
                 case "flesh_to_dust": {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Black);
+                    break;
+                }
+                case "arcane_flight": {
+                    shootColorSphere(particle.source, particle.target, ColorRGBA.Blue);
                     break;
                 }
                 case "antidote":
