@@ -1,0 +1,27 @@
+{
+  "alias": "konda_lord_of_eiganjo",
+  "display": {
+    "name": "Konda, Lord of Eiganjo",
+    "imagePath": "konda_lord_of_eiganjo.jpg",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 3,
+    "BUSHIDO": 5,
+    "VIGILANCE": true,
+    "INDESTRUCTIBLE": true
+  }
+}

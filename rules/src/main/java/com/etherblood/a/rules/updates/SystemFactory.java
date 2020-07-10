@@ -32,8 +32,8 @@ public class SystemFactory {
     public UpdateService build() {
         return new UpdateService(
                 Arrays.asList(
-                        new StartPhaseSystem(data, templates, random, events),
-                        new EndPhaseSystem(data, templates, random, events)
+                        new EndPhaseSystem(data, templates, random, events),
+                        new StartPhaseSystem(data, templates, random, events)
                 ),
                 Arrays.asList(
                         new CastSystem(data, templates, random, events),

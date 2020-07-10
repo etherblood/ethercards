@@ -89,7 +89,7 @@ public class StartPhaseSystem implements ActionSystem {
                 onUpkeepEffect.apply(data, templates, random, events, minion, ~0);
             }
         }
-        
+
         for (int rager : data.list(core.RAGE)) {
             declareRandomAttackIfAble(rager);
         }
@@ -123,6 +123,8 @@ public class StartPhaseSystem implements ActionSystem {
             if (!data.has(attacker, core.IN_BATTLE_ZONE)) {
                 continue;
             }
+            applyBushido(attacker);
+            applyBushido(blocker);
             SystemsUtil.fight(data, templates, random, attacker, blocker, events);
             if (!data.has(attacker, core.TRAMPLE)) {
                 data.remove(attacker, core.ATTACKS_TARGET);
@@ -134,6 +136,14 @@ public class StartPhaseSystem implements ActionSystem {
             });
         }
         data.set(player, core.END_PHASE_REQUEST, PlayerPhase.BATTLE);
+    }
+
+    private void applyBushido(int minion) {
+        if (data.has(minion, core.BUSHIDO) && !data.has(minion, core.BUSHIDO_TRIGGERED)) {
+            int bushido = data.get(minion, core.BUSHIDO);
+            SystemsUtil.increase(data, minion, core.TEMPORARY_ATTACK, bushido);
+            SystemsUtil.increase(data, minion, core.TEMPORARY_HEALTH, bushido);
+        }
     }
 
     @Override

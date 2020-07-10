@@ -26,6 +26,8 @@ public class CoreComponents implements ComponentsModule {
     public final int ACTIVE_PLAYER_PHASE;
     public final int HEALTH;
     public final int ATTACK;
+    public final int TEMPORARY_HEALTH;
+    public final int TEMPORARY_ATTACK;
     public final int OWNED_BY;
     public final int IN_BATTLE_ZONE;
     public final int IN_HAND_ZONE;
@@ -65,6 +67,9 @@ public class CoreComponents implements ComponentsModule {
     public final int OWN_MINIONS_HASTE_AURA;
     public final int OWN_MINIONS_HEALTH_AURA;
     public final int OWN_MINIONS_VENOM_AURA;
+    public final int BUSHIDO;
+    public final int BUSHIDO_TRIGGERED;
+    public final int INDESTRUCTIBLE;
 
     public CoreComponents(ToIntFunction<String> register) {
         END_PHASE_REQUEST = register.applyAsInt("END_PHASE_REQUEST");
@@ -82,6 +87,8 @@ public class CoreComponents implements ComponentsModule {
         ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
         HEALTH = register.applyAsInt("HEALTH");
         ATTACK = register.applyAsInt("ATTACK");
+        TEMPORARY_HEALTH = register.applyAsInt("TEMPORARY_HEALTH");
+        TEMPORARY_ATTACK = register.applyAsInt("TEMPORARY_ATTACK");
         OWNED_BY = register.applyAsInt("OWNED_BY");
         IN_BATTLE_ZONE = register.applyAsInt("IN_BATTLE_ZONE");
         IN_HAND_ZONE = register.applyAsInt("IN_HAND_ZONE");
@@ -127,5 +134,8 @@ public class CoreComponents implements ComponentsModule {
         OWN_MINIONS_VENOM_AURA = register.applyAsInt("OWN_MINIONS_VENOM_AURA");
         DAMAGE_SURVIVAL_REQUEST = register.applyAsInt("DAMAGE_SURVIVAL_REQUEST");
         DAMAGE_SURVIVAL_ACTION = register.applyAsInt("DAMAGE_SURVIVAL_ACTION");
+        BUSHIDO = register.applyAsInt("BUSHIDO");
+        BUSHIDO_TRIGGERED = register.applyAsInt("BUSHIDO_TRIGGERED");
+        INDESTRUCTIBLE = register.applyAsInt("INDESTRUCTIBLE");
     }
 }

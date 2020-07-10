@@ -21,7 +21,7 @@ public class EffectiveStatsService {
     public int manaPool(int player) {
         int manaPool = data.getOptional(player, core.MANA_POOL).orElse(0);
         for (int minion : data.list(core.MANA_POOL_AURA)) {
-            if(data.hasValue(minion, core.OWNED_BY, player)) {
+            if (data.hasValue(minion, core.OWNED_BY, player)) {
                 manaPool += data.get(minion, core.MANA_POOL_AURA);
             }
         }
@@ -30,7 +30,7 @@ public class EffectiveStatsService {
 
     public void killHealthless() {
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (health(minion) <= 0) {
+            if (health(minion) <= 0 && !data.has(minion, core.INDESTRUCTIBLE)) {
                 data.set(minion, core.DEATH_REQUEST, 1);
             }
         }
@@ -38,6 +38,7 @@ public class EffectiveStatsService {
 
     public int attack(int minion) {
         int attack = data.getOptional(minion, core.ATTACK).orElse(0);
+        attack += data.getOptional(minion, core.TEMPORARY_ATTACK).orElse(0);
         CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
         for (StatModifier attackModifier : template.getComponentModifiers(core.ATTACK)) {
             attack = attackModifier.modify(data, templates, minion, attack);
@@ -56,6 +57,7 @@ public class EffectiveStatsService {
 
     public int health(int minion) {
         int health = data.getOptional(minion, core.HEALTH).orElse(0);
+        health += data.getOptional(minion, core.TEMPORARY_HEALTH).orElse(0);
         CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
         for (StatModifier healthModifier : template.getComponentModifiers(core.HEALTH)) {
             health = healthModifier.modify(data, templates, minion, health);

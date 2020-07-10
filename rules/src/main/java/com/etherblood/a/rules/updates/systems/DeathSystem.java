@@ -27,7 +27,7 @@ public class DeathSystem implements ActionSystem {
         this.core = data.getComponents().getModule(CoreComponents.class);
         this.templates = templates;
         this.modifiers = new Modifier[]{
-            (entity, value) -> data.has(entity, core.IN_BATTLE_ZONE) ? value : 0
+            (entity, value) -> data.has(entity, core.IN_BATTLE_ZONE) && !data.has(entity, core.INDESTRUCTIBLE) ? value : 0
         };
         this.triggers = new Trigger[]{
             (entity, value) -> {

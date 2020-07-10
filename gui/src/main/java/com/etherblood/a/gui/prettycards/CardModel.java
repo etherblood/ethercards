@@ -84,6 +84,12 @@ public class CardModel extends BoardObjectModel {
             if (data.has(entityId, core.POISONED)) {
                 keywords.add("Poisoned_" + data.get(entityId, core.POISONED));
             }
+            if (data.has(entityId, core.BUSHIDO)) {
+                keywords.add("Bushido_" + data.get(entityId, core.BUSHIDO));
+            }
+            if (data.has(entityId, core.INDESTRUCTIBLE)) {
+                keywords.add("Indestructible");
+            }
             if (data.has(entityId, core.MANA_POOL_AURA)) {
                 keywords.add("Mana_Pool_" + data.get(entityId, core.MANA_POOL_AURA));
             }
@@ -166,6 +172,12 @@ public class CardModel extends BoardObjectModel {
             }
             if (template.has(core.POISONED)) {
                 keywords.add("Poisoned_" + template.get(core.POISONED));
+            }
+            if (template.has(core.BUSHIDO)) {
+                keywords.add("Bushido_" + template.get(core.BUSHIDO));
+            }
+            if (template.has(core.INDESTRUCTIBLE)) {
+                keywords.add("Indestructible");
             }
             if (template.has(core.MANA_POOL_AURA)) {
                 keywords.add("Mana_Pool_" + template.get(core.MANA_POOL_AURA));

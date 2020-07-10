@@ -147,6 +147,15 @@ public class EndPhaseSystem implements ActionSystem {
             data.remove(player, core.END_PHASE_ACTION);
             data.remove(player, core.ACTIVE_PLAYER_PHASE);
         }
+        for (int minion : data.list(core.TEMPORARY_ATTACK)) {
+            data.remove(minion, core.TEMPORARY_ATTACK);
+        }
+        for (int minion : data.list(core.TEMPORARY_HEALTH)) {
+            data.remove(minion, core.TEMPORARY_HEALTH);
+        }
+        for (int minion : data.list(core.BUSHIDO_TRIGGERED)) {
+            data.remove(minion, core.BUSHIDO_TRIGGERED);
+        }
 
         //mulligan logic
         if (mulliganEnded && data.list(core.ACTIVE_PLAYER_PHASE).isEmpty()) {

@@ -1,0 +1,26 @@
+{
+  "alias": "inner_chamber_guard",
+  "display": {
+    "name": "Inner-Chamber Guard",
+    "imagePath": "inner_chamber_guard.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "flavourText": "\"It seems that each time I visit Lord Konda his guards are more on edge, perhaps even more eager for the war to reach them.\"\n—Masako the Humorless"
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 3,
+    "BUSHIDO": 2
+  }
+}

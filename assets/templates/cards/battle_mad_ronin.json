@@ -1,0 +1,26 @@
+{
+  "alias": "battle_mad_ronin",
+  "display": {
+    "name": "Battle-Mad Ronin",
+    "imagePath": "battle_mad_ronin.jpg",
+    "colors": [
+      "RED"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 2,
+    "BUSHIDO": 2,
+    "RAGE": true
+  }
+}
