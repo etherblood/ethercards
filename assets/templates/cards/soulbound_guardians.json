@@ -1,0 +1,36 @@
+{
+  "alias": "soulbound_guardians",
+  "display": {
+    "name": "Soulbound Guardians",
+    "imagePath": "soulbound_guardians.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "flavourText": "The kor's most righteous dead are given the greatest reward: an eternity tied to the land they so cherish."
+  },
+  "casts": [
+    {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 5,
+    "CANNOT_ATTACK": true,
+    "FLYING": true
+  },
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 4
+    }
+  ],
+  "tribes": [
+    "SPIRIT"
+  ]
+}

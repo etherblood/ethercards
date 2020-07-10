@@ -1,0 +1,37 @@
+{
+  "alias": "release_the_dogs",
+  "display": {
+    "name": "Release the Dogs",
+    "imagePath": "release_the_dogs.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "Summon 4 1/1 dogs."
+  },
+  "casts": [
+    {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "summon",
+          "minionId": "dog_token"
+        },
+        {
+          "type": "summon",
+          "minionId": "dog_token"
+        },
+        {
+          "type": "summon",
+          "minionId": "dog_token"
+        },
+        {
+          "type": "summon",
+          "minionId": "dog_token"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}

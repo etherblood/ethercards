@@ -1,0 +1,24 @@
+{
+  "alias": "dog_token",
+  "display": {
+    "name": "Dog",
+    "imagePath": "dog_token.jpg",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "manaCost": 1,
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 1
+  },
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ]
+}
