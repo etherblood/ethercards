@@ -177,7 +177,7 @@ public class GameApplication extends SimpleApplication {
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
-            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode, battleFullArt));
+            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode, assetsPath, battleFullArt));
             futureGameReplayService = null;
         }
     }

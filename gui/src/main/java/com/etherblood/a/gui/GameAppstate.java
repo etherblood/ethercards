@@ -1,5 +1,9 @@
 package com.etherblood.a.gui;
 
+import com.destroflyer.jme3.effekseer.model.ParticleEffect;
+import com.destroflyer.jme3.effekseer.model.ParticleEffectSettings;
+import com.destroflyer.jme3.effekseer.reader.EffekseerReader;
+import com.destroflyer.jme3.effekseer.renderer.EffekseerControl;
 import com.destrostudios.cardgui.Animation;
 import com.destrostudios.cardgui.Board;
 import com.destrostudios.cardgui.BoardAppState;
@@ -15,7 +19,10 @@ import com.destrostudios.cardgui.events.MoveCardEvent;
 import com.destrostudios.cardgui.interactivities.AimToTargetInteractivity;
 import com.destrostudios.cardgui.interactivities.DragToPlayInteractivity;
 import com.destrostudios.cardgui.samples.animations.CameraShakeAnimation;
+import com.destrostudios.cardgui.samples.animations.EffekseerAnimation;
 import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
+import com.destrostudios.cardgui.samples.boardobjects.staticspatial.StaticSpatial;
+import com.destrostudios.cardgui.samples.boardobjects.staticspatial.StaticSpatialVisualizer;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.transformations.relative.HoveringTransformation;
@@ -98,17 +105,20 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final int userControlledPlayer;
     private final CardImages cardImages;
     private final Node rootNode;
+    private final String assetsPath;
     private final boolean battleFullArt;
 
     private CameraAppState cameraAppstate;
     private HudTextAppstate hudAppstate;
+    private BoardAppState boardAppState;
     private AssetManager assetManager;
     private Geometry endPhaseButton;
     private final Node endPhaseButtonNode = new Node();
 
-    private final Map<Animation, BoardObject> particleMap = new HashMap<>();
+    private final Map<Animation, BoardObject> particleMapBoardObjects = new HashMap<>();
+    private final Map<Animation, Node> particleMapGlobalNodes = new HashMap<>();
 
-    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode, boolean battleFullArt) {
+    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode, String assetsPath, boolean battleFullArt) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
         events = new QueueEventListener();
@@ -116,6 +126,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         this.userControlledPlayer = game.findPlayerByIndex(gameReplayService.getPlayerIndex(authentication.user.id));
         this.cardImages = cardImages;
         this.rootNode = rootNode;
+        this.assetsPath = assetsPath;
         this.battleFullArt = battleFullArt;
     }
 
@@ -128,12 +139,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     @Override
     public void update(float tpf) {
-        for (Map.Entry<Animation, BoardObject> entry : new ArrayList<>(particleMap.entrySet())) {
-            if (entry.getKey().isFinished()) {
-                board.unregister(entry.getValue());
-                particleMap.remove(entry.getKey());
-            }
-        }
+        removeFinishedAnimationObjects();
         gameReplayService.updateInstance(game);
         Object event;
         while ((event = events.getQueue().poll()) != null) {
@@ -143,18 +149,47 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         updateCamera();
     }
 
+    private void removeFinishedAnimationObjects() {
+        for (Map.Entry<Animation, BoardObject> entry : new ArrayList<>(particleMapBoardObjects.entrySet())) {
+            if (entry.getKey().isFinished()) {
+                board.unregister(entry.getValue());
+                particleMapBoardObjects.remove(entry.getKey());
+            }
+        }
+        for (Map.Entry<Animation, Node> entry : new ArrayList<>(particleMapGlobalNodes.entrySet())) {
+            if (entry.getKey().isFinished()) {
+                Node node = entry.getValue();
+                node.getParent().detachChild(node);
+                particleMapGlobalNodes.remove(entry.getKey());
+            }
+        }
+    }
+
     private void playAnimation(Object event) {
         if (event instanceof ParticleEvent) {
             ParticleEvent particle = (ParticleEvent) event;
             switch (particle.alias) {
-                case "raigeki":
-                case "dark_hole":
-                case "flamestrike":
-                case "deathwing": {
+                case "raigeki": {
                     board.playAnimation(new CameraShakeAnimation(cameraAppstate.getCamera(), 0.3f, 0.2f));
                     break;
                 }
-                case "shock":
+                case "deathwing": {
+                    board.playAnimation(new CameraShakeAnimation(cameraAppstate.getCamera(), 0.3f, 0.2f));
+                    playParticleEffect("tktk01/Fire7", 1, 1);
+                    break;
+                }
+                case "dark_hole": {
+                    playParticleEffect("Pierre02/Benediction", 0.3f, 2);
+                    break;
+                }
+                case "flamestrike": {
+                    playParticleEffect("TouhouStrategy/patch_stElmo_area", 0.3f, 1);
+                    break;
+                }
+                case "shock": {
+                    playParticleEffect(particle.target, "Pierre01/LightningStrike", 0.08f, 2);
+                    break;
+                }
                 case "fireball": {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Red);
                     break;
@@ -168,9 +203,15 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Blue);
                     break;
                 }
-                case "antidote":
+                case "antidote": {
+                    shootParticleEffect(particle.source, particle.target, "MAGICALxSPIRAL/AquaPoint", 0.4f, 2);
+                    break;
+                }
+                case "blessing_of_wisdom": {
+                    playParticleEffect(particle.target, "MAGICALxSPIRAL/Lance3", 0.5f, 2);
+                    break;
+                }
                 case "armadillo_cloak":
-                case "blessing_of_wisdom":
                 case "slagwurm_armor": {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.White);
                     break;
@@ -182,12 +223,68 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private void shootColorSphere(int source, int target, ColorRGBA color) {
         ColoredSphere sphere = new ColoredSphere(new ColorModel());
         sphere.getModel().setColor(color);
-        sphere.resetTransformations();
-        sphere.position().setCurrentValue(visualCards.get(source).position().getCurrentValue());
-        board.register(sphere);
-        TargetedArcAnimation animation = new TargetedArcAnimation(sphere, visualCards.get(target), 1, 0.6f);
+        shootBoardObject(source, target, sphere);
+    }
+
+    private void shootParticleEffect(int source, int target, String particleEffectName, float scale, float speed) {
+        UncollidableNode node = new UncollidableNode();
+        node.setLocalScale(scale);
+        ParticleEffect particleEffect = new EffekseerReader().read(assetsPath, getParticleEffectPath(particleEffectName));
+        node.addControl(new EffekseerControl(particleEffect, getParticleEffectSettings(speed), assetManager));
+        shootSpatial(source, target, node);
+    }
+
+    private void shootSpatial(int source, int target, Spatial spatial) {
+        StaticSpatial staticSpatial = new StaticSpatial();
+        staticSpatial.getModel().setSpatial(spatial);
+        shootBoardObject(source, target, staticSpatial);
+    }
+
+    private void shootBoardObject(int source, int target, TransformedBoardObject transformedBoardObject) {
+        transformedBoardObject.resetTransformations();
+        transformedBoardObject.position().setCurrentValue(visualCards.get(source).position().getCurrentValue());
+        board.register(transformedBoardObject);
+        TargetedArcAnimation animation = new TargetedArcAnimation(transformedBoardObject, visualCards.get(target), 1, 0.6f);
         board.playAnimation(animation);
-        particleMap.put(animation, sphere);
+        particleMapBoardObjects.put(animation, transformedBoardObject);
+    }
+
+    private void playParticleEffect(String particleEffectName, float scale, float speed) {
+        UncollidableNode placeholder = new UncollidableNode();
+        placeholder.setLocalTranslation(0, 0, 1);
+        rootNode.attachChild(placeholder);
+        playParticleEffect(placeholder, particleEffectName, scale, speed);
+    }
+
+    private void playParticleEffect(int target, String particleEffectName, float scale, float speed) {
+        Node node = boardAppState.getNode(visualCards.get(target));
+        playParticleEffect(node, particleEffectName, scale, speed);
+    }
+
+    private void playParticleEffect(Node parentNode, String particleEffectName, float scale, float speed) {
+        UncollidableNode node = new UncollidableNode();
+        node.setLocalScale(scale);
+        parentNode.attachChild(node);
+        EffekseerAnimation animation = new EffekseerAnimation(
+                node,
+                assetsPath,
+                getParticleEffectPath(particleEffectName),
+                getParticleEffectSettings(speed),
+                assetManager
+        );
+        board.playAnimation(animation);
+        particleMapGlobalNodes.put(animation, node);
+    }
+
+    private ParticleEffectSettings getParticleEffectSettings(float speed) {
+        return ParticleEffectSettings.builder()
+                .loop(false)
+                .frameLength((1f / 24) / speed)
+                .build();
+    }
+
+    private String getParticleEffectPath(String particleEffectName) {
+        return assetsPath + "effekseer/" + particleEffectName + ".efkproj";
     }
 
     @Override
@@ -195,7 +292,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         cameraAppstate = stateManager.getState(CameraAppState.class);
         hudAppstate = stateManager.getState(HudTextAppstate.class);
         board = new Board();
-        stateManager.attach(initBoardGui());
+        boardAppState = initBoardGui();
+        stateManager.attach(boardAppState);
 
         assetManager = stateManager.getApplication().getAssetManager();
         endPhaseButton = createButton(assetManager);
@@ -507,6 +605,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private BoardAppState initBoardGui() {
         CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
         board.registerVisualizer_Class(ColoredSphere.class, new ColoredSphereVisualizer());
+        board.registerVisualizer_Class(StaticSpatial.class, new StaticSpatialVisualizer());
         board.registerVisualizer_Class(CardZone.class, new DebugZoneVisualizer() {
 
             @Override
