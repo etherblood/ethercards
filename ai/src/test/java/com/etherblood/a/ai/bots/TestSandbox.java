@@ -35,26 +35,28 @@ public class TestSandbox {
 
     @Test
     public void simulateGame() throws InterruptedException {
+        Random random = new Random(7);
         // This test mainly serves as crash detection
-        // TODO: use & log seed for reproducibility
-        // Note: This is not a benchmark, asserts are enabled and gamelength may vary
+        // Note: This is not a benchmark, asserts are enabled
         float[] result = new float[2];
         for (int i = 0; i < 1; i++) {
-            Game game = startGame();
+            Game game = startGame(random);
 
             Function<MoveBotGame, float[]> simple = new SimpleEvaluation<Move, MoveBotGame>()::evaluate;
 
-            Function<MoveBotGame, float[]> rolloutEvaluation0 = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
+            Function<MoveBotGame, float[]> rolloutEvaluation0 = new RolloutToEvaluation<>(random, 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings0 = new MctsBotSettings<>();
+            settings0.random = random;
             settings0.strength = 100;
             settings0.evaluation = rolloutEvaluation0;
-            MctsBot bot0 = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(simulationGame(game)), settings0);
+            MctsBot bot0 = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(simulationGame(game, random)), settings0);
 
-            Function<MoveBotGame, float[]> rolloutEvaluation1 = new RolloutToEvaluation<>(new Random(), 10, simple)::evaluate;
+            Function<MoveBotGame, float[]> rolloutEvaluation1 = new RolloutToEvaluation<>(random, 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings1 = new MctsBotSettings<>();
+            settings0.random = random;
             settings1.strength = 100;
             settings1.evaluation = rolloutEvaluation1;
-            MctsBot bot1 = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(simulationGame(game)), settings1);
+            MctsBot bot1 = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(simulationGame(game, random)), settings1);
 
             while (!game.isGameOver()) {
                 Move move;
@@ -78,13 +80,13 @@ public class TestSandbox {
         }
     }
 
-    private Game simulationGame(Game game) {
+    private Game simulationGame(Game game, Random random) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false, new NoopGameEventListener());
+        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(random::nextInt), null, false, false, new NoopGameEventListener());
         return new Game(game.getSettings(), data, moves);
     }
 
-    private Game startGame() {
+    private Game startGame(Random random) {
         GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
@@ -117,7 +119,7 @@ public class TestSandbox {
         setup.setHero(1, lib1.hero);
 
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(settings, data, HistoryRandom.producer(), new NoopGameEventListener());
+        MoveService moves = new MoveService(settings, data, HistoryRandom.producer(random::nextInt), new NoopGameEventListener());
         Game game = new Game(settings, data, moves);
         setup.apply(game);
         moves.apply(new Start());

@@ -9,7 +9,7 @@
   },
   "components": {
     "ATTACK": 0,
-    "HEALTH": 1000,
+    "HEALTH": 100,
     "CANNOT_ATTACK": true
   }
 }

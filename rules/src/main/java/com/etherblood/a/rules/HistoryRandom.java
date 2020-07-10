@@ -7,7 +7,7 @@ import java.util.function.IntUnaryOperator;
 
 public class HistoryRandom implements IntUnaryOperator {
 
-    private IntUnaryOperator sourceRandom;
+    private final IntUnaryOperator sourceRandom;
     private final IntList history = new IntList();
     private int next = 0;
 
@@ -15,8 +15,12 @@ public class HistoryRandom implements IntUnaryOperator {
         this.sourceRandom = random;
     }
 
+    public static HistoryRandom producer(IntUnaryOperator random) {
+        return new HistoryRandom(random);
+    }
+
     public static HistoryRandom producer() {
-        return new HistoryRandom(new SecureRandom()::nextInt);
+        return producer(new SecureRandom()::nextInt);
     }
 
     public static HistoryRandom consumer() {
@@ -39,14 +43,6 @@ public class HistoryRandom implements IntUnaryOperator {
         history.add(result);
         next++;
         return result;
-    }
-
-    public void convertToProducer() {
-        sourceRandom = new SecureRandom()::nextInt;
-    }
-
-    public void convertToConsumer() {
-        sourceRandom = null;
     }
 
     public IntList getHistory() {

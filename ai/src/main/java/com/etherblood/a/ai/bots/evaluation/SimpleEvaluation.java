@@ -60,7 +60,7 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
             score += (float) 15 * handCards.getOrElse(player, 0);
             score += (float) Math.sqrt(libraryCards.getOrElse(player, 0));
             score -= 10 * data.getOptional(player, core.FATIGUE).orElse(0);
-            result[data.get(player, core.PLAYER_INDEX)] = Math.max(score, 0);
+            result[data.get(player, core.PLAYER_INDEX)] = Math.max(score, 0.01f);
         }
 
         float sum = 0;
