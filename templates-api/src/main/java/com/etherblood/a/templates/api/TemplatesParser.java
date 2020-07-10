@@ -22,8 +22,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TemplatesParser {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TemplatesParser.class);
 
     private final Map<Integer, DisplayCardTemplate> cards = new HashMap<>();
     private final Map<String, Integer> cardAliases = new HashMap<>();
@@ -66,164 +70,169 @@ public class TemplatesParser {
 
     public DisplayCardTemplate parseCard(JsonObject cardJson) {
         String alias = cardJson.get("alias").getAsString();
-        DisplayCardTemplateBuilder builder = new DisplayCardTemplateBuilder();
-        builder.setAlias(alias);
-        JsonObject display = cardJson.getAsJsonObject("display");
-        if (display != null) {
-            JsonElement colors = display.get("colors");
-            if (colors != null) {
-                builder.setColors(Arrays.asList(aliasGson.fromJson(colors, CardColor[].class)));
+        try {
+            DisplayCardTemplateBuilder builder = new DisplayCardTemplateBuilder();
+            builder.setAlias(alias);
+            JsonObject display = cardJson.getAsJsonObject("display");
+            if (display != null) {
+                JsonElement colors = display.get("colors");
+                if (colors != null) {
+                    builder.setColors(Arrays.asList(aliasGson.fromJson(colors, CardColor[].class)));
+                }
+                JsonElement name = display.get("name");
+                if (name != null) {
+                    builder.setName(name.getAsString());
+                }
+                JsonElement description = display.get("description");
+                if (description != null) {
+                    builder.setDescription(description.getAsString());
+                }
+                JsonElement flavourText = display.get("flavourText");
+                if (flavourText != null) {
+                    builder.setFlavourText(flavourText.getAsString());
+                }
+                JsonElement imagePath = display.get("imagePath");
+                if (imagePath != null && !imagePath.isJsonNull()) {
+                    builder.setImagePath(imagePath.getAsString());
+                }
+            } else {
+                builder.setColors(Arrays.asList(CardColor.values()));
+                builder.setName("MissingNo #" + alias);
+                builder.setDescription("404");
+                builder.setFlavourText("Nothing here.");
+                builder.setImagePath(null);
             }
-            JsonElement name = display.get("name");
-            if (name != null) {
-                builder.setName(name.getAsString());
-            }
-            JsonElement description = display.get("description");
-            if (description != null) {
-                builder.setDescription(description.getAsString());
-            }
-            JsonElement flavourText = display.get("flavourText");
-            if (flavourText != null) {
-                builder.setFlavourText(flavourText.getAsString());
-            }
-            JsonElement imagePath = display.get("imagePath");
-            if (imagePath != null && !imagePath.isJsonNull()) {
-                builder.setImagePath(imagePath.getAsString());
-            }
-        } else {
-            builder.setColors(Arrays.asList(CardColor.values()));
-            builder.setName("MissingNo #" + alias);
-            builder.setDescription("404");
-            builder.setFlavourText("Nothing here.");
-            builder.setImagePath(null);
-        }
 
-        JsonArray casts = cardJson.getAsJsonArray("casts");
-        if (casts != null) {
-            for (JsonElement castElement : casts) {
-                JsonObject castJson = castElement.getAsJsonObject();
-                CardCastBuilder cast = builder.newCast();
-                JsonPrimitive manaCost = castJson.getAsJsonPrimitive("manaCost");
-                if (manaCost != null) {
-                    builder.setManaCost(manaCost.getAsInt());
+            JsonArray casts = cardJson.getAsJsonArray("casts");
+            if (casts != null) {
+                for (JsonElement castElement : casts) {
+                    JsonObject castJson = castElement.getAsJsonObject();
+                    CardCastBuilder cast = builder.newCast();
+                    JsonPrimitive manaCost = castJson.getAsJsonPrimitive("manaCost");
+                    if (manaCost != null) {
+                        builder.setManaCost(manaCost.getAsInt());
+                    }
+                    if (castJson.has("targets")) {
+                        cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
+                    }
+                    for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
+                        JsonObject effectJson = jsonElement.getAsJsonObject();
+                        cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
+                    }
+                    if (castJson.has("attackCast")) {
+                        cast.setAttackCast(castJson.get("attackCast").getAsBoolean());
+                    }
+                    if (castJson.has("blockCast")) {
+                        cast.setBlockCast(castJson.get("blockCast").getAsBoolean());
+                    }
                 }
-                if (castJson.has("targets")) {
-                    cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
+            }
+            JsonElement manaCost = cardJson.get("manaCost");
+            if (manaCost != null) {
+                builder.setManaCost(manaCost.getAsInt());
+            }
+            JsonArray tribes = cardJson.getAsJsonArray("tribes");
+            if (tribes != null) {
+                for (JsonElement tribe : tribes) {
+                    builder.addTribe(aliasGson.fromJson(tribe, Tribe.class));
                 }
-                for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
+            }
+            JsonArray onDeath = cardJson.getAsJsonArray("onDeath");
+            if (onDeath != null) {
+                for (JsonElement jsonElement : onDeath) {
                     JsonObject effectJson = jsonElement.getAsJsonObject();
-                    cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
-                }
-                if (castJson.has("attackCast")) {
-                    cast.setAttackCast(castJson.get("attackCast").getAsBoolean());
-                }
-                if (castJson.has("blockCast")) {
-                    cast.setBlockCast(castJson.get("blockCast").getAsBoolean());
+                    builder.onDeath(aliasGson.fromJson(effectJson, Effect.class));
                 }
             }
-        }
-        JsonElement manaCost = cardJson.get("manaCost");
-        if (manaCost != null) {
-            builder.setManaCost(manaCost.getAsInt());
-        }
-        JsonArray tribes = cardJson.getAsJsonArray("tribes");
-        if (tribes != null) {
-            for (JsonElement tribe : tribes) {
-                builder.addTribe(aliasGson.fromJson(tribe, Tribe.class));
-            }
-        }
-        JsonArray onDeath = cardJson.getAsJsonArray("onDeath");
-        if (onDeath != null) {
-            for (JsonElement jsonElement : onDeath) {
-                JsonObject effectJson = jsonElement.getAsJsonObject();
-                builder.onDeath(aliasGson.fromJson(effectJson, Effect.class));
-            }
-        }
-        JsonArray onSurvive = cardJson.getAsJsonArray("onSurvive");
-        if (onSurvive != null) {
-            for (JsonElement jsonElement : onSurvive) {
-                JsonObject effectJson = jsonElement.getAsJsonObject();
-                builder.onSurvive(aliasGson.fromJson(effectJson, Effect.class));
-            }
-        }
-        JsonArray onUpkeep = cardJson.getAsJsonArray("onUpkeep");
-        if (onUpkeep != null) {
-            for (JsonElement jsonElement : onUpkeep) {
-                JsonObject effectJson = jsonElement.getAsJsonObject();
-                builder.onUpkeep(aliasGson.fromJson(effectJson, Effect.class));
-            }
-        }
-        JsonArray afterBattle = cardJson.getAsJsonArray("afterBattle");
-        if (afterBattle != null) {
-            for (JsonElement jsonElement : afterBattle) {
-                JsonObject effectJson = jsonElement.getAsJsonObject();
-                builder.afterBattle(aliasGson.fromJson(effectJson, Effect.class));
-            }
-        }
-        JsonArray onCast = cardJson.getAsJsonArray("onCast");
-        if (onCast != null) {
-            for (JsonElement jsonElement : onCast) {
-                JsonObject effectJson = jsonElement.getAsJsonObject();
-                builder.onCast(aliasGson.fromJson(effectJson, Effect.class));
-            }
-        }
-        JsonArray onSummon = cardJson.getAsJsonArray("onSummon");
-        if (onSummon != null) {
-            for (JsonElement jsonElement : onSummon) {
-                JsonObject effectJson = jsonElement.getAsJsonObject();
-                builder.onSummon(aliasGson.fromJson(effectJson, Effect.class));
-            }
-        }
-        JsonObject componentModifiers = cardJson.getAsJsonObject("componentModifiers");
-        if (componentModifiers != null) {
-            for (Map.Entry<String, JsonElement> entry : componentModifiers.entrySet()) {
-                Integer component = componentAliases.get(entry.getKey());
-                for (StatModifier modifier : aliasGson.fromJson(entry.getValue(), StatModifier[].class)) {
-                    builder.modifyComponent(component, modifier);
+            JsonArray onSurvive = cardJson.getAsJsonArray("onSurvive");
+            if (onSurvive != null) {
+                for (JsonElement jsonElement : onSurvive) {
+                    JsonObject effectJson = jsonElement.getAsJsonObject();
+                    builder.onSurvive(aliasGson.fromJson(effectJson, Effect.class));
                 }
             }
-        }
+            JsonArray onUpkeep = cardJson.getAsJsonArray("onUpkeep");
+            if (onUpkeep != null) {
+                for (JsonElement jsonElement : onUpkeep) {
+                    JsonObject effectJson = jsonElement.getAsJsonObject();
+                    builder.onUpkeep(aliasGson.fromJson(effectJson, Effect.class));
+                }
+            }
+            JsonArray afterBattle = cardJson.getAsJsonArray("afterBattle");
+            if (afterBattle != null) {
+                for (JsonElement jsonElement : afterBattle) {
+                    JsonObject effectJson = jsonElement.getAsJsonObject();
+                    builder.afterBattle(aliasGson.fromJson(effectJson, Effect.class));
+                }
+            }
+            JsonArray onCast = cardJson.getAsJsonArray("onCast");
+            if (onCast != null) {
+                for (JsonElement jsonElement : onCast) {
+                    JsonObject effectJson = jsonElement.getAsJsonObject();
+                    builder.onCast(aliasGson.fromJson(effectJson, Effect.class));
+                }
+            }
+            JsonArray onSummon = cardJson.getAsJsonArray("onSummon");
+            if (onSummon != null) {
+                for (JsonElement jsonElement : onSummon) {
+                    JsonObject effectJson = jsonElement.getAsJsonObject();
+                    builder.onSummon(aliasGson.fromJson(effectJson, Effect.class));
+                }
+            }
+            JsonObject componentModifiers = cardJson.getAsJsonObject("componentModifiers");
+            if (componentModifiers != null) {
+                for (Map.Entry<String, JsonElement> entry : componentModifiers.entrySet()) {
+                    Integer component = componentAliases.get(entry.getKey());
+                    for (StatModifier modifier : aliasGson.fromJson(entry.getValue(), StatModifier[].class)) {
+                        builder.modifyComponent(component, modifier);
+                    }
+                }
+            }
 
-        JsonObject cardComponents = cardJson.getAsJsonObject("components");
-        if (cardComponents != null) {
-            for (Map.Entry<String, JsonElement> entry : cardComponents.entrySet()) {
-                Integer component = componentAliases.get(entry.getKey());
-                if (component == null) {
-                    throw new NullPointerException("No component found for alias " + alias + ".");
-                }
-                JsonElement value = entry.getValue();
-                if (value.isJsonNull()) {
-                    builder.remove(component);
-                    continue;
-                }
-                if (value.isJsonPrimitive()) {
-                    JsonPrimitive primitive = value.getAsJsonPrimitive();
-                    if (primitive.isNumber()) {
-                        builder.set(component, primitive.getAsInt());
+            JsonObject cardComponents = cardJson.getAsJsonObject("components");
+            if (cardComponents != null) {
+                for (Map.Entry<String, JsonElement> entry : cardComponents.entrySet()) {
+                    Integer component = componentAliases.get(entry.getKey());
+                    if (component == null) {
+                        throw new NullPointerException("No component found for alias " + alias + ".");
+                    }
+                    JsonElement value = entry.getValue();
+                    if (value.isJsonNull()) {
+                        builder.remove(component);
                         continue;
                     }
-                    if (primitive.isBoolean()) {
-                        builder.set(component, primitive.getAsBoolean() ? 1 : 0);
-                        continue;
+                    if (value.isJsonPrimitive()) {
+                        JsonPrimitive primitive = value.getAsJsonPrimitive();
+                        if (primitive.isNumber()) {
+                            builder.set(component, primitive.getAsInt());
+                            continue;
+                        }
+                        if (primitive.isBoolean()) {
+                            builder.set(component, primitive.getAsBoolean() ? 1 : 0);
+                            continue;
+                        }
                     }
+                    if (value.isJsonObject()) {
+                        JsonObject obj = value.getAsJsonObject();
+                        if (obj.has("minion")) {
+                            int minion = registerIfAbsent(cardAliases, obj.getAsJsonPrimitive("minion").getAsString());
+                            builder.set(component, minion);
+                            continue;
+                        }
+                        if (obj.has("card")) {
+                            int card = registerIfAbsent(cardAliases, obj.getAsJsonPrimitive("card").getAsString());
+                            builder.set(component, card);
+                            continue;
+                        }
+                    }
+                    throw new UnsupportedOperationException(value.toString());
                 }
-                if (value.isJsonObject()) {
-                    JsonObject obj = value.getAsJsonObject();
-                    if (obj.has("minion")) {
-                        int minion = registerIfAbsent(cardAliases, obj.getAsJsonPrimitive("minion").getAsString());
-                        builder.set(component, minion);
-                        continue;
-                    }
-                    if (obj.has("card")) {
-                        int card = registerIfAbsent(cardAliases, obj.getAsJsonPrimitive("card").getAsString());
-                        builder.set(component, card);
-                        continue;
-                    }
-                }
-                throw new UnsupportedOperationException(value.toString());
             }
+            return register(builder);
+        } catch (Exception ex) {
+            LOG.error("Failed to parse card {}.", alias);
+            throw ex;
         }
-        return register(builder);
     }
 
     public DisplayCardTemplate register(DisplayCardTemplateBuilder builder) {

@@ -1,41 +1,81 @@
 {
-  "alias": "dr_bees",
-  "display": {
-    "name": "Dr. Bees",
-    "imagePath": "dr_bees.gif",
-    "colors": [
-      "GREEN"
-    ],
-    "description": "Summon five 0/0 Bee Workers with Venom 1 which die after battle."
-  },
-  "casts": [
-    {
-      "manaCost": 4,
-      "effects": [
+    "alias": "dr_bees",
+    "display": {
+        "name": "Dr. Bees",
+        "imagePath": "dr_bees.gif",
+        "colors": [
+            "GREEN"
+        ],
+        "description": "Shuffle 10 Bee Workers, 5 Bee Warriors, 1 Bee Drone, 1 Bee Queen and 1 Bee Hive into your library."
+    },
+    "manaCost": 5,
+    "casts": [
         {
-          "type": "summon",
-          "minionId": "bee_worker"
-        },
-        {
-          "type": "summon",
-          "minionId": "bee_worker"
-        },
-        {
-          "type": "summon",
-          "minionId": "bee_worker"
-        },
-        {
-          "type": "summon",
-          "minionId": "bee_worker"
-        },
-        {
-          "type": "summon",
-          "minionId": "bee_worker"
-        },
-        {
-          "type": "selfDiscard"
+            "effects": [
+                {
+                    "type": "multiTrigger",
+                    "amount": 10,
+                    "effects": [{
+                        "type": "create",
+                        "cardId": "bee_worker",
+                        "components":
+                                {
+                                    "IN_LIBRARY_ZONE": 1
+                                }
+                    }]
+                },
+                {
+                    "type": "multiTrigger",
+                    "amount": 5,
+                    "effects": [{
+                        "type": "create",
+                        "cardId": "bee_warrior",
+                        "components":
+                                {
+                                    "IN_LIBRARY_ZONE": 1
+                                }
+                    }]
+                },
+                {
+                    "type": "multiTrigger",
+                    "amount": 1,
+                    "effects": [{
+                        "type": "create",
+                        "cardId": "bee_drone",
+                        "components":
+                                {
+                                    "IN_LIBRARY_ZONE": 1
+                                }
+                    }]
+                },
+                {
+                    "type": "multiTrigger",
+                    "amount": 1,
+                    "effects": [{
+                        "type": "create",
+                        "cardId": "bee_queen",
+                        "components":
+                                {
+                                    "IN_LIBRARY_ZONE": 1
+                                }
+                    }]
+                },
+                {
+                    "type": "multiTrigger",
+                    "amount": 1,
+                    "effects": [{
+                        "type": "create",
+                        "cardId": "bee_hive",
+                        "components":
+                                {
+                                    "IN_LIBRARY_ZONE": 1
+                                }
+                    }]
+                },
+                {
+                    "type": "selfDiscard"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
