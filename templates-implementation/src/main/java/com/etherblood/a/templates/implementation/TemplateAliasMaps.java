@@ -9,6 +9,7 @@ import com.etherblood.a.templates.implementation.effects.CreateCardEffect;
 import com.etherblood.a.templates.implementation.effects.DebuffEffect;
 import com.etherblood.a.templates.implementation.effects.DrawCardTemplateEffect;
 import com.etherblood.a.templates.implementation.effects.FractionalDamageEffect;
+import com.etherblood.a.templates.implementation.effects.HandCardCountActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.KolaghanDamageEffect;
 import com.etherblood.a.templates.implementation.effects.LathlissTokenEffect;
 import com.etherblood.a.templates.implementation.effects.ParticleEventEffect;
@@ -28,6 +29,7 @@ import com.etherblood.a.templates.implementation.statmodifiers.AddOnOwnTurnModif
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnHandCardCountModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnManaPoolModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnSpiritCountModifier;
+import com.etherblood.a.templates.implementation.statmodifiers.OwnHandCardCountActivatedModifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +57,7 @@ public class TemplateAliasMaps {
         effectClasses.put("tribeActivated", TribeActivatedEffects.class);
         effectClasses.put("targetOwnedActivated", TargetOwnedActivatedEffects.class);
         effectClasses.put("targetComponentActivated", TargetComponentActivatedEffects.class);
+        effectClasses.put("handCardCountActivated", HandCardCountActivatedEffects.class);
         return effectClasses;
     }
 
@@ -66,6 +69,7 @@ public class TemplateAliasMaps {
         modifierClasses.put("addOnOpponentThreshold", AddOnOpponentThresholdModifier.class);
         modifierClasses.put("addOnOwnTurn", AddOnOwnTurnModifier.class);
         modifierClasses.put("addFractional", AddFractionalModifier.class);
+        modifierClasses.put("ownHandCardCountActivated", OwnHandCardCountActivatedModifier.class);
         return modifierClasses;
     }
 }

@@ -39,16 +39,25 @@ public class EffectiveStatsService {
     public int attack(int minion) {
         int attack = data.getOptional(minion, core.ATTACK).orElse(0);
         CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
-        for (StatModifier attackModifier : template.getAttackModifiers()) {
+        for (StatModifier attackModifier : template.getComponentModifiers(core.ATTACK)) {
             attack = attackModifier.modify(data, templates, minion, attack);
         }
         return attack;
     }
 
+    public boolean hasVigilance(int minion) {
+        int vigilance = data.getOptional(minion, core.VIGILANCE).orElse(0);
+        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
+        for (StatModifier modifier : template.getComponentModifiers(core.VIGILANCE)) {
+            vigilance = modifier.modify(data, templates, minion, vigilance);
+        }
+        return vigilance >= 1;
+    }
+
     public int health(int minion) {
         int health = data.getOptional(minion, core.HEALTH).orElse(0);
         CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
-        for (StatModifier healthModifier : template.getHealthModifiers()) {
+        for (StatModifier healthModifier : template.getComponentModifiers(core.HEALTH)) {
             health = healthModifier.modify(data, templates, minion, health);
         }
         if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {

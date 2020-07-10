@@ -14,6 +14,7 @@ import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.setup.SimpleSetup;
+import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.api.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
@@ -34,6 +35,7 @@ public abstract class AbstractGameTest {
     public EntityData data;
     public MoveService moves;
     public Game game;
+    public EffectiveStatsService effectiveStats;
 
     public AbstractGameTest() {
         TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
@@ -63,6 +65,7 @@ public abstract class AbstractGameTest {
         data = new SimpleEntityData(settings.components);
         moves = new MoveService(settings, data, HistoryRandom.producer(), new NoopGameEventListener());
         game = new Game(settings, data, moves);
+        effectiveStats = new EffectiveStatsService(data, templates);
 
         SimpleSetup setup = new SimpleSetup(2);
         setup.setLibrary(0, new IntList());

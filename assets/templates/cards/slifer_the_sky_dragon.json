@@ -23,8 +23,7 @@
     "HEALTH": 0,
     "FLYING": true
   },
-  "attackModifiers": [{"type": "addOwnHandCardCount"}],
-  "healthModifiers": [{"type": "addOwnHandCardCount"}],
+  "componentModifiers": {"HEALTH": [{"type": "addOwnHandCardCount"}],"ATTACK": [{"type": "addOwnHandCardCount"}]},
   "tribes": [
     "DRAGON"
   ]

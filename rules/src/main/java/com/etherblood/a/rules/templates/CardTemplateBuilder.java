@@ -3,7 +3,9 @@ package com.etherblood.a.rules.templates;
 import com.etherblood.a.entities.collections.IntMap;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class CardTemplateBuilder {
@@ -18,8 +20,7 @@ public class CardTemplateBuilder {
     protected final List<Effect> onSurviveEffects = new ArrayList<>();
     protected final List<Effect> onUpkeepEffects = new ArrayList<>();
     protected final List<Effect> afterBattleEffects = new ArrayList<>();
-    protected final List<StatModifier> attackModifiers = new ArrayList<>();
-    protected final List<StatModifier> healthModifiers = new ArrayList<>();
+    protected final Map<Integer, List<StatModifier>> componentModifiers = new HashMap<>();
 
     public CardCastBuilder newCast() {
         CardCastBuilder cast = new CardCastBuilder();
@@ -67,16 +68,12 @@ public class CardTemplateBuilder {
         components.remove(component);
     }
 
-    public void modifyAttack(StatModifier modifier) {
-        attackModifiers.add(modifier);
-    }
-
-    public void modifyHealth(StatModifier modifier) {
-        healthModifiers.add(modifier);
+    public void modifyComponent(int component, StatModifier modifier) {
+        componentModifiers.computeIfAbsent(component, x -> new ArrayList<>()).add(modifier);
     }
 
     public CardTemplate build(int id) {
-        return new CardTemplate(id, !components.isEmpty(), manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, attackModifiers, healthModifiers);
+        return new CardTemplate(id, !components.isEmpty(), manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, componentModifiers);
     }
 
 }

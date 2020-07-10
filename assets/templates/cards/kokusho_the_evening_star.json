@@ -1,0 +1,62 @@
+{
+  "alias": "kokusho_the_evening_star",
+  "display": {
+    "name": "Kokusho, the Evening Star",
+    "imagePath": "kokusho_the_evening_star.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "When Kokusho, the Evening Star dies, each opponent loses 5 life. You gain 5 life."
+  },
+  "casts": [
+    {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 5,
+    "HEALTH": 5,
+    "FLYING": true
+  },
+  "onDeath": [
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "HEALTH": 5
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 5
+          }
+        }
+      ]
+    }
+  ],
+  "tribes": [
+    "DRAGON",
+    "SPIRIT"
+  ]
+}

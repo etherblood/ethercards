@@ -9,6 +9,7 @@ import com.etherblood.a.rules.templates.Effect;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class DisplayCardTemplate extends CardTemplate {
@@ -16,8 +17,8 @@ public class DisplayCardTemplate extends CardTemplate {
     private final String alias, name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayCardTemplate(int templateId, boolean isMinion, Integer manaCost, CardCast[] casts, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<StatModifier> attackModifiers, List<StatModifier> healthModifiers) {
-        super(templateId, isMinion, manaCost, casts, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, attackModifiers, healthModifiers);
+    public DisplayCardTemplate(int templateId, boolean isMinion, Integer manaCost, CardCast[] casts, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, Map<Integer, List<StatModifier>> componentModifiers) {
+        super(templateId, isMinion, manaCost, casts, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, componentModifiers);
         this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;

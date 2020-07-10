@@ -23,8 +23,7 @@
     "ATTACK": 0,
     "HEALTH": 0
   },
-  "attackModifiers": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}],
-  "healthModifiers": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}],
+  "componentModifiers": {"HEALTH": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}],"ATTACK": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}]},
   "tribes": [
     "SPIRIT"
   ]

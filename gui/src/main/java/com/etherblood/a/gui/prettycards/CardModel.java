@@ -69,7 +69,7 @@ public class CardModel extends BoardObjectModel {
             if (data.has(entityId, core.LIFELINK)) {
                 keywords.add("Lifelink");
             }
-            if (data.has(entityId, core.VIGILANCE)) {
+            if (stats.hasVigilance(entityId)) {
                 keywords.add("Vigilance");
             }
             if (data.has(entityId, core.FLYING)) {

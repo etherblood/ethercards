@@ -8,6 +8,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ActionSystem;
+import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.Trigger;
 import java.util.function.IntUnaryOperator;
 
@@ -54,11 +55,13 @@ public class EndPhaseSystem implements ActionSystem {
     }
 
     private void endAttackPhase(int player) {
+        EffectiveStatsService stats = new EffectiveStatsService(data, templates);
         for (int attacker : data.list(core.ATTACKS_TARGET)) {
             if (!data.hasValue(attacker, core.OWNED_BY, player)) {
                 continue;
             }
-            if (!data.has(attacker, core.VIGILANCE)) {
+
+            if (!stats.hasVigilance(attacker)) {
                 data.set(attacker, core.TIRED, 1);
             }
             int target = data.get(attacker, core.ATTACKS_TARGET);

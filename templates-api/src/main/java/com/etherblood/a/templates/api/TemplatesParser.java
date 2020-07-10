@@ -174,18 +174,13 @@ public class TemplatesParser {
                 builder.onSummon(aliasGson.fromJson(effectJson, Effect.class));
             }
         }
-        JsonArray attackModifiers = cardJson.getAsJsonArray("attackModifiers");
-        if (attackModifiers != null) {
-            for (JsonElement jsonElement : attackModifiers) {
-                JsonObject modifierJson = jsonElement.getAsJsonObject();
-                builder.modifyAttack(aliasGson.fromJson(modifierJson, StatModifier.class));
-            }
-        }
-        JsonArray healthModifiers = cardJson.getAsJsonArray("healthModifiers");
-        if (healthModifiers != null) {
-            for (JsonElement jsonElement : healthModifiers) {
-                JsonObject modifierJson = jsonElement.getAsJsonObject();
-                builder.modifyHealth(aliasGson.fromJson(modifierJson, StatModifier.class));
+        JsonObject componentModifiers = cardJson.getAsJsonObject("componentModifiers");
+        if (componentModifiers != null) {
+            for (Map.Entry<String, JsonElement> entry : componentModifiers.entrySet()) {
+                Integer component = componentAliases.get(entry.getKey());
+                for (StatModifier modifier : aliasGson.fromJson(entry.getValue(), StatModifier[].class)) {
+                    builder.modifyComponent(component, modifier);
+                }
             }
         }
 
