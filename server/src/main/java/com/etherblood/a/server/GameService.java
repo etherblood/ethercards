@@ -189,12 +189,13 @@ public class GameService {
                     human.id = jwt.user.id;
                     human.name = jwt.user.login;
                     human.library = request.library;
-                    applyPlayerEasterEggs(human);
 
                     PlayerSetup bot = new PlayerSetup();
                     bot.id = botId;
                     bot.name = "Bot";
                     bot.library = botLibrary;
+
+                    applyPlayerEasterEggs(human, bot);
 
                     GameSetup setup = new GameSetup();
                     setup.players = shuffle(new PlayerSetup[]{human, bot});
@@ -242,7 +243,6 @@ public class GameService {
             player0.id = jwt0.user.id;
             player0.name = jwt0.user.login;
             player0.library = request0.library;
-            applyPlayerEasterEggs(player0);
 
             GameRequest request1 = entry1.getValue();
             PlayerSetup player1 = new PlayerSetup();
@@ -250,7 +250,9 @@ public class GameService {
             player1.id = jwt1.user.id;
             player1.name = jwt1.user.login;
             player1.library = request1.library;
-            applyPlayerEasterEggs(player1);
+
+            applyPlayerEasterEggs(player0, player1);
+            applyPlayerEasterEggs(player1, player0);
 
             GameSetup setup = new GameSetup();
             setup.players = shuffle(new PlayerSetup[]{player0, player1});
@@ -272,9 +274,12 @@ public class GameService {
         }
     }
 
-    private void applyPlayerEasterEggs(PlayerSetup player) {
+    private void applyPlayerEasterEggs(PlayerSetup player, PlayerSetup opponent) {
         if (player.name.equalsIgnoreCase("yalee")) {
             replaceCard(player.library, "raigeki", "fabi_raigeki");
+        }
+        if (opponent.name.equalsIgnoreCase("destroflyer")) {
+            replaceCard(player.library, "the_coin", "the_other_coin");
         }
     }
 
