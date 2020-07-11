@@ -117,7 +117,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final Node endPhaseButtonNode = new Node();
 
     private final Map<Animation, BoardObject> particleMapBoardObjects = new HashMap<>();
-    private final Map<Animation, Node> particleMapGlobalNodes = new HashMap<>();
 
     public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode, String assetsPath, boolean battleFullArt) {
         this.moveRequester = moveRequester;
@@ -155,13 +154,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             if (entry.getKey().isFinished()) {
                 board.unregister(entry.getValue());
                 particleMapBoardObjects.remove(entry.getKey());
-            }
-        }
-        for (Map.Entry<Animation, Node> entry : new ArrayList<>(particleMapGlobalNodes.entrySet())) {
-            if (entry.getKey().isFinished()) {
-                Node node = entry.getValue();
-                node.getParent().detachChild(node);
-                particleMapGlobalNodes.remove(entry.getKey());
             }
         }
     }
@@ -237,6 +229,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private void shootSpatial(int source, int target, Spatial spatial) {
         StaticSpatial staticSpatial = new StaticSpatial();
         staticSpatial.getModel().setSpatial(spatial);
+        staticSpatial.setVisibleToMouse(false);
         shootBoardObject(source, target, staticSpatial);
     }
 
@@ -250,33 +243,35 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private void playParticleEffect(String particleEffectName, float scale, float speed) {
-        UncollidableNode placeholder = new UncollidableNode();
-        placeholder.setLocalTranslation(0, 0, 1);
-        rootNode.attachChild(placeholder);
-        playParticleEffect(placeholder, particleEffectName, scale, speed);
+        Node node = createParticleEffectNode(scale);
+        node.setLocalTranslation(0, 0, 1);
+        playParticleEffect(node, particleEffectName, speed);
     }
 
     private void playParticleEffect(int target, String particleEffectName, float scale, float speed) {
-        Node node = boardAppState.getNode(visualCards.get(target));
-        playParticleEffect(node, particleEffectName, scale, speed);
+        Node node = createParticleEffectNode(scale);
+        StaticSpatial staticSpatial = playParticleEffect(node, particleEffectName, speed);
+        staticSpatial.getModel().setFollowTarget(visualCards.get(target));
     }
 
-    private void playParticleEffect(Node parentNode, String particleEffectName, float scale, float speed) {
-        Node node = createParticleEffectNode(scale);
-        parentNode.attachChild(node);
+    private StaticSpatial playParticleEffect(Node node, String particleEffectName, float speed) {
+        StaticSpatial staticSpatial = new StaticSpatial();
+        staticSpatial.getModel().setSpatial(node);
+        board.register(staticSpatial);
         EffekseerAnimation animation = new EffekseerAnimation(
-                node,
-                assetsPath,
-                getParticleEffectPath(particleEffectName),
-                getParticleEffectSettings(speed),
-                assetManager
+            node,
+            assetsPath,
+            getParticleEffectPath(particleEffectName),
+            getParticleEffectSettings(speed),
+            assetManager
         );
         board.playAnimation(animation);
-        particleMapGlobalNodes.put(animation, node);
+        particleMapBoardObjects.put(animation, staticSpatial);
+        return staticSpatial;
     }
 
     private Node createParticleEffectNode(float scale) {
-        UncollidableNode node = new UncollidableNode();
+        Node node = new Node();
         node.setLocalScale(scale);
         node.setShadowMode(RenderQueue.ShadowMode.Off);
         return node;
