@@ -1,0 +1,43 @@
+{
+  "alias": "yuumi",
+  "display": {
+    "name": "Yuumi",
+    "imagePath": "yuumi.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "Yuumi can not be attacked after surviving damage.",
+    "flavourText": "We've got the zoomies!."
+  },
+  "casts": [
+    {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 4
+  },
+  "onSurvive": [
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "SOURCE"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "CANNOT_BE_ATTACKED": true
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -25,8 +25,7 @@
       "power": 3
     }
   ],
-  "attackModifiers": [{"type": "addOnOwnTurn", "value": 2}],
-  "healthModifiers": [{"type": "addOnOwnTurn", "value": 2}],
+  "componentModifiers": {"HEALTH": [{"type": "addOnOwnTurn", "value": 2}],"ATTACK": [{"type": "addOnOwnTurn", "value": 2}]},
   "tribes": [
     "SPIRIT"
   ],

@@ -114,6 +114,9 @@ public class CardModel extends BoardObjectModel {
             if (data.has(entityId, core.CANNOT_BLOCK)) {
                 keywords.add("Cannot_block");
             }
+            if (data.has(entityId, core.CANNOT_BE_ATTACKED)) {
+                keywords.add("Cannot_be_attacked");
+            }
             if (data.has(entityId, core.CANNOT_BE_BLOCKED)) {
                 keywords.add("Cannot_be_blocked");
             }
@@ -202,6 +205,9 @@ public class CardModel extends BoardObjectModel {
             }
             if (template.has(core.CANNOT_BLOCK)) {
                 keywords.add("Cannot_block");
+            }
+            if (template.has(core.CANNOT_BE_ATTACKED)) {
+                keywords.add("Cannot_be_attacked");
             }
             if (template.has(core.CANNOT_BE_BLOCKED)) {
                 keywords.add("Cannot_be_blocked");

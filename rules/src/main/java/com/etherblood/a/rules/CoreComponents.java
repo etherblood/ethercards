@@ -38,6 +38,7 @@ public class CoreComponents implements ComponentsModule {
     public final int BLOCKS_ATTACKER;
     public final int CANNOT_ATTACK;
     public final int CANNOT_BLOCK;
+    public final int CANNOT_BE_ATTACKED;
     public final int CANNOT_BE_BLOCKED;
     public final int ATTACKS_TARGET;
     public final int CAST_TARGET;
@@ -100,6 +101,7 @@ public class CoreComponents implements ComponentsModule {
         IN_GRAVEYARD_ZONE = register.applyAsInt("IN_GRAVEYARD_ZONE");
         CANNOT_ATTACK = register.applyAsInt("CANNOT_ATTACK");
         CANNOT_BLOCK = register.applyAsInt("CANNOT_BLOCK");
+        CANNOT_BE_ATTACKED = register.applyAsInt("CANNOT_BE_ATTACKED");
         CANNOT_BE_BLOCKED = register.applyAsInt("CANNOT_BE_BLOCKED");
         BLOCKS_ATTACKER = register.applyAsInt("BLOCKS_ATTACKER");
         ATTACKS_TARGET = register.applyAsInt("ATTACKS_PLAYER");

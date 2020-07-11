@@ -86,6 +86,12 @@ public class MoveAvailabilityService {
             }
             return false;
         }
+        if (data.has(target, core.CANNOT_BE_ATTACKED)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " cannot be attacked.");
+            }
+            return false;
+        }
         return canDeclareAttack(player, attacker, throwOnFail);
     }
 
