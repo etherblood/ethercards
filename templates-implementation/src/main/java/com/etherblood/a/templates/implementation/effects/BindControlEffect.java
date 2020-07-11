@@ -5,6 +5,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
 public class BindControlEffect implements Effect {
@@ -18,5 +19,7 @@ public class BindControlEffect implements Effect {
         }
         data.set(target, core.OWNED_BY, owner);
         data.set(target, core.BOUND_TO, source);
+        
+        SystemsUtil.clearSameTeamBattles(data);
     }
 }

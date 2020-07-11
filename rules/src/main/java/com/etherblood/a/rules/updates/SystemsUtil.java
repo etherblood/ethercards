@@ -240,4 +240,22 @@ public class SystemsUtil {
         }
     }
 
+    public static void clearSameTeamBattles(EntityData data) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        for (int attacker : data.list(core.ATTACKS_TARGET)) {
+            int owner = data.get(attacker, core.OWNED_BY);
+            int target = data.get(attacker, core.ATTACKS_TARGET);
+            if (data.hasValue(target, core.OWNED_BY, owner)) {
+                data.remove(attacker, core.ATTACKS_TARGET);
+            }
+        }
+        for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
+            int owner = data.get(blocker, core.OWNED_BY);
+            int target = data.get(blocker, core.BLOCKS_ATTACKER);
+            if (data.hasValue(target, core.OWNED_BY, owner)) {
+                data.remove(blocker, core.BLOCKS_ATTACKER);
+            }
+        }
+    }
+
 }

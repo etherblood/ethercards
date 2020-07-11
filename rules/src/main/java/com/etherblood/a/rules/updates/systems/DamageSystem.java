@@ -71,8 +71,19 @@ public class DamageSystem implements ActionSystem {
             int damage = data.get(entity, core.DAMAGE_ACTION);
             assert data.has(entity, core.IN_BATTLE_ZONE);
 
-            int previous = data.getOptional(entity, core.HEALTH).orElse(0);
-            data.set(entity, core.HEALTH, previous - damage);
+            if(data.has(entity, core.TEMPORARY_HEALTH)) {
+                int temporaryHealth = data.get(entity, core.TEMPORARY_HEALTH);
+                if(damage > temporaryHealth) {
+                    damage -= temporaryHealth;
+                    data.remove(entity, core.TEMPORARY_HEALTH);
+                } else {
+                    data.set(entity, core.TEMPORARY_HEALTH, temporaryHealth - damage);
+                    damage = 0;
+                }
+            }
+            
+            int health = data.getOptional(entity, core.HEALTH).orElse(0);
+            data.set(entity, core.HEALTH, health - damage);
             data.remove(entity, core.DAMAGE_ACTION);
         }
     }

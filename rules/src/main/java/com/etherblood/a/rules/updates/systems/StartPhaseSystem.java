@@ -56,6 +56,8 @@ public class StartPhaseSystem implements ActionSystem {
     }
 
     private void startAttackPhase(int player) {
+        clearTemporaryStats();
+        
         int draws = data.getOptional(player, core.DRAW_CARDS_REQUEST).orElse(0);
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (!data.hasValue(minion, core.OWNED_BY, player)) {
@@ -92,6 +94,18 @@ public class StartPhaseSystem implements ActionSystem {
 
         for (int rager : data.list(core.RAGE)) {
             declareRandomAttackIfAble(rager);
+        }
+    }
+
+    private void clearTemporaryStats() {
+        for (int minion : data.list(core.TEMPORARY_ATTACK)) {
+            data.remove(minion, core.TEMPORARY_ATTACK);
+        }
+        for (int minion : data.list(core.TEMPORARY_HEALTH)) {
+            data.remove(minion, core.TEMPORARY_HEALTH);
+        }
+        for (int minion : data.list(core.BUSHIDO_TRIGGERED)) {
+            data.remove(minion, core.BUSHIDO_TRIGGERED);
         }
     }
 
