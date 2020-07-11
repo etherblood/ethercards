@@ -7,7 +7,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.updates.BattleZoneService;
+import com.etherblood.a.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
 
 public class ResurrectRandomEffect implements Effect {
@@ -38,8 +38,9 @@ public class ResurrectRandomEffect implements Effect {
         }
         int resurrectMinion = candidates.getRandomItem(random);
 
-        data.remove(resurrectMinion, core.IN_GRAVEYARD_ZONE);
-        new BattleZoneService(data, templates).addToBattle(resurrectMinion);
+        ZoneService zoneService = new ZoneService(data, templates);
+        zoneService.removeFromGraveyard(resurrectMinion);
+        zoneService.addToBattle(resurrectMinion);
         data.set(resurrectMinion, core.SUMMONING_SICKNESS, 1);
         for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (resurrectMinion == other) {

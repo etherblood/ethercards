@@ -37,7 +37,7 @@ public class SystemFactory {
                 ),
                 Arrays.asList(
                         new CastSystem(data, templates, random, events),
-                        new DiscardSystem(data, random),
+                        new DiscardSystem(data, templates, random),
                         new DrawSystem(data, templates, events, random),
                         new DamageSystem(data, templates, random, events),
                         new DeathSystem(data, templates, random, events),

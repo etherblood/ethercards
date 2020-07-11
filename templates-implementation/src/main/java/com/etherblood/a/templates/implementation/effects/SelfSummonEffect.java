@@ -6,7 +6,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.updates.BattleZoneService;
+import com.etherblood.a.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
 
 public class SelfSummonEffect implements Effect {
@@ -15,7 +15,7 @@ public class SelfSummonEffect implements Effect {
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         data.remove(source, core.IN_HAND_ZONE);
-        new BattleZoneService(data, templates).addToBattle(source);
+        new ZoneService(data, templates).addToBattle(source);
         data.set(source, core.SUMMONING_SICKNESS, 1);
         for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (source == other) {

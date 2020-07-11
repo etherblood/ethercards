@@ -9,7 +9,7 @@ import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.updates.ActionSystem;
-import com.etherblood.a.rules.updates.BattleZoneService;
+import com.etherblood.a.rules.updates.ZoneService;
 import com.etherblood.a.rules.updates.Modifier;
 import com.etherblood.a.rules.updates.Trigger;
 import java.util.function.IntUnaryOperator;
@@ -78,12 +78,13 @@ public class DeathSystem implements ActionSystem {
 
     @Override
     public void after() {
+        ZoneService zoneService = new ZoneService(data, templates);
         for (int entity : data.list(core.DEATH_ACTION)) {
             data.remove(entity, core.ATTACKS_TARGET);
             data.remove(entity, core.BLOCKS_ATTACKER);
             data.remove(entity, core.DEATH_ACTION);
-            new BattleZoneService(data, templates).removeFromBattle(entity);
-            data.set(entity, core.IN_GRAVEYARD_ZONE, 1);
+            zoneService.removeFromBattle(entity);
+            zoneService.addToGraveyard(entity);
         }
     }
 }

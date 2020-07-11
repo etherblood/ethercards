@@ -8,6 +8,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Tribe;
+import com.etherblood.a.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
 
 public class SoulshiftEffect implements Effect {
@@ -49,7 +50,7 @@ public class SoulshiftEffect implements Effect {
             return;
         }
         int selected = candidates.getRandomItem(random);
-        data.remove(selected, core.IN_GRAVEYARD_ZONE);
+        new ZoneService(data, templates).removeFromGraveyard(selected);
         data.set(selected, core.IN_HAND_ZONE, 1);
     }
 }
