@@ -20,7 +20,7 @@
     }
   ],
   "components": {
-    "ATTACK": 2,
+    "ATTACK": 3,
     "HEALTH": 4
   },
   "onSurvive": [
