@@ -451,9 +451,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 visualCards.remove(entity);
             }
         }
-        if (game.isGameOver()) {
-            return;
-        }
         List<Move> moves = game.getMoves().generate(false, userControlledPlayer);
         int index = 0;
         for (int cardEntity : cards) {
@@ -587,10 +584,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private void updateCamera() {
-        if (game.isGameOver()) {
-            return;
-        }
-
         Vector3f position = new Vector3f();
         Quaternion rotation = new Quaternion();
         boolean isPlayer1 = userControlledPlayer == game.findPlayerByIndex(1);
