@@ -382,12 +382,14 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         IntList handCards = data.list(core.IN_HAND_ZONE);
         IntList battleCards = data.listInValueOrder(core.IN_BATTLE_ZONE);
         IntList libraryCards = data.list(core.IN_LIBRARY_ZONE);
+        IntList graveyardCards = data.list(core.IN_GRAVEYARD_ZONE);
         for (int player : players) {
             PlayerZones zones = playerZones.get(player);
             IntPredicate playerFilter = x -> data.hasValue(x, core.OWNED_BY, player);
             updateZone(libraryCards.stream().filter(playerFilter).toArray(), zones.getDeckZone(), Vector3f.UNIT_Y);
             updateZone(handCards.stream().filter(playerFilter).toArray(), zones.getHandZone(), Vector3f.UNIT_X);
             updateZone(battleCards.stream().filter(playerFilter).toArray(), zones.getBoardZone(), Vector3f.UNIT_X);
+            updateZone(graveyardCards.stream().filter(playerFilter).toArray(), zones.getGraveyardZone(), Vector3f.UNIT_Y);
         }
 
         IntList blocked = new IntList();
@@ -441,7 +443,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (Card card : new ArrayList<>(cardZone.getCards())) {
             int entity = objectEntities.get(card);
-            if (!data.has(entity, core.IN_LIBRARY_ZONE) && !data.has(entity, core.IN_HAND_ZONE) && !data.has(entity, core.IN_BATTLE_ZONE)) {
+            if (!data.has(entity, core.IN_LIBRARY_ZONE) && !data.has(entity, core.IN_HAND_ZONE) && !data.has(entity, core.IN_BATTLE_ZONE) && !data.has(entity, core.IN_GRAVEYARD_ZONE)) {
                 cardZone.removeCard(card);
                 board.unregister(card);
                 objectEntities.remove(card);
@@ -653,33 +655,35 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 zoneRotation = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y);
             }
 
-            float x = -1.25f;
-            float z = 2 * (ZONE_HEIGHT / 2);
-            x += 3.9f;
-            SimpleIntervalZone boardZone = new SimpleScalingIntervalZone(offset.add(-x, 0, directionZ * z), zoneRotation, new Vector3f(-0.9f * directionX, 1, 1)) {
+            float x = -2.65f;
+            float z = 1.3f;
+            SimpleIntervalZone boardZone = new SimpleScalingIntervalZone(offset.add(x, 0, directionZ * z), zoneRotation, new Vector3f(-0.9f * directionX, 1, 1)) {
+
                 @Override
                 protected float getScale() {
                     long cardsCount = game.getData().list(core.IN_BATTLE_ZONE).stream().filter(x -> game.getData().hasValue(x, core.OWNED_BY, player)).count();
                     float limit = 6;
                     return ((cardsCount < limit) ? 1 : (limit / cardsCount));
                 }
-
             };
 
-            x = 0;
-            x += 3.75f;
-            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(-x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.01f, 0));
-            z += ZONE_HEIGHT / 2;
+            x = -3.75f;
+            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.01f, 0));
+
+            z = 0.35f;
+            float graveyardScale = 0.5f;
+            SimpleIntervalZone graveyardZone = new SimpleIntervalZone(offset.add(x, 0, directionZ * z), zoneRotation, new Vector3f(graveyardScale, graveyardScale, graveyardScale), new Vector3f(0, 0.01f, 0));
 
             x = 0;
-            z += (ZONE_HEIGHT - 0.25f);
+            z = 3;
             Quaternion handRotation = zoneRotation.mult(new Quaternion().fromAngleAxis(FastMath.QUARTER_PI, Vector3f.UNIT_X));
             CenteredIntervalZone handZone = new CenteredIntervalZone(offset.add(directionX * x, 0, directionZ * z), handRotation, new Vector3f(0.85f, 1, 1));
 
             board.addZone(deckZone);
+            board.addZone(graveyardZone);
             board.addZone(handZone);
             board.addZone(boardZone);
-            playerZones.put(player, new PlayerZones(deckZone, handZone, boardZone));
+            playerZones.put(player, new PlayerZones(deckZone, graveyardZone, handZone, boardZone));
         }
         return new BoardAppState(board, rootNode, BoardSettings.builder()
                 .hoverInspectionDelay(1f)
