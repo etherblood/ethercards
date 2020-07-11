@@ -144,7 +144,7 @@ public class SystemsUtil {
 
     public static int createMinion(EntityData data, GameTemplates templates, int templateId, int owner) {
         int minion = createCard(data, templateId, owner);
-        new BattleZoneService(data, templates).addToBattle(minion);
+        new ZoneService(data, templates).addToBattle(minion);
         return minion;
     }
 

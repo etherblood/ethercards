@@ -3,21 +3,25 @@ package com.etherblood.a.rules.updates.systems;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.ActionSystem;
 import com.etherblood.a.rules.updates.Modifier;
 import com.etherblood.a.rules.updates.Trigger;
+import com.etherblood.a.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
 
 public class DiscardSystem implements ActionSystem {
 
     private final EntityData data;
     private final CoreComponents core;
+    private final GameTemplates templates;
     private final IntUnaryOperator random;
     private final Modifier[] modifiers;
     private final Trigger[] triggers;
 
-    public DiscardSystem(EntityData data, IntUnaryOperator random) {
+    public DiscardSystem(EntityData data, GameTemplates templates, IntUnaryOperator random) {
         this.data = data;
+        this.templates = templates;
         this.random = random;
         this.core = data.getComponents().getModule(CoreComponents.class);
         this.modifiers = new Modifier[0];
@@ -55,6 +59,7 @@ public class DiscardSystem implements ActionSystem {
 
     @Override
     public void after() {
+        ZoneService zoneService = new ZoneService(data, templates);
         for (int player : data.list(core.DISCARD_CARDS_ACTION)) {
             int cards = data.get(player, core.DISCARD_CARDS_ACTION);
             IntList handCards = data.list(core.IN_HAND_ZONE);
@@ -67,7 +72,7 @@ public class DiscardSystem implements ActionSystem {
             for (int i = 0; i < cards; i++) {
                 int card = handCards.swapRemoveAt(random.applyAsInt(handCards.size()));
                 data.remove(card, core.IN_HAND_ZONE);
-                data.set(card, core.IN_GRAVEYARD_ZONE, 1);
+                zoneService.addToGraveyard(card);
             }
             data.remove(player, core.DISCARD_CARDS_ACTION);
         }

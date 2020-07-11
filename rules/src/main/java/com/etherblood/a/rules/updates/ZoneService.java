@@ -7,16 +7,26 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
 
-public class BattleZoneService {
+public class ZoneService {
 
     private final EntityData data;
     private final GameTemplates templates;
     private final CoreComponents core;
 
-    public BattleZoneService(EntityData data, GameTemplates templates) {
+    public ZoneService(EntityData data, GameTemplates templates) {
         this.data = data;
         this.core = data.getComponents().getModule(CoreComponents.class);
         this.templates = templates;
+    }
+
+    public void addToGraveyard(int entity) {
+        assert !data.has(entity, core.IN_GRAVEYARD_ZONE);
+        data.set(entity, core.IN_GRAVEYARD_ZONE, data.createEntity());
+    }
+
+    public void removeFromGraveyard(int entity) {
+        assert data.has(entity, core.IN_GRAVEYARD_ZONE);
+        data.remove(entity, core.IN_GRAVEYARD_ZONE);
     }
 
     public void addToBattle(int entity) {

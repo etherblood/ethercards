@@ -382,7 +382,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         IntList handCards = data.list(core.IN_HAND_ZONE);
         IntList battleCards = data.listInValueOrder(core.IN_BATTLE_ZONE);
         IntList libraryCards = data.list(core.IN_LIBRARY_ZONE);
-        IntList graveyardCards = data.list(core.IN_GRAVEYARD_ZONE);
+        IntList graveyardCards = data.listInValueOrder(core.IN_GRAVEYARD_ZONE);
         for (int player : players) {
             PlayerZones zones = playerZones.get(player);
             IntPredicate playerFilter = x -> data.hasValue(x, core.OWNED_BY, player);
@@ -687,17 +687,20 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         }
         return new BoardAppState(board, rootNode, BoardSettings.builder()
                 .hoverInspectionDelay(1f)
-                .isInspectable(this::isInBattleZone)
+                .isInspectable(this::isInspectable)
                 .dragProjectionZ(0.9975f)
                 .build());
     }
 
-    private boolean isInBattleZone(TransformedBoardObject<?> transformedBoardObject) {
+    private boolean isInspectable(TransformedBoardObject<?> transformedBoardObject) {
         if (transformedBoardObject instanceof Card) {
             Card<?> card = (Card<?>) transformedBoardObject;
             CardZone cardZone = card.getZonePosition().getZone();
             for (PlayerZones playerZones : playerZones.values()) {
                 if ((cardZone == playerZones.getBoardZone())) {
+                    return true;
+                }
+                if ((cardZone == playerZones.getGraveyardZone())) {
                     return true;
                 }
             }
