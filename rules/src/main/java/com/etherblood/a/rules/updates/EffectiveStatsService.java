@@ -3,6 +3,7 @@ package com.etherblood.a.rules.updates;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.MoveAvailabilityService;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.StatModifier;
 
@@ -39,10 +40,30 @@ public class EffectiveStatsService {
     public void unbindFreedMinions() {
         for (int minion : data.listInValueOrder(core.BOUND_TO)) {
             int bindTarget = data.get(minion, core.BOUND_TO);
-            if(!data.has(bindTarget, core.IN_BATTLE_ZONE)) {
+            if (!data.has(bindTarget, core.IN_BATTLE_ZONE)) {
                 data.set(minion, core.OWNED_BY, data.get(minion, core.ORIGINALLY_OWNED_BY));
                 data.remove(minion, core.ORIGINALLY_OWNED_BY);
                 data.remove(minion, core.BOUND_TO);
+            }
+        }
+    }
+
+    public void removeInvalidAttacks() {
+        MoveAvailabilityService moves = new MoveAvailabilityService(data, templates);
+        for (int attacker : data.list(core.ATTACKS_TARGET)) {
+            int target = data.get(attacker, core.ATTACKS_TARGET);
+            if (!moves.isAttackValid(attacker, target)) {
+                data.remove(attacker, core.ATTACKS_TARGET);
+            }
+        }
+    }
+
+    public void removeInvalidBlocks() {
+        MoveAvailabilityService moves = new MoveAvailabilityService(data, templates);
+        for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
+            int target = data.get(blocker, core.BLOCKS_ATTACKER);
+            if (!moves.isBlockValid(blocker, target)) {
+                data.remove(blocker, core.BLOCKS_ATTACKER);
             }
         }
     }

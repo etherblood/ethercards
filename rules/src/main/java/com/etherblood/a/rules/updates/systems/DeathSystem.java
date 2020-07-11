@@ -80,8 +80,6 @@ public class DeathSystem implements ActionSystem {
     public void after() {
         ZoneService zoneService = new ZoneService(data, templates);
         for (int entity : data.list(core.DEATH_ACTION)) {
-            data.remove(entity, core.ATTACKS_TARGET);
-            data.remove(entity, core.BLOCKS_ATTACKER);
             data.remove(entity, core.DEATH_ACTION);
             zoneService.removeFromBattle(entity);
             zoneService.addToGraveyard(entity);

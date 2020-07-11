@@ -67,7 +67,22 @@ public class MoveAvailabilityService {
         return true;
     }
 
+    public boolean isAttackValid(int attacker, int target) {
+        return isAttackerValid(attacker, false) && isAttackTargetValid(attacker, target, false);
+    }
+
     public boolean canDeclareAttack(int player, int attacker, int target, boolean throwOnFail) {
+        return canDeclareAttack(player, attacker, throwOnFail) && isAttackTargetValid(attacker, target, throwOnFail);
+    }
+
+    private boolean isAttackTargetValid(int attacker, int target, boolean throwOnFail) {
+        int attackerOwner = data.get(attacker, core.OWNED_BY);
+        if (data.hasValue(target, core.OWNED_BY, attackerOwner)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " has same owner as attacker.");
+            }
+            return false;
+        }
         if (!data.has(target, core.IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is not in battle zone.");
@@ -80,19 +95,13 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.hasValue(target, core.OWNED_BY, player)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is owned by attacker.");
-            }
-            return false;
-        }
         if (data.has(target, core.CANNOT_BE_ATTACKED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, target #" + target + " cannot be attacked.");
             }
             return false;
         }
-        return canDeclareAttack(player, attacker, throwOnFail);
+        return true;
     }
 
     public boolean canDeclareAttack(int player, int attacker, boolean throwOnFail) {
@@ -108,6 +117,22 @@ public class MoveAvailabilityService {
             }
             return false;
         }
+        if (data.has(attacker, core.TIRED)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is tired.");
+            }
+            return false;
+        }
+        if (data.has(attacker, core.ATTACKS_TARGET)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is already attacking.");
+            }
+            return false;
+        }
+        return isAttackerValid(attacker, throwOnFail);
+    }
+
+    private boolean isAttackerValid(int attacker, boolean throwOnFail) {
         if (!data.has(attacker, core.IN_BATTLE_ZONE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is not in battle zone.");
@@ -126,19 +151,11 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(attacker, core.TIRED)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is tired.");
-            }
-            return false;
-        }
-        if (data.has(attacker, core.ATTACKS_TARGET)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is already attacking.");
-            }
-            return false;
-        }
         return true;
+    }
+
+    public boolean isBlockValid(int blocker, int target) {
+        return isBlockerValid(blocker, false) && isBlockTargetValid(blocker, target, false);
     }
 
     public boolean canDeclareBlock(int player, int blocker, int attacker, boolean throwOnFail) {
@@ -148,19 +165,30 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(attacker, core.CANNOT_BE_BLOCKED)) {
+        return canDeclareBlock(player, blocker, throwOnFail) && isBlockTargetValid(blocker, attacker, throwOnFail);
+    }
+
+    public boolean isBlockTargetValid(int blocker, int target, boolean throwOnFail) {
+        int blockerOwner = data.get(blocker, core.OWNED_BY);
+        if (data.hasValue(target, core.OWNED_BY, blockerOwner)) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " can not be blocked.");
+                throw new IllegalArgumentException("Failed to declare block, target #" + target + " has same owner as blocker.");
             }
             return false;
         }
-        if (data.has(attacker, core.FLYING) && !data.has(blocker, core.FLYING) && !data.has(blocker, core.REACH)) {
+        if (data.has(target, core.CANNOT_BE_BLOCKED)) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, target #" + attacker + " is flying.");
+                throw new IllegalArgumentException("Failed to block, attacker #" + target + " can not be blocked.");
             }
             return false;
         }
-        return canDeclareBlock(player, blocker, throwOnFail);
+        if (data.has(target, core.FLYING) && !data.has(blocker, core.FLYING) && !data.has(blocker, core.REACH)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is flying.");
+            }
+            return false;
+        }
+        return true;
     }
 
     public boolean canDeclareBlock(int player, int blocker, boolean throwOnFail) {
@@ -170,27 +198,31 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (!data.has(blocker, core.IN_BATTLE_ZONE)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is not in battle zone.");
-            }
-            return false;
-        }
         if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.BLOCK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " is not in block phase.");
             }
             return false;
         }
-        if (data.has(blocker, core.SUMMONING_SICKNESS) && !effectiveStats.isFastToDefend(blocker)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " has summoning sickness.");
-            }
-            return false;
-        }
         if (data.has(blocker, core.TIRED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is tired.");
+            }
+            return false;
+        }
+        return isBlockerValid(blocker, throwOnFail);
+    }
+
+    public boolean isBlockerValid(int blocker, boolean throwOnFail) {
+        if (!data.has(blocker, core.IN_BATTLE_ZONE)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is not in battle zone.");
+            }
+            return false;
+        }
+        if (data.has(blocker, core.SUMMONING_SICKNESS) && !effectiveStats.isFastToDefend(blocker)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " has summoning sickness.");
             }
             return false;
         }

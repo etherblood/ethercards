@@ -38,14 +38,21 @@ public class UpdateService {
                     actionSystem.after();
                 }
 
-                stats.killHealthless();
-                stats.unbindFreedMinions();
+                fixInconsistencies();
                 if (actionSystems.stream().noneMatch(ActionSystem::isActive)) {
                     survivalSystem.before();
                     survivalSystem.run();
                     survivalSystem.after();
+                    fixInconsistencies();
                 }
             }
         } while (phaseSystems.stream().anyMatch(ActionSystem::isActive));
+    }
+
+    private void fixInconsistencies() {
+        stats.killHealthless();
+        stats.unbindFreedMinions();
+        stats.removeInvalidAttacks();
+        stats.removeInvalidBlocks();
     }
 }

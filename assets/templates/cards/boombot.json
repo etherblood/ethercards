@@ -8,6 +8,16 @@
     ],
     "description": "Deal 2 damage to a random enemy when this dies."
   },
+  "manaCost": 1,
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
   "onDeath": [
     {
       "type": "targeted",
