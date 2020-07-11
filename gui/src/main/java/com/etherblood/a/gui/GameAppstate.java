@@ -75,6 +75,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -227,9 +228,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private void shootParticleEffect(int source, int target, String particleEffectName, float scale, float speed) {
-        UncollidableNode node = new UncollidableNode();
-        node.setLocalScale(scale);
         ParticleEffect particleEffect = new EffekseerReader().read(assetsPath, getParticleEffectPath(particleEffectName));
+        Node node = createParticleEffectNode(scale);
         node.addControl(new EffekseerControl(particleEffect, getParticleEffectSettings(speed), assetManager));
         shootSpatial(source, target, node);
     }
@@ -262,8 +262,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private void playParticleEffect(Node parentNode, String particleEffectName, float scale, float speed) {
-        UncollidableNode node = new UncollidableNode();
-        node.setLocalScale(scale);
+        Node node = createParticleEffectNode(scale);
         parentNode.attachChild(node);
         EffekseerAnimation animation = new EffekseerAnimation(
                 node,
@@ -274,6 +273,13 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         );
         board.playAnimation(animation);
         particleMapGlobalNodes.put(animation, node);
+    }
+
+    private Node createParticleEffectNode(float scale) {
+        UncollidableNode node = new UncollidableNode();
+        node.setLocalScale(scale);
+        node.setShadowMode(RenderQueue.ShadowMode.Off);
+        return node;
     }
 
     private ParticleEffectSettings getParticleEffectSettings(float speed) {
