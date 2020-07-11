@@ -40,6 +40,7 @@ public class CoreComponents implements ComponentsModule {
     public final int CANNOT_BLOCK;
     public final int CANNOT_BE_ATTACKED;
     public final int CANNOT_BE_BLOCKED;
+    public final int CANNOT_BE_CAST_TARGETED;
     public final int ATTACKS_TARGET;
     public final int CAST_TARGET;
     public final int MANA;
@@ -103,6 +104,7 @@ public class CoreComponents implements ComponentsModule {
         CANNOT_BLOCK = register.applyAsInt("CANNOT_BLOCK");
         CANNOT_BE_ATTACKED = register.applyAsInt("CANNOT_BE_ATTACKED");
         CANNOT_BE_BLOCKED = register.applyAsInt("CANNOT_BE_BLOCKED");
+        CANNOT_BE_CAST_TARGETED = register.applyAsInt("CANNOT_BE_CAST_TARGETED");
         BLOCKS_ATTACKER = register.applyAsInt("BLOCKS_ATTACKER");
         ATTACKS_TARGET = register.applyAsInt("ATTACKS_PLAYER");
         CAST_TARGET = register.applyAsInt("CAST_TARGET");

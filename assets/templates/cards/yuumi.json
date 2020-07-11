@@ -34,7 +34,8 @@
         {
           "type": "buff",
           "components": {
-            "CANNOT_BE_ATTACKED": true
+            "CANNOT_BE_ATTACKED": true,
+            "CANNOT_BE_CAST_TARGETED": true
           }
         }
       ]

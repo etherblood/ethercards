@@ -286,6 +286,12 @@ public class MoveAvailabilityService {
     }
 
     public boolean canCast(int player, int castable, int target, boolean throwOnFail) {
+        if (data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to cast, target #" + target + " cannot be targeted.");
+            }
+            return false;
+        }
         CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
         OptionalInt phase = data.getOptional(player, core.ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
@@ -347,7 +353,7 @@ public class MoveAvailabilityService {
                 requiredCards--;
             }
         }
-        if(requiredCards > 0) {
+        if (requiredCards > 0) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare mulligan, player #" + player + " does not have enough remaining cards in their library.");
             }

@@ -120,6 +120,9 @@ public class CardModel extends BoardObjectModel {
             if (data.has(entityId, core.CANNOT_BE_BLOCKED)) {
                 keywords.add("Cannot_be_blocked");
             }
+            if (data.has(entityId, core.CANNOT_BE_CAST_TARGETED)) {
+                keywords.add("Untargetable");
+            }
             if (data.has(entityId, core.OWN_MINIONS_HASTE_AURA)) {
                 keywords.add("Haste_Aura");
             }
@@ -211,6 +214,9 @@ public class CardModel extends BoardObjectModel {
             }
             if (template.has(core.CANNOT_BE_BLOCKED)) {
                 keywords.add("Cannot_be_blocked");
+            }
+            if (template.has(core.CANNOT_BE_CAST_TARGETED)) {
+                keywords.add("Untargetable");
             }
             if (template.has(core.OWN_MINIONS_HASTE_AURA)) {
                 keywords.add("Haste_Aura");

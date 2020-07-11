@@ -150,7 +150,9 @@ public class MoveService {
     private void addCastMoves(int player, int handCard, CardCast cast, List<Move> result) {
         if (cast.isTargeted()) {
             for (int target : TargetUtil.findValidTargets(data, handCard, cast.getTargets())) {
-                result.add(new Cast(player, handCard, target));
+                if (moveAvailability.canCast(player, handCard, target, false)) {
+                    result.add(new Cast(player, handCard, target));
+                }
             }
         } else {
             result.add(new Cast(player, handCard, ~0));
