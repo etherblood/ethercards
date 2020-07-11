@@ -5,6 +5,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
 public class TakeControlEffect implements Effect {
@@ -15,5 +16,7 @@ public class TakeControlEffect implements Effect {
         int owner = data.get(source, core.OWNED_BY);
         data.set(target, core.OWNED_BY, owner);
         data.set(target, core.SUMMONING_SICKNESS, 1);
+        
+        SystemsUtil.clearSameTeamBattles(data);
     }
 }

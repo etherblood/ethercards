@@ -6,7 +6,7 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Summons two 0/0 Bee Workers each turn."
+    "description": "Summons a 0/0 Bee Worker each turn wich dies after battle and draws a card when it dies."
   },
   "casts": [
     {
@@ -25,10 +25,6 @@
     "CANNOT_BLOCK": true
   },
   "onUpkeep": [
-    {
-      "type": "summon",
-      "minionId": "bee_worker"
-    },
     {
       "type": "summon",
       "minionId": "bee_worker"

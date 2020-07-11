@@ -6,7 +6,7 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Dies after Battle. Draw 1."
+    "description": "Dies after Battle. Draw 1 card when this dies."
   },
   "casts": [
     {
@@ -14,21 +14,6 @@
       "effects": [
         {
           "type": "selfSummon"
-        },
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DRAW_CARDS_REQUEST": 1
-              }
-            }
-          ]
         }
       ]
     }
@@ -45,6 +30,23 @@
       "components": {
         "DEATH_REQUEST": true
       }
+    }
+  ],
+  "onDeath": [
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWNER"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DRAW_CARDS_REQUEST": 1
+          }
+        }
+      ]
     }
   ]
 }

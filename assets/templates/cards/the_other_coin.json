@@ -1,0 +1,37 @@
+{
+  "alias": "the_other_coin",
+  "display": {
+    "name": "The Other Coin",
+    "imagePath": "the_coin.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "A random player wins."
+  },
+  "casts": [
+    {
+      "manaCost": 0,
+      "effects": [
+        {
+          "type": "targeted",
+          "targeting": "ANY",
+          "targets": [
+            "OWNER",
+            "OPPONENT"
+          ],
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "PLAYER_RESULT_REQUEST": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  ]
+}

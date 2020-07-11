@@ -1,7 +1,6 @@
 package com.etherblood.a.ai.bots.mcts;
 
 import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.rules.moves.Move;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +10,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,6 +87,7 @@ class MctsBotWorker implements Runnable, Callable<Void> {
         }
 
         float[] result = evaluation.apply(simulationGame);
+        assert Math.abs(IntStream.range(0, result.length).mapToDouble(i -> result[i]).sum() - 1) < 0.0000001: Arrays.toString(result);
         for (MctsNode node : nodePath) {
             node.updateScores(result);
         }

@@ -20,6 +20,7 @@ public class CardTemplateBuilder {
     protected final List<Effect> onSurviveEffects = new ArrayList<>();
     protected final List<Effect> onUpkeepEffects = new ArrayList<>();
     protected final List<Effect> afterBattleEffects = new ArrayList<>();
+    protected final List<Effect> onDrawEffects = new ArrayList<>();
     protected final Map<Integer, List<StatModifier>> componentModifiers = new HashMap<>();
 
     public CardCastBuilder newCast() {
@@ -60,6 +61,10 @@ public class CardTemplateBuilder {
         afterBattleEffects.add(effect);
     }
 
+    public void onDraw(Effect effect) {
+        onDrawEffects.add(effect);
+    }
+
     public void set(int component, int value) {
         components.set(component, value);
     }
@@ -73,7 +78,7 @@ public class CardTemplateBuilder {
     }
 
     public CardTemplate build(int id) {
-        return new CardTemplate(id, !components.isEmpty(), manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, componentModifiers);
+        return new CardTemplate(id, !components.isEmpty(), manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, onDrawEffects, componentModifiers);
     }
 
 }
