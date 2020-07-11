@@ -179,6 +179,13 @@ public class TemplatesParser {
                     builder.onSummon(aliasGson.fromJson(effectJson, Effect.class));
                 }
             }
+            JsonArray onDraw = cardJson.getAsJsonArray("onDraw");
+            if (onDraw != null) {
+                for (JsonElement jsonElement : onDraw) {
+                    JsonObject effectJson = jsonElement.getAsJsonObject();
+                    builder.onDraw(aliasGson.fromJson(effectJson, Effect.class));
+                }
+            }
             JsonObject componentModifiers = cardJson.getAsJsonObject("componentModifiers");
             if (componentModifiers != null) {
                 for (Map.Entry<String, JsonElement> entry : componentModifiers.entrySet()) {

@@ -1,0 +1,49 @@
+{
+  "alias": "niv_mizzet_the_firemind",
+  "display": {
+    "name": "Niv-Mizzet, the Firemind",
+    "imagePath": "niv_mizzet_the_firemind.jpg",
+    "colors": [
+      "BLUE",
+      "RED"
+    ],
+    "description": "Whenever you draw a card, Niv-Mizzet, the Firemind deals 1 damage to a random enemy minion or hero.",
+    "flavourText": "As brilliant as a cut diamond, and with just as cruel an edge."
+  },
+  "manaCost": 6,
+  "tribes": [
+    "DRAGON"
+  ],
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "onDraw": [
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 1
+          }
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 4,
+    "FLYING": true
+  }
+}

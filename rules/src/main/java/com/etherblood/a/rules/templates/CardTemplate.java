@@ -24,9 +24,10 @@ public class CardTemplate {
     protected final List<Effect> onSelfSurviveEffects;
     protected final List<Effect> onSelfUpkeepEffects;
     protected final List<Effect> afterSelfBattleEffects;
+    protected final List<Effect> onDrawEffects;
     protected final Map<Integer, List<StatModifier>> componentModifiers;
 
-    protected CardTemplate(int id, boolean isMinion, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, Map<Integer, List<StatModifier>> componentModifiers) {
+    protected CardTemplate(int id, boolean isMinion, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<Effect> onDrawEffects, Map<Integer, List<StatModifier>> componentModifiers) {
         this.id = id;
         this.isMinion = isMinion;
         this.manaCost = manaCost;
@@ -38,6 +39,7 @@ public class CardTemplate {
         this.onSelfSurviveEffects = Collections.unmodifiableList(new ArrayList<>(onSurviveEffects));
         this.onSelfUpkeepEffects = Collections.unmodifiableList(new ArrayList<>(onUpkeepEffects));
         this.afterSelfBattleEffects = Collections.unmodifiableList(new ArrayList<>(afterBattleEffects));
+        this.onDrawEffects = Collections.unmodifiableList(new ArrayList<>(onDrawEffects));
         this.components = new IntMap();
         for (int key : components) {
             this.components.set(key, components.get(key));
@@ -108,6 +110,10 @@ public class CardTemplate {
 
     public List<Effect> getAfterSelfBattleEffects() {
         return afterSelfBattleEffects;
+    }
+
+    public List<Effect> getOnDrawEffects() {
+        return onDrawEffects;
     }
 
     public List<StatModifier> getComponentModifiers(int component) {
