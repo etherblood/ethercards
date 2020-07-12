@@ -89,8 +89,7 @@ public class MoveService {
                             }
                         }
                     }
-                    IntList handCards = data.list(core.IN_HAND_ZONE);
-                    for (int handCard : handCards) {
+                    for (int handCard : data.list(core.IN_HAND_ZONE)) {
                         if (!moveAvailability.canCast(player, handCard, false)) {
                             continue;
                         }
@@ -113,8 +112,7 @@ public class MoveService {
                             }
                         }
                     }
-                    IntList handCards = data.list(core.IN_HAND_ZONE);
-                    for (int handCard : handCards) {
+                    for (int handCard : data.list(core.IN_HAND_ZONE)) {
                         if (!moveAvailability.canCast(player, handCard, false)) {
                             continue;
                         }
@@ -154,8 +152,11 @@ public class MoveService {
                     result.add(new Cast(player, handCard, target));
                 }
             }
-        } else {
-            result.add(new Cast(player, handCard, ~0));
+        }
+        if (!cast.isTargeted() || cast.isTargetOptional()) {
+            if (moveAvailability.canCast(player, handCard, null, false)) {
+                result.add(new Cast(player, handCard, null));
+            }
         }
     }
 
@@ -255,11 +256,19 @@ public class MoveService {
 
     private void cast(int player, int castable, Integer target) {
         if (validateMoves) {
-            moveAvailability.canCast(player, castable, target != null ? target : ~0, true);
+            if (target != null) {
+                moveAvailability.canCast(player, castable, target, true);
+            } else {
+                moveAvailability.canCast(player, castable, null, true);
+            }
         }
         String cardName = getCardName(castable);
         try {
-            data.set(castable, core.CAST_TARGET, target != null ? target : ~0);
+            if (target != null) {
+                data.set(castable, core.CAST_TARGET, target);
+            } else {
+                data.set(castable, core.CAST_TARGET, ~0);
+            }
             update();
         } catch (Throwable t) {
             LOG.error("Error when casting {}.", cardName);

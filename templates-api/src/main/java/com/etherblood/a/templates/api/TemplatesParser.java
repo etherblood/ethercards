@@ -115,6 +115,9 @@ public class TemplatesParser {
                     if (castJson.has("targets")) {
                         cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
                     }
+                    if (castJson.has("targetOptional")) {
+                        cast.setTargetOptional(castJson.get("targetOptional").getAsBoolean());
+                    }
                     for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
                         JsonObject effectJson = jsonElement.getAsJsonObject();
                         cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));

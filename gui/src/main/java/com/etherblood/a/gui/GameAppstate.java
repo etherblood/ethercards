@@ -259,11 +259,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         staticSpatial.getModel().setSpatial(node);
         board.register(staticSpatial);
         EffekseerAnimation animation = new EffekseerAnimation(
-            node,
-            assetsPath,
-            getParticleEffectPath(particleEffectName),
-            getParticleEffectSettings(speed),
-            assetManager
+                node,
+                assetsPath,
+                getParticleEffectPath(particleEffectName),
+                getParticleEffectSettings(speed),
+                assetManager
         );
         board.playAnimation(animation);
         particleMapBoardObjects.put(animation, staticSpatial);
@@ -551,7 +551,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
-                requestMove(new Cast(player, castable, ~0));
+                requestMove(new Cast(player, castable, null));
             }
         };
     }

@@ -39,7 +39,7 @@ public class DeathSystem implements ActionSystem {
                 int templateId = data.get(entity, core.CARD_TEMPLATE);
                 CardTemplate template = templates.getCard(templateId);
                 for (Effect onDeathEffect : template.getOnSelfDeathEffects()) {
-                    onDeathEffect.apply(data, templates, random, events, entity, ~0);
+                    onDeathEffect.apply(data, templates, random, events, entity, entity);
                 }
 
                 events.fire(new DeathEvent(entity));

@@ -20,7 +20,7 @@ public class ArmadilloCloakTest extends AbstractGameTest {
         int previousAttack = data.get(ornithopter, core.ATTACK);
 
         data.set(player(0), core.MANA, Integer.MAX_VALUE);
-        game.getMoves().apply(new Cast(player(0), armadillo_cloak, ornithopter));
+        moves.apply(new Cast(player(0), armadillo_cloak, ornithopter));
 
         int actualHealth = data.get(ornithopter, core.HEALTH);
         int actualAttack = data.get(ornithopter, core.ATTACK);

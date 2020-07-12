@@ -9,17 +9,23 @@ public class CardCast {
 
     private final boolean attackCast, blockCast;
     private final TargetFilters[] targets;
+    private final boolean targetOptional;
     private final List<Effect> effects;
 
-    CardCast(TargetFilters[] targets, List<Effect> effects, boolean attackCast, boolean blockCast) {
+    CardCast(TargetFilters[] targets, boolean targetOptional, List<Effect> effects, boolean attackCast, boolean blockCast) {
         this.targets = targets;
+        this.targetOptional = targetOptional;
         this.effects = Collections.unmodifiableList(new ArrayList<>(effects));
         this.attackCast = attackCast;
         this.blockCast = blockCast;
     }
-
+    
     public List<Effect> getEffects() {
         return effects;
+    }
+
+    public boolean isTargetOptional() {
+        return targetOptional;
     }
 
     public boolean isTargeted() {

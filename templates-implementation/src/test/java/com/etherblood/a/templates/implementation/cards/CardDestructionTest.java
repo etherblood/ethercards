@@ -16,7 +16,7 @@ public class CardDestructionTest extends AbstractGameTest {
         int cardDestruction4 = createCard(player(1), "card_destruction", core.IN_HAND_ZONE);
 
         data.set(player(0), core.MANA, Integer.MAX_VALUE);
-        game.getMoves().apply(new Cast(player(0), cardDestruction1, ~0));
+        moves.apply(new Cast(player(0), cardDestruction1, null));
 
         Assertions.assertTrue(data.has(cardDestruction1, core.IN_GRAVEYARD_ZONE));
         Assertions.assertTrue(data.has(cardDestruction2, core.IN_GRAVEYARD_ZONE));

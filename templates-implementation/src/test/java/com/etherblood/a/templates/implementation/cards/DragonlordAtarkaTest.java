@@ -18,11 +18,11 @@ public class DragonlordAtarkaTest extends AbstractGameTest {
         int previousHealth = data.get(hero(1), core.HEALTH);
         int atarkaAttack = data.get(atarka, core.ATTACK);
 
-        game.getMoves().apply(new DeclareAttack(player(0), atarka, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), atarka, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
 
-        game.getMoves().apply(new DeclareBlock(player(1), ornithopter, atarka));
-        game.getMoves().apply(new EndBlockPhase(player(1)));
+        moves.apply(new DeclareBlock(player(1), ornithopter, atarka));
+        moves.apply(new EndBlockPhase(player(1)));
 
         Assertions.assertFalse(data.has(ornithopter, core.IN_BATTLE_ZONE));
 
@@ -37,11 +37,11 @@ public class DragonlordAtarkaTest extends AbstractGameTest {
 
         int previousHealth = data.get(hero(1), core.HEALTH);
 
-        game.getMoves().apply(new DeclareAttack(player(0), attackingAtarka, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), attackingAtarka, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
 
-        game.getMoves().apply(new DeclareBlock(player(1), blockingAtarka, attackingAtarka));
-        game.getMoves().apply(new EndBlockPhase(player(1)));
+        moves.apply(new DeclareBlock(player(1), blockingAtarka, attackingAtarka));
+        moves.apply(new EndBlockPhase(player(1)));
 
         Assertions.assertFalse(data.has(attackingAtarka, core.IN_BATTLE_ZONE));
 

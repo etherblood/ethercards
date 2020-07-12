@@ -13,8 +13,8 @@ public class GoblinGuideTest extends AbstractGameTest {
         int goblinGuide = createMinion(player(0), "goblin_guide");
         int orniThopter = createCard(player(1), "ornithopter", core.IN_LIBRARY_ZONE);
 
-        game.getMoves().apply(new DeclareAttack(player(0), goblinGuide, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), goblinGuide, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
 
         Assertions.assertTrue(data.has(orniThopter, core.IN_HAND_ZONE));
     }

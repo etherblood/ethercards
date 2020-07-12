@@ -19,11 +19,11 @@ public class KondaLordOfEiganjoTest extends AbstractGameTest {
         Assertions.assertEquals(3, data.get(konda, core.HEALTH));
         Assertions.assertEquals(5, data.get(konda, core.BUSHIDO));
 
-        game.getMoves().apply(new DeclareAttack(player(0), kami, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), kami, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
 
-        game.getMoves().apply(new DeclareBlock(player(1), konda, kami));
-        game.getMoves().apply(new EndBlockPhase(player(1)));
+        moves.apply(new DeclareBlock(player(1), konda, kami));
+        moves.apply(new EndBlockPhase(player(1)));
 
         Assertions.assertEquals(1, data.get(konda, core.HEALTH));
     }

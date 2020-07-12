@@ -14,7 +14,7 @@ public class BoombotTest extends AbstractGameTest {
         int previousHealth = data.get(hero(1), core.HEALTH);
 
         data.set(boombot, core.DEATH_REQUEST, 1);
-        game.getMoves().apply(new Update());
+        moves.apply(new Update());
 
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth - boomBotDamage, actualHealth);

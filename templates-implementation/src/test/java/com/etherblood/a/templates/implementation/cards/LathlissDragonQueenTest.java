@@ -19,12 +19,12 @@ public class LathlissDragonQueenTest extends AbstractGameTest {
 
         Assertions.assertEquals(3, data.list(core.IN_BATTLE_ZONE).size());
 
-        game.getMoves().apply(new Cast(player(0), babyDragon0, ~0));
+        moves.apply(new Cast(player(0), babyDragon0, null));
 
         Assertions.assertEquals(5, data.list(core.IN_BATTLE_ZONE).size());
 
-        game.getMoves().apply(new EndAttackPhase(player(0)));
-        game.getMoves().apply(new Cast(player(1), babyDragon1, ~0));
+        moves.apply(new EndAttackPhase(player(0)));
+        moves.apply(new Cast(player(1), babyDragon1, null));
 
         Assertions.assertEquals(6, data.list(core.IN_BATTLE_ZONE).size());
     }

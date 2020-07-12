@@ -15,7 +15,7 @@ public class GrimPatronTest extends AbstractGameTest {
         int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
 
         data.set(patron, core.DAMAGE_REQUEST, 1);
-        game.getMoves().apply(new Update());
+        moves.apply(new Update());
 
         int actualMinionCount = data.list(core.IN_BATTLE_ZONE).size();
         Assertions.assertEquals(previousMinionCount + 1, actualMinionCount);
@@ -27,7 +27,7 @@ public class GrimPatronTest extends AbstractGameTest {
         int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
 
         data.set(patron, core.DAMAGE_REQUEST, 3);
-        game.getMoves().apply(new Update());
+        moves.apply(new Update());
 
         int actualMinionCount = data.list(core.IN_BATTLE_ZONE).size();
         Assertions.assertEquals(previousMinionCount - 1, actualMinionCount);
@@ -46,7 +46,7 @@ public class GrimPatronTest extends AbstractGameTest {
         int flamestrike = createCard(player(0), "flamestrike", core.IN_HAND_ZONE);
         int previousMinionCount = data.list(core.IN_BATTLE_ZONE).size();
 
-        game.getMoves().apply(new Cast(player(0), flamestrike, ~0));
+        moves.apply(new Cast(player(0), flamestrike, null));
 
         int actualMinionCount = data.list(core.IN_BATTLE_ZONE).size();
         Assertions.assertEquals(previousMinionCount - 3, actualMinionCount);

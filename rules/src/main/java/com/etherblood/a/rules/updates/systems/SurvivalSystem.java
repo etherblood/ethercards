@@ -30,7 +30,7 @@ public class SurvivalSystem implements ActionSystem {
                 int templateId = data.get(entity, core.CARD_TEMPLATE);
                 CardTemplate template = templates.getCard(templateId);
                 for (Effect onSurviveEffect : template.getOnSelfSurviveEffects()) {
-                    onSurviveEffect.apply(data, templates, random, events, entity, ~0);
+                    onSurviveEffect.apply(data, templates, random, events, entity, entity);
                 }
             }
         };

@@ -15,10 +15,10 @@ public class DragonlordSilumgarTest extends AbstractGameTest {
         int silumgar = createCard(player(1), "dragonlord_silumgar", core.IN_HAND_ZONE);
         int ornithopter = createMinion(player(0), "ornithopter");
 
-        game.getMoves().apply(new DeclareAttack(player(0), ornithopter, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), ornithopter, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
 
-        game.getMoves().apply(new Cast(player(1), silumgar, ornithopter));
+        moves.apply(new Cast(player(1), silumgar, ornithopter));
 
         Assertions.assertEquals(player(1), data.get(ornithopter, core.OWNED_BY));
         Assertions.assertTrue(data.list(core.ATTACKS_TARGET).isEmpty());

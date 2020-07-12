@@ -15,7 +15,7 @@ public class RoyalJellyTest extends AbstractGameTest {
         int drone = createCard(player(0), "bee_drone", core.IN_LIBRARY_ZONE);
 
         data.set(player(0), core.MANA, Integer.MAX_VALUE);
-        game.getMoves().apply(new Cast(player(0), royalJelly, ~0));
+        moves.apply(new Cast(player(0), royalJelly, null));
 
         Assertions.assertTrue(data.has(queen, core.IN_LIBRARY_ZONE));
         Assertions.assertTrue(data.has(drone, core.IN_HAND_ZONE));
@@ -27,9 +27,9 @@ public class RoyalJellyTest extends AbstractGameTest {
         int queen = createCard(player(1), "bee_queen", core.IN_LIBRARY_ZONE);
         int drone = createCard(player(1), "bee_drone", core.IN_LIBRARY_ZONE);
 
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new EndAttackPhase(player(0)));
         data.set(player(1), core.MANA, Integer.MAX_VALUE);
-        game.getMoves().apply(new Cast(player(1), royalJelly, ~0));
+        moves.apply(new Cast(player(1), royalJelly, null));
 
         Assertions.assertTrue(data.has(queen, core.IN_HAND_ZONE));
         Assertions.assertTrue(data.has(drone, core.IN_LIBRARY_ZONE));

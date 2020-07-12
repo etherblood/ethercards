@@ -39,7 +39,11 @@ public class GameDataPrinter {
         }
         if (move instanceof Cast) {
             Cast cast = (Cast) move;
-            return "Cast " + toCardString(cast.source) + " -> " + toMinionString(cast.target);
+            if (cast.target != null) {
+                return "Cast " + toCardString(cast.source) + " -> " + toMinionString(cast.target);
+            } else {
+                return "Cast " + toCardString(cast.source);
+            }
         }
         if (move instanceof DeclareBlock) {
             DeclareBlock block = (DeclareBlock) move;
@@ -62,9 +66,6 @@ public class GameDataPrinter {
     }
 
     public String toMinionString(int minion) {
-        if (!game.getData().has(minion, core.CARD_TEMPLATE)) {
-            return "Null";
-        }
         int templateId = game.getData().get(minion, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(templateId);
         return "#" + minion + " " + template.getTemplateName() + " (" + game.getData().getOptional(minion, core.ATTACK).orElse(0) + ", " + game.getData().getOptional(minion, core.HEALTH).orElse(0) + ")";

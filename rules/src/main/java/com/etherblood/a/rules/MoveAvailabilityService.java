@@ -317,32 +317,43 @@ public class MoveAvailabilityService {
         return true;
     }
 
-    public boolean canCast(int player, int castable, int target, boolean throwOnFail) {
-        if (data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to cast, target #" + target + " cannot be targeted.");
-            }
-            return false;
-        }
+    public boolean canCast(int player, int castable, Integer target, boolean throwOnFail) {
         CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
         OptionalInt phase = data.getOptional(player, core.ACTIVE_PLAYER_PHASE);
         if (phase.isPresent()) {
-            CardCast cast;
+            CardCast cast = null;
             if (phase.getAsInt() == PlayerPhase.ATTACK) {
                 cast = template.getAttackPhaseCast();
-                if (cast != null && cast.isTargeted() && !TargetUtil.isValidTarget(data, castable, target, cast.getTargets())) {
-                    if (throwOnFail) {
-                        throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
-                    }
-                    return false;
-                }
             } else if (phase.getAsInt() == PlayerPhase.BLOCK) {
                 cast = template.getBlockPhaseCast();
-                if (cast != null && cast.isTargeted() && !TargetUtil.isValidTarget(data, castable, target, cast.getTargets())) {
-                    if (throwOnFail) {
-                        throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
+            }
+            if (cast != null) {
+                if (target != null) {
+                    if (!cast.isTargeted()) {
+                        if (throwOnFail) {
+                            throw new IllegalArgumentException("Failed to cast, target #" + target + " was given, but cast is untargeted.");
+                        }
+                        return false;
                     }
-                    return false;
+                    if (data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
+                        if (throwOnFail) {
+                            throw new IllegalArgumentException("Failed to cast, target #" + target + " cannot be targeted.");
+                        }
+                        return false;
+                    }
+                    if (!TargetUtil.isValidTarget(data, castable, target, cast.getTargets())) {
+                        if (throwOnFail) {
+                            throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
+                        }
+                        return false;
+                    }
+                } else {
+                    if (cast.isTargeted() && !cast.isTargetOptional()) {
+                        if (throwOnFail) {
+                            throw new IllegalArgumentException("Failed to cast, no target was given, but cast is targeted.");
+                        }
+                        return false;
+                    }
                 }
             }
         }

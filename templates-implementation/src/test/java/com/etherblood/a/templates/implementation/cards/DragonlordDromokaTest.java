@@ -16,10 +16,10 @@ public class DragonlordDromokaTest extends AbstractGameTest {
         int previousHealth = data.get(hero(0), core.HEALTH);
         int dromokaAttack = data.get(dromoka, core.ATTACK);
 
-        game.getMoves().apply(new DeclareAttack(player(0), dromoka, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), dromoka, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
 
-        game.getMoves().apply(new EndBlockPhase(player(1)));
+        moves.apply(new EndBlockPhase(player(1)));
 
         int actualHealth = data.get(hero(0), core.HEALTH);
         Assertions.assertEquals(previousHealth + dromokaAttack, actualHealth);

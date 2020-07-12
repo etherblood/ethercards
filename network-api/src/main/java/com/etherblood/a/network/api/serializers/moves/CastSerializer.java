@@ -12,12 +12,24 @@ public class CastSerializer extends Serializer<Cast> {
     public void write(Kryo kryo, Output output, Cast t) {
         output.writeInt(t.player);
         output.writeInt(t.source);
-        output.writeInt(t.target);
+        if (t.target != null) {
+            output.writeBoolean(true);
+            output.writeInt(t.target);
+        } else {
+            output.writeBoolean(false);
+        }
     }
 
     @Override
     public Cast read(Kryo kryo, Input input, Class<Cast> type) {
-        return new Cast(input.readInt(), input.readInt(), input.readInt());
+        int player = input.readInt();
+        int source = input.readInt();
+        boolean hasTarget = input.readBoolean();
+        Integer target = null;
+        if (hasTarget) {
+            target = input.readInt();
+        }
+        return new Cast(player, source, target);
     }
 
 }

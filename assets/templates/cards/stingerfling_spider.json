@@ -12,6 +12,7 @@
   "casts": [
     {
       "manaCost": 5,
+      "targetOptional": true,
       "targets": [
         "OWN_MINION",
         "OPPONENT_MINION",

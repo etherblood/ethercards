@@ -29,8 +29,8 @@ public class KiyomaroFirstToStandTest extends AbstractGameTest {
         
         int previousHealth = effectiveStats.health(hero(0));
         
-        game.getMoves().apply(new DeclareAttack(player(0), kiyomaro, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), kiyomaro, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
         
         Assertions.assertEquals(previousHealth, effectiveStats.health(hero(0)));
         
@@ -38,12 +38,12 @@ public class KiyomaroFirstToStandTest extends AbstractGameTest {
             createCard(player(0), "kiyomaro_first_to_stand", core.IN_HAND_ZONE);
         }
         
-        game.getMoves().apply(new EndBlockPhase(player(1)));
-        game.getMoves().apply(new EndAttackPhase(player(1)));
-        game.getMoves().apply(new EndBlockPhase(player(0)));
+        moves.apply(new EndBlockPhase(player(1)));
+        moves.apply(new EndAttackPhase(player(1)));
+        moves.apply(new EndBlockPhase(player(0)));
         
-        game.getMoves().apply(new DeclareAttack(player(0), kiyomaro, hero(1)));
-        game.getMoves().apply(new EndAttackPhase(player(0)));
+        moves.apply(new DeclareAttack(player(0), kiyomaro, hero(1)));
+        moves.apply(new EndAttackPhase(player(0)));
         
         Assertions.assertEquals(previousHealth + healEffectThreshold, effectiveStats.health(hero(0)));
     }

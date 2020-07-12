@@ -7,11 +7,16 @@ import java.util.List;
 public class CardCastBuilder {
 
     private boolean attackCast = true, blockCast = true;
+    private boolean targetOptional = false;
     private TargetFilters[] targets;
     private final List<Effect> effects = new ArrayList<>();
 
     public void setTargets(TargetFilters[] targets) {
         this.targets = targets;
+    }
+
+    public void setTargetOptional(boolean targetOptional) {
+        this.targetOptional = targetOptional;
     }
 
     public void addEffect(Effect effect) {
@@ -30,7 +35,7 @@ public class CardCastBuilder {
         if (effects.isEmpty()) {
             return null;
         }
-        return new CardCast(targets, effects, attackCast, blockCast);
+        return new CardCast(targets, targetOptional, effects, attackCast, blockCast);
     }
 
 }

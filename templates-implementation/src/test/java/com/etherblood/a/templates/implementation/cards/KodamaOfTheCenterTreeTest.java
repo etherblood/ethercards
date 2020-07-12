@@ -32,7 +32,7 @@ public class KodamaOfTheCenterTreeTest extends AbstractGameTest {
         int kodama = createMinion(player(0), "kodama_of_the_center_tree");
         
         data.set(kodama, core.DEATH_REQUEST, 1);
-        game.getMoves().apply(new Update());
+        moves.apply(new Update());
         
         Assertions.assertTrue(data.has(spider, core.IN_HAND_ZONE));
         Assertions.assertTrue(data.has(deadKodama, core.IN_GRAVEYARD_ZONE));

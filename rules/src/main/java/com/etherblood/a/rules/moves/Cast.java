@@ -1,10 +1,13 @@
 package com.etherblood.a.rules.moves;
 
+import java.util.Objects;
+
 public class Cast implements Move {
 
-    public final int player, source, target;
+    public final int player, source;
+    public final Integer target;
 
-    public Cast(int player, int source, int target) {
+    public Cast(int player, int source, Integer target) {
         this.player = player;
         this.source = source;
         this.target = target;
@@ -12,7 +15,7 @@ public class Cast implements Move {
 
     @Override
     public int hashCode() {
-        return 131 * player + 117 * source + target;
+        return 131 * player + 117 * source + Objects.hashCode(target);
     }
 
     @Override
@@ -21,7 +24,7 @@ public class Cast implements Move {
             return false;
         }
         Cast other = (Cast) obj;
-        return player == other.player && source == other.source && target == other.target;
+        return player == other.player && source == other.source && Objects.equals(target, other.target);
     }
 
     @Override
