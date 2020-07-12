@@ -1,16 +1,16 @@
 {
-  "alias": "blue_eyes_white_dragon",
+  "alias": "red_eyes_black_dragon",
   "display": {
-    "name": "Blue-Eyes White Dragon",
-    "imagePath": "blue_eyes_white_dragon.jpg",
+    "name": "Red-Eyes Black Dragon",
+    "imagePath": "red_eyes_black_dragon.jpg",
     "colors": [
-      "WHITE",
-      "BLUE"
+      "BLACK",
+      "RED"
     ]
   },
   "casts": [
     {
-      "manaCost": 8,
+      "manaCost": 6,
       "effects": [
         {
           "type": "selfSummon"
@@ -19,8 +19,8 @@
     }
   ],
   "components": {
-    "ATTACK": 8,
-    "HEALTH": 7,
+    "ATTACK": 6,
+    "HEALTH": 5,
     "FLYING": true
   },
   "tribes": [

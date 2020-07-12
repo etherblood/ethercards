@@ -10,7 +10,7 @@
   },
   "casts": [
     {
-      "manaCost": 5,
+      "manaCost": 6,
       "effects": [
         {
           "type": "targeted",
