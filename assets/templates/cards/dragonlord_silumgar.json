@@ -11,7 +11,7 @@
   },
   "casts": [
     {
-      "manaCost": 6,
+      "manaCost": 7,
       "targets": [
         "OWN_HERO",
         "OPPONENT_MINION"
