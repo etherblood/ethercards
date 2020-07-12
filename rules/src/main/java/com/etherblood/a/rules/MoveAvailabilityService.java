@@ -210,6 +210,12 @@ public class MoveAvailabilityService {
             }
             return false;
         }
+        if (data.has(blocker, core.BLOCKS_ATTACKER)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is already blocking.");
+            }
+            return false;
+        }
         return isBlockerValid(blocker, throwOnFail);
     }
 
@@ -223,12 +229,6 @@ public class MoveAvailabilityService {
         if (data.has(blocker, core.SUMMONING_SICKNESS) && !effectiveStats.isFastToDefend(blocker)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " has summoning sickness.");
-            }
-            return false;
-        }
-        if (data.has(blocker, core.BLOCKS_ATTACKER)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is already blocking.");
             }
             return false;
         }
