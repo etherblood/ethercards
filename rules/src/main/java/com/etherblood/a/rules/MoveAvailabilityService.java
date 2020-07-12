@@ -76,8 +76,8 @@ public class MoveAvailabilityService {
     }
 
     private boolean isAttackTargetValid(int attacker, int target, boolean throwOnFail) {
-        int attackerOwner = data.get(attacker, core.OWNED_BY);
-        if (data.hasValue(target, core.OWNED_BY, attackerOwner)) {
+        int attackerOwner = data.get(attacker, core.OWNER);
+        if (data.hasValue(target, core.OWNER, attackerOwner)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, target #" + target + " has same owner as attacker.");
             }
@@ -105,7 +105,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canDeclareAttack(int player, int attacker, boolean throwOnFail) {
-        if (!data.hasValue(attacker, core.OWNED_BY, player)) {
+        if (!data.hasValue(attacker, core.OWNER, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " does not own attacker #" + attacker + ".");
             }
@@ -169,8 +169,8 @@ public class MoveAvailabilityService {
     }
 
     public boolean isBlockTargetValid(int blocker, int target, boolean throwOnFail) {
-        int blockerOwner = data.get(blocker, core.OWNED_BY);
-        if (data.hasValue(target, core.OWNED_BY, blockerOwner)) {
+        int blockerOwner = data.get(blocker, core.OWNER);
+        if (data.hasValue(target, core.OWNER, blockerOwner)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare block, target #" + target + " has same owner as blocker.");
             }
@@ -192,7 +192,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canDeclareBlock(int player, int blocker, boolean throwOnFail) {
-        if (!data.hasValue(blocker, core.OWNED_BY, player)) {
+        if (!data.hasValue(blocker, core.OWNER, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, player #" + player + " does not own blocker #" + blocker + ".");
             }
@@ -261,7 +261,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canCast(int player, int castable, boolean throwOnFail) {
-        if (!data.hasValue(castable, core.OWNED_BY, player)) {
+        if (!data.hasValue(castable, core.OWNER, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, player #" + player + " does not own castable #" + castable + ".");
             }
@@ -361,7 +361,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canDeclareMulligan(int player, int card, boolean throwOnFail) {
-        if (!data.hasValue(card, core.OWNED_BY, player)) {
+        if (!data.hasValue(card, core.OWNER, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare mulligan, player #" + player + " does not own card #" + card + ".");
             }
@@ -387,12 +387,12 @@ public class MoveAvailabilityService {
         }
         int requiredCards = 1;
         for (int mulliganedCard : data.list(core.MULLIGAN)) {
-            if (data.hasValue(mulliganedCard, core.OWNED_BY, player)) {
+            if (data.hasValue(mulliganedCard, core.OWNER, player)) {
                 requiredCards++;
             }
         }
         for (int availableCard : data.list(core.IN_LIBRARY_ZONE)) {
-            if (data.hasValue(availableCard, core.OWNED_BY, player)) {
+            if (data.hasValue(availableCard, core.OWNER, player)) {
                 requiredCards--;
             }
         }

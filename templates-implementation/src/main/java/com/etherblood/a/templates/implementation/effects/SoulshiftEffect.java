@@ -22,11 +22,11 @@ public class SoulshiftEffect implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(source, core.OWNED_BY);
+        int owner = data.get(source, core.OWNER);
         int best = -1;
         IntList candidates = new IntList();
         for (int candidate : data.list(core.IN_GRAVEYARD_ZONE)) {
-            if (!data.hasValue(candidate, core.OWNED_BY, owner)) {
+            if (!data.hasValue(candidate, core.OWNER, owner)) {
                 continue;
             }
             int templateId = data.get(candidate, core.CARD_TEMPLATE);

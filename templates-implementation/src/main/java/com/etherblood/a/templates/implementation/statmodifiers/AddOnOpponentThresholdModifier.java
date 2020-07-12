@@ -20,14 +20,14 @@ public class AddOnOpponentThresholdModifier implements StatModifier {
     @Override
     public int modify(EntityData data, GameTemplates templates, int self, int stat) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(self, core.OWNED_BY);
+        int owner = data.get(self, core.OWNER);
         IntList graveyard = data.list(core.IN_GRAVEYARD_ZONE);
         if (graveyard.size() < threshold) {
             return stat;
         }
         IntMap playerGraveCounts = new IntMap();
         for (int minion : graveyard) {
-            int otherOwner = data.get(minion, core.OWNED_BY);
+            int otherOwner = data.get(minion, core.OWNER);
             if (owner == otherOwner) {
                 continue;
             }

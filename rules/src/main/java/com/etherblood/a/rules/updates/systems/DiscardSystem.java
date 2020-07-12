@@ -64,7 +64,7 @@ public class DiscardSystem implements ActionSystem {
             int cards = data.get(player, core.DISCARD_CARDS_ACTION);
             IntList handCards = data.list(core.IN_HAND_ZONE);
             for (int i = handCards.size() - 1; i >= 0; i--) {
-                if (!data.hasValue(handCards.get(i), core.OWNED_BY, player)) {
+                if (!data.hasValue(handCards.get(i), core.OWNER, player)) {
                     handCards.swapRemoveAt(i);
                 }
             }

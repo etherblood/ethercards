@@ -386,7 +386,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         IntList graveyardCards = data.listInValueOrder(core.IN_GRAVEYARD_ZONE);
         for (int player : players) {
             PlayerZones zones = playerZones.get(player);
-            IntPredicate playerFilter = x -> data.hasValue(x, core.OWNED_BY, player);
+            IntPredicate playerFilter = x -> data.hasValue(x, core.OWNER, player);
             updateZone(libraryCards.stream().filter(playerFilter).toArray(), zones.getDeckZone(), Vector3f.UNIT_Y);
             updateZone(handCards.stream().filter(playerFilter).toArray(), zones.getHandZone(), Vector3f.UNIT_X);
             updateZone(battleCards.stream().filter(playerFilter).toArray(), zones.getBoardZone(), Vector3f.UNIT_X);
@@ -655,7 +655,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
                 @Override
                 protected float getScale() {
-                    long cardsCount = game.getData().list(core.IN_BATTLE_ZONE).stream().filter(x -> game.getData().hasValue(x, core.OWNED_BY, player)).count();
+                    long cardsCount = game.getData().list(core.IN_BATTLE_ZONE).stream().filter(x -> game.getData().hasValue(x, core.OWNER, player)).count();
                     float limit = 6;
                     return ((cardsCount < limit) ? 1 : (limit / cardsCount));
                 }

@@ -28,7 +28,8 @@ public class CoreComponents implements ComponentsModule {
     public final int ATTACK;
     public final int TEMPORARY_HEALTH;
     public final int TEMPORARY_ATTACK;
-    public final int OWNED_BY;
+    public final int OWNER;
+    public final int TEAM;
     public final int ORIGINALLY_OWNED_BY;
     public final int BOUND_TO;
     public final int IN_BATTLE_ZONE;
@@ -76,6 +77,10 @@ public class CoreComponents implements ComponentsModule {
     public final int INDESTRUCTIBLE;
 
     public CoreComponents(ToIntFunction<String> register) {
+        OWNER = register.applyAsInt("OWNER");
+        TEAM = register.applyAsInt("TEAM");
+        PLAYER_INDEX = register.applyAsInt("PLAYER_INDEX");
+        ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
         END_PHASE_REQUEST = register.applyAsInt("END_PHASE_REQUEST");
         END_PHASE_ACTION = register.applyAsInt("END_PHASE_ACTION");
         START_PHASE_REQUEST = register.applyAsInt("START_PHASE_REQUEST");
@@ -87,13 +92,10 @@ public class CoreComponents implements ComponentsModule {
         PLAYER_RESULT_REQUEST = register.applyAsInt("PLAYER_RESULT_REQUEST");
         PLAYER_RESULT_ACTION = register.applyAsInt("PLAYER_RESULT_ACTION");
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
-        PLAYER_INDEX = register.applyAsInt("PLAYER_INDEX");
-        ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
         HEALTH = register.applyAsInt("HEALTH");
         ATTACK = register.applyAsInt("ATTACK");
         TEMPORARY_HEALTH = register.applyAsInt("TEMPORARY_HEALTH");
         TEMPORARY_ATTACK = register.applyAsInt("TEMPORARY_ATTACK");
-        OWNED_BY = register.applyAsInt("OWNED_BY");
         ORIGINALLY_OWNED_BY = register.applyAsInt("ORIGINALLY_OWNED_BY");
         BOUND_TO = register.applyAsInt("BOUND_TO");
         IN_BATTLE_ZONE = register.applyAsInt("IN_BATTLE_ZONE");

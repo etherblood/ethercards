@@ -18,8 +18,8 @@ public class TargetOwnedActivatedEffects implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int sourceOwner = data.get(source, core.OWNED_BY);
-        if (data.hasValue(target, core.OWNED_BY, sourceOwner)) {
+        int sourceOwner = data.get(source, core.OWNER);
+        if (data.hasValue(target, core.OWNER, sourceOwner)) {
             for (Effect effect : effects) {
                 effect.apply(data, templates, random, events, source, target);
             }

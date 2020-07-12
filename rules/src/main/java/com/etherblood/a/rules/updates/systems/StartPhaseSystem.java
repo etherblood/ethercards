@@ -60,7 +60,7 @@ public class StartPhaseSystem implements ActionSystem {
         
         int draws = data.getOptional(player, core.DRAW_CARDS_REQUEST).orElse(0);
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (!data.hasValue(minion, core.OWNED_BY, player)) {
+            if (!data.hasValue(minion, core.OWNER, player)) {
                 continue;
             }
 
@@ -81,7 +81,7 @@ public class StartPhaseSystem implements ActionSystem {
         draws = Math.max(draws, 0);
         data.set(player, core.DRAW_CARDS_REQUEST, draws);
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (!data.hasValue(minion, core.OWNED_BY, player)) {
+            if (!data.hasValue(minion, core.OWNER, player)) {
                 continue;
             }
 
@@ -110,7 +110,7 @@ public class StartPhaseSystem implements ActionSystem {
     }
 
     private void declareRandomAttackIfAble(int attacker) {
-        int owner = data.get(attacker, core.OWNED_BY);
+        int owner = data.get(attacker, core.OWNER);
         if (!moveAvailibility.canDeclareAttack(owner, attacker, false)) {
             return;
         }
@@ -128,7 +128,7 @@ public class StartPhaseSystem implements ActionSystem {
 
     private void startBattlePhase(int player) {
         for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
-            int owner = data.get(blocker, core.OWNED_BY);
+            int owner = data.get(blocker, core.OWNER);
             if (owner != player) {
                 continue;
             }

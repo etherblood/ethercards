@@ -362,7 +362,7 @@ public class MoveService {
         }
 
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
-            if (!data.has(minion, core.OWNED_BY)) {
+            if (!data.has(minion, core.OWNER)) {
                 throw new IllegalStateException("Minion without owner in battle zone.");
             }
             if (!data.has(minion, core.CARD_TEMPLATE)) {
@@ -371,7 +371,7 @@ public class MoveService {
         }
 
         for (int minion : data.list(core.IN_HAND_ZONE)) {
-            if (!data.has(minion, core.OWNED_BY)) {
+            if (!data.has(minion, core.OWNER)) {
                 throw new IllegalStateException("Card without owner in hand zone.");
             }
             if (!data.has(minion, core.CARD_TEMPLATE)) {
@@ -380,7 +380,7 @@ public class MoveService {
         }
 
         for (int minion : data.list(core.IN_LIBRARY_ZONE)) {
-            if (!data.has(minion, core.OWNED_BY)) {
+            if (!data.has(minion, core.OWNER)) {
                 throw new IllegalStateException("Card without owner in library zone.");
             }
             if (!data.has(minion, core.CARD_TEMPLATE)) {

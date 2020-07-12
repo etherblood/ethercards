@@ -87,7 +87,7 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
         IntList allHandCards = data.list(core.IN_HAND_ZONE);
         IntList opponentHandCards = new IntList();
         for (int card : allHandCards) {
-            if (!data.hasValue(card, core.OWNED_BY, self)) {
+            if (!data.hasValue(card, core.OWNER, self)) {
                 opponentHandCards.add(card);
             }
         }
@@ -98,11 +98,11 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
         }
 
         for (int card : opponentHandCards) {
-            int owner = data.get(card, core.OWNED_BY);
+            int owner = data.get(card, core.OWNER);
             IntList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
             IntList ownerLibraryCards = new IntList();
             for (int libraryCard : allLibraryCards) {
-                if (data.hasValue(libraryCard, core.OWNED_BY, owner)) {
+                if (data.hasValue(libraryCard, core.OWNER, owner)) {
                     ownerLibraryCards.add(libraryCard);
                 }
             }

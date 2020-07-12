@@ -20,9 +20,9 @@ public class DrawCardTemplateEffect implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(source, core.OWNED_BY);
+        int owner = data.get(source, core.OWNER);
         for (int card : data.list(core.IN_LIBRARY_ZONE)) {
-            if (data.hasValue(card, core.CARD_TEMPLATE, cardId) && data.hasValue(card, core.OWNED_BY, owner)) {
+            if (data.hasValue(card, core.CARD_TEMPLATE, cardId) && data.hasValue(card, core.OWNER, owner)) {
                 data.remove(card, core.IN_LIBRARY_ZONE);
                 data.set(card, core.IN_HAND_ZONE, 1);
                 break;

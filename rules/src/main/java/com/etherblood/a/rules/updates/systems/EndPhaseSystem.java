@@ -57,7 +57,7 @@ public class EndPhaseSystem implements ActionSystem {
     private void endAttackPhase(int player) {
         EffectiveStatsService stats = new EffectiveStatsService(data, templates);
         for (int attacker : data.list(core.ATTACKS_TARGET)) {
-            if (!data.hasValue(attacker, core.OWNED_BY, player)) {
+            if (!data.hasValue(attacker, core.OWNER, player)) {
                 continue;
             }
 
@@ -71,16 +71,16 @@ public class EndPhaseSystem implements ActionSystem {
             }
             data.set(target, core.TIRED, 1);
             data.getOptional(attacker, core.DRAWS_ON_ATTACK).ifPresent(draws -> {
-                int owner = data.get(attacker, core.OWNED_BY);
+                int owner = data.get(attacker, core.OWNER);
                 SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
             });
             data.getOptional(attacker, core.GIVE_DRAWS_ON_ATTACK).ifPresent(draws -> {
-                int targetOwner = data.get(target, core.OWNED_BY);
+                int targetOwner = data.get(target, core.OWNER);
                 SystemsUtil.increase(data, targetOwner, core.DRAW_CARDS_REQUEST, draws);
             });
         }
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
-            if (data.hasValue(minion, core.OWNED_BY, player)) {
+            if (data.hasValue(minion, core.OWNER, player)) {
                 SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.SUMMONING_SICKNESS, 1);
             }
         }
@@ -98,12 +98,12 @@ public class EndPhaseSystem implements ActionSystem {
     private void endBattlePhase(int player) {
         for (int attacker : data.list(core.ATTACKS_TARGET)) {
             int attackTarget = data.get(attacker, core.ATTACKS_TARGET);
-            if (data.hasValue(attackTarget, core.OWNED_BY, player)) {
+            if (data.hasValue(attackTarget, core.OWNER, player)) {
                 if (data.has(attackTarget, core.IN_BATTLE_ZONE)) {
                     SystemsUtil.fight(data, templates, random, attacker, attackTarget, events);
 
                     data.getOptional(attackTarget, core.DRAWS_ON_ATTACKED).ifPresent(draws -> {
-                        int owner = data.get(attackTarget, core.OWNED_BY);
+                        int owner = data.get(attackTarget, core.OWNER);
                         SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
                     });
                 }
@@ -152,7 +152,7 @@ public class EndPhaseSystem implements ActionSystem {
         if (mulliganEnded && data.list(core.ACTIVE_PLAYER_PHASE).isEmpty()) {
             IntMap draws = new IntMap();
             for (int card : data.list(core.MULLIGAN)) {
-                int owner = data.get(card, core.OWNED_BY);
+                int owner = data.get(card, core.OWNER);
                 draws.set(owner, draws.getOrElse(owner, 0) + 1);
             }
             for (int player : draws) {

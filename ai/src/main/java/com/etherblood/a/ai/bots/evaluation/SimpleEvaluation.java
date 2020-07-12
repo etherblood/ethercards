@@ -18,7 +18,7 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
             if (data.has(minion, core.HERO)) {
                 continue;
             }
-            int player = data.get(minion, core.OWNED_BY);
+            int player = data.get(minion, core.OWNER);
             int count = playerMinionCount.getOrElse(player, 0);
             count++;
             playerMinionCount.set(player, count);
@@ -29,7 +29,7 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
             playerScores.set(player, 10 * data.get(player, core.MANA_POOL));
         }
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
-            int player = data.get(minion, core.OWNED_BY);
+            int player = data.get(minion, core.OWNER);
             int score = playerScores.getOrElse(player, 0);
             score += 10 * (data.getOptional(minion, core.ATTACK).orElse(0) + data.getOptional(minion, core.VENOM).orElse(0));
             score += 10 * (data.getOptional(minion, core.HEALTH).orElse(0) - data.getOptional(minion, core.POISONED).orElse(0));
@@ -42,14 +42,14 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
         }
         IntMap handCards = new IntMap();
         for (int card : data.list(core.IN_HAND_ZONE)) {
-            int player = data.get(card, core.OWNED_BY);
+            int player = data.get(card, core.OWNER);
             int score = handCards.getOrElse(player, 0);
             score += 1;
             handCards.set(player, score);
         }
         IntMap libraryCards = new IntMap();
         for (int card : data.list(core.IN_LIBRARY_ZONE)) {
-            int player = data.get(card, core.OWNED_BY);
+            int player = data.get(card, core.OWNER);
             int score = libraryCards.getOrElse(player, 0);
             score += 1;
             libraryCards.set(player, score);

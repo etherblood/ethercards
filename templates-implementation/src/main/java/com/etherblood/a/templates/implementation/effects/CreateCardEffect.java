@@ -27,7 +27,7 @@ public class CreateCardEffect implements Effect {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int entity = data.createEntity();
         data.set(entity, core.CARD_TEMPLATE, cardId);
-        data.set(entity, core.OWNED_BY, data.get(source, core.OWNED_BY));
+        data.set(entity, core.OWNER, data.get(source, core.OWNER));
         for (int component : components) {
             data.set(entity, component, components.get(component));
         }

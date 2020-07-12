@@ -14,12 +14,12 @@ public class TargetUtil {
         if (target == source) {
             return targetTypes.contains(TargetFilters.SOURCE);
         }
-        int sourceOwner = data.get(source, core.OWNED_BY);
+        int sourceOwner = data.get(source, core.OWNER);
         if (sourceOwner == target) {
             return targetTypes.contains(TargetFilters.OWNER);
         }
         if (data.has(target, core.IN_BATTLE_ZONE) && !data.has(target, core.DEATH_REQUEST)) {
-            int targetOwner = data.get(target, core.OWNED_BY);
+            int targetOwner = data.get(target, core.OWNER);
             if (data.has(target, core.HERO)) {
                 if (sourceOwner == targetOwner) {
                     return targetTypes.contains(TargetFilters.OWN_HERO);
@@ -42,12 +42,12 @@ public class TargetUtil {
         assert !targetTypes.contains(null);
         IntList availableTargets = new IntList();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int sourceOwner = data.get(source, core.OWNED_BY);
+        int sourceOwner = data.get(source, core.OWNER);
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (data.has(minion, core.DEATH_REQUEST)) {
                 continue;
             }
-            int owner = data.get(minion, core.OWNED_BY);
+            int owner = data.get(minion, core.OWNER);
             if (sourceOwner == owner) {
                 if (data.has(minion, core.HERO)) {
                     if (targetTypes.contains(TargetFilters.OWN_HERO)) {

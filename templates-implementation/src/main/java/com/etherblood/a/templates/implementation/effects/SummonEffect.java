@@ -21,7 +21,7 @@ public class SummonEffect implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(source, core.OWNED_BY);
+        int owner = data.get(source, core.OWNER);
         SystemsUtil.summonMinion(data, templates, random, events, minionId, owner);
     }
 }

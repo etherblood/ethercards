@@ -56,7 +56,7 @@ public class CastSystem implements ActionSystem {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
             CardTemplate template = templates.getCard(cardTemplateId);
-            int owner = data.get(castSource, core.OWNED_BY);
+            int owner = data.get(castSource, core.OWNER);
             CardCast cast;
             if (data.get(owner, core.ACTIVE_PLAYER_PHASE) == PlayerPhase.ATTACK) {
                 cast = template.getAttackPhaseCast();

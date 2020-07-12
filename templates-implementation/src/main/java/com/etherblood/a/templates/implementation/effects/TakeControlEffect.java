@@ -12,8 +12,8 @@ public class TakeControlEffect implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(source, core.OWNED_BY);
-        data.set(target, core.OWNED_BY, owner);
+        int owner = data.get(source, core.OWNER);
+        data.set(target, core.OWNER, owner);
         data.set(target, core.SUMMONING_SICKNESS, 1);
     }
 }

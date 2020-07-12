@@ -11,7 +11,7 @@ public class AddOwnManaPoolModifier implements StatModifier {
     @Override
     public int modify(EntityData data, GameTemplates templates, int self, int stat) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(self, core.OWNED_BY);
+        int owner = data.get(self, core.OWNER);
         int manaPool = new EffectiveStatsService(data, templates).manaPool(owner);
         return stat + manaPool;
     }

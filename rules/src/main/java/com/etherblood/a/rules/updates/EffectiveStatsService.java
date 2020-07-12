@@ -22,7 +22,7 @@ public class EffectiveStatsService {
     public int manaPool(int player) {
         int manaPool = data.getOptional(player, core.MANA_POOL).orElse(0);
         for (int minion : data.list(core.MANA_POOL_AURA)) {
-            if (data.hasValue(minion, core.OWNED_BY, player)) {
+            if (data.hasValue(minion, core.OWNER, player)) {
                 manaPool += data.get(minion, core.MANA_POOL_AURA);
             }
         }
@@ -41,7 +41,7 @@ public class EffectiveStatsService {
         for (int minion : data.listInValueOrder(core.BOUND_TO)) {
             int bindTarget = data.get(minion, core.BOUND_TO);
             if (!data.has(bindTarget, core.IN_BATTLE_ZONE)) {
-                data.set(minion, core.OWNED_BY, data.get(minion, core.ORIGINALLY_OWNED_BY));
+                data.set(minion, core.OWNER, data.get(minion, core.ORIGINALLY_OWNED_BY));
                 data.remove(minion, core.ORIGINALLY_OWNED_BY);
                 data.remove(minion, core.BOUND_TO);
             }
@@ -133,7 +133,7 @@ public class EffectiveStatsService {
     }
 
     private boolean hasOwnerOtherMinionWithComponent(int minion, int component) {
-        int owner = data.get(minion, core.OWNED_BY);
+        int owner = data.get(minion, core.OWNER);
         for (int other : data.list(component)) {
             if (other == minion) {
                 continue;
@@ -141,7 +141,7 @@ public class EffectiveStatsService {
             if (!data.has(other, core.IN_BATTLE_ZONE)) {
                 continue;
             }
-            if (data.hasValue(other, core.OWNED_BY, owner)) {
+            if (data.hasValue(other, core.OWNER, owner)) {
                 return true;
             }
         }
@@ -150,7 +150,7 @@ public class EffectiveStatsService {
 
     private int sumOwnerOtherMinionComponents(int minion, int component) {
         int sum = 0;
-        int owner = data.get(minion, core.OWNED_BY);
+        int owner = data.get(minion, core.OWNER);
         for (int other : data.list(component)) {
             if (other == minion) {
                 continue;
@@ -158,7 +158,7 @@ public class EffectiveStatsService {
             if (!data.has(other, core.IN_BATTLE_ZONE)) {
                 continue;
             }
-            if (data.hasValue(other, core.OWNED_BY, owner)) {
+            if (data.hasValue(other, core.OWNER, owner)) {
                 sum += data.get(other, component);
             }
         }

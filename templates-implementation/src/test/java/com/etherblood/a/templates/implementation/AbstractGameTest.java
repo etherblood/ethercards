@@ -96,7 +96,7 @@ public abstract class AbstractGameTest {
 
     public int hero(int index) {
         int player = player(index);
-        return data.list(core.HERO).stream().filter(x -> data.hasValue(x, core.OWNED_BY, player)).findAny().getAsInt();
+        return data.list(core.HERO).stream().filter(x -> data.hasValue(x, core.OWNER, player)).findAny().getAsInt();
     }
 
     public int createCard(int owner, String cardTemplate, int zone) {

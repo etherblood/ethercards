@@ -22,10 +22,10 @@ public class ResurrectRandomEffect implements Effect {
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
 
-        int owner = data.get(source, core.OWNED_BY);
+        int owner = data.get(source, core.OWNER);
         IntList candidates = new IntList();
         for (int dead : data.list(core.IN_GRAVEYARD_ZONE)) {
-            if (!data.hasValue(dead, core.OWNED_BY, owner)) {
+            if (!data.hasValue(dead, core.OWNER, owner)) {
                 continue;
             }
             CardTemplate template = templates.getCard(data.get(dead, core.CARD_TEMPLATE));

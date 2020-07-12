@@ -20,14 +20,14 @@ public class KolaghanDamageEffect implements Effect {
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
 
-        int owner = data.get(source, core.OWNED_BY);
-        int targetOwner = data.get(target, core.OWNED_BY);
+        int owner = data.get(source, core.OWNER);
+        int targetOwner = data.get(target, core.OWNER);
         if (owner == targetOwner) {
             return;
         }
         int targetTemplate = data.get(target, core.CARD_TEMPLATE);
         for (int dead : data.list(core.IN_GRAVEYARD_ZONE)) {
-            if (data.hasValue(dead, core.CARD_TEMPLATE, targetTemplate) && data.hasValue(dead, core.OWNED_BY, targetOwner)) {
+            if (data.hasValue(dead, core.CARD_TEMPLATE, targetTemplate) && data.hasValue(dead, core.OWNER, targetOwner)) {
                 data.set(SystemsUtil.randomHero(data, random, targetOwner), core.DAMAGE_REQUEST, damage);
                 break;
             }

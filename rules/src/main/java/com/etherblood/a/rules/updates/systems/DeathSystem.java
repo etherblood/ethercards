@@ -32,7 +32,7 @@ public class DeathSystem implements ActionSystem {
         this.triggers = new Trigger[]{
             (entity, value) -> {
                 if (data.has(entity, core.HERO)) {
-                    int owner = data.get(entity, core.OWNED_BY);
+                    int owner = data.get(entity, core.OWNER);
                     data.set(owner, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
                 }
 

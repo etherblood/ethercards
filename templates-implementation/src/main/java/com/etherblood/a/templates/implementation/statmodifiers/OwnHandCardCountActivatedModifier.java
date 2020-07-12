@@ -16,10 +16,10 @@ public class OwnHandCardCountActivatedModifier implements StatModifier {
     @Override
     public int modify(EntityData data, GameTemplates templates, int self, int stat) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(self, core.OWNED_BY);
+        int owner = data.get(self, core.OWNER);
         int handCardCount = 0;
         for (int minion : data.list(core.IN_HAND_ZONE)) {
-            if (data.hasValue(minion, core.OWNED_BY, owner)) {
+            if (data.hasValue(minion, core.OWNER, owner)) {
                 handCardCount++;
             }
         }

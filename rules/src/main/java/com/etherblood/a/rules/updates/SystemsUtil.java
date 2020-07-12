@@ -67,11 +67,11 @@ public class SystemsUtil {
         damage(data, attacker, blockerDamage);
 
         if (data.has(attacker, core.LIFELINK)) {
-            int attackerOwner = data.get(attacker, core.OWNED_BY);
+            int attackerOwner = data.get(attacker, core.OWNER);
             increase(data, randomHero(data, random, attackerOwner), core.HEALTH, attackerDamage);
         }
         if (data.has(blocker, core.LIFELINK)) {
-            int blockerOwner = data.get(blocker, core.OWNED_BY);
+            int blockerOwner = data.get(blocker, core.OWNER);
             increase(data, randomHero(data, random, blockerOwner), core.HEALTH, blockerDamage);
         }
 
@@ -111,7 +111,8 @@ public class SystemsUtil {
         int card = data.createEntity();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         data.set(card, core.CARD_TEMPLATE, templateId);
-        data.set(card, core.OWNED_BY, owner);
+        data.set(card, core.OWNER, owner);
+        data.set(card, core.TEAM, data.get(owner, core.TEAM));
         return card;
     }
 
@@ -152,7 +153,7 @@ public class SystemsUtil {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList ownHeroes = new IntList();
         for (int hero : data.list(core.HERO)) {
-            if (data.hasValue(hero, core.OWNED_BY, player)) {
+            if (data.hasValue(hero, core.OWNER, player)) {
                 ownHeroes.add(hero);
             }
         }
@@ -164,7 +165,7 @@ public class SystemsUtil {
         IntList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
         IntList myLibraryCards = new IntList();
         for (int card : allLibraryCards) {
-            if (data.hasValue(card, core.OWNED_BY, player)) {
+            if (data.hasValue(card, core.OWNER, player)) {
                 myLibraryCards.add(card);
             }
         }
@@ -198,7 +199,7 @@ public class SystemsUtil {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         IntList ownHeroes = new IntList();
         for (int hero : data.list(core.HERO)) {
-            if (data.hasValue(hero, core.OWNED_BY, player) && data.has(hero, core.IN_BATTLE_ZONE)) {
+            if (data.hasValue(hero, core.OWNER, player) && data.has(hero, core.IN_BATTLE_ZONE)) {
                 ownHeroes.add(hero);
             }
         }

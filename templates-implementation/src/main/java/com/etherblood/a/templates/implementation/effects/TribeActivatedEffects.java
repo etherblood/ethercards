@@ -22,10 +22,10 @@ public class TribeActivatedEffects implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(source, core.OWNED_BY);
+        int owner = data.get(source, core.OWNER);
         boolean tribeExists = false;
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
-            if (data.hasValue(minion, core.OWNED_BY, owner)) {
+            if (data.hasValue(minion, core.OWNER, owner)) {
                 int templateId = data.get(minion, core.CARD_TEMPLATE);
                 CardTemplate card = templates.getCard(templateId);
                 if (card.getTribes().contains(tribe)) {

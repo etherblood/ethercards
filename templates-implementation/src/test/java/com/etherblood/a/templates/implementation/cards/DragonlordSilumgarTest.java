@@ -20,7 +20,7 @@ public class DragonlordSilumgarTest extends AbstractGameTest {
 
         moves.apply(new Cast(player(1), silumgar, ornithopter));
 
-        Assertions.assertEquals(player(1), data.get(ornithopter, core.OWNED_BY));
+        Assertions.assertEquals(player(1), data.get(ornithopter, core.OWNER));
         Assertions.assertTrue(data.list(core.ATTACKS_TARGET).isEmpty());
         Assertions.assertTrue(data.list(core.BLOCKS_ATTACKER).isEmpty());
     }

@@ -20,10 +20,10 @@ public class HandCardCountActivatedEffects implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int owner = data.get(source, core.OWNED_BY);
+        int owner = data.get(source, core.OWNER);
         int handCardCount = 0;
         for (int minion : data.list(core.IN_HAND_ZONE)) {
-            if (data.hasValue(minion, core.OWNED_BY, owner)) {
+            if (data.hasValue(minion, core.OWNER, owner)) {
                 handCardCount++;
             }
         }
