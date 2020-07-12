@@ -53,7 +53,7 @@ public class TestSandbox {
 
             Function<MoveBotGame, float[]> rolloutEvaluation1 = new RolloutToEvaluation<>(random, 10, simple)::evaluate;
             MctsBotSettings<Move, MoveBotGame> settings1 = new MctsBotSettings<>();
-            settings0.random = random;
+            settings1.random = random;
             settings1.strength = 100;
             settings1.evaluation = rolloutEvaluation1;
             MctsBot bot1 = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(simulationGame(game, random)), settings1);
