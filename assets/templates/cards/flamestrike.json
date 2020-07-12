@@ -8,9 +8,9 @@
     ],
     "description": "Deal 4 damage to all enemy minions."
   },
+  "manaCost": 8,
   "casts": [
     {
-      "manaCost": 8,
       "effects": [
         {
           "type": "targeted",

@@ -7,6 +7,16 @@
       "BLACK"
     ]
   },
+  "manaCost": 1,
+  "casts": [
+    {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
   "components": {
     "ATTACK": 2,
     "HEALTH": 1

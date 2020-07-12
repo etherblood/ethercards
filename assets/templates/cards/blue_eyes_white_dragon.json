@@ -18,8 +18,8 @@
     }
   ],
   "components": {
-    "ATTACK": 10,
-    "HEALTH": 8,
+    "ATTACK": 9,
+    "HEALTH": 7,
     "FLYING": true
   },
   "tribes": [

@@ -18,5 +18,6 @@ public class BindControlEffect implements Effect {
         }
         data.set(target, core.OWNED_BY, owner);
         data.set(target, core.BOUND_TO, source);
+        data.set(target, core.SUMMONING_SICKNESS, 1);
     }
 }

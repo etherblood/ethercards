@@ -7,9 +7,9 @@
       "RED"
     ]
   },
+  "manaCost": 3,
   "casts": [
     {
-      "manaCost": 3,
       "effects": [
         {
           "type": "selfSummon"

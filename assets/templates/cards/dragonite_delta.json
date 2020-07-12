@@ -10,7 +10,7 @@
   },
   "casts": [
     {
-      "manaCost": 7,
+      "manaCost": 8,
       "effects": [
         {
           "type": "selfSummon"
@@ -21,8 +21,7 @@
   "components": {
     "ATTACK": 7,
     "HEALTH": 10,
-    "VIGILANCE": true,
-    "TRAMPLE": true,
+    "RAGE": true,
     "FLYING": true
   },
   "tribes": [

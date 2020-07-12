@@ -9,9 +9,9 @@
     "description": "Enchanted minion gets +1/+1 and has flying.",
     "flavourText": "The Tolarian Academies are known for their magical research, powerful sorcerers, and accidental destruction of ecosystems."
   },
+  "manaCost": 2,
   "casts": [
     {
-      "manaCost": 1,
       "targets": [
         "OWN_MINION",
         "OPPONENT_MINION"

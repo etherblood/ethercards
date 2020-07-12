@@ -1,6 +1,6 @@
 {
   "alias": "he_who_hungers",
-  "manaCost": 3,
+  "manaCost": 4,
   "display": {
     "name": "He Who Hungers",
     "imagePath": "he_who_hungers.jpg",
@@ -25,7 +25,7 @@
   "onDeath": [
     {
       "type": "soulshift",
-      "power": 2
+      "power": 3
     }
   ],
   "tribes": [

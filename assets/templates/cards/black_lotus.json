@@ -6,7 +6,7 @@
     "colors": [
       "BLACK"
     ],
-    "description": "Gain 3 Mana. Your hero gains 3 Poisoned."
+    "description": "Gain 3 Mana. Your hero gains 5 Poisoned."
   },
   "casts": [
     {
@@ -37,7 +37,7 @@
             {
               "type": "buff",
               "components": {
-                "POISONED": 3
+                "POISONED": 5
               }
             }
           ]

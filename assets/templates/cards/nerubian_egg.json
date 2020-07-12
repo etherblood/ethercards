@@ -6,7 +6,7 @@
     "colors": [
       "BLACK"
     ],
-    "description": "Summon a 3/3 Nerubian when this dies."
+    "description": "Summon a 3/3 Nerubian with Reach when this dies."
   },
   "casts": [
     {
