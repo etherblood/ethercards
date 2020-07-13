@@ -23,7 +23,6 @@ public class StartPhaseSystem implements ActionSystem {
     private final IntUnaryOperator random;
     private final GameEventListener events;
     private final Trigger[] triggers;
-    private final MoveAvailabilityService moveAvailibility;
 
     public StartPhaseSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
@@ -52,7 +51,6 @@ public class StartPhaseSystem implements ActionSystem {
                     }
                 }
             }};
-        this.moveAvailibility = new MoveAvailabilityService(data, templates);
     }
 
     private void startAttackPhase(int player) {
@@ -91,10 +89,6 @@ public class StartPhaseSystem implements ActionSystem {
                 onUpkeepEffect.apply(data, templates, random, events, minion, minion);
             }
         }
-
-        for (int rager : data.list(core.RAGE)) {
-            declareRandomAttackIfAble(rager);
-        }
     }
 
     private void clearTemporaryStats() {
@@ -107,23 +101,6 @@ public class StartPhaseSystem implements ActionSystem {
         for (int minion : data.list(core.BUSHIDO_TRIGGERED)) {
             data.remove(minion, core.BUSHIDO_TRIGGERED);
         }
-    }
-
-    private void declareRandomAttackIfAble(int attacker) {
-        int owner = data.get(attacker, core.OWNER);
-        if (!moveAvailibility.canDeclareAttack(owner, attacker, false)) {
-            return;
-        }
-        IntList candidates = new IntList();
-        for (int candidate : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (moveAvailibility.canDeclareAttack(owner, attacker, candidate, false)) {
-                candidates.add(candidate);
-            }
-        }
-        if (candidates.isEmpty()) {
-            return;
-        }
-        data.set(attacker, core.ATTACKS_TARGET, candidates.getRandomItem(random));
     }
 
     private void startBattlePhase(int player) {

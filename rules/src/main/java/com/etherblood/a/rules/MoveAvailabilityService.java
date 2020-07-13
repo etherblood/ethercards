@@ -105,15 +105,15 @@ public class MoveAvailabilityService {
     }
 
     public boolean canDeclareAttack(int player, int attacker, boolean throwOnFail) {
-        if (!data.hasValue(attacker, core.OWNER, player)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, player #" + player + " does not own attacker #" + attacker + ".");
-            }
-            return false;
-        }
         if (!data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " is not in attack phase.");
+            }
+            return false;
+        }
+        if (data.has(attacker, core.ATTACKS_TARGET)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is already attacking.");
             }
             return false;
         }
@@ -123,9 +123,9 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(attacker, core.ATTACKS_TARGET)) {
+        if (!data.hasValue(attacker, core.OWNER, player)) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is already attacking.");
+                throw new IllegalArgumentException("Failed to declare attack, player #" + player + " does not own attacker #" + attacker + ".");
             }
             return false;
         }

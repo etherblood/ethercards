@@ -114,7 +114,7 @@ public class CoreComponents implements ComponentsModule {
         CANNOT_BE_CAST_TARGETED = register.applyAsInt("CANNOT_BE_CAST_TARGETED");
         CANNOT_BE_MULLIGANED = register.applyAsInt("CANNOT_BE_MULLIGANED");
         BLOCKS_ATTACKER = register.applyAsInt("BLOCKS_ATTACKER");
-        ATTACKS_TARGET = register.applyAsInt("ATTACKS_PLAYER");
+        ATTACKS_TARGET = register.applyAsInt("ATTACKS_TARGET");
         CAST_TARGET = register.applyAsInt("CAST_TARGET");
         MANA = register.applyAsInt("MANA");
         MANA_POOL = register.applyAsInt("MANA_POOL");

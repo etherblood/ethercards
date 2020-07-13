@@ -44,7 +44,7 @@ public class SystemFactory {
                         new PlayerResultSystem(data)
                 ),
                 new SurvivalSystem(data, templates, random, events),
-                new EffectiveStatsService(data, templates)
+                new StateDrivenUpdatesService(data, templates, random, new EffectiveStatsService(data, templates))
         );
     }
 }

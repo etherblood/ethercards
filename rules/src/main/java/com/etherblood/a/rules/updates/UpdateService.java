@@ -4,16 +4,16 @@ import java.util.List;
 
 public class UpdateService {
 
-    private final EffectiveStatsService stats;
     private final List<ActionSystem> actionSystems;
     private final List<ActionSystem> phaseSystems;
     private final ActionSystem survivalSystem;
+    private final StateDrivenUpdatesService stateDrivenService;
 
-    public UpdateService(List<ActionSystem> phaseSystems, List<ActionSystem> actionSystems, ActionSystem survivalSystem, EffectiveStatsService stats) {
-        this.stats = stats;
+    public UpdateService(List<ActionSystem> phaseSystems, List<ActionSystem> actionSystems, ActionSystem survivalSystem, StateDrivenUpdatesService stateDrivenService) {
         this.actionSystems = actionSystems;
         this.phaseSystems = phaseSystems;
         this.survivalSystem = survivalSystem;
+        this.stateDrivenService = stateDrivenService;
     }
 
     public void run() {
@@ -50,9 +50,10 @@ public class UpdateService {
     }
 
     private void fixInconsistencies() {
-        stats.killHealthless();
-        stats.unbindFreedMinions();
-        stats.removeInvalidAttacks();
-        stats.removeInvalidBlocks();
+        stateDrivenService.killHealthless();
+        stateDrivenService.unbindFreedMinions();
+        stateDrivenService.removeInvalidAttacks();
+        stateDrivenService.removeInvalidBlocks();
+        stateDrivenService.attackWithRagers();
     }
 }

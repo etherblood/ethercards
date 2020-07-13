@@ -393,6 +393,21 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             updateZone(graveyardCards.stream().filter(playerFilter).toArray(), zones.getGraveyardZone(), Vector3f.UNIT_Y);
         }
 
+        for (Map.Entry<Integer, ColoredConnectionArrow> entry : new ArrayList<>(arrows.entrySet())) {
+            ColoredConnectionArrow arrow = entry.getValue();
+            int minion = entry.getKey();
+            OptionalInt attackTarget = data.getOptional(minion, core.ATTACKS_TARGET);
+            if (attackTarget.isPresent() && arrow.getModel().getTarget() == visualCards.get(attackTarget.getAsInt())) {
+                continue;
+            }
+            OptionalInt blockTarget = data.getOptional(minion, core.BLOCKS_ATTACKER);
+            if (blockTarget.isPresent() && arrow.getModel().getTarget() == visualCards.get(blockTarget.getAsInt())) {
+                continue;
+            }
+            arrows.remove(minion);
+            board.unregister(arrow);
+        }
+
         IntList blocked = new IntList();
         for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
             int target = data.get(blocker, core.BLOCKS_ATTACKER);
@@ -421,21 +436,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             } else {
                 arrow.getModel().setColor(color);
             }
-        }
-
-        for (Map.Entry<Integer, ColoredConnectionArrow> entry : new ArrayList<>(arrows.entrySet())) {
-            ColoredConnectionArrow arrow = entry.getValue();
-            int minion = entry.getKey();
-            OptionalInt target = data.getOptional(minion, core.ATTACKS_TARGET);
-            if (target.isPresent()) {
-                continue;
-            }
-            OptionalInt blocker = data.getOptional(minion, core.BLOCKS_ATTACKER);
-            if (blocker.isPresent()) {
-                continue;
-            }
-            arrows.remove(minion);
-            board.unregister(arrow);
         }
     }
 
