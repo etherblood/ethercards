@@ -393,6 +393,14 @@ public class MoveService {
                 throw new IllegalStateException("Attacking minion is not in battle zone.");
             }
         }
+        
+        for (int entity : data.list(core.OWNER)) {
+            int owner = data.get(entity, core.OWNER);
+            int team = data.get(entity, core.TEAM);
+            if(!data.hasValue(owner, core.TEAM, team)) {
+                throw new IllegalStateException("Entities owner has a different team than entity.");
+            }
+        }
 
         return true;
     }

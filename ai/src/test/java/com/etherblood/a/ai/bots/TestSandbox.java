@@ -34,6 +34,7 @@ public class TestSandbox {
 
     @Test
     public void simulateGame() throws InterruptedException {
+        int movesPlayed = 0;
         Random random = new Random(7);
         // This test mainly serves as crash detection
         // Note: This is not a benchmark, asserts are enabled
@@ -66,6 +67,7 @@ public class TestSandbox {
                     move = bot1.findMove(1);
                 }
                 game.getMoves().apply(move);
+                movesPlayed++;
             }
             if (game.hasPlayerWon(game.findPlayerByIndex(0))) {
                 result[0]++;
@@ -76,6 +78,7 @@ public class TestSandbox {
                 result[1] += 0.5f;
             }
         }
+        System.out.println("Moves played: " + movesPlayed);
     }
 
     private Game simulationGame(Game game, Random random) {
