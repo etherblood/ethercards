@@ -1,6 +1,6 @@
 package com.etherblood.a.ai.bots.mcts;
 
-strictfp class MctsRaveScore {
+class MctsRaveScore {
 
     private final float[] scores;
 

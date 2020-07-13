@@ -30,7 +30,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
-public strictfp class TestSandbox {
+public class TestSandbox {
 
     @Test
     public void simulateGame() throws InterruptedException {

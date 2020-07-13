@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-strictfp class MctsBotWorker implements Runnable, Callable<Void> {
+class MctsBotWorker implements Runnable, Callable<Void> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MctsBotWorker.class);
 
