@@ -21,7 +21,6 @@ class MctsRaveScores {
 
     public void updateScores(Move move, float[] scores) {
         map.computeIfAbsent(move, x -> new MctsRaveScore(playerCount)).updateScores(scores);
-//        defaultScore.updateScores(scores);
     }
 
     public MctsRaveScore get(Move move) {

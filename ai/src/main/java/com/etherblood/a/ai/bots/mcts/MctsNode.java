@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-class MctsNode {
+strictfp class MctsNode {
 
     private static final Object[] EMPTY = new Object[0];
 

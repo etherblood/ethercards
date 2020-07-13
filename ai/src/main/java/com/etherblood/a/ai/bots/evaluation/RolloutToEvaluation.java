@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
-public class RolloutToEvaluation<Move, Game extends BotGame<Move, Game>> {
+public strictfp class RolloutToEvaluation<Move, Game extends BotGame<Move, Game>> {
 
     private final Random random;
     private final int rolloutMoves;

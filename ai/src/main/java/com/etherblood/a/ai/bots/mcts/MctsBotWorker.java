@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class MctsBotWorker implements Runnable, Callable<Void> {
+strictfp class MctsBotWorker implements Runnable, Callable<Void> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MctsBotWorker.class);
 

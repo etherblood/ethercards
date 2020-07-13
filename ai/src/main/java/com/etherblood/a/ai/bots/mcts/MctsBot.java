@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MctsBot implements Bot {
+public strictfp class MctsBot implements Bot {
 
     private static final Logger LOG = LoggerFactory.getLogger(MctsBot.class);
 
