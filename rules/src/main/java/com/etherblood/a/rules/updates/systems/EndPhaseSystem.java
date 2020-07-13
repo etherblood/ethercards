@@ -92,7 +92,7 @@ public class EndPhaseSystem implements ActionSystem {
     }
 
     private void endMulliganPhase(int player) {
-        //mulligan logic happens in triggerAndClean
+        //mulligan logic happens in after()
     }
 
     private void endBattlePhase(int player) {
@@ -175,6 +175,11 @@ public class EndPhaseSystem implements ActionSystem {
                 }
             }
             data.set(startingPlayer, core.START_PHASE_REQUEST, PlayerPhase.ATTACK);
+
+            // mulligan components are no longer needed, clean them up
+            for (int card : data.list(core.CANNOT_BE_MULLIGANED)) {
+                data.remove(card, core.CANNOT_BE_MULLIGANED);
+            }
         }
     }
 

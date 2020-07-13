@@ -41,8 +41,10 @@ public class EffectiveStatsService {
         for (int minion : data.listInValueOrder(core.BOUND_TO)) {
             int bindTarget = data.get(minion, core.BOUND_TO);
             if (!data.has(bindTarget, core.IN_BATTLE_ZONE)) {
-                data.set(minion, core.OWNER, data.get(minion, core.ORIGINALLY_OWNED_BY));
-                data.remove(minion, core.ORIGINALLY_OWNED_BY);
+                data.set(minion, core.OWNER, data.get(minion, core.ORIGINAL_OWNER));
+                data.set(minion, core.TEAM, data.get(minion, core.ORIGINAL_TEAM));
+                data.remove(minion, core.ORIGINAL_OWNER);
+                data.remove(minion, core.ORIGINAL_TEAM);
                 data.remove(minion, core.BOUND_TO);
             }
         }

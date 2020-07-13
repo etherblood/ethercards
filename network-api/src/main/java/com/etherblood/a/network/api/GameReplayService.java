@@ -6,9 +6,8 @@ import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.network.api.game.GameSetup;
-import com.etherblood.a.network.api.game.PlayerSetup;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
@@ -16,8 +15,6 @@ import com.etherblood.a.rules.GameSettingsBuilder;
 import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.rules.setup.SimpleSetup;
-import com.etherblood.a.templates.api.LibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
 import com.google.gson.JsonElement;
@@ -25,16 +22,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
 import com.etherblood.a.game.events.api.GameEventListener;
+import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.templates.implementation.TemplateAliasMaps;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameReplayService {
+
+    private static final String THE_COIN = "the_coin";
 
     private final GameReplay replay;
     private final Function<String, JsonElement> assetLoader;
 
     private Game cachedGame = null;
 
-    public GameReplayService(GameSetup setup, Function<String, JsonElement> assetLoader) {
+    public GameReplayService(RawGameSetup setup, Function<String, JsonElement> assetLoader) {
         this.assetLoader = assetLoader;
         replay = new GameReplay();
         replay.setup = setup;
@@ -53,14 +55,15 @@ public class GameReplayService {
         TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
         TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
 
-        GameSetup setup = replay.setup;
-        SimpleSetup simpleSetup = new SimpleSetup(setup.players.length);
-        for (int i = 0; i < setup.players.length; i++) {
-            PlayerSetup player = setup.players[i];
-            LibraryTemplate library = loader.parseLibrary(player.library);
-            simpleSetup.setLibrary(i, new IntList(library.cards));
-            simpleSetup.setHero(i, library.hero);
+        Map<String, Integer> cardAliasMap = new HashMap<>();
+        RawGameSetup gameData = replay.setup;
+        for (RawPlayerSetup player : gameData.players) {
+            cardAliasMap.put(player.library.hero, loader.registerCardAlias(player.library.hero));
+            for (String card : player.library.cards.keySet()) {
+                cardAliasMap.put(card, loader.registerCardAlias(card));
+            }
         }
+        cardAliasMap.put(THE_COIN, loader.registerCardAlias(THE_COIN));
         GameSettingsBuilder builder = new GameSettingsBuilder();
         builder.components = components;
         builder.templates = loader.buildGameTemplates();
@@ -68,7 +71,7 @@ public class GameReplayService {
         EntityData data = new SimpleEntityData(settings.components);
         MoveService moves = new MoveService(settings, data, HistoryRandom.producer(), Collections.emptyList(), true, true, listener);
         Game game = new Game(settings, data, moves);
-        simpleSetup.apply(game);
+        gameData.toGameSetup(cardAliasMap::get).setup(data, game.getTemplates());
         updateInstance(game);
         return game;
     }
@@ -103,7 +106,7 @@ public class GameReplayService {
     }
 
     public synchronized int getPlayerIndex(long playerId) {
-        PlayerSetup[] players = replay.setup.players;
+        RawPlayerSetup[] players = replay.setup.players;
         for (int i = 0; i < players.length; i++) {
             if (players[i].id == playerId) {
                 return i;
@@ -116,7 +119,7 @@ public class GameReplayService {
         updateCachedGame();
         return cachedGame.findPlayerByIndex(playerIndex);
     }
-
+    
     public synchronized boolean hasPlayerWon(int player) {
         updateCachedGame();
         return cachedGame.hasPlayerWon(player);
@@ -136,6 +139,10 @@ public class GameReplayService {
     }
 
     public synchronized String getPlayerName(int playerIndex) {
-        return replay.setup.players[playerIndex].name;
+        return playerByIndex(playerIndex).name;
+    }
+
+    private RawPlayerSetup playerByIndex(int playerIndex) {
+        return replay.setup.players[playerIndex];
     }
 }

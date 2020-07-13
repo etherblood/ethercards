@@ -1,5 +1,6 @@
 package com.etherblood.a.templates.api;
 
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.rules.GameTemplates;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

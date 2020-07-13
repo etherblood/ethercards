@@ -41,8 +41,8 @@ public class ZoneService {
     public void removeFromBattle(int entity) {
         assert data.has(entity, core.IN_BATTLE_ZONE);
         data.remove(entity, core.IN_BATTLE_ZONE);
-        //TODO: use a blacklist instead
-        IntList whiteList = new IntList(core.CARD_TEMPLATE, core.OWNER);
+        //TODO: use a blacklist instead?
+        IntList whiteList = new IntList(core.CARD_TEMPLATE, core.OWNER, core.TEAM);
         for (ComponentMeta meta : data.getComponents().getMetas()) {
             if (whiteList.contains(meta.id)) {
                 continue;

@@ -1,4 +1,4 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.a.templates.api.setup;
 
 import java.util.Map;
 

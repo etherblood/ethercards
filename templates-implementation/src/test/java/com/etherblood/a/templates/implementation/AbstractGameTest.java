@@ -3,7 +3,6 @@ package com.etherblood.a.templates.implementation;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
-import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
@@ -13,12 +12,14 @@ import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.setup.SimpleSetup;
+import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.google.gson.Gson;
 import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +29,7 @@ public abstract class AbstractGameTest {
 
     private static final String DEFAULT_HERO = "lots_of_health";
     private final TemplatesLoader loader;
+    private final RawLibraryTemplate rawLibrary;
     public final GameSettings settings;
     public final CoreComponents core;
     public final GameTemplates templates;
@@ -51,7 +53,7 @@ public abstract class AbstractGameTest {
         loader.registerCardAlias(DEFAULT_HERO);
         templates = loader.buildGameTemplates();
 
-        RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
+        rawLibrary = new RawLibraryTemplate();
         rawLibrary.hero = DEFAULT_HERO;
         rawLibrary.cards = Collections.emptyMap();
         settingsBuilder.templates = templates;
@@ -67,20 +69,33 @@ public abstract class AbstractGameTest {
         game = new Game(settings, data, moves);
         effectiveStats = new EffectiveStatsService(data, templates);
 
-        SimpleSetup setup = new SimpleSetup(2);
-        setup.setLibrary(0, new IntList());
-        setup.setLibrary(1, new IntList());
-        setup.setHero(0, getCardId(DEFAULT_HERO));
-        setup.setHero(1, getCardId(DEFAULT_HERO));
+        startGame();
+    }
 
-        setup.apply(game);
-        for (int player : data.list(core.DRAW_CARDS_REQUEST)) {
-            data.remove(player, core.DRAW_CARDS_REQUEST);
-        }
-        for (int hero : data.list(core.DRAWS_PER_TURN)) {
-            data.remove(hero, core.DRAWS_PER_TURN);
-        }
-        data.set(game.findPlayerByIndex(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
+    private void startGame() {
+        RawPlayerSetup playerSetup0 = new RawPlayerSetup();
+        playerSetup0.library = rawLibrary;
+        playerSetup0.teamIndex = 0;
+        RawPlayerSetup playerSetup1 = new RawPlayerSetup();
+        playerSetup1.library = rawLibrary;
+        playerSetup1.teamIndex = 1;
+
+        RawGameSetup gameSetup = new RawGameSetup();
+        gameSetup.players = new RawPlayerSetup[]{playerSetup0, playerSetup1};
+        gameSetup.teamCount = 2;
+        gameSetup.theCoinAlias = null;
+        gameSetup.startingPlayersHandCardCount = 0;
+        gameSetup.otherPlayersHandCardCount = 0;
+
+        gameSetup.toGameSetup(loader::registerCardAlias).setup(data, templates);
+        data.set(player(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
+
+        data.remove(hero(0), core.DRAWS_PER_TURN);
+        data.remove(hero(0), core.MANA_POOL_AURA_GROWTH);
+        data.remove(hero(1), core.DRAWS_PER_TURN);
+        data.remove(hero(1), core.MANA_POOL_AURA_GROWTH);
+        
+        moves.apply(new Update());
     }
 
     @AfterEach

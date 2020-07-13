@@ -2,6 +2,7 @@ package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.collections.IntList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +38,10 @@ public class Game {
     }
 
     public int findPlayerByIndex(int playerIndex) {
-        for (int player : data.list(core.PLAYER_INDEX)) {
-            if (data.hasValue(player, core.PLAYER_INDEX, playerIndex)) {
-                return player;
-            }
-        }
-        throw new AssertionError();
+        IntList players = data.listInValueOrder(core.PLAYER_INDEX);
+        int player = players.get(playerIndex);
+        assert data.hasValue(player, core.PLAYER_INDEX, playerIndex);
+        return player;
     }
 
     public int getPlayerIndex(int player) {

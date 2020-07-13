@@ -7,7 +7,7 @@ import com.etherblood.a.network.api.NetworkUtil;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;

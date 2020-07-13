@@ -385,6 +385,12 @@ public class MoveAvailabilityService {
             }
             return false;
         }
+        if (data.has(card, core.CANNOT_BE_MULLIGANED)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare mulligan, card #" + card + " can not be mulliganed.");
+            }
+            return false;
+        }
         int requiredCards = 1;
         for (int mulliganedCard : data.list(core.MULLIGAN)) {
             if (data.hasValue(mulliganedCard, core.OWNER, player)) {

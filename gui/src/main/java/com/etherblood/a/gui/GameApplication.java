@@ -11,7 +11,7 @@ import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.templates.api.DisplayCardTemplate;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
 import com.etherblood.a.templates.implementation.TemplateAliasMaps;

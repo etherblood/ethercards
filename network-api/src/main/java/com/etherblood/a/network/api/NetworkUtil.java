@@ -1,8 +1,8 @@
 package com.etherblood.a.network.api;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.etherblood.a.network.api.game.GameSetup;
-import com.etherblood.a.network.api.game.PlayerSetup;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.network.api.matchmaking.OpponentType;
 import com.etherblood.a.network.api.serializers.moves.BlockSerializer;
@@ -23,7 +23,7 @@ import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.internal.LinkedTreeMap;
 import java.util.HashMap;
 
@@ -36,9 +36,9 @@ public class NetworkUtil {
         
         kryo.register(GameRequest.class);
         kryo.register(OpponentType.class);
-        kryo.register(GameSetup.class);
-        kryo.register(PlayerSetup[].class);
-        kryo.register(PlayerSetup.class);
+        kryo.register(RawGameSetup.class);
+        kryo.register(RawPlayerSetup[].class);
+        kryo.register(RawPlayerSetup.class);
         kryo.register(RawLibraryTemplate.class);
         kryo.register(MoveReplay.class);
         kryo.register(int[].class);

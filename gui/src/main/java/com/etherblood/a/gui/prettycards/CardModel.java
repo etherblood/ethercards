@@ -33,6 +33,7 @@ public class CardModel extends BoardObjectModel {
         this.template = Objects.requireNonNull(template);
     }
 
+    //TODO: CardModel should not know anything about data/templates
     public void updateFrom(EntityData data, GameTemplates templates) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         if (data.has(entityId, core.IN_BATTLE_ZONE)) {

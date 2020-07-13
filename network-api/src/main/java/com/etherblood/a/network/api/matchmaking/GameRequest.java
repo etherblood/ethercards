@@ -1,6 +1,6 @@
 package com.etherblood.a.network.api.matchmaking;
 
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 
 public class GameRequest {
 

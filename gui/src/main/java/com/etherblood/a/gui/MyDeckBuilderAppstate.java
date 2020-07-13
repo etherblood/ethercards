@@ -19,10 +19,11 @@ import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
+import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.api.DisplayCardTemplate;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -85,11 +86,13 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         cardOrder = cardOrder.thenComparingInt(x -> x.getTemplate().getId());
 
         EntityData data = new SimpleEntityData(components);
+        int owner = data.createEntity();
+        data.set(owner, components.getModule(CoreComponents.class).TEAM, 0);
         GameTemplates gameTemplates = new GameTemplates(cards.stream().collect(Collectors.toMap(x -> x.getId(), x -> x)));
 
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
-            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card.getId(), 0), card);
+            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card.getId(), owner), card);
             cardModel.updateFrom(data, gameTemplates);
             allCardModels.add(cardModel);
         }

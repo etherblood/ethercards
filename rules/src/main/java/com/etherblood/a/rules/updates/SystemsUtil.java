@@ -108,11 +108,12 @@ public class SystemsUtil {
     }
 
     public static int createCard(EntityData data, int templateId, int owner) {
-        int card = data.createEntity();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        int team = data.get(owner, core.TEAM);
+        int card = data.createEntity();
         data.set(card, core.CARD_TEMPLATE, templateId);
         data.set(card, core.OWNER, owner);
-        data.set(card, core.TEAM, data.get(owner, core.TEAM));
+        data.set(card, core.TEAM, team);
         return card;
     }
 

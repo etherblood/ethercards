@@ -8,7 +8,6 @@ import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
-import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
@@ -18,11 +17,11 @@ import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
-import com.etherblood.a.rules.setup.SimpleSetup;
-import com.etherblood.a.templates.api.LibraryTemplate;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.etherblood.a.templates.implementation.TemplateAliasMaps;
 import com.google.gson.Gson;
 import java.util.Arrays;
@@ -97,30 +96,30 @@ public class TestSandbox {
         rawLibrary.hero = "lots_of_health";
         rawLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
 
-        LibraryTemplate lib0 = loader.parseLibrary(rawLibrary);
-        LibraryTemplate lib1 = lib0;
+        RawPlayerSetup playerSetup0 = new RawPlayerSetup();
+        playerSetup0.library = rawLibrary;
+        playerSetup0.teamIndex = 0;
+        RawPlayerSetup playerSetup1 = new RawPlayerSetup();
+        playerSetup1.library = rawLibrary;
+        playerSetup1.teamIndex = 1;
+
+        RawGameSetup gameSetup = new RawGameSetup();
+        gameSetup.players = new RawPlayerSetup[]{playerSetup0, playerSetup1};
+        gameSetup.teamCount = 2;
+        gameSetup.theCoinAlias = "the_coin";
+        
+        loader.parseLibrary(rawLibrary);
+        loader.registerCardAlias(gameSetup.theCoinAlias);
+
         settingsBuilder.templates = loader.buildGameTemplates();
         GameSettings settings = settingsBuilder.build();
 
-        IntList library0 = new IntList();
-        for (int card : lib0.cards) {
-            library0.add(card);
-        }
-        IntList library1 = new IntList();
-        for (int card : lib1.cards) {
-            library1.add(card);
-        }
-
-        SimpleSetup setup = new SimpleSetup(2);
-        setup.setLibrary(0, library0);
-        setup.setLibrary(1, library1);
-        setup.setHero(0, lib0.hero);
-        setup.setHero(1, lib1.hero);
+        
 
         EntityData data = new SimpleEntityData(settings.components);
         MoveService moves = new MoveService(settings, data, HistoryRandom.producer(random::nextInt), new NoopGameEventListener());
         Game game = new Game(settings, data, moves);
-        setup.apply(game);
+        gameSetup.toGameSetup(loader::registerCardAlias).setup(data, game.getTemplates());
         moves.apply(new Start());
         return game;
     }

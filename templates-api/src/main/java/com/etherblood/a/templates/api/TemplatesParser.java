@@ -1,5 +1,6 @@
 package com.etherblood.a.templates.api;
 
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.entities.ComponentMeta;

@@ -5,12 +5,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.NetworkUtil;
-import com.etherblood.a.network.api.game.GameSetup;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.network.api.matchmaking.OpponentType;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -31,8 +31,8 @@ public class GameClient {
             @Override
             public void received(Connection connection, Object object) {
                 CompletableFuture<GameReplayService> future = gameRequest.get();
-                if (object instanceof GameSetup) {
-                    future.complete(new GameReplayService((GameSetup) object, assetLoader));
+                if (object instanceof RawGameSetup) {
+                    future.complete(new GameReplayService((RawGameSetup) object, assetLoader));
                 } else if (object instanceof MoveReplay) {
                     try {
                         future.get().apply((MoveReplay) object);

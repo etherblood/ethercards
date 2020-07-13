@@ -10,8 +10,8 @@ import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.network.api.GameReplayService;
-import com.etherblood.a.network.api.game.GameSetup;
-import com.etherblood.a.network.api.game.PlayerSetup;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
@@ -25,7 +25,7 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
-import com.etherblood.a.templates.api.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -184,25 +184,29 @@ public class GameService {
             switch (request.opponent) {
                 case BOT:
                     Connection connection = Objects.requireNonNull(getConnection(entry.getKey()));
-                    PlayerSetup human = new PlayerSetup();
+                    RawPlayerSetup human = new RawPlayerSetup();
                     JwtAuthentication jwt = jwtParser.verify(request.jwt);
                     human.id = jwt.user.id;
                     human.name = jwt.user.login;
                     human.library = request.library;
 
-                    PlayerSetup bot = new PlayerSetup();
+                    RawPlayerSetup bot = new RawPlayerSetup();
                     bot.id = botId;
                     bot.name = "Bot";
                     bot.library = botLibrary;
 
                     applyPlayerEasterEggs(human, bot);
 
-                    GameSetup setup = new GameSetup();
-                    setup.players = shuffle(new PlayerSetup[]{human, bot});
+                    RawGameSetup setup = new RawGameSetup();
+                    setup.teamCount = 2;
+                    setup.players = shuffle(new RawPlayerSetup[]{human, bot});
+                    for (int teamIndex = 0; teamIndex < setup.players.length; teamIndex++) {
+                        setup.players[teamIndex].teamIndex = teamIndex;
+                    }
+                    setup.theCoinAlias = "the_coin";
                     UUID gameId = UUID.randomUUID();
                     GameReplayService game = new GameReplayService(setup, assetLoader);
                     MoveReplay moveReplay = game.apply(new Start());
-                    games.put(gameId, game);
 
                     players.add(new GamePlayerMapping(gameId, human.id, Arrays.asList(setup.players).indexOf(human), connection.getID()));
 
@@ -219,6 +223,7 @@ public class GameService {
                     }
                     bots.add(new GameBotMapping(gameId, Arrays.asList(setup.players).indexOf(bot), moveBotGame, botInstance));
 
+                    games.put(gameId, game);
                     connection.sendTCP(setup);
                     connection.sendTCP(moveReplay);
 
@@ -238,14 +243,14 @@ public class GameService {
             Connection connection1 = Objects.requireNonNull(getConnection(entry1.getKey()));
 
             GameRequest request0 = entry0.getValue();
-            PlayerSetup player0 = new PlayerSetup();
+            RawPlayerSetup player0 = new RawPlayerSetup();
             JwtAuthentication jwt0 = jwtParser.verify(request0.jwt);
             player0.id = jwt0.user.id;
             player0.name = jwt0.user.login;
             player0.library = request0.library;
 
             GameRequest request1 = entry1.getValue();
-            PlayerSetup player1 = new PlayerSetup();
+            RawPlayerSetup player1 = new RawPlayerSetup();
             JwtAuthentication jwt1 = jwtParser.verify(request1.jwt);
             player1.id = jwt1.user.id;
             player1.name = jwt1.user.login;
@@ -254,8 +259,13 @@ public class GameService {
             applyPlayerEasterEggs(player0, player1);
             applyPlayerEasterEggs(player1, player0);
 
-            GameSetup setup = new GameSetup();
-            setup.players = shuffle(new PlayerSetup[]{player0, player1});
+            RawGameSetup setup = new RawGameSetup();
+            setup.teamCount = 2;
+            setup.players = shuffle(new RawPlayerSetup[]{player0, player1});
+            for (int teamIndex = 0; teamIndex < setup.players.length; teamIndex++) {
+                setup.players[teamIndex].teamIndex = teamIndex;
+            }
+            setup.theCoinAlias = "the_coin";
             GameReplayService game = new GameReplayService(setup, assetLoader);
             MoveReplay moveReplay = game.apply(new Start());
             UUID gameId = UUID.randomUUID();
@@ -274,7 +284,7 @@ public class GameService {
         }
     }
 
-    private void applyPlayerEasterEggs(PlayerSetup player, PlayerSetup opponent) {
+    private void applyPlayerEasterEggs(RawPlayerSetup player, RawPlayerSetup opponent) {
         if (player.name.equalsIgnoreCase("yalee")) {
             replaceCard(player.library, "raigeki", "fabi_raigeki");
         }
