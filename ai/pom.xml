@@ -17,6 +17,7 @@
                 <version>2.22.2</version>
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
+                    <enableAssertions>true</enableAssertions>
                 </configuration>
             </plugin>
         </plugins>

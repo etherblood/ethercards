@@ -22,6 +22,7 @@ import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.google.gson.Gson;
 import java.util.Collections;
+import java.util.Random;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -65,7 +66,7 @@ public abstract class AbstractGameTest {
     @BeforeEach
     public void before() {
         data = new SimpleEntityData(settings.components);
-        moves = new MoveService(settings, data, HistoryRandom.producer(), new NoopGameEventListener());
+        moves = new MoveService(settings, data, HistoryRandom.producer(new Random(7)::nextInt), new NoopGameEventListener());
         game = new Game(settings, data, moves);
         effectiveStats = new EffectiveStatsService(data, templates);
 
