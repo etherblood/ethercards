@@ -84,10 +84,11 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
                 data.remove(player, core.ACTIVE_PLAYER_PHASE);
             }
         }
+        int team = data.get(self, core.TEAM);
         IntList allHandCards = data.list(core.IN_HAND_ZONE);
         IntList opponentHandCards = new IntList();
         for (int card : allHandCards) {
-            if (!data.hasValue(card, core.OWNER, self)) {
+            if (!data.hasValue(card, core.TEAM, team)) {
                 opponentHandCards.add(card);
             }
         }

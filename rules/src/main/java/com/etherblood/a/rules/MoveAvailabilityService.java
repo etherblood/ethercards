@@ -76,10 +76,10 @@ public class MoveAvailabilityService {
     }
 
     private boolean isAttackTargetValid(int attacker, int target, boolean throwOnFail) {
-        int attackerOwner = data.get(attacker, core.OWNER);
-        if (data.hasValue(target, core.OWNER, attackerOwner)) {
+        int attackerTeam = data.get(attacker, core.TEAM);
+        if (data.hasValue(target, core.TEAM, attackerTeam)) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " has same owner as attacker.");
+                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " has same team as attacker.");
             }
             return false;
         }
@@ -169,10 +169,10 @@ public class MoveAvailabilityService {
     }
 
     public boolean isBlockTargetValid(int blocker, int target, boolean throwOnFail) {
-        int blockerOwner = data.get(blocker, core.OWNER);
-        if (data.hasValue(target, core.OWNER, blockerOwner)) {
+        int blockerTeam = data.get(blocker, core.TEAM);
+        if (data.hasValue(target, core.TEAM, blockerTeam)) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare block, target #" + target + " has same owner as blocker.");
+                throw new IllegalArgumentException("Failed to declare block, target #" + target + " has same team as blocker.");
             }
             return false;
         }

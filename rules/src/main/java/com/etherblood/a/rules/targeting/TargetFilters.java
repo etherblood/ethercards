@@ -6,6 +6,9 @@ public enum TargetFilters {
     OWN_HERO,
     OPPONENT_MINION,
     OPPONENT_HERO,
+    ALLY_MINION,
+    ALLY_HERO,
     OWNER,
-    OPPONENT
+    OPPONENT,
+    ALLY
 }
