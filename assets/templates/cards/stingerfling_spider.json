@@ -28,11 +28,11 @@
             "components": {
               "DEATH_REQUEST": true
             }
+          },
+          {
+            "type": "particle",
+            "alias": "stingerfling_spider"
           }]
-        },
-        {
-          "type": "particle",
-          "alias": "stingerfling_spider"
         },
         {
           "type": "selfSummon"

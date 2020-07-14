@@ -32,6 +32,10 @@
           "components": {
             "DAMAGE_REQUEST": 2
           }
+        },
+        {
+          "type": "particle",
+          "alias": "boombot"
         }
       ]
     }

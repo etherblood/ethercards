@@ -187,6 +187,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Red);
                     break;
                 }
+                case "boombot":
                 case "stingerfling_spider":
                 case "flesh_to_dust": {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Black);
