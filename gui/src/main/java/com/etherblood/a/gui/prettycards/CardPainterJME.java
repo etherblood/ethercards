@@ -1,6 +1,7 @@
 package com.etherblood.a.gui.prettycards;
 
 import com.destrostudios.cardgui.samples.visualization.PaintableImage;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -12,6 +13,12 @@ public class CardPainterJME {
 
     public CardPainterJME(CardPainterAWT cardPainterAWT) {
         this.cardPainterAWT = cardPainterAWT;
+    }
+
+    public PaintableImage createPaintable(Color color) {
+        PaintableImage image = createPaintable();
+        image.setBackground(color);
+        return image;
     }
 
     public PaintableImage createPaintable() {

@@ -3,6 +3,7 @@ package com.etherblood.a.gui.prettycards;
 import com.destrostudios.cardgui.Card;
 import com.destrostudios.cardgui.samples.visualization.PaintableImage;
 import com.jme3.asset.AssetManager;
+import java.awt.Color;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,6 +27,13 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
             visualization.setCardFront(image);
             image.flipY();
         } else {
+            if (!card.getModel().isFaceUp()) {
+                //don't bother rendering the card when it is face down
+                PaintableImage image = FULL_CARD_CACHE.computeIfAbsent("facedown_card", x -> cardPainter.createPaintable(Color.BLACK));
+                visualization.setCardFront(image);
+                return;
+            }
+
             PaintableImage back = cardPainter.createPaintable();
             PaintableImage art = cardPainter.createPaintable();
             PaintableImage front = cardPainter.createPaintable();
