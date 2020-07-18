@@ -81,7 +81,7 @@ public abstract class AbstractGameTest {
         }
 
         RawGameSetup gameSetup = new RawGameSetup();
-        gameSetup.players = players.toArray(RawPlayerSetup[]::new);
+        gameSetup.players = players.toArray(new RawPlayerSetup[players.size()]);
         gameSetup.teamCount = teamSizes.length;
         gameSetup.theCoinAlias = null;
         gameSetup.startingPlayersHandCardCount = 0;
