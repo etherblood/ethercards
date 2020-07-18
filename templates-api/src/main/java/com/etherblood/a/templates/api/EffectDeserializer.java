@@ -3,6 +3,7 @@ package com.etherblood.a.templates.api;
 import com.etherblood.a.templates.api.filedtypes.CardId;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.templates.api.filedtypes.ComponentId;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -40,6 +41,15 @@ public class EffectDeserializer implements JsonDeserializer<Effect> {
                     jsonObject.addProperty(field.getName(), cardAliases.applyAsInt(fieldJsonValue.getAsString()));
                 } else if (field.getAnnotation(ComponentId.class) != null) {
                     jsonObject.addProperty(field.getName(), componentAliases.applyAsInt(fieldJsonValue.getAsString()));
+                }
+            } else if (field.getType() == int[].class) {
+                if (field.getAnnotation(CardId.class) != null) {
+                    JsonArray rawArray = fieldJsonValue.getAsJsonArray();
+                    JsonArray intArray = new JsonArray();
+                    for (JsonElement item : rawArray) {
+                        intArray.add(cardAliases.applyAsInt(item.getAsString()));
+                    }
+                    jsonObject.add(field.getName(), intArray);
                 }
             }
         }

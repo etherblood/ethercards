@@ -1,0 +1,30 @@
+{
+  "alias": "blue_eyes_ultimate_dragon",
+  "display": {
+    "name": "Blue-Eyes Ultimate Dragon",
+    "imagePath": "blue_eyes_ultimate_dragon.jpg",
+    "colors": [
+      "BLUE"
+    ]
+  },
+  "casts": [
+    {
+      "manaCost": 24,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 30,
+    "HEALTH": 25,
+    "TRAMPLE": true,
+    "VIGILANCE": true,
+    "FLYING": true
+  },
+  "tribes": [
+    "DRAGON"
+  ]
+}

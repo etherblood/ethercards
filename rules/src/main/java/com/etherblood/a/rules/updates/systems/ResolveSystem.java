@@ -6,6 +6,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.DamageEvent;
 import com.etherblood.a.game.events.api.events.DeathEvent;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.DeathOptions;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
@@ -153,9 +154,11 @@ public class ResolveSystem {
 
     private void death() {
         for (int entity : data.list(core.DEATH_REQUEST)) {
-            int death = data.get(entity, core.DEATH_REQUEST);
-            if (data.has(entity, core.IN_BATTLE_ZONE) && !data.has(entity, core.INDESTRUCTIBLE)) {
-                data.set(entity, core.DEATH_ACTION, death);
+            int deathOptions = data.get(entity, core.DEATH_REQUEST);
+            if (data.has(entity, core.IN_BATTLE_ZONE)) {
+                if (deathOptions == DeathOptions.SACRIFICE || !data.has(entity, core.INDESTRUCTIBLE)) {
+                    data.set(entity, core.DEATH_ACTION, deathOptions);
+                }
             }
             data.remove(entity, core.DEATH_REQUEST);
         }

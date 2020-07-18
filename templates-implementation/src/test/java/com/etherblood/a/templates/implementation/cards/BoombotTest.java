@@ -1,5 +1,6 @@
 package com.etherblood.a.templates.implementation.cards;
 
+import com.etherblood.a.rules.DeathOptions;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.templates.implementation.AbstractGameTest;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +14,7 @@ public class BoombotTest extends AbstractGameTest {
         int boomBotDamage = 2;
         int previousHealth = data.get(hero(1), core.HEALTH);
 
-        data.set(boombot, core.DEATH_REQUEST, 1);
+        data.set(boombot, core.DEATH_REQUEST, DeathOptions.NORMAL);
         moves.apply(new Update());
 
         int actualHealth = data.get(hero(1), core.HEALTH);

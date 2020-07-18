@@ -3,6 +3,7 @@ package com.etherblood.a.rules.updates.systems;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.DeathOptions;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.MoveAvailabilityService;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
@@ -27,7 +28,7 @@ public class StateDrivenUpdatesService {
     public void killHealthless() {
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
             if (effectiveStats.health(minion) <= 0 && !data.has(minion, core.INDESTRUCTIBLE)) {
-                data.set(minion, core.DEATH_REQUEST, 1);
+                data.set(minion, core.DEATH_REQUEST, DeathOptions.NORMAL);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.etherblood.a.templates.implementation;
 
+import com.etherblood.a.rules.DeathOptions;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.moves.EndAttackPhase;
@@ -53,7 +54,7 @@ public class GameTest extends AbstractGameTest {
     
     @Test
     public void gameover_on_hero_death() {
-        data.set(hero(0), core.DEATH_REQUEST, 1);
+        data.set(hero(0), core.DEATH_REQUEST, DeathOptions.NORMAL);
         moves.apply(new Update());
         
         Assertions.assertFalse(data.has(player(0), core.ACTIVE_PLAYER_PHASE));

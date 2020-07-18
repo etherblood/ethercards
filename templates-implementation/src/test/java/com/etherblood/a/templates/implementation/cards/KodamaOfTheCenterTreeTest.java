@@ -1,5 +1,6 @@
 package com.etherblood.a.templates.implementation.cards;
 
+import com.etherblood.a.rules.DeathOptions;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.templates.implementation.AbstractGameTest;
@@ -31,7 +32,7 @@ public class KodamaOfTheCenterTreeTest extends AbstractGameTest {
         int deadKodama = createCard(player(0), "kodama_of_the_center_tree", core.IN_GRAVEYARD_ZONE);
         int kodama = createMinion(player(0), "kodama_of_the_center_tree");
         
-        data.set(kodama, core.DEATH_REQUEST, 1);
+        data.set(kodama, core.DEATH_REQUEST, DeathOptions.NORMAL);
         moves.apply(new Update());
         
         Assertions.assertTrue(data.has(spider, core.IN_HAND_ZONE));

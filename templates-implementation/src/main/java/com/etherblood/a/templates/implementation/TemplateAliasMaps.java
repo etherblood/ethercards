@@ -10,6 +10,7 @@ import com.etherblood.a.templates.implementation.effects.CreateCardEffect;
 import com.etherblood.a.templates.implementation.effects.DebuffEffect;
 import com.etherblood.a.templates.implementation.effects.DrawCardTemplateEffect;
 import com.etherblood.a.templates.implementation.effects.FractionalDamageEffect;
+import com.etherblood.a.templates.implementation.effects.FusionEffect;
 import com.etherblood.a.templates.implementation.effects.HandCardCountActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.KolaghanDamageEffect;
 import com.etherblood.a.templates.implementation.effects.LathlissTokenEffect;
@@ -62,6 +63,7 @@ public class TemplateAliasMaps {
         effectClasses.put("targetComponentActivated", TargetComponentActivatedEffects.class);
         effectClasses.put("handCardCountActivated", HandCardCountActivatedEffects.class);
         effectClasses.put("multiTrigger", MultiTriggerEffects.class);
+        effectClasses.put("fusion", FusionEffect.class);
         return effectClasses;
     }
 
