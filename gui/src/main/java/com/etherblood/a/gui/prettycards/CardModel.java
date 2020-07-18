@@ -19,7 +19,7 @@ import java.util.Objects;
 public class CardModel extends BoardObjectModel {
 
     private final int entityId;
-    private final DisplayCardTemplate template;
+    private DisplayCardTemplate template;
     private Integer attack, health;
     private boolean damaged, foil;
     private ColorRGBA glow;
@@ -28,14 +28,14 @@ public class CardModel extends BoardObjectModel {
     @IsBoardObjectInspected
     private boolean isInspected;
 
-    public CardModel(int entityId, DisplayCardTemplate template) {
+    public CardModel(int entityId) {
         this.entityId = entityId;
-        this.template = Objects.requireNonNull(template);
     }
 
     //TODO: CardModel should not know anything about data/templates
     public void updateFrom(EntityData data, GameTemplates templates) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        template = (DisplayCardTemplate) templates.getCard(data.get(entityId, core.CARD_TEMPLATE));
         if (data.has(entityId, core.IN_BATTLE_ZONE)) {
             setZone(BoardZone.BATTLE);
         } else if (data.has(entityId, core.IN_HAND_ZONE)) {

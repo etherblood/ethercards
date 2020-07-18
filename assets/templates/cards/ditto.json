@@ -1,0 +1,32 @@
+{
+  "alias": "ditto",
+  "display": {
+    "name": "Ditto",
+    "imagePath": "ditto.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Transform into a copy of a minion."
+  },
+  "manaCost": 5,
+  "casts": [
+    {
+      "targets": [
+        "OWN_MINION",
+        "OPPONENT_MINION"
+      ],
+      "effects": [
+        {
+          "type": "ditto"
+        }, {
+          "type": "selfSummon",
+          "skipComponents": true
+        }
+      ]
+    }
+  ],
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 1
+  }
+}

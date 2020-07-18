@@ -134,9 +134,6 @@ public class SystemsUtil {
         int minion = createMinion(data, templates, minionTemplate, owner);
         data.set(minion, core.SUMMONING_SICKNESS, 1);
         for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (minion == other) {
-                continue;
-            }
             int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
             CardTemplate otherTemplate = templates.getCard(otherTemplateId);
             for (Effect effect : otherTemplate.getOnSummonEffects()) {
@@ -148,7 +145,7 @@ public class SystemsUtil {
 
     public static int createMinion(EntityData data, GameTemplates templates, int templateId, int owner) {
         int minion = createCard(data, templateId, owner);
-        new ZoneService(data, templates).addToBattle(minion);
+        new ZoneService(data, templates).addToBattle(minion, true);
         return minion;
     }
 

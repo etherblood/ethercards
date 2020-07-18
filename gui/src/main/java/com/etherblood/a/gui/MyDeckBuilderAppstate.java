@@ -92,7 +92,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
-            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card.getId(), owner), card);
+            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card.getId(), owner));
             cardModel.updateFrom(data, gameTemplates);
             allCardModels.add(cardModel);
         }

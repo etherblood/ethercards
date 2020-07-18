@@ -11,16 +11,19 @@ import java.util.function.IntUnaryOperator;
 
 public class SelfSummonEffect implements Effect {
 
+    private final boolean skipComponents;
+
+    public SelfSummonEffect(boolean skipComponents) {
+        this.skipComponents = skipComponents;
+    }
+
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         data.remove(source, core.IN_HAND_ZONE);
-        new ZoneService(data, templates).addToBattle(source);
+        new ZoneService(data, templates).addToBattle(source, !skipComponents);
         data.set(source, core.SUMMONING_SICKNESS, 1);
         for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (source == other) {
-                continue;
-            }
             int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
             CardTemplate otherTemplate = templates.getCard(otherTemplateId);
             for (Effect effect : otherTemplate.getOnSummonEffects()) {

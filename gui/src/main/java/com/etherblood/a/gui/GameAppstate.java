@@ -61,7 +61,6 @@ import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.templates.api.DisplayCardTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jme3.app.Application;
@@ -572,7 +571,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         if (card == null) {
             EntityData data = game.getData();
             CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-            Card<CardModel> inner = new Card<>(new CardModel(myCard, (DisplayCardTemplate) game.getTemplates().getCard(data.get(myCard, core.CARD_TEMPLATE))));
+            Card<CardModel> inner = new Card<>(new CardModel(myCard));
             card = inner;
             visualCards.put(myCard, card);
             objectEntities.put(card, myCard);

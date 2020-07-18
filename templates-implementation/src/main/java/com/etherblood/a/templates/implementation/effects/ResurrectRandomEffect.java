@@ -40,12 +40,9 @@ public class ResurrectRandomEffect implements Effect {
 
         ZoneService zoneService = new ZoneService(data, templates);
         zoneService.removeFromGraveyard(resurrectMinion);
-        zoneService.addToBattle(resurrectMinion);
+        zoneService.addToBattle(resurrectMinion, true);
         data.set(resurrectMinion, core.SUMMONING_SICKNESS, 1);
         for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (resurrectMinion == other) {
-                continue;
-            }
             int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
             CardTemplate otherTemplate = templates.getCard(otherTemplateId);
             for (Effect effect : otherTemplate.getOnSummonEffects()) {

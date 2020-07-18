@@ -29,11 +29,13 @@ public class ZoneService {
         data.remove(entity, core.IN_GRAVEYARD_ZONE);
     }
 
-    public void addToBattle(int entity) {
+    public void addToBattle(int entity, boolean applyComponents) {
         assert !data.has(entity, core.IN_BATTLE_ZONE);
-        CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
-        for (int component : template.components()) {
-            data.set(entity, component, template.get(component));
+        if (applyComponents) {
+            CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
+            for (int component : template.components()) {
+                data.set(entity, component, template.get(component));
+            }
         }
         data.set(entity, core.IN_BATTLE_ZONE, data.createEntity());
     }
