@@ -2,7 +2,6 @@ package com.etherblood.a.rules.updates;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.BattleEvent;
 import com.etherblood.a.rules.CoreComponents;
@@ -14,31 +13,34 @@ import java.util.function.IntUnaryOperator;
 
 public class SystemsUtil {
 
-    public static Integer nextPlayer(EntityData data, int player) {
+    public static Integer nextTeam(EntityData data, int team) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int playerIndex = data.get(player, core.PLAYER_INDEX);
+        int teamIndex = data.get(team, core.TEAM_INDEX);
         int bestScore = Integer.MAX_VALUE;
-        Integer bestPlayer = null;
-        IntList players = data.list(core.PLAYER_INDEX);
-        for (int current : players) {
-            if (current == player) {
+        Integer bestTeam = null;
+        IntList teams = data.list(core.TEAM_INDEX);
+        for (int current : teams) {
+            if (current == team) {
                 continue;
             }
-            if (data.has(current, core.PLAYER_RESULT)) {
+            if (data.has(current, core.TEAM_RESULT)) {
                 continue;
             }
-            int currentIndex = data.get(current, core.PLAYER_INDEX);
-            int currentScore = Math.floorMod(currentIndex - playerIndex, players.size());
+            int currentIndex = data.get(current, core.TEAM_INDEX);
+            int currentScore = Math.floorMod(currentIndex - teamIndex, teams.size());
             if (currentScore < bestScore) {
                 bestScore = currentScore;
-                bestPlayer = current;
+                bestTeam = current;
             }
         }
-        return bestPlayer;
+        return bestTeam;
     }
 
     public static int increase(EntityData data, int entity, int component, int value) {
         int total = data.getOptional(entity, component).orElse(0);
+        if (value == 0) {
+            return total;
+        }
         total += value;
         data.set(entity, component, total);
         return total;
@@ -68,11 +70,11 @@ public class SystemsUtil {
 
         if (data.has(attacker, core.LIFELINK)) {
             int attackerOwner = data.get(attacker, core.OWNER);
-            increase(data, randomHero(data, random, attackerOwner), core.HEALTH, attackerDamage);
+            increase(data, heroOf(data, attackerOwner), core.HEALTH, attackerDamage);
         }
         if (data.has(blocker, core.LIFELINK)) {
             int blockerOwner = data.get(blocker, core.OWNER);
-            increase(data, randomHero(data, random, blockerOwner), core.HEALTH, blockerDamage);
+            increase(data, heroOf(data, blockerOwner), core.HEALTH, blockerDamage);
         }
 
         int attackerVenom = stats.venom(attacker);
@@ -150,19 +152,20 @@ public class SystemsUtil {
         return minion;
     }
 
-    public static int randomHero(EntityData data, IntUnaryOperator random, int player) {
+    public static int heroOf(EntityData data, int player) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        IntList ownHeroes = new IntList();
+        assert data.has(player, core.PLAYER_INDEX);
         for (int hero : data.list(core.HERO)) {
             if (data.hasValue(hero, core.OWNER, player)) {
-                ownHeroes.add(hero);
+                return hero;
             }
         }
-        return ownHeroes.getRandomItem(random);
+        throw new AssertionError();
     }
 
     public static void drawCards(EntityData data, int amount, IntUnaryOperator random, int player) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        assert data.has(player, core.PLAYER_INDEX);
         IntList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
         IntList myLibraryCards = new IntList();
         for (int card : allLibraryCards) {
@@ -192,54 +195,8 @@ public class SystemsUtil {
         for (int i = 0; i < amount; i++) {
             fatigueDamage += ++fatigue;
         }
-        applyFatigue(data, player, fatigueDamage);
+        SystemsUtil.damage(data, heroOf(data, player), fatigueDamage);
         data.set(player, core.FATIGUE, fatigue);
-    }
-
-    private static void applyFatigue(EntityData data, int player, int fatigue) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        IntList ownHeroes = new IntList();
-        for (int hero : data.list(core.HERO)) {
-            if (data.hasValue(hero, core.OWNER, player) && data.has(hero, core.IN_BATTLE_ZONE)) {
-                ownHeroes.add(hero);
-            }
-        }
-        if (ownHeroes.isEmpty()) {
-            return;
-        }
-        if (ownHeroes.size() == 1) {
-            SystemsUtil.damage(data, ownHeroes.get(0), fatigue);
-            return;
-        }
-        IntMap effectiveHealth = new IntMap();
-        for (int hero : ownHeroes) {
-            int health = data.getOptional(hero, core.HEALTH).orElse(0);
-            int damage = data.getOptional(hero, core.DAMAGE_REQUEST).orElse(0);
-            effectiveHealth.set(hero, health - damage);
-        }
-        IntMap fatigueDamage = new IntMap();
-        for (int i = 0; i < fatigue; i++) {
-            int bestEntity = ownHeroes.get(0);
-            int bestValue = effectiveHealth.get(bestEntity);
-            for (int j = 1; j < ownHeroes.size(); j++) {
-                int entity = ownHeroes.get(j);
-                int value = effectiveHealth.get(entity);
-                if (value > bestValue) {
-                    bestEntity = entity;
-                    bestValue = value;
-                }
-            }
-
-            int prev = fatigueDamage.getOrElse(bestEntity, 0);
-            fatigueDamage.set(bestEntity, prev + 1);
-
-            effectiveHealth.set(bestEntity, bestValue - 1);
-        }
-
-        for (int minion : fatigueDamage) {
-            int fatigueDmg = fatigueDamage.get(minion);
-            SystemsUtil.damage(data, minion, fatigueDmg);
-        }
     }
 
 }

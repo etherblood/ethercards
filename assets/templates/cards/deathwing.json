@@ -46,7 +46,7 @@
             {
               "type": "buff",
               "components": {
-                "DISCARD_CARDS_REQUEST": 1000000
+                "DISCARD_CARDS": 1000000
               }
             }
           ]

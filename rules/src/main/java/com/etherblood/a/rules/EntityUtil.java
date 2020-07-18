@@ -5,7 +5,6 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,7 @@ public class EntityUtil {
     }
 
     public static Map<String, Integer> extractEntityComponents(EntityData data, int entity) {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new LinkedHashMap<>();
         for (ComponentMeta component : data.getComponents().getMetas()) {
             data.getOptional(entity, component.id).ifPresent(value -> map.put(component.name, value));
         }

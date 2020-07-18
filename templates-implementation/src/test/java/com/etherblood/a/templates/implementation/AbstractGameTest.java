@@ -13,6 +13,7 @@ import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.moves.Update;
+import com.etherblood.a.rules.setup.GameSetup;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
@@ -21,7 +22,9 @@ import com.etherblood.a.templates.api.TemplatesParser;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +37,7 @@ public abstract class AbstractGameTest {
     public final GameSettings settings;
     public final CoreComponents core;
     public final GameTemplates templates;
+    private final GameSetup setup;
 
     public EntityData data;
     public MoveService moves;
@@ -41,6 +45,10 @@ public abstract class AbstractGameTest {
     public EffectiveStatsService effectiveStats;
 
     public AbstractGameTest() {
+        this(1, 1);
+    }
+
+    public AbstractGameTest(int... teamSizes) {
         TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
         GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
@@ -59,8 +67,26 @@ public abstract class AbstractGameTest {
         rawLibrary.cards = Collections.emptyMap();
         settingsBuilder.templates = templates;
         settings = settingsBuilder.build();
-
         core = settings.components.getModule(CoreComponents.class);
+
+        List<RawPlayerSetup> players = new ArrayList<>();
+        for (int teamIndex = 0; teamIndex < teamSizes.length; teamIndex++) {
+            int teamSize = teamSizes[teamIndex];
+            for (int playerTeamIndex = 0; playerTeamIndex < teamSize; playerTeamIndex++) {
+                RawPlayerSetup player = new RawPlayerSetup();
+                player.library = rawLibrary;
+                player.teamIndex = teamIndex;
+                players.add(player);
+            }
+        }
+
+        RawGameSetup gameSetup = new RawGameSetup();
+        gameSetup.players = players.toArray(RawPlayerSetup[]::new);
+        gameSetup.teamCount = teamSizes.length;
+        gameSetup.theCoinAlias = null;
+        gameSetup.startingPlayersHandCardCount = 0;
+        gameSetup.otherPlayersHandCardCount = 0;
+        setup = gameSetup.toGameSetup(loader::registerCardAlias);
     }
 
     @BeforeEach
@@ -74,28 +100,18 @@ public abstract class AbstractGameTest {
     }
 
     private void startGame() {
-        RawPlayerSetup playerSetup0 = new RawPlayerSetup();
-        playerSetup0.library = rawLibrary;
-        playerSetup0.teamIndex = 0;
-        RawPlayerSetup playerSetup1 = new RawPlayerSetup();
-        playerSetup1.library = rawLibrary;
-        playerSetup1.teamIndex = 1;
-
-        RawGameSetup gameSetup = new RawGameSetup();
-        gameSetup.players = new RawPlayerSetup[]{playerSetup0, playerSetup1};
-        gameSetup.teamCount = 2;
-        gameSetup.theCoinAlias = null;
-        gameSetup.startingPlayersHandCardCount = 0;
-        gameSetup.otherPlayersHandCardCount = 0;
-
-        gameSetup.toGameSetup(loader::registerCardAlias).setup(data, templates);
-        data.set(player(0), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
-
-        data.remove(hero(0), core.DRAWS_PER_TURN);
-        data.remove(hero(0), core.MANA_POOL_AURA_GROWTH);
-        data.remove(hero(1), core.DRAWS_PER_TURN);
-        data.remove(hero(1), core.MANA_POOL_AURA_GROWTH);
-        
+        setup.setup(data, templates);
+        for (int hero : data.list(core.HERO)) {
+            data.remove(hero, core.DRAWS_PER_TURN);
+            data.remove(hero, core.MANA_POOL_AURA_GROWTH);
+        }
+        int team0 = team(0);
+        for (int player : data.list(core.PLAYER_INDEX)) {
+            if (data.hasValue(player, core.TEAM, team0)) {
+                data.set(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
+            }
+        }
+        data.set(team0, core.ACTIVE_TEAM_PHASE, PlayerPhase.ATTACK);
         moves.apply(new Update());
     }
 
@@ -104,6 +120,18 @@ public abstract class AbstractGameTest {
         data = null;
         moves = null;
         game = null;
+    }
+
+    public int teamCount() {
+        return setup.teamCount;
+    }
+
+    public int playerCount() {
+        return setup.players.length;
+    }
+
+    public int team(int index) {
+        return data.list(core.TEAM_INDEX).stream().filter(x -> data.hasValue(x, core.TEAM_INDEX, index)).findAny().getAsInt();
     }
 
     public int player(int index) {

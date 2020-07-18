@@ -8,10 +8,9 @@ import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.updates.ActionSystem;
 import java.util.function.IntUnaryOperator;
 
-public class CastSystem implements ActionSystem {
+public class CastSystem {
 
     private final EntityData data;
     private final GameTemplates templates;
@@ -27,16 +26,6 @@ public class CastSystem implements ActionSystem {
         this.core = data.getComponents().getModule(CoreComponents.class);
     }
 
-    @Override
-    public boolean isActive() {
-        return data.list(core.CAST_TARGET).nonEmpty();
-    }
-
-    @Override
-    public void before() {
-    }
-
-    @Override
     public void run() {
         for (int castSource : data.list(core.CAST_TARGET)) {
             int target = data.get(castSource, core.CAST_TARGET);
@@ -48,10 +37,7 @@ public class CastSystem implements ActionSystem {
                 }
             }
         }
-    }
 
-    @Override
-    public void after() {
         for (int castSource : data.list(core.CAST_TARGET)) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);

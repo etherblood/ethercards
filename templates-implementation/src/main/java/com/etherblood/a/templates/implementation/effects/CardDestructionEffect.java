@@ -15,7 +15,7 @@ public class CardDestructionEffect implements Effect {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         for (int card : data.list(core.IN_HAND_ZONE)) {
             int owner = data.get(card, core.OWNER);
-            SystemsUtil.increase(data, owner, core.DISCARD_CARDS_REQUEST, 1);
+            SystemsUtil.increase(data, owner, core.DISCARD_CARDS, 1);
             SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, 1);
         }
     }

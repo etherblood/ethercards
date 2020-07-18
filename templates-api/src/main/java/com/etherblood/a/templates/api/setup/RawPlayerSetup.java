@@ -2,7 +2,6 @@ package com.etherblood.a.templates.api.setup;
 
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.setup.PlayerSetup;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 

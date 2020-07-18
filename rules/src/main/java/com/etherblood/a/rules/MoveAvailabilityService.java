@@ -22,6 +22,12 @@ public class MoveAvailabilityService {
     }
 
     public boolean canStart(boolean throwOnFail) {
+        if (!data.list(core.ACTIVE_TEAM_PHASE).isEmpty()) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to start game, there are already active teams.");
+            }
+            return false;
+        }
         if (!data.list(core.ACTIVE_PLAYER_PHASE).isEmpty()) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to start game, there are already active players.");
@@ -111,7 +117,7 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(attacker, core.ATTACKS_TARGET)) {
+        if (data.has(attacker, core.ATTACK_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is already attacking.");
             }
@@ -159,7 +165,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canDeclareBlock(int player, int blocker, int attacker, boolean throwOnFail) {
-        if (!data.has(attacker, core.ATTACKS_TARGET)) {
+        if (!data.has(attacker, core.ATTACK_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, attacker #" + attacker + " is not attacking.");
             }
@@ -210,7 +216,7 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(blocker, core.BLOCKS_ATTACKER)) {
+        if (data.has(blocker, core.BLOCK_TARGET)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is already blocking.");
             }
@@ -239,8 +245,8 @@ public class MoveAvailabilityService {
             return false;
         }
         boolean allAttackersUnblockable = true;
-        for (int attacker : data.list(core.ATTACKS_TARGET)) {
-            int target = data.get(attacker, core.ATTACKS_TARGET);
+        for (int attacker : data.list(core.ATTACK_TARGET)) {
+            int target = data.get(attacker, core.ATTACK_TARGET);
             if (target == blocker) {
                 if (throwOnFail) {
                     throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " is being attacked.");

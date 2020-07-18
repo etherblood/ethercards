@@ -28,7 +28,7 @@ public class KolaghanDamageEffect implements Effect {
         int targetTemplate = data.get(target, core.CARD_TEMPLATE);
         for (int dead : data.list(core.IN_GRAVEYARD_ZONE)) {
             if (data.hasValue(dead, core.CARD_TEMPLATE, targetTemplate) && data.hasValue(dead, core.OWNER, targetOwner)) {
-                data.set(SystemsUtil.randomHero(data, random, targetOwner), core.DAMAGE_REQUEST, damage);
+                data.set(SystemsUtil.heroOf(data, targetOwner), core.DAMAGE_REQUEST, damage);
                 break;
             }
         }

@@ -18,7 +18,7 @@ import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.targeting.TargetUtil;
-import com.etherblood.a.rules.updates.SystemFactory;
+import com.etherblood.a.rules.updates.systems.GameLoopService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -208,8 +208,11 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canStart(true);
         }
+        for (int player : data.list(core.TEAM_INDEX)) {
+            data.set(player, core.ACTIVE_TEAM_PHASE, PlayerPhase.MULLIGAN);
+        }
         for (int player : data.list(core.PLAYER_INDEX)) {
-            data.set(player, core.START_PHASE_REQUEST, PlayerPhase.MULLIGAN);
+            data.set(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.MULLIGAN);
         }
         update();
     }
@@ -218,7 +221,7 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canEndAttackPhase(player, true);
         }
-        data.set(player, core.END_PHASE_REQUEST, PlayerPhase.ATTACK);
+        data.remove(player, core.ACTIVE_PLAYER_PHASE);
         update();
     }
 
@@ -226,7 +229,7 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canEndBlockPhase(player, true);
         }
-        data.set(player, core.END_PHASE_REQUEST, PlayerPhase.BLOCK);
+        data.remove(player, core.ACTIVE_PLAYER_PHASE);
         update();
     }
 
@@ -234,7 +237,7 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canEndMulliganPhase(player, true);
         }
-        data.set(player, core.END_PHASE_REQUEST, PlayerPhase.MULLIGAN);
+        data.remove(player, core.ACTIVE_PLAYER_PHASE);
         update();
     }
 
@@ -242,7 +245,7 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canDeclareAttack(player, attacker, target, true);
         }
-        data.set(attacker, core.ATTACKS_TARGET, target);
+        data.set(attacker, core.ATTACK_TARGET, target);
         update();
     }
 
@@ -250,7 +253,7 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canDeclareBlock(player, blocker, attacker, true);
         }
-        data.set(blocker, core.BLOCKS_ATTACKER, attacker);
+        data.set(blocker, core.BLOCK_TARGET, attacker);
         update();
     }
 
@@ -322,11 +325,30 @@ public class MoveService {
     }
 
     private void update() {
-        new SystemFactory(data, settings.templates, random, eventListener).build().run();
+        new GameLoopService(data, settings.templates, random, eventListener).run();
+//        new SystemFactory(data, settings.templates, random, eventListener).build().run();
         assert validateStateLegal();
     }
 
     private boolean validateStateLegal() {
+        for (int player : data.list(core.TEAM)) {
+            int team = data.get(player, core.TEAM);
+            if (!data.has(team, core.TEAM_INDEX)) {
+                throw new IllegalStateException("Player has team without index.");
+            }
+        }
+
+        for (int card : data.list(core.OWNER)) {
+            int player = data.get(card, core.OWNER);
+            if (!data.has(player, core.PLAYER_INDEX)) {
+                throw new IllegalStateException("Card has owner without index.");
+            }
+            int team = data.get(player, core.TEAM);
+            if(!data.hasValue(card, core.TEAM, team)) {
+                throw new IllegalStateException("Card has different team than its owner.");
+            }
+        }
+
         IntList playerResults = data.list(core.PLAYER_RESULT);
         IntList winners = new IntList();
         IntList losers = new IntList();
@@ -355,7 +377,10 @@ public class MoveService {
             }
         }
 
-        if (data.list(core.ACTIVE_PLAYER_PHASE).isEmpty() && data.list(core.START_PHASE_REQUEST).isEmpty()) {
+        if (data.list(core.ACTIVE_TEAM_PHASE).isEmpty()) {
+            if (data.list(core.ACTIVE_PLAYER_PHASE).nonEmpty()) {
+                throw new IllegalStateException("Some players are still active when there is no activeTeamPhase.");
+            }
             if (winners.size() + losers.size() != players.size()) {
                 throw new IllegalStateException("Some players are still without playerResult and there is no activePlayerPhase.");
             }
@@ -388,16 +413,16 @@ public class MoveService {
             }
         }
 
-        for (int minion : data.list(core.ATTACKS_TARGET)) {
+        for (int minion : data.list(core.ATTACK_TARGET)) {
             if (!data.has(minion, core.IN_BATTLE_ZONE)) {
                 throw new IllegalStateException("Attacking minion is not in battle zone.");
             }
         }
-        
+
         for (int entity : data.list(core.OWNER)) {
             int owner = data.get(entity, core.OWNER);
             int team = data.get(entity, core.TEAM);
-            if(!data.hasValue(owner, core.TEAM, team)) {
+            if (!data.hasValue(owner, core.TEAM, team)) {
                 throw new IllegalStateException("Entities owner has a different team than entity.");
             }
         }

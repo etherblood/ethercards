@@ -1,10 +1,11 @@
-package com.etherblood.a.rules.updates;
+package com.etherblood.a.rules.updates.systems;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.MoveAvailabilityService;
+import com.etherblood.a.rules.updates.EffectiveStatsService;
 import java.util.function.IntUnaryOperator;
 
 public class StateDrivenUpdatesService {
@@ -46,20 +47,20 @@ public class StateDrivenUpdatesService {
 
     public void removeInvalidAttacks() {
         MoveAvailabilityService moves = new MoveAvailabilityService(data, templates);
-        for (int attacker : data.list(core.ATTACKS_TARGET)) {
-            int target = data.get(attacker, core.ATTACKS_TARGET);
+        for (int attacker : data.list(core.ATTACK_TARGET)) {
+            int target = data.get(attacker, core.ATTACK_TARGET);
             if (!moves.isAttackValid(attacker, target)) {
-                data.remove(attacker, core.ATTACKS_TARGET);
+                data.remove(attacker, core.ATTACK_TARGET);
             }
         }
     }
 
     public void removeInvalidBlocks() {
         MoveAvailabilityService moves = new MoveAvailabilityService(data, templates);
-        for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
-            int target = data.get(blocker, core.BLOCKS_ATTACKER);
+        for (int blocker : data.list(core.BLOCK_TARGET)) {
+            int target = data.get(blocker, core.BLOCK_TARGET);
             if (!moves.isBlockValid(blocker, target)) {
-                data.remove(blocker, core.BLOCKS_ATTACKER);
+                data.remove(blocker, core.BLOCK_TARGET);
             }
         }
     }
@@ -85,6 +86,6 @@ public class StateDrivenUpdatesService {
         if (candidates.isEmpty()) {
             return;
         }
-        data.set(attacker, core.ATTACKS_TARGET, candidates.getRandomItem(random));
+        data.set(attacker, core.ATTACK_TARGET, candidates.getRandomItem(random));
     }
 }

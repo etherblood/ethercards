@@ -9,10 +9,11 @@ public class CoreComponents implements ComponentsModule {
     public final int TEAM;
     public final int PLAYER_INDEX;
     public final int TEAM_INDEX;
-    public final int END_PHASE_REQUEST;
-    public final int END_PHASE_ACTION;
-    public final int START_PHASE_REQUEST;
-    public final int START_PHASE_ACTION;
+    public final int ACTIVE_PLAYER_PHASE;
+    public final int ACTIVE_TEAM_PHASE;
+    public final int ATTACK_TARGET;
+    public final int BLOCK_TARGET;
+    public final int CAST_TARGET;
     public final int DAMAGE_REQUEST;
     public final int DAMAGE_ACTION;
     public final int DEATH_REQUEST;
@@ -21,12 +22,10 @@ public class CoreComponents implements ComponentsModule {
     public final int DAMAGE_SURVIVAL_ACTION;
     public final int DRAW_CARDS_REQUEST;
     public final int DRAW_CARDS_ACTION;
-    public final int DISCARD_CARDS_REQUEST;
-    public final int DISCARD_CARDS_ACTION;
+    public final int DISCARD_CARDS;
     public final int PLAYER_RESULT_REQUEST;
-    public final int PLAYER_RESULT_ACTION;
     public final int PLAYER_RESULT;
-    public final int ACTIVE_PLAYER_PHASE;
+    public final int TEAM_RESULT;
     public final int HEALTH;
     public final int ATTACK;
     public final int TEMPORARY_HEALTH;
@@ -38,15 +37,12 @@ public class CoreComponents implements ComponentsModule {
     public final int IN_HAND_ZONE;
     public final int IN_LIBRARY_ZONE;
     public final int IN_GRAVEYARD_ZONE;
-    public final int BLOCKS_ATTACKER;
     public final int CANNOT_ATTACK;
     public final int CANNOT_BLOCK;
     public final int CANNOT_BE_ATTACKED;
     public final int CANNOT_BE_BLOCKED;
     public final int CANNOT_BE_CAST_TARGETED;
     public final int CANNOT_BE_MULLIGANED;
-    public final int ATTACKS_TARGET;
-    public final int CAST_TARGET;
     public final int MANA;
     public final int MANA_POOL;
     public final int MANA_POOL_AURA;
@@ -76,7 +72,6 @@ public class CoreComponents implements ComponentsModule {
     public final int OWN_MINIONS_HEALTH_AURA;
     public final int OWN_MINIONS_VENOM_AURA;
     public final int BUSHIDO;
-    public final int BUSHIDO_TRIGGERED;
     public final int INDESTRUCTIBLE;
 
     public CoreComponents(ToIntFunction<String> register) {
@@ -85,17 +80,17 @@ public class CoreComponents implements ComponentsModule {
         PLAYER_INDEX = register.applyAsInt("PLAYER_INDEX");
         TEAM_INDEX = register.applyAsInt("TEAM_INDEX");
         ACTIVE_PLAYER_PHASE = register.applyAsInt("ACTIVE_PLAYER_PHASE");
-        END_PHASE_REQUEST = register.applyAsInt("END_PHASE_REQUEST");
-        END_PHASE_ACTION = register.applyAsInt("END_PHASE_ACTION");
-        START_PHASE_REQUEST = register.applyAsInt("START_PHASE_REQUEST");
-        START_PHASE_ACTION = register.applyAsInt("START_PHASE_ACTION");
+        ACTIVE_TEAM_PHASE = register.applyAsInt("ACTIVE_TEAM_PHASE");
+        ATTACK_TARGET = register.applyAsInt("ATTACK_TARGET");
+        BLOCK_TARGET = register.applyAsInt("BLOCK_TARGET");
+        CAST_TARGET = register.applyAsInt("CAST_TARGET");
         DAMAGE_REQUEST = register.applyAsInt("DAMAGE_REQUEST");
         DAMAGE_ACTION = register.applyAsInt("DAMAGE_ACTION");
         DEATH_REQUEST = register.applyAsInt("DEATH_REQUEST");
         DEATH_ACTION = register.applyAsInt("DEATH_ACTION");
         PLAYER_RESULT_REQUEST = register.applyAsInt("PLAYER_RESULT_REQUEST");
-        PLAYER_RESULT_ACTION = register.applyAsInt("PLAYER_RESULT_ACTION");
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
+        TEAM_RESULT = register.applyAsInt("TEAM_RESULT");
         HEALTH = register.applyAsInt("HEALTH");
         ATTACK = register.applyAsInt("ATTACK");
         TEMPORARY_HEALTH = register.applyAsInt("TEMPORARY_HEALTH");
@@ -113,17 +108,13 @@ public class CoreComponents implements ComponentsModule {
         CANNOT_BE_BLOCKED = register.applyAsInt("CANNOT_BE_BLOCKED");
         CANNOT_BE_CAST_TARGETED = register.applyAsInt("CANNOT_BE_CAST_TARGETED");
         CANNOT_BE_MULLIGANED = register.applyAsInt("CANNOT_BE_MULLIGANED");
-        BLOCKS_ATTACKER = register.applyAsInt("BLOCKS_ATTACKER");
-        ATTACKS_TARGET = register.applyAsInt("ATTACKS_TARGET");
-        CAST_TARGET = register.applyAsInt("CAST_TARGET");
         MANA = register.applyAsInt("MANA");
         MANA_POOL = register.applyAsInt("MANA_POOL");
         MANA_POOL_AURA = register.applyAsInt("MANA_POOL_AURA");
         MANA_POOL_AURA_GROWTH = register.applyAsInt("MANA_POOL_AURA_GROWTH");
         DRAW_CARDS_REQUEST = register.applyAsInt("DRAW_CARDS_REQUEST");
         DRAW_CARDS_ACTION = register.applyAsInt("DRAW_CARDS_ACTION");
-        DISCARD_CARDS_REQUEST = register.applyAsInt("DISCARD_CARDS_REQUEST");
-        DISCARD_CARDS_ACTION = register.applyAsInt("DISCARD_CARDS_ACTION");
+        DISCARD_CARDS = register.applyAsInt("DISCARD_CARDS");
         DRAWS_PER_TURN = register.applyAsInt("DRAWS_PER_TURN");
         DRAWS_ON_ATTACK = register.applyAsInt("DRAWS_ON_ATTACK");
         GIVE_DRAWS_ON_ATTACK = register.applyAsInt("GIVE_DRAWS_ON_ATTACK");
@@ -151,7 +142,6 @@ public class CoreComponents implements ComponentsModule {
         DAMAGE_SURVIVAL_REQUEST = register.applyAsInt("DAMAGE_SURVIVAL_REQUEST");
         DAMAGE_SURVIVAL_ACTION = register.applyAsInt("DAMAGE_SURVIVAL_ACTION");
         BUSHIDO = register.applyAsInt("BUSHIDO");
-        BUSHIDO_TRIGGERED = register.applyAsInt("BUSHIDO_TRIGGERED");
         INDESTRUCTIBLE = register.applyAsInt("INDESTRUCTIBLE");
     }
 }

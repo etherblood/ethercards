@@ -397,11 +397,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         for (Map.Entry<Integer, ColoredConnectionArrow> entry : new ArrayList<>(arrows.entrySet())) {
             ColoredConnectionArrow arrow = entry.getValue();
             int minion = entry.getKey();
-            OptionalInt attackTarget = data.getOptional(minion, core.ATTACKS_TARGET);
+            OptionalInt attackTarget = data.getOptional(minion, core.ATTACK_TARGET);
             if (attackTarget.isPresent() && arrow.getModel().getTarget() == visualCards.get(attackTarget.getAsInt())) {
                 continue;
             }
-            OptionalInt blockTarget = data.getOptional(minion, core.BLOCKS_ATTACKER);
+            OptionalInt blockTarget = data.getOptional(minion, core.BLOCK_TARGET);
             if (blockTarget.isPresent() && arrow.getModel().getTarget() == visualCards.get(blockTarget.getAsInt())) {
                 continue;
             }
@@ -410,8 +410,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         }
 
         IntList blocked = new IntList();
-        for (int blocker : data.list(core.BLOCKS_ATTACKER)) {
-            int target = data.get(blocker, core.BLOCKS_ATTACKER);
+        for (int blocker : data.list(core.BLOCK_TARGET)) {
+            int target = data.get(blocker, core.BLOCK_TARGET);
             blocked.add(target);
             ColoredConnectionArrow arrow = arrows.get(blocker);
             if (arrow == null) {
@@ -421,8 +421,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 board.register(arrow);
             }
         }
-        for (int attacker : data.list(core.ATTACKS_TARGET)) {
-            int target = data.get(attacker, core.ATTACKS_TARGET);
+        for (int attacker : data.list(core.ATTACK_TARGET)) {
+            int target = data.get(attacker, core.ATTACK_TARGET);
             ColoredConnectionArrow arrow = arrows.get(attacker);
             ColorRGBA color;
             if (blocked.contains(attacker)) {
