@@ -29,16 +29,13 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Quad;
+import com.simsilica.lemur.Button;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -51,7 +48,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private static final int CARD_COPIES_LIMIT = 100;
     private RawLibraryTemplate result = null;
     private final RawLibraryTemplate presetLibrary;
-
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
     private final ActionListener saveLibraryListener = new ActionListener() {
         public void onAction(String name, boolean isPressed, float tpf) {
@@ -74,12 +70,12 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             }
         }
     };
-    private final Geometry saveLibraryButton;
-    private final Node rootNode;
+    private final Node guiNode;
+    private final Button saveButton;
 
-    public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, RawLibraryTemplate presetLibrary, Components components) {
+    public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, Node guiNode, RawLibraryTemplate presetLibrary, Components components) {
         this.presetLibrary = presetLibrary;
-        this.rootNode = rootNode;
+        this.guiNode = guiNode;
 
         Comparator<CardModel> cardOrder = Comparator.comparingInt(this::getManaCost);
         cardOrder = cardOrder.thenComparing(x -> x.getTemplate().getName());
@@ -157,8 +153,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
         deckBuilderAppState.setDeck(deck);
 
-        Quad quad = new Quad(1, 1);
-        saveLibraryButton = new Geometry("saveLibraryButton", quad);
+        saveButton = new Button("Save");
+        saveButton.setFontSize(50);
+        saveButton.addClickCommands(x -> completeResult());
+        saveButton.setLocalTranslation(1400, 100, 0);
     }
 
     private int getManaCost(CardModel card) {
@@ -171,6 +169,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
     @Override
     public void stateAttached(AppStateManager stateManager) {
+        guiNode.attachChild(saveButton);
         stateManager.attach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
         inputManager.addListener(saveLibraryListener, "space");
@@ -178,15 +177,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.addListener(previousPage, "left");
         stateManager.getState(CameraAppState.class).moveTo(new Vector3f(-0.25036395f, 15.04817f, 1), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
         stateManager.attach(new ForestBoardAppstate(0));
-
-        Material mat = new Material(stateManager.getApplication().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", stateManager.getApplication().getAssetManager().loadTexture("textures/buttons/save.png"));
-        saveLibraryButton.setMaterial(mat);
-        rootNode.attachChild(saveLibraryButton);
-        saveLibraryButton.setLocalRotation(new Quaternion().fromAngles(-FastMath.HALF_PI, 0, 0));
-        saveLibraryButton.setLocalTranslation(6, 2, 5.7f);
-        saveLibraryButton.setLocalScale(2, 1, 1);
-        stateManager.getState(ButtonAppstate.class).registerButton(saveLibraryButton, this::completeResult, ColorRGBA.Gray, ColorRGBA.LightGray, ColorRGBA.White);
     }
 
     @Override
@@ -198,8 +188,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.removeListener(previousPage);
         stateManager.detach(stateManager.getState(ForestBoardAppstate.class));
 
-        stateManager.getState(ButtonAppstate.class).unregisterButton(saveLibraryButton);
-        rootNode.detachChild(saveLibraryButton);
+        guiNode.detachChild(saveButton);
     }
 
     private void completeResult() {

@@ -22,6 +22,8 @@ import com.jme3.asset.AssetKey;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.style.BaseStyles;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -98,7 +100,7 @@ public class GameApplication extends SimpleApplication {
             presetLibrary.hero = cleanAlias("elderwood_ahri");
             presetLibrary.cards = presetLibrary.cards.entrySet().stream().collect(Collectors.toMap(x -> cleanAlias(x.getKey()), x -> x.getValue()));
         }
-        deckBuilderAppstate = new MyDeckBuilderAppstate(cards, cardImages, rootNode, presetLibrary, components);
+        deckBuilderAppstate = new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components);
         stateManager.attach(deckBuilderAppstate);
     }
 
@@ -117,6 +119,10 @@ public class GameApplication extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        GuiGlobals.initialize(this);
+        BaseStyles.loadGlassStyle();
+        GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
+        
         assetManager.registerLocator(assetsPath, FileLocator.class);
         assetManager.registerLoader(GsonLoader.class, "json");
 

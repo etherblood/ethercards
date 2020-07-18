@@ -114,5 +114,22 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.30</version>
         </dependency>
+        <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>lemur</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>lemur-proto</artifactId>
+            <version>1.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>3.0.4</version>
+            <type>pom</type>
+        </dependency>
+
     </dependencies>
 </project>
