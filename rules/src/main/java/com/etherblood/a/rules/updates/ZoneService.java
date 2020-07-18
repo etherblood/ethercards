@@ -6,6 +6,7 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
+import java.util.OptionalInt;
 
 public class ZoneService {
 
@@ -43,6 +44,10 @@ public class ZoneService {
     public void removeFromBattle(int entity) {
         assert data.has(entity, core.IN_BATTLE_ZONE);
         data.remove(entity, core.IN_BATTLE_ZONE);
+        data.getOptional(entity, core.ORIGINAL_CARD_TEMPLATE).ifPresent(template -> {
+            data.remove(entity, core.ORIGINAL_CARD_TEMPLATE);
+            data.set(entity, core.CARD_TEMPLATE, template);
+        });
         //TODO: use a blacklist instead?
         IntList whiteList = new IntList(core.CARD_TEMPLATE, core.OWNER, core.TEAM, core.HERO);
         for (ComponentMeta meta : data.getComponents().getMetas()) {

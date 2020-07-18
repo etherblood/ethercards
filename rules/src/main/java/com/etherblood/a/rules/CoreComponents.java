@@ -56,6 +56,7 @@ public class CoreComponents implements ComponentsModule {
     public final int TIRED;
     public final int SUMMONING_SICKNESS;
     public final int CARD_TEMPLATE;
+    public final int ORIGINAL_CARD_TEMPLATE;
     public final int HERO;
     public final int MULLIGAN;
     public final int POISONED;
@@ -124,6 +125,7 @@ public class CoreComponents implements ComponentsModule {
         TIRED = register.applyAsInt("TIRED");
         SUMMONING_SICKNESS = register.applyAsInt("SUMMONING_SICKNESS");
         CARD_TEMPLATE = register.applyAsInt("CARD_TEMPLATE");
+        ORIGINAL_CARD_TEMPLATE = register.applyAsInt("ORIGINAL_CARD_TEMPLATE");
         HERO = register.applyAsInt("HERO");
         MULLIGAN = register.applyAsInt("MULLIGAN");
         POISONED = register.applyAsInt("POISONED");
