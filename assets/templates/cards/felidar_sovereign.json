@@ -1,0 +1,56 @@
+{
+    "alias": "felidar_sovereign",
+    "display": {
+        "name": "Felidar Sovereign",
+        "imagePath": "felidar_sovereign.jpg",
+        "colors": [
+            "WHITE"
+        ],
+        "description": "At the beginning of your upkeep, if you have 50 or more life, you win the game.",
+        "flavourText": "It surveys the withering landscape, waiting for a victory only it can see."
+    },
+    "manaCost": 6,
+    "casts": [
+        {
+            "effects": [
+                {
+                    "type": "selfSummon"
+                }
+            ]
+        }
+    ],
+    "onUpkeep": [
+        {
+            "type": "targeted",
+            "targeting": "ALL",
+            "targets": [
+                "OWN_HERO"
+            ],
+            "effects": [
+                {
+                    "type": "targetHealthThresholdActivated",
+                    "threshold": 50,
+                    "effects": [{
+                            "type": "targeted",
+                            "targeting": "ALL",
+                            "targets": [
+                                "OWNER"
+                            ],
+                            "effects": [{
+                                    "type": "buff",
+                                    "components": {
+                                        "PLAYER_RESULT_REQUEST": 1
+                                    }
+                                }]
+                        }
+                    ]
+                }]
+        }
+    ],
+    "components": {
+        "ATTACK": 4,
+        "HEALTH": 6,
+        "LIFELINK": true,
+        "VIGILANCE": true
+    }
+}

@@ -5,6 +5,7 @@ import com.destrostudios.cardgui.samples.visualization.PaintableImage;
 import com.jme3.asset.AssetManager;
 import java.awt.Color;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MyCardVisualizer extends CardVisualizer<CardModel> {
@@ -12,6 +13,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
     // this cache assumes card images are static which works atm...
     // TODO: replace this with better optimizations which don't assume staticness
     private static final Map<String, PaintableImage> FULL_CARD_CACHE = new ConcurrentHashMap<>();
+    private static final String FACE_DOWN_CARD_ID = UUID.randomUUID().toString();
     private final CardPainterJME cardPainter;
     private final boolean battleFullArt;
 
@@ -29,7 +31,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         } else {
             if (!card.getModel().isFaceUp()) {
                 //don't bother rendering the card when it is face down
-                PaintableImage image = FULL_CARD_CACHE.computeIfAbsent("facedown_card", x -> cardPainter.createPaintable(Color.BLACK));
+                PaintableImage image = FULL_CARD_CACHE.computeIfAbsent(FACE_DOWN_CARD_ID, x -> cardPainter.createPaintable(Color.BLACK));
                 visualization.setCardFront(image);
                 return;
             }

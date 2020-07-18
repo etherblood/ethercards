@@ -1,12 +1,11 @@
 package com.etherblood.a.rules.updates;
 
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.MoveAvailabilityService;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.StatModifier;
+import java.util.OptionalInt;
 
 public class EffectiveStatsService {
 
@@ -33,28 +32,49 @@ public class EffectiveStatsService {
     public int attack(int minion) {
         int attack = data.getOptional(minion, core.ATTACK).orElse(0);
         attack += data.getOptional(minion, core.TEMPORARY_ATTACK).orElse(0);
-        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
-        for (StatModifier attackModifier : template.getComponentModifiers(core.ATTACK)) {
-            attack = attackModifier.modify(data, templates, minion, attack);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            for (StatModifier attackModifier : template.getComponentModifiers(core.ATTACK)) {
+                attack = attackModifier.modify(data, templates, minion, attack);
+            }
         }
         return attack;
     }
 
     public boolean hasVigilance(int minion) {
         int vigilance = data.getOptional(minion, core.VIGILANCE).orElse(0);
-        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
-        for (StatModifier modifier : template.getComponentModifiers(core.VIGILANCE)) {
-            vigilance = modifier.modify(data, templates, minion, vigilance);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            for (StatModifier modifier : template.getComponentModifiers(core.VIGILANCE)) {
+                vigilance = modifier.modify(data, templates, minion, vigilance);
+            }
         }
         return vigilance >= 1;
+    }
+
+    public boolean hasFlying(int minion) {
+        int flying = data.getOptional(minion, core.FLYING).orElse(0);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            for (StatModifier modifier : template.getComponentModifiers(core.FLYING)) {
+                flying = modifier.modify(data, templates, minion, flying);
+            }
+        }
+        return flying >= 1;
     }
 
     public int health(int minion) {
         int health = data.getOptional(minion, core.HEALTH).orElse(0);
         health += data.getOptional(minion, core.TEMPORARY_HEALTH).orElse(0);
-        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
-        for (StatModifier healthModifier : template.getComponentModifiers(core.HEALTH)) {
-            health = healthModifier.modify(data, templates, minion, health);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            for (StatModifier healthModifier : template.getComponentModifiers(core.HEALTH)) {
+                health = healthModifier.modify(data, templates, minion, health);
+            }
         }
         if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
             health += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_HEALTH_AURA);
