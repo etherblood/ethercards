@@ -6,16 +6,20 @@ public class GameRequest {
 
     public String jwt;
     public RawLibraryTemplate library;
-    public OpponentType opponent;
     public int strength;
+    public int[] teamHumanCounts;
+    public int teamSize;
+
+    public GameRequest(String jwt, RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
+        this.jwt = jwt;
+        this.library = library;
+        this.strength = strength;
+        this.teamHumanCounts = teamHumanCounts;
+        this.teamSize = teamSize;
+    }
+
 
     GameRequest() {
     }
 
-    public GameRequest(String jwt, RawLibraryTemplate library, OpponentType opponent, int strength) {
-        this.jwt = jwt;
-        this.library = library;
-        this.opponent = opponent;
-        this.strength = strength;
-    }
 }

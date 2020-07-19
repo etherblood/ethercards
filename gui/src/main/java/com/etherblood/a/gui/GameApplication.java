@@ -1,8 +1,10 @@
 package com.etherblood.a.gui;
 
+import com.etherblood.a.gui.matchmaking.SelectOpponentAppstate;
 import com.etherblood.a.client.GameClient;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.ComponentsBuilder;
+import com.etherblood.a.gui.matchmaking.MatchOpponents;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
@@ -22,8 +24,11 @@ import com.jme3.asset.AssetKey;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.math.ColorRGBA;
 import com.simsilica.lemur.GuiGlobals;
-import com.simsilica.lemur.style.BaseStyles;
+import com.simsilica.lemur.component.QuadBackgroundComponent;
+import com.simsilica.lemur.style.Attributes;
+import com.simsilica.lemur.style.Styles;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -46,7 +51,7 @@ public class GameApplication extends SimpleApplication {
     private Future<GameReplayService> futureGameReplayService;
     private GameClient client;
 
-    private Integer selectedStrength;
+    private MatchOpponents selectedOpponents;
     private RawLibraryTemplate selectedLibrary;
 
     public GameApplication(Properties properties, JwtAuthentication authentication) {
@@ -62,12 +67,8 @@ public class GameApplication extends SimpleApplication {
         client = new GameClient(assetLoader);
         try {
             client.start(hostUrl);
-            if (selectedStrength < 0) {
-                futureGameReplayService = client.requestGame(authentication.rawJwt, selectedLibrary);
-                stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
-            } else {
-                futureGameReplayService = client.requestBotgame(authentication.rawJwt, selectedLibrary, selectedStrength * 10_000);
-            }
+            futureGameReplayService = client.requestGame(authentication.rawJwt, selectedLibrary, selectedOpponents.strength, selectedOpponents.teamHumanCounts, selectedOpponents.teamSize);
+            stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -120,9 +121,16 @@ public class GameApplication extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         GuiGlobals.initialize(this);
-        BaseStyles.loadGlassStyle();
-        GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
-        
+        String defaultStyleName = "myStyleTest";
+        Styles styles = GuiGlobals.getInstance().getStyles();
+        QuadBackgroundComponent bg = new QuadBackgroundComponent(ColorRGBA.DarkGray);
+        Attributes attrs = styles.getSelector(defaultStyleName);
+        attrs.set("color", ColorRGBA.LightGray);
+        attrs.set("background", bg);
+
+//        BaseStyles.loadGlassStyle();// very slow
+        styles.setDefaultStyle(defaultStyleName);
+
         assetManager.registerLocator(assetsPath, FileLocator.class);
         assetManager.registerLoader(GsonLoader.class, "json");
 
@@ -159,16 +167,16 @@ public class GameApplication extends SimpleApplication {
             return;
         }
 
-        if (selectedStrength == null) {
+        if (selectedOpponents == null) {
             SelectOpponentAppstate selectOpponentAppstate = stateManager.getState(SelectOpponentAppstate.class);
             if (selectOpponentAppstate == null) {
-                stateManager.attach(new SelectOpponentAppstate(rootNode, assetManager));
-            } else if (selectOpponentAppstate.getSelectedStrength() != null) {
-                selectedStrength = selectOpponentAppstate.getSelectedStrength();
+                stateManager.attach(new SelectOpponentAppstate(guiNode, assetManager));
+            } else if (selectOpponentAppstate.getMatchOpponents() != null) {
+                selectedOpponents = selectOpponentAppstate.getMatchOpponents();
                 stateManager.detach(selectOpponentAppstate);
             }
         }
-        if (selectedStrength == null) {
+        if (selectedOpponents == null) {
             return;
         }
         if (futureGameReplayService == null) {

@@ -7,7 +7,6 @@ import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.NetworkUtil;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
-import com.etherblood.a.network.api.matchmaking.OpponentType;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
@@ -49,19 +48,10 @@ public class GameClient {
         gameRequest.set(null);
     }
 
-    public Future<GameReplayService> requestGame(String jwt, RawLibraryTemplate library) {
+    public Future<GameReplayService> requestGame(String jwt, RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
         CompletableFuture<GameReplayService> future = new CompletableFuture<>();
         if (gameRequest.compareAndSet(null, future)) {
-            client.sendTCP(new GameRequest(jwt, library, OpponentType.HUMAN, 0));
-            return future;
-        }
-        throw new IllegalStateException();
-    }
-
-    public Future<GameReplayService> requestBotgame(String jwt, RawLibraryTemplate library, int strength) {
-        CompletableFuture<GameReplayService> future = new CompletableFuture<>();
-        if (gameRequest.compareAndSet(null, future)) {
-            client.sendTCP(new GameRequest(jwt, library, OpponentType.BOT, strength));
+            client.sendTCP(new GameRequest(jwt, library, strength, teamHumanCounts, teamSize));
             return future;
         }
         throw new IllegalStateException();

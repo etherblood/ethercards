@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
 import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.templates.implementation.TemplateAliasMaps;
 import java.util.HashMap;
 import java.util.Map;

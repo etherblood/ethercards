@@ -4,7 +4,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
-import com.etherblood.a.network.api.matchmaking.OpponentType;
 import com.etherblood.a.network.api.serializers.moves.BlockSerializer;
 import com.etherblood.a.network.api.serializers.moves.CastSerializer;
 import com.etherblood.a.network.api.serializers.moves.DeclareAttackSerializer;
@@ -35,7 +34,6 @@ public class NetworkUtil {
 //        kryo.register(UUID.class, new UuidSerializer());
         
         kryo.register(GameRequest.class);
-        kryo.register(OpponentType.class);
         kryo.register(RawGameSetup.class);
         kryo.register(RawPlayerSetup[].class);
         kryo.register(RawPlayerSetup.class);

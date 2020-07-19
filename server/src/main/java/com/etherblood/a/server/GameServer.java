@@ -7,6 +7,7 @@ import com.etherblood.a.network.api.NetworkUtil;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.io.IOException;
@@ -26,7 +27,8 @@ public class GameServer {
         server = new Server(1024 * 1024, 1024 * 1024);
         NetworkUtil.init(server.getKryo());
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
-        GameService gameService = new GameService(server, jwtParser, assetLoader, -1, botLibrary, scheduledThreadPoolExecutor);
+        Matchmaker matchmaker = new Matchmaker(-1, "Bot", botLibrary);
+        GameService gameService = new GameService(server, jwtParser, assetLoader, matchmaker, scheduledThreadPoolExecutor);
         server.addListener(new Listener() {
 
             @Override

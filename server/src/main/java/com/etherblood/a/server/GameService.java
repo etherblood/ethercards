@@ -12,7 +12,6 @@ import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
-import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.matchmaking.GameRequest;
 import com.etherblood.a.rules.Game;
@@ -25,6 +24,10 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
+import com.etherblood.a.server.matchmaking.BotRequest;
+import com.etherblood.a.server.matchmaking.MatchmakeRequest;
+import com.etherblood.a.server.matchmaking.MatchmakeResult;
+import com.etherblood.a.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.security.SecureRandom;
@@ -32,10 +35,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -53,8 +54,7 @@ public class GameService {
     private final Server server;
     private final JwtParser jwtParser;
     private final Function<String, JsonElement> assetLoader;
-    private final long botId;
-    private final RawLibraryTemplate botLibrary;
+    private final Matchmaker matchmaker;
 
     private final Map<UUID, GameReplayService> games = new HashMap<>();
     private final List<GamePlayerMapping> players = new ArrayList<>();
@@ -63,22 +63,17 @@ public class GameService {
     private final Map<UUID, Future<Move>> botMoves = new HashMap<>();
     private final ExecutorService executor;
 
-    private final Map<Integer, GameRequest> connectionGameRequests = new LinkedHashMap<>();
-
-    public GameService(Server server, JwtParser jwtParser, Function<String, JsonElement> assetLoader, long botId, RawLibraryTemplate botLibrary, ExecutorService executor) {
+//    private final Map<Integer, GameRequest> connectionGameRequests = new LinkedHashMap<>();
+    public GameService(Server server, JwtParser jwtParser, Function<String, JsonElement> assetLoader, Matchmaker matchmaker, ExecutorService executor) {
         this.server = server;
         this.jwtParser = jwtParser;
         this.assetLoader = assetLoader;
-        this.botId = botId;
-        this.botLibrary = botLibrary;
+        this.matchmaker = matchmaker;
         this.executor = executor;
     }
 
     public synchronized void onDisconnect(Connection connection) {
-        GameRequest gameRequest = connectionGameRequests.remove(connection.getID());
-        if (gameRequest != null) {
-            LOG.info("Removed game request of connection {} due to disconnect.", connection.getID());
-        }
+        matchmaker.remove(connection.getID());
         for (GamePlayerMapping player : players) {
             if (player.connectionId == connection.getID()) {
                 LOG.info("Game_{} surrendering for player {} due to disconnect.", player.gameId, player.playerId);
@@ -92,7 +87,7 @@ public class GameService {
     }
 
     public synchronized void onGameRequest(Connection connection, GameRequest request) {
-        connectionGameRequests.put(connection.getID(), request);
+        matchmaker.enqueue(MatchmakeRequest.of(request, connection.getID(), jwtParser));
         matchmake();
     }
 
@@ -153,7 +148,7 @@ public class GameService {
         if (bots.isEmpty()) {
             return;
         }
-        LOG.debug("Processing {} bots.", bots.size());
+        LOG.trace("Processing {} bots.", bots.size());
         for (GameBotMapping bot : bots) {
             if (botMoves.containsKey(bot.gameId)) {
                 LOG.debug("Game_{} Still computing move.", bot.gameId);
@@ -170,143 +165,70 @@ public class GameService {
                 LOG.debug("Game_{} start computing move.", bot.gameId);
                 botMoves.put(bot.gameId, executor.submit(() -> bot.bot.findMove(bot.playerIndex)));
             } else {
-                LOG.debug("Game_{} skip, it is not the bots turn.", bot.gameId);
+                LOG.trace("Game_{} skip, it is not the bots turn.", bot.gameId);
             }
         }
     }
 
     private synchronized void matchmake() {
-        List<Map.Entry<Integer, GameRequest>> humanRequests = new ArrayList<>();
-        Iterator<Map.Entry<Integer, GameRequest>> iterator = connectionGameRequests.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, GameRequest> entry = iterator.next();
-            GameRequest request = entry.getValue();
-            switch (request.opponent) {
-                case BOT:
-                    Connection connection = Objects.requireNonNull(getConnection(entry.getKey()));
-                    RawPlayerSetup human = new RawPlayerSetup();
-                    JwtAuthentication jwt = jwtParser.verify(request.jwt);
-                    human.id = jwt.user.id;
-                    human.name = jwt.user.login;
-                    human.library = request.library;
-
-                    RawPlayerSetup bot = new RawPlayerSetup();
-                    bot.id = botId;
-                    bot.name = "Bot";
-                    bot.library = botLibrary;
-
-                    applyPlayerEasterEggs(human, bot);
-
-                    RawGameSetup setup = new RawGameSetup();
-                    setup.teamCount = 2;
-                    setup.players = shuffle(new RawPlayerSetup[]{human, bot});
-                    for (int teamIndex = 0; teamIndex < setup.players.length; teamIndex++) {
-                        setup.players[teamIndex].teamIndex = teamIndex;
-                    }
-                    setup.theCoinAlias = "the_coin";
-                    UUID gameId = UUID.randomUUID();
-                    GameReplayService game = new GameReplayService(setup, assetLoader);
-                    MoveReplay moveReplay = game.apply(new Start());
-
-                    players.add(new GamePlayerMapping(gameId, human.id, Arrays.asList(setup.players).indexOf(human), connection.getID()));
-
-                    Game gameInstance = game.createInstance();
-                    MoveBotGame moveBotGame = new MoveBotGame(gameInstance);
-                    Bot botInstance;
-                    if (request.strength <= 0) {
-                        botInstance = new RandomMover(moveBotGame, new Random());
-                    } else {
-                        MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
-                        settings.maxThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
-                        settings.strength = request.strength;
-                        botInstance = new MctsBot(moveBotGame, () -> new MoveBotGame(simulationGame(gameInstance)), settings);
-                    }
-                    bots.add(new GameBotMapping(gameId, Arrays.asList(setup.players).indexOf(bot), moveBotGame, botInstance));
-
-                    games.put(gameId, game);
-                    connection.sendTCP(setup);
-                    connection.sendTCP(moveReplay);
-
-                    iterator.remove();
-                    break;
-
-                case HUMAN:
-                    humanRequests.add(entry);
-                    break;
-            }
-        }
-
-        for (int i = 0; i + 2 <= humanRequests.size(); i += 2) {
-            Map.Entry<Integer, GameRequest> entry0 = humanRequests.get(i);
-            Connection connection0 = Objects.requireNonNull(getConnection(entry0.getKey()));
-            Map.Entry<Integer, GameRequest> entry1 = humanRequests.get(i + 1);
-            Connection connection1 = Objects.requireNonNull(getConnection(entry1.getKey()));
-
-            GameRequest request0 = entry0.getValue();
-            RawPlayerSetup player0 = new RawPlayerSetup();
-            JwtAuthentication jwt0 = jwtParser.verify(request0.jwt);
-            player0.id = jwt0.user.id;
-            player0.name = jwt0.user.login;
-            player0.library = request0.library;
-
-            GameRequest request1 = entry1.getValue();
-            RawPlayerSetup player1 = new RawPlayerSetup();
-            JwtAuthentication jwt1 = jwtParser.verify(request1.jwt);
-            player1.id = jwt1.user.id;
-            player1.name = jwt1.user.login;
-            player1.library = request1.library;
-
-            applyPlayerEasterEggs(player0, player1);
-            applyPlayerEasterEggs(player1, player0);
-
-            RawGameSetup setup = new RawGameSetup();
-            setup.teamCount = 2;
-            setup.players = shuffle(new RawPlayerSetup[]{player0, player1});
-            for (int teamIndex = 0; teamIndex < setup.players.length; teamIndex++) {
-                setup.players[teamIndex].teamIndex = teamIndex;
-            }
+        MatchmakeResult result;
+        while ((result = matchmaker.matchmake()) != null) {
+            RawGameSetup setup = result.setup;
             setup.theCoinAlias = "the_coin";
+            applyPlayerEasterEggs(setup.players);
+            UUID gameId = result.gameId;
             GameReplayService game = new GameReplayService(setup, assetLoader);
             MoveReplay moveReplay = game.apply(new Start());
-            UUID gameId = UUID.randomUUID();
+
+            LOG.info("Game_{} started.", gameId);
+            players.addAll(result.playerMappings);
+
+            for (BotRequest botRequest : result.botRequests) {
+                Game gameInstance = game.createInstance();
+                MoveBotGame moveBotGame = new MoveBotGame(gameInstance);
+                Bot botInstance;
+                if (botRequest.strength <= 0) {
+                    botInstance = new RandomMover(moveBotGame, new Random());
+                } else {
+                    MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
+                    settings.maxThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+                    settings.strength = botRequest.strength;
+                    botInstance = new MctsBot(moveBotGame, () -> new MoveBotGame(simulationGame(gameInstance)), settings);
+                }
+                bots.add(new GameBotMapping(gameId, botRequest.playerIndex, moveBotGame, botInstance));
+            }
+
             games.put(gameId, game);
-
-            players.add(new GamePlayerMapping(gameId, player0.id, Arrays.asList(setup.players).indexOf(player0), connection0.getID()));
-            players.add(new GamePlayerMapping(gameId, player1.id, Arrays.asList(setup.players).indexOf(player1), connection1.getID()));
-
-            connection0.sendTCP(setup);
-            connection1.sendTCP(setup);
-            connection0.sendTCP(moveReplay);
-            connection1.sendTCP(moveReplay);
-
-            connectionGameRequests.remove(connection0.getID());
-            connectionGameRequests.remove(connection1.getID());
+            for (GamePlayerMapping playerMapping : result.playerMappings) {
+                Connection connection = getConnection(playerMapping.connectionId);
+                connection.sendTCP(setup);
+                connection.sendTCP(moveReplay);
+            }
         }
     }
 
-    private void applyPlayerEasterEggs(RawPlayerSetup player, RawPlayerSetup opponent) {
-        if (player.name.equalsIgnoreCase("yalee")) {
-            replaceCard(player.library, "raigeki", "fabi_raigeki");
-        }
-        if (opponent.name.equalsIgnoreCase("destroflyer")) {
-            replaceCard(player.library, "the_coin", "the_other_coin");
+    private void applyPlayerEasterEggs(RawPlayerSetup[] players) {
+        for (RawPlayerSetup player : players) {
+            if (player.name.equalsIgnoreCase("yalee")) {
+                replaceCards(player.library, "raigeki", "fabi_raigeki");
+            }
+
+            if (player.name.equalsIgnoreCase("destroflyer")) {
+                for (RawPlayerSetup opponent : players) {
+                    if (player == opponent) {
+                        continue;
+                    }
+                    replaceCards(opponent.library, "the_coin", "the_other_coin");
+                }
+            }
         }
     }
 
-    private void replaceCard(RawLibraryTemplate library, String toRemove, String replacement) {
+    private void replaceCards(RawLibraryTemplate library, String toRemove, String replacement) {
         if (library.cards.containsKey(toRemove)) {
-            library.cards.put(replacement, library.cards.remove(toRemove));
+            int previous = library.cards.getOrDefault(replacement, 0);
+            library.cards.put(replacement, previous + library.cards.remove(toRemove));
         }
-    }
-
-    private <T> T[] shuffle(T[] array) {
-        for (int i = 0; i < array.length; i++) {
-            int j = random.nextInt(array.length - i);
-            T tmp = array[i];
-            array[i] = array[j];
-            array[j] = tmp;
-        }
-        return array;
     }
 
     private List<GamePlayerMapping> getPlayersByGameId(UUID gameId) {
