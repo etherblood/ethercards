@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.bots.Bot;
 import com.etherblood.a.ai.bots.RandomMover;
+import com.etherblood.a.ai.bots.SkipBot;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.EntityData;
@@ -30,7 +31,6 @@ import com.etherblood.a.server.matchmaking.MatchmakeResult;
 import com.etherblood.a.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,7 +50,6 @@ public class GameService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GameService.class);
 
-    private final Random random = new SecureRandom();
     private final Server server;
     private final JwtParser jwtParser;
     private final Function<String, JsonElement> assetLoader;
@@ -63,7 +62,6 @@ public class GameService {
     private final Map<UUID, Future<Move>> botMoves = new HashMap<>();
     private final ExecutorService executor;
 
-//    private final Map<Integer, GameRequest> connectionGameRequests = new LinkedHashMap<>();
     public GameService(Server server, JwtParser jwtParser, Function<String, JsonElement> assetLoader, Matchmaker matchmaker, ExecutorService executor) {
         this.server = server;
         this.jwtParser = jwtParser;
@@ -187,7 +185,9 @@ public class GameService {
                 Game gameInstance = game.createInstance();
                 MoveBotGame moveBotGame = new MoveBotGame(gameInstance);
                 Bot botInstance;
-                if (botRequest.strength <= 0) {
+                if (botRequest.strength < 0) {
+                    botInstance = new SkipBot(moveBotGame);
+                } else if (botRequest.strength == 0) {
                     botInstance = new RandomMover(moveBotGame, new Random());
                 } else {
                     MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();

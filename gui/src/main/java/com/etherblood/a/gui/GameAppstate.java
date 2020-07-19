@@ -45,6 +45,7 @@ import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
+import com.etherblood.a.gui.soprettyboard.ScalingGridCardZone;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
@@ -74,6 +75,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Vector4f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -651,15 +653,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
             float x = -2.65f;
             float z = 1.3f;
-            SimpleIntervalZone boardZone = new SimpleScalingIntervalZone(offset.add(x, 0, directionZ * z), zoneRotation, new Vector3f(-0.9f * directionX, 1, 1)) {
-
-                @Override
-                protected float getScale() {
-                    long cardsCount = game.getData().list(core.IN_BATTLE_ZONE).stream().filter(x -> game.getData().hasValue(x, core.OWNER, player)).count();
-                    float limit = 6;
-                    return ((cardsCount < limit) ? 1 : (limit / cardsCount));
-                }
-            };
+            ScalingGridCardZone boardZone = new ScalingGridCardZone(offset.add(x, 0, directionZ * z).subtract(0.5f, 0, 0.7f), zoneRotation, new Vector4f(0, 0, 6, 1.5f), new Vector2f(1, 1.4f));
 
             x = -3.75f;
             SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.01f, 0));
