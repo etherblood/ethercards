@@ -86,7 +86,6 @@ class MctsBotWorker implements Runnable, Callable<Void> {
         }
 
         float[] result = evaluation.apply(simulationGame);
-        assert Math.abs(IntStream.range(0, result.length).mapToDouble(i -> result[i]).sorted().sum() - 1) <= EPSILON : Arrays.toString(result);
         for (MctsNode node : nodePath) {
             node.updateScores(result);
         }

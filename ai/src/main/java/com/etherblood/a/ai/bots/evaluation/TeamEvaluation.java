@@ -5,7 +5,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.CoreComponents;
 
-public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
+public class TeamEvaluation<Move, Game extends BotGame<Move, Game>> {
 
     public float[] evaluate(Game game) {
         if (game.isGameOver()) {
@@ -24,13 +24,17 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
             playerMinionCount.set(player, count);
         }
 
-        IntMap playerScores = new IntMap();
+        IntMap teamScores = new IntMap();
         for (int player : data.list(core.MANA_POOL)) {
-            playerScores.set(player, 10 * data.get(player, core.MANA_POOL));
+            int score = teamScores.getOrElse(player, 0);
+            int team = data.get(player, core.TEAM);
+            int manaPool = data.get(player, core.MANA_POOL);
+            teamScores.set(team, score + 10 * manaPool);
         }
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             int player = data.get(minion, core.OWNER);
-            int score = playerScores.getOrElse(player, 0);
+            int team = data.get(minion, core.TEAM);
+            int score = teamScores.getOrElse(team, 0);
             score += 10 * (data.getOptional(minion, core.ATTACK).orElse(0) + data.getOptional(minion, core.VENOM).orElse(0));
             score += 10 * (data.getOptional(minion, core.HEALTH).orElse(0) - data.getOptional(minion, core.POISONED).orElse(0));
             score += 10 * data.getOptional(minion, core.MANA_POOL_AURA).orElse(0);
@@ -38,7 +42,7 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
             if (minionCount > 1) {
                 score += 10 * (minionCount - 1) * (data.getOptional(minion, core.OWN_MINIONS_HEALTH_AURA).orElse(0) + data.getOptional(minion, core.OWN_MINIONS_VENOM_AURA).orElse(0));
             }
-            playerScores.set(player, score);
+            teamScores.set(team, score);
         }
         IntMap handCards = new IntMap();
         for (int card : data.list(core.IN_HAND_ZONE)) {
@@ -56,19 +60,23 @@ public class SimpleEvaluation<Move, Game extends BotGame<Move, Game>> {
         }
         float[] result = new float[game.playerCount()];
         for (int player : data.list(core.PLAYER_INDEX)) {
-            float score = playerScores.getOrElse(player, 0);
-            score += (float) 15 * handCards.getOrElse(player, 0);
-            score += (float) Math.sqrt(libraryCards.getOrElse(player, 0));
+            int team = data.get(player, core.TEAM);
+            int score = teamScores.getOrElse(team, 0);
+            score += 15 * handCards.getOrElse(player, 0);
+            score += Math.sqrt(libraryCards.getOrElse(player, 0));
             score -= 10 * data.getOptional(player, core.FATIGUE).orElse(0);
-            result[data.get(player, core.PLAYER_INDEX)] = Math.max(score, 0.01f);
+            teamScores.set(team, Math.max(score, 0));
         }
 
-        float sum = 0;
-        for (float f : result) {
-            sum += f;
+        float teamScoreSum = 1;
+        for (int team : teamScores) {
+            teamScoreSum += teamScores.get(team);
         }
-        for (int i = 0; i < result.length; i++) {
-            result[i] /= sum;
+
+        for (int player : data.list(core.PLAYER_INDEX)) {
+            int team = data.get(player, core.TEAM);
+            int index = data.get(player, core.PLAYER_INDEX);
+            result[index] = teamScores.get(team) / teamScoreSum;
         }
         return result;
     }

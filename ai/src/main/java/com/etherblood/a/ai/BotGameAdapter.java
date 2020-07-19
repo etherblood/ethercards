@@ -6,6 +6,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.PlayerResult;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -63,11 +64,12 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
         }
         float[] result = new float[playerCount()];
         if (winners.isEmpty()) {
-            winners = losers;
+            Arrays.fill(result, 0.5f);
+            return result;
         }
         for (int winner : winners) {
             int index = data.get(winner, core.PLAYER_INDEX);
-            result[index] += 1f / winners.size();
+            result[index] = 1f;
         }
         return result;
     }

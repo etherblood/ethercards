@@ -10,6 +10,7 @@ class MctsNode {
 
     private static final Object[] EMPTY = new Object[0];
 
+    private float visits = 0;
     private final float[] scores;
     private Object[] childs = EMPTY;
 
@@ -18,11 +19,7 @@ class MctsNode {
     }
 
     public synchronized float visits() {
-        float sum = 0;
-        for (float score : scores) {
-            sum += score;
-        }
-        return sum;
+        return visits;
     }
 
     public synchronized float[] getScores() {
@@ -37,6 +34,7 @@ class MctsNode {
         for (int i = 0; i < scores.length; i++) {
             scores[i] += playerScores[i];
         }
+        visits++;
     }
 
     public synchronized MctsNode getChild(Move move) {

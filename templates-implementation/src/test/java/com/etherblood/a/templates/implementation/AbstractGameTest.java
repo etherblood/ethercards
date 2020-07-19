@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractGameTest {
 
-    private static final String DEFAULT_HERO = "lots_of_health";
+    private static final String DEFAULT_HERO = "elderwood_ahri";
     private final TemplatesLoader loader;
     private final RawLibraryTemplate rawLibrary;
     public final GameSettings settings;
