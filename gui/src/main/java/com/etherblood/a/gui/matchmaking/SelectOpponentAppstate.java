@@ -8,6 +8,7 @@ import com.jme3.scene.Node;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.DefaultRangedValueModel;
+import com.simsilica.lemur.Label;
 import com.simsilica.lemur.Slider;
 
 public class SelectOpponentAppstate extends AbstractAppState {
@@ -30,7 +31,8 @@ public class SelectOpponentAppstate extends AbstractAppState {
         toggleTeamSizeButton = new Button("");
         toggleTeamSizeButton.addClickCommands(x -> toggleTeamSize());
         container.addChild(toggleTeamSizeButton);
-        container.setLocalTranslation(0, 800, 0);
+        container.setLocalTranslation(500, 600, 0);
+        container.addChild(new Label("Humans per team:"));
         int teamCount = 2;
         humanCountSliders = new Slider[teamCount];
         for (int i = 0; i < humanCountSliders.length; i++) {

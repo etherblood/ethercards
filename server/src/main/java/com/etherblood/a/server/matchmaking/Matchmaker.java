@@ -33,6 +33,9 @@ public class Matchmaker {
     }
 
     public synchronized void enqueue(MatchmakeRequest request) {
+        if (request.humanCount == 0) {
+            throw new IllegalArgumentException("Match must have at least 1 human player.");
+        }
         matchRequests.add(request);
     }
 

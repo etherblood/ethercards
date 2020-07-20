@@ -127,6 +127,7 @@ public class GameApplication extends SimpleApplication {
         Attributes attrs = styles.getSelector(defaultStyleName);
         attrs.set("color", ColorRGBA.LightGray);
         attrs.set("background", bg);
+        attrs.set("fontSize", 50);
 
 //        BaseStyles.loadGlassStyle();// very slow
         styles.setDefaultStyle(defaultStyleName);

@@ -149,7 +149,7 @@ public class GameService {
         LOG.trace("Processing {} bots.", bots.size());
         for (GameBotMapping bot : bots) {
             if (botMoves.containsKey(bot.gameId)) {
-                LOG.debug("Game_{} Still computing move.", bot.gameId);
+                LOG.trace("Game_{} Still computing move.", bot.gameId);
                 continue;
             }
 
