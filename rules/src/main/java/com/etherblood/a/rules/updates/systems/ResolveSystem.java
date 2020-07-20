@@ -242,19 +242,23 @@ public class ResolveSystem {
     }
 
     private void updateTeamResult(int team) {
+        boolean allLost = true;
         for (int player : data.list(core.PLAYER_INDEX)) {
-            if (!data.hasValue(player, core.TEAM, team)) {
-                continue;
-            }
-            OptionalInt playerResult = data.getOptional(player, core.PLAYER_RESULT);
-            if (!playerResult.isPresent()) {
-                return;
-            } else if (playerResult.getAsInt() == PlayerResult.WIN) {
-                setTeamResult(team, PlayerResult.WIN);
-                return;
+            if (data.hasValue(player, core.TEAM, team)) {
+                OptionalInt playerResult = data.getOptional(player, core.PLAYER_RESULT);
+                if (playerResult.isPresent()) {
+                    if (playerResult.getAsInt() == PlayerResult.WIN) {
+                        setTeamResult(team, PlayerResult.WIN);
+                        return;
+                    }
+                } else {
+                    allLost = false;
+                }
             }
         }
-        setTeamResult(team, PlayerResult.LOSS);
+        if (allLost) {
+            setTeamResult(team, PlayerResult.LOSS);
+        }
     }
 
     private boolean survive() {
