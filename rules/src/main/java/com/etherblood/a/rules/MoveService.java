@@ -326,108 +326,111 @@ public class MoveService {
 
     private void update() {
         new GameLoopService(data, settings.templates, random, eventListener).run();
-//        new SystemFactory(data, settings.templates, random, eventListener).build().run();
         assert validateStateLegal();
     }
 
     private boolean validateStateLegal() {
-        for (int player : data.list(core.TEAM)) {
-            int team = data.get(player, core.TEAM);
-            if (!data.has(team, core.TEAM_INDEX)) {
-                throw new IllegalStateException("Player has team without index.");
-            }
-        }
-
-        for (int card : data.list(core.OWNER)) {
-            int player = data.get(card, core.OWNER);
-            if (!data.has(player, core.PLAYER_INDEX)) {
-                throw new IllegalStateException("Card has owner without index.");
-            }
-            int team = data.get(player, core.TEAM);
-            if(!data.hasValue(card, core.TEAM, team)) {
-                throw new IllegalStateException("Card has different team than its owner.");
-            }
-        }
-
-        IntList playerResults = data.list(core.PLAYER_RESULT);
-        IntList winners = new IntList();
-        IntList losers = new IntList();
-        for (int player : playerResults) {
-            if (data.get(player, core.PLAYER_RESULT) == PlayerResult.WIN) {
-                winners.add(player);
-            } else {
-                losers.add(player);
-            }
-        }
-        IntList players = data.list(core.PLAYER_INDEX);
-        if (!winners.isEmpty()) {
-            for (int player : players) {
-                if (data.has(player, core.PLAYER_RESULT)) {
-                    continue;
+        try {
+            for (int player : data.list(core.TEAM)) {
+                int team = data.get(player, core.TEAM);
+                if (!data.has(team, core.TEAM_INDEX)) {
+                    throw new IllegalStateException("Player has team without index.");
                 }
-                throw new IllegalStateException("Players without playerResult exist when there is already a winner.");
             }
-        }
-        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
-            if (data.has(player, core.PLAYER_RESULT)) {
-                throw new IllegalStateException("Active player has a playerResult.");
-            }
-            if (!data.has(player, core.PLAYER_INDEX)) {
-                throw new IllegalStateException("Active player does not have a playerIndex");
-            }
-        }
 
-        if (data.list(core.ACTIVE_TEAM_PHASE).isEmpty()) {
-            if (data.list(core.ACTIVE_PLAYER_PHASE).nonEmpty()) {
-                throw new IllegalStateException("Some players are still active when there is no activeTeamPhase.");
+            for (int card : data.list(core.OWNER)) {
+                int player = data.get(card, core.OWNER);
+                if (!data.has(player, core.PLAYER_INDEX)) {
+                    throw new IllegalStateException("Card has owner without index.");
+                }
+                int team = data.get(player, core.TEAM);
+                if (!data.hasValue(card, core.TEAM, team)) {
+                    throw new IllegalStateException("Card has different team than its owner.");
+                }
             }
-            if (winners.size() + losers.size() != players.size()) {
-                throw new IllegalStateException("Some players are still without playerResult and there is no activePlayerPhase.");
-            }
-        }
 
-        for (int minion : data.list(core.IN_BATTLE_ZONE)) {
-            if (!data.has(minion, core.OWNER)) {
-                throw new IllegalStateException("Minion without owner in battle zone.");
+            IntList playerResults = data.list(core.PLAYER_RESULT);
+            IntList winners = new IntList();
+            IntList losers = new IntList();
+            for (int player : playerResults) {
+                if (data.get(player, core.PLAYER_RESULT) == PlayerResult.WIN) {
+                    winners.add(player);
+                } else {
+                    losers.add(player);
+                }
             }
-            if (!data.has(minion, core.CARD_TEMPLATE)) {
-                throw new IllegalStateException("Minion without template in battle zone.");
+            IntList players = data.list(core.PLAYER_INDEX);
+            if (!winners.isEmpty()) {
+                for (int player : players) {
+                    if (data.has(player, core.PLAYER_RESULT)) {
+                        continue;
+                    }
+                    throw new IllegalStateException("Players without playerResult exist when there is already a winner.");
+                }
             }
-        }
+            for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
+                if (data.has(player, core.PLAYER_RESULT)) {
+                    throw new IllegalStateException("Active player has a playerResult.");
+                }
+                if (!data.has(player, core.PLAYER_INDEX)) {
+                    throw new IllegalStateException("Active player does not have a playerIndex");
+                }
+            }
 
-        for (int minion : data.list(core.IN_HAND_ZONE)) {
-            if (!data.has(minion, core.OWNER)) {
-                throw new IllegalStateException("Card without owner in hand zone.");
+            if (data.list(core.ACTIVE_TEAM_PHASE).isEmpty()) {
+                if (data.list(core.ACTIVE_PLAYER_PHASE).nonEmpty()) {
+                    throw new IllegalStateException("Some players are still active when there is no activeTeamPhase.");
+                }
+                if (winners.size() + losers.size() != players.size()) {
+                    throw new IllegalStateException("Some players are still without playerResult and there is no activePlayerPhase.");
+                }
             }
-            if (!data.has(minion, core.CARD_TEMPLATE)) {
-                throw new IllegalStateException("Card without template in hand zone.");
-            }
-        }
 
-        for (int minion : data.list(core.IN_LIBRARY_ZONE)) {
-            if (!data.has(minion, core.OWNER)) {
-                throw new IllegalStateException("Card without owner in library zone.");
+            for (int minion : data.list(core.IN_BATTLE_ZONE)) {
+                if (!data.has(minion, core.OWNER)) {
+                    throw new IllegalStateException("Minion without owner in battle zone.");
+                }
+                if (!data.has(minion, core.CARD_TEMPLATE)) {
+                    throw new IllegalStateException("Minion without template in battle zone.");
+                }
             }
-            if (!data.has(minion, core.CARD_TEMPLATE)) {
-                throw new IllegalStateException("Card without template in library zone.");
-            }
-        }
 
-        for (int minion : data.list(core.ATTACK_TARGET)) {
-            if (!data.has(minion, core.IN_BATTLE_ZONE)) {
-                throw new IllegalStateException("Attacking minion is not in battle zone.");
+            for (int minion : data.list(core.IN_HAND_ZONE)) {
+                if (!data.has(minion, core.OWNER)) {
+                    throw new IllegalStateException("Card without owner in hand zone.");
+                }
+                if (!data.has(minion, core.CARD_TEMPLATE)) {
+                    throw new IllegalStateException("Card without template in hand zone.");
+                }
             }
-        }
 
-        for (int entity : data.list(core.OWNER)) {
-            int owner = data.get(entity, core.OWNER);
-            int team = data.get(entity, core.TEAM);
-            if (!data.hasValue(owner, core.TEAM, team)) {
-                throw new IllegalStateException("Entities owner has a different team than entity.");
+            for (int minion : data.list(core.IN_LIBRARY_ZONE)) {
+                if (!data.has(minion, core.OWNER)) {
+                    throw new IllegalStateException("Card without owner in library zone.");
+                }
+                if (!data.has(minion, core.CARD_TEMPLATE)) {
+                    throw new IllegalStateException("Card without template in library zone.");
+                }
             }
-        }
 
-        return true;
+            for (int minion : data.list(core.ATTACK_TARGET)) {
+                if (!data.has(minion, core.IN_BATTLE_ZONE)) {
+                    throw new IllegalStateException("Attacking minion is not in battle zone.");
+                }
+            }
+
+            for (int entity : data.list(core.OWNER)) {
+                int owner = data.get(entity, core.OWNER);
+                int team = data.get(entity, core.TEAM);
+                if (!data.hasValue(owner, core.TEAM, team)) {
+                    throw new IllegalStateException("Entities owner has a different team than entity.");
+                }
+            }
+            return true;
+        } catch (IllegalStateException e) {
+            LOG.error("{}", EntityUtil.toMap(data));
+            throw e;
+        }
     }
 
     public HistoryRandom getRandom() {
