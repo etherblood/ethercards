@@ -6,7 +6,7 @@
         "colors": [
             "WHITE"
         ],
-        "description": "At the beginning of your upkeep, if you have 50 or more life, you win the game.",
+        "description": "In your upkeep, if you have 50 or more life, you win the game.",
         "flavourText": "It surveys the withering landscape, waiting for a victory only it can see."
     },
     "manaCost": 6,

@@ -311,7 +311,7 @@ public class MoveService {
         int randomHistorySize = random.getHistory().size();
         EntityData backup = new SimpleEntityData(data.getComponents());
         EntityUtil.copy(data, backup);
-        LOG.debug("Created backup.");
+        LOG.trace("Created backup.");
         try {
             runnable.run();
         } catch (Throwable t) {

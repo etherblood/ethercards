@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class GameServer {
 
+    static final String BOT_NAME = "Bot";
     private static final Logger LOG = LoggerFactory.getLogger(GameServer.class);
 
     private final Server server;
@@ -27,7 +28,7 @@ public class GameServer {
         server = new Server(1024 * 1024, 1024 * 1024);
         NetworkUtil.init(server.getKryo());
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
-        Matchmaker matchmaker = new Matchmaker(-1, "Bot", botLibrary);
+        Matchmaker matchmaker = new Matchmaker(-1, BOT_NAME, botLibrary);
         GameService gameService = new GameService(server, jwtParser, assetLoader, matchmaker, scheduledThreadPoolExecutor);
         server.addListener(new Listener() {
 

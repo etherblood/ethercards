@@ -8,9 +8,9 @@
     ],
     "description": "Summon three 1/1 dogs."
   },
+  "manaCost": 3,
   "casts": [
     {
-      "manaCost": 3,
       "effects": [
         {
           "type": "summon",

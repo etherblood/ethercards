@@ -215,7 +215,7 @@ public class GameService {
 
             if (player.name.equalsIgnoreCase("destroflyer")) {
                 for (RawPlayerSetup opponent : players) {
-                    if (player == opponent) {
+                    if (player == opponent || opponent.name.equals(GameServer.BOT_NAME)) {
                         continue;
                     }
                     replaceCards(opponent.library, "the_coin", "the_other_coin");

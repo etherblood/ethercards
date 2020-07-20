@@ -1,6 +1,5 @@
 package com.etherblood.a.gui.soprettyboard;
 
-import com.destrostudios.cardgui.Card;
 import com.destrostudios.cardgui.CardZone;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
