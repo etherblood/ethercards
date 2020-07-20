@@ -84,6 +84,7 @@ public class PhaseSystem {
         applyBlocks(team);
         applyAttacks(team);
         clearTemporaryStats();
+        resolveSystem.run();
     }
 
     private void applyBlocks(int team) {
