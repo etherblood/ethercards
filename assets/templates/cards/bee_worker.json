@@ -6,8 +6,9 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Dies after Battle. Draw 1 card when this dies."
+    "description": "Dies after Battle. Gain 1 Delayed Mana when this dies."
   },
+  "manaCost": 1,
   "components": {
     "ATTACK": 0,
     "HEALTH": 0,
@@ -33,7 +34,7 @@
         {
           "type": "buff",
           "components": {
-            "DRAW_CARDS_REQUEST": 1
+            "DELAYED_MANA": 1
           }
         }
       ]
@@ -43,6 +44,5 @@
     {
       "type": "selfSummon"
     }
-  ],
-  "manaCost": 1
+  ]
 }

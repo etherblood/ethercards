@@ -44,6 +44,7 @@ public class CoreComponents implements ComponentsModule {
     public final int CANNOT_BE_CAST_TARGETED;
     public final int CANNOT_BE_MULLIGANED;
     public final int MANA;
+    public final int DELAYED_MANA;
     public final int MANA_POOL;
     public final int MANA_POOL_AURA;
     public final int MANA_POOL_AURA_GROWTH;
@@ -110,6 +111,7 @@ public class CoreComponents implements ComponentsModule {
         CANNOT_BE_CAST_TARGETED = register.applyAsInt("CANNOT_BE_CAST_TARGETED");
         CANNOT_BE_MULLIGANED = register.applyAsInt("CANNOT_BE_MULLIGANED");
         MANA = register.applyAsInt("MANA");
+        DELAYED_MANA = register.applyAsInt("DELAYED_MANA");
         MANA_POOL = register.applyAsInt("MANA_POOL");
         MANA_POOL_AURA = register.applyAsInt("MANA_POOL_AURA");
         MANA_POOL_AURA_GROWTH = register.applyAsInt("MANA_POOL_AURA_GROWTH");

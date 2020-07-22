@@ -11,6 +11,7 @@ import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
+import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
 public class PhaseSystem {
@@ -266,6 +267,11 @@ public class PhaseSystem {
             assert data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
             assert data.hasValue(player, core.TEAM, team);
             int mana = new EffectiveStatsService(data, templates).manaPool(player);
+            OptionalInt delayedMana = data.getOptional(player, core.DELAYED_MANA);
+            if(delayedMana.isPresent()) {
+                mana += delayedMana.getAsInt();
+                data.remove(player, core.DELAYED_MANA);
+            }
             data.set(player, core.MANA, mana);
         }
         for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {

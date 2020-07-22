@@ -8,8 +8,8 @@
     ]
   },
   "components": {
-    "ATTACK": 2,
-    "HEALTH": 1,
+    "ATTACK": 1,
+    "HEALTH": 3,
     "OWN_MINIONS_VENOM_AURA": 1,
     "FLYING": true
   },
@@ -18,5 +18,5 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 2
+  "manaCost": 3
 }
