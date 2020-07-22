@@ -14,14 +14,10 @@
     "VIGILANCE": true,
     "FLYING": true
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 3,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
+      "type": "selfSummon"
     }
-  ]
+  ],
+  "manaCost": 3
 }

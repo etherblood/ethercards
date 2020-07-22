@@ -8,17 +8,13 @@
     ]
   },
   "manaCost": 3,
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 5,
     "HEALTH": 2
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
 }

@@ -8,16 +8,6 @@
     ],
     "description": "Whenever another nontoken Dragon enters the battlefield under your control, create a 5/5 red Dragon creature token with flying."
   },
-  "casts": [
-    {
-      "manaCost": 8,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 6,
     "HEALTH": 6,
@@ -31,5 +21,11 @@
   ],
   "tribes": [
     "DRAGON"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 8
 }

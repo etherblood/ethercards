@@ -12,13 +12,9 @@
     "ATTACK": 1,
     "HEALTH": 1
   },
-  "casts": [
+  "cast": [
     {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
+      "type": "selfSummon"
     }
   ]
 }

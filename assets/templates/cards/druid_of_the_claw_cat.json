@@ -7,6 +7,12 @@
       "GREEN"
     ]
   },
+  "manaCost": 5,
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
   "components": {
     "ATTACK": 4,
     "HEALTH": 4,

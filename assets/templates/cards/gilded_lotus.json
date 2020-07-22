@@ -8,29 +8,25 @@
     ],
     "description": "Gain 3 Mana Pool."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 6,
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWNER"
+      ],
       "effects": [
         {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "MANA_POOL": 3
-              }
-            }
-          ]
-        },
-        {
-          "type": "selfDiscard"
+          "type": "buff",
+          "components": {
+            "MANA_POOL": 3
+          }
         }
       ]
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 6
 }

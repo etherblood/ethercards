@@ -8,16 +8,6 @@
     ],
     "description": "Summons a 0/0 Bee Worker each turn wich dies after battle and draws a card when it dies."
   },
-  "casts": [
-    {
-      "manaCost": 2,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 3,
@@ -29,5 +19,11 @@
       "type": "summon",
       "minionId": "bee_worker"
     }
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 2
 }

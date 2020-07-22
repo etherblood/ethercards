@@ -30,7 +30,6 @@ import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
 import com.destrostudios.cardgui.zones.CenteredIntervalZone;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
-import com.destrostudios.cardgui.zones.SimpleScalingIntervalZone;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.events.ParticleEvent;
@@ -60,7 +59,6 @@ import com.etherblood.a.rules.moves.EndAttackPhase;
 import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -529,8 +527,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
         int cardTemplate = game.getData().get(castable, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(cardTemplate);
-        CardCast cast = template.getAttackPhaseCast() != null ? template.getAttackPhaseCast() : template.getBlockPhaseCast();
-        if (cast.isTargeted()) {
+        IntList validTargets = template.getCastTarget().getValidTargets(game.getData(), game.getTemplates(), castable);
+        if (validTargets.nonEmpty()) {
             return new AimToTargetInteractivity(TargetSnapMode.VALID) {
                 @Override
                 public boolean isValid(BoardObject target) {

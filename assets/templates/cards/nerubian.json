@@ -8,18 +8,14 @@
     ]
   },
   "manaCost": 3,
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 3,
     "HEALTH": 3,
     "REACH": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
 }

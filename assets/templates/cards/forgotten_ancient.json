@@ -9,16 +9,6 @@
     "description": "Whenever a player casts a spell, you may put a +1/+1 counter on Forgotten Ancient.",
     "flavourText": "Its blood is life. Its body is growth."
   },
-  "casts": [
-    {
-      "manaCost": 4,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 3
@@ -40,5 +30,11 @@
         }
       ]
     }
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 4
 }

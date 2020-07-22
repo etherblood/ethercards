@@ -14,20 +14,12 @@
     "HEALTH": 2,
     "FLYING": true
   },
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "onDeath": [
     {
       "type": "soulshift",
       "power": 3
-    }, {
+    },
+    {
       "type": "targeted",
       "targeting": "ALL",
       "targets": [
@@ -45,5 +37,10 @@
   ],
   "tribes": [
     "SPIRIT"
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
   ]
 }

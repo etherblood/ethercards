@@ -8,34 +8,30 @@
     ],
     "description": "Your hero gains 5 health."
   },
-  "casts": [
-    {
-      "manaCost": 5,
-      "effects": [
-        {
-          "type": "selfSummon"
-        },
-        {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OWN_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "HEALTH": 5
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 5,
     "HEALTH": 4,
     "TRAMPLE": 1
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "HEALTH": 5
+          }
+        }
+      ]
+    }
+  ],
+  "manaCost": 5
 }

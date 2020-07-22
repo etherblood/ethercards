@@ -6,18 +6,8 @@
     "colors": [
       "WHITE"
     ],
-    "flavourText": "The kor's most righteous dead are given the greatest reward: an eternity tied to the land they so cherish."
+    "flavourText": "The kor\u0027s most righteous dead are given the greatest reward: an eternity tied to the land they so cherish."
   },
-  "casts": [
-    {
-      "manaCost": 5,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 4,
     "HEALTH": 5,
@@ -32,5 +22,11 @@
   ],
   "tribes": [
     "SPIRIT"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 5
 }

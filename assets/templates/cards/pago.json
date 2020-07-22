@@ -7,19 +7,15 @@
       "RED"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 3,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 4,
     "HEALTH": 4,
     "RAGE": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 3
 }

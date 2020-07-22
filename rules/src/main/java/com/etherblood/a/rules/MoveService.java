@@ -15,9 +15,8 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
-import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.targeting.TargetUtil;
+import com.etherblood.a.rules.templates.TargetSelection;
 import com.etherblood.a.rules.updates.systems.GameLoopService;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,8 +29,8 @@ public class MoveService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MoveService.class);
 
-    private final GameSettings settings;
     private final EntityData data;
+    private final GameTemplates templates;
     private final HistoryRandom random;
     private final List<MoveReplay> history;
     private final CoreComponents core;
@@ -41,13 +40,13 @@ public class MoveService {
     private final boolean backupsEnabled;
     private final boolean validateMoves;
 
-    public MoveService(GameSettings settings, EntityData data, HistoryRandom random, GameEventListener eventListener) {
-        this(settings, data, random, Collections.emptyList(), true, true, eventListener);
+    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, GameEventListener eventListener) {
+        this(data, templates, random, Collections.emptyList(), true, true, eventListener);
     }
 
-    public MoveService(GameSettings settings, EntityData data, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves, GameEventListener eventListener) {
-        this.settings = settings;
+    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves, GameEventListener eventListener) {
         this.data = data;
+        this.templates = templates;
         this.random = random;
         this.core = data.getComponents().getModule(CoreComponents.class);
         this.backupsEnabled = backupsEnabled;
@@ -58,7 +57,7 @@ public class MoveService {
         } else {
             this.history = null;
         }
-        this.moveAvailability = new MoveAvailabilityService(data, settings.templates);
+        this.moveAvailability = new MoveAvailabilityService(data, templates);
     }
 
     public List<MoveReplay> getHistory() {
@@ -93,9 +92,8 @@ public class MoveService {
                         if (!moveAvailability.canCast(player, handCard, false)) {
                             continue;
                         }
-                        CardTemplate template = settings.templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
-                        CardCast cast = template.getAttackPhaseCast();
-                        addCastMoves(player, handCard, cast, result);
+                        CardTemplate template = templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
+                        addCastMoves(player, handCard, template.getCastTarget(), result);
                     }
                     result.add(new EndAttackPhase(player));
                     break;
@@ -116,9 +114,8 @@ public class MoveService {
                         if (!moveAvailability.canCast(player, handCard, false)) {
                             continue;
                         }
-                        CardTemplate template = settings.templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
-                        CardCast cast = template.getBlockPhaseCast();
-                        addCastMoves(player, handCard, cast, result);
+                        CardTemplate template = templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
+                        addCastMoves(player, handCard, template.getCastTarget(), result);
                     }
                     result.add(new EndBlockPhase(player));
                     break;
@@ -145,17 +142,19 @@ public class MoveService {
         return result;
     }
 
-    private void addCastMoves(int player, int handCard, CardCast cast, List<Move> result) {
-        if (cast.isTargeted()) {
-            for (int target : TargetUtil.findValidTargets(data, handCard, cast.getTargets())) {
+    private void addCastMoves(int player, int handCard, TargetSelection targeting, List<Move> result) {
+        IntList targets = targeting.getValidTargets(data, templates, handCard);
+        if (targets.isEmpty()) {
+            if (!targeting.requiresTarget()) {
+                if (moveAvailability.canCast(player, handCard, null, false)) {
+                    result.add(new Cast(player, handCard, null));
+                }
+            }
+        } else {
+            for (int target : targets) {
                 if (moveAvailability.canCast(player, handCard, target, false)) {
                     result.add(new Cast(player, handCard, target));
                 }
-            }
-        }
-        if (!cast.isTargeted() || cast.isTargetOptional()) {
-            if (moveAvailability.canCast(player, handCard, null, false)) {
-                result.add(new Cast(player, handCard, null));
             }
         }
     }
@@ -282,7 +281,7 @@ public class MoveService {
     private String getCardName(int entity) {
         OptionalInt templateId = data.getOptional(entity, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
-            return settings.templates.getCard(templateId.getAsInt()).getTemplateName();
+            return templates.getCard(templateId.getAsInt()).getTemplateName();
         }
         return null;
     }
@@ -325,7 +324,7 @@ public class MoveService {
     }
 
     private void update() {
-        new GameLoopService(data, settings.templates, random, eventListener).run();
+        new GameLoopService(data, templates, random, eventListener).run();
         assert validateStateLegal();
     }
 
@@ -405,6 +404,15 @@ public class MoveService {
             }
 
             for (int minion : data.list(core.IN_LIBRARY_ZONE)) {
+                if (!data.has(minion, core.OWNER)) {
+                    throw new IllegalStateException("Card without owner in library zone.");
+                }
+                if (!data.has(minion, core.CARD_TEMPLATE)) {
+                    throw new IllegalStateException("Card without template in library zone.");
+                }
+            }
+
+            for (int minion : data.list(core.IN_GRAVEYARD_ZONE)) {
                 if (!data.has(minion, core.OWNER)) {
                     throw new IllegalStateException("Card without owner in library zone.");
                 }

@@ -8,30 +8,26 @@
     ],
     "description": "A random player wins."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 0,
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWNER",
+        "OPPONENT"
+      ],
       "effects": [
         {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OWNER",
-            "OPPONENT"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "PLAYER_RESULT_REQUEST": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "selfDiscard"
+          "type": "buff",
+          "components": {
+            "PLAYER_RESULT_REQUEST": 1
+          }
         }
       ]
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 0
 }

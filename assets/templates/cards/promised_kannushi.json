@@ -12,19 +12,15 @@
     "ATTACK": 1,
     "HEALTH": 1
   },
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "onDeath": [
     {
       "type": "soulshift",
       "power": 7
+    }
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
     }
   ]
 }

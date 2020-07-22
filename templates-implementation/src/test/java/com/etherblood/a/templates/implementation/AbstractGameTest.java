@@ -54,7 +54,7 @@ public abstract class AbstractGameTest {
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
+        loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
         String[] cardPool = new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class);
         for (String card : cardPool) {
             loader.registerCardAlias(card);
@@ -92,7 +92,7 @@ public abstract class AbstractGameTest {
     @BeforeEach
     public void before() {
         data = new SimpleEntityData(settings.components);
-        moves = new MoveService(settings, data, HistoryRandom.producer(new Random(7)::nextInt), new NoopGameEventListener());
+        moves = new MoveService(data, settings.templates, HistoryRandom.producer(new Random(7)::nextInt), new NoopGameEventListener());
         game = new Game(settings, data, moves);
         effectiveStats = new EffectiveStatsService(data, templates);
 

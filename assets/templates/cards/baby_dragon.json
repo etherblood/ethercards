@@ -7,14 +7,10 @@
       "RED"
     ]
   },
-  "casts": [
+  "manaCost": 1,
+  "cast": [
     {
-      "manaCost": 1,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
+      "type": "selfSummon"
     }
   ],
   "components": {

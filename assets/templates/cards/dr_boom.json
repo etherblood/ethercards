@@ -8,26 +8,22 @@
     ],
     "description": "Summon two 1/1 Boombots which deal 2 damage to a random enemy when they die."
   },
-  "casts": [
-    {
-      "manaCost": 7,
-      "effects": [
-        {
-          "type": "summon",
-          "minionId": "boombot"
-        },
-        {
-          "type": "selfSummon"
-        },
-        {
-          "type": "summon",
-          "minionId": "boombot"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 7,
     "HEALTH": 7
-  }
+  },
+  "cast": [
+    {
+      "type": "summon",
+      "minionId": "boombot"
+    },
+    {
+      "type": "selfSummon"
+    },
+    {
+      "type": "summon",
+      "minionId": "boombot"
+    }
+  ],
+  "manaCost": 7
 }

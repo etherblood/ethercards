@@ -7,21 +7,17 @@
       "GREEN"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 2,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 2,
     "VENOM": 1,
     "OWN_MINIONS_HEALTH_AURA": 1,
     "FLYING": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 2
 }

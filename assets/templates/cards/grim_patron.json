@@ -8,16 +8,6 @@
     ],
     "description": "Summon a 3/3 Grim Patron whenever this survives damage."
   },
-  "casts": [
-    {
-      "manaCost": 5,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 3,
     "HEALTH": 3
@@ -27,5 +17,11 @@
       "type": "summon",
       "minionId": "grim_patron"
     }
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 5
 }

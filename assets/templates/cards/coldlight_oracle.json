@@ -8,34 +8,30 @@
     ],
     "description": "Each player Draws 2 cards."
   },
-  "casts": [
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 2
+  },
+  "cast": [
     {
-      "manaCost": 3,
+      "type": "selfSummon"
+    },
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWNER",
+        "OPPONENT"
+      ],
       "effects": [
         {
-          "type": "selfSummon"
-        },
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER",
-            "OPPONENT"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DRAW_CARDS_REQUEST": 2
-              }
-            }
-          ]
+          "type": "buff",
+          "components": {
+            "DRAW_CARDS_REQUEST": 2
+          }
         }
       ]
     }
   ],
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 2
-  }
+  "manaCost": 3
 }

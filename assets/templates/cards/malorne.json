@@ -8,16 +8,6 @@
     ],
     "description": "Shuffle this into your library when it dies."
   },
-  "casts": [
-    {
-      "manaCost": 8,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 9,
     "HEALTH": 7
@@ -30,5 +20,11 @@
         "IN_LIBRARY_ZONE": 1
       }
     }
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 8
 }

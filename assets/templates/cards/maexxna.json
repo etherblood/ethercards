@@ -7,20 +7,16 @@
       "BLACK"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 7,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 2,
     "HEALTH": 8,
     "VENOM": 4,
     "REACH": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 7
 }

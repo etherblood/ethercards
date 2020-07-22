@@ -52,7 +52,7 @@ public class GameReplayService {
         Components components = componentsBuilder.build();
 
         TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
-        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
+        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
 
         Map<String, Integer> cardAliasMap = new HashMap<>();
         RawGameSetup gameData = replay.setup;
@@ -68,7 +68,7 @@ public class GameReplayService {
         builder.templates = loader.buildGameTemplates();
         GameSettings settings = builder.build();
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(settings, data, HistoryRandom.producer(), Collections.emptyList(), true, true, listener);
+        MoveService moves = new MoveService(data, settings.templates, HistoryRandom.producer(), Collections.emptyList(), true, true, listener);
         Game game = new Game(settings, data, moves);
         gameData.toGameSetup(cardAliasMap::get).setup(data, game.getTemplates());
         updateInstance(game);

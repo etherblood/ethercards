@@ -7,19 +7,15 @@
       "GREEN"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 2,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 8,
     "HEALTH": 0,
     "TRAMPLE": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 2
 }

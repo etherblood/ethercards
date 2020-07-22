@@ -8,29 +8,25 @@
     ],
     "description": "Gain 1 Mana."
   },
-  "casts": [
+  "manaCost": 0,
+  "cast": [
     {
-      "manaCost": 0,
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWNER"
+      ],
       "effects": [
         {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "MANA": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "selfDiscard"
+          "type": "buff",
+          "components": {
+            "MANA": 1
+          }
         }
       ]
+    },
+    {
+      "type": "selfDiscard"
     }
   ]
 }

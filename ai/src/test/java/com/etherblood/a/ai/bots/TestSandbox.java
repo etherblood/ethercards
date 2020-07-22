@@ -82,7 +82,7 @@ public class TestSandbox {
 
     private Game simulationGame(Game game, Random random) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(random::nextInt), null, false, false, new NoopGameEventListener());
+        MoveService moves = new MoveService(data, game.getSettings().templates, HistoryRandom.producer(random::nextInt), null, false, false, new NoopGameEventListener());
         return new Game(game.getSettings(), data, moves);
     }
 
@@ -92,10 +92,10 @@ public class TestSandbox {
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
         TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
-        TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
+        TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
 
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
-        rawLibrary.hero = "lots_of_health";
+        rawLibrary.hero = "elderwood_ahri";
         rawLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
 
         List<RawPlayerSetup> players = new ArrayList<>();
@@ -121,7 +121,7 @@ public class TestSandbox {
         GameSettings settings = settingsBuilder.build();
 
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(settings, data, HistoryRandom.producer(random::nextInt), new NoopGameEventListener());
+        MoveService moves = new MoveService(data, settings.templates, HistoryRandom.producer(random::nextInt), new NoopGameEventListener());
         Game game = new Game(settings, data, moves);
         gameSetup.toGameSetup(loader::registerCardAlias).setup(data, game.getTemplates());
         moves.apply(new Start());

@@ -82,7 +82,7 @@ public class GameApplication extends SimpleApplication {
         Components components = componentsBuilder.build();
 
         TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
-        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/cards/" + x + ".json", JsonElement.class), new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers()));
+        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/cards/" + x + ".json", JsonElement.class), new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
         String[] cardAliases = load("templates/card_pool.json", String[].class);
         Map<String, Integer> cardAliasToId = new LinkedHashMap<>();
         for (String card : cardAliases) {

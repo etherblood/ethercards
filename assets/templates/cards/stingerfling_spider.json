@@ -6,39 +6,35 @@
     "colors": [
       "GREEN"
     ],
-    "description": "When Stingerfling Spider enters the battlefield, you may destroy target creature if it has flying.",
+    "description": "When Stingerfling Spider enters the battlefield, destroy target creature with flying.",
     "flavourText": "The juiciest prey is that which grows lazy, thinking itself beyond the reach of danger."
   },
-  "casts": [
+  "manaCost": 5,
+  "cast": [
     {
-      "manaCost": 5,
-      "targetOptional": true,
-      "targets": [
-        "OWN_MINION",
-        "OPPONENT_MINION",
-        "OWN_HERO",
-        "OPPONENT_HERO"
-      ],
+      "type": "targetFlyingActivated",
       "effects": [
         {
-          "type": "targetFlyingActivated",
-          "effects": [{
-            "type": "buff",
-            "components": {
-              "DEATH_REQUEST": true
-            }
-          },
-          {
-            "type": "particle",
-            "alias": "stingerfling_spider"
-          }]
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": true
+          }
         },
         {
-          "type": "selfSummon"
+          "type": "particle",
+          "alias": "stingerfling_spider"
         }
       ]
+    },
+    {
+      "type": "selfSummon"
     }
   ],
+  "target": {
+    "type": "flyingMinion",
+    "requiresTarget": false,
+    "select": "USER"
+  },
   "components": {
     "ATTACK": 2,
     "HEALTH": 5,

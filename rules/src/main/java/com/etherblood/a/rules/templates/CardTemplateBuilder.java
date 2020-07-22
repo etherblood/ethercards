@@ -11,8 +11,9 @@ import java.util.Set;
 public class CardTemplateBuilder {
 
     protected Integer manaCost;
-    protected final List<CardCastBuilder> casts = new ArrayList<>();
+    protected TargetSelection castTarget;
     protected final IntMap components = new IntMap();
+    protected final List<Effect> castEffects = new ArrayList<>();
     protected final Set<Tribe> tribes = EnumSet.noneOf(Tribe.class);
     protected final List<Effect> onCastEffects = new ArrayList<>();
     protected final List<Effect> onSummonEffects = new ArrayList<>();
@@ -23,10 +24,12 @@ public class CardTemplateBuilder {
     protected final List<Effect> onDrawEffects = new ArrayList<>();
     protected final Map<Integer, List<StatModifier>> componentModifiers = new HashMap<>();
 
-    public CardCastBuilder newCast() {
-        CardCastBuilder cast = new CardCastBuilder();
-        casts.add(cast);
-        return cast;
+    public void setCastTarget(TargetSelection castTarget) {
+        this.castTarget = castTarget;
+    }
+
+    public void castEffect(Effect effect) {
+        castEffects.add(effect);
     }
 
     public void setManaCost(Integer manaCost) {
@@ -78,7 +81,7 @@ public class CardTemplateBuilder {
     }
 
     public CardTemplate build(int id) {
-        return new CardTemplate(id, !components.isEmpty(), manaCost, casts.stream().map(CardCastBuilder::build).toArray(CardCast[]::new), components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, onDrawEffects, componentModifiers);
+        return new CardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, onDrawEffects, componentModifiers);
     }
 
 }

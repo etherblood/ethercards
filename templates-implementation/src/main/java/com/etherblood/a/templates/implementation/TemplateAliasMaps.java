@@ -3,6 +3,7 @@ package com.etherblood.a.templates.implementation;
 import com.etherblood.a.templates.implementation.effects.TargetedEffects;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.StatModifier;
+import com.etherblood.a.rules.templates.TargetSelection;
 import com.etherblood.a.templates.implementation.effects.BindControlEffect;
 import com.etherblood.a.templates.implementation.effects.BuffEffect;
 import com.etherblood.a.templates.implementation.effects.CardDestructionEffect;
@@ -35,11 +36,17 @@ import com.etherblood.a.templates.implementation.statmodifiers.AddOwnHandCardCou
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnManaPoolModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnSpiritCountModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.OwnHandCardCountActivatedModifier;
+import com.etherblood.a.templates.implementation.targets.FlyingMinionTarget;
+import com.etherblood.a.templates.implementation.targets.SimpleTarget;
+import com.etherblood.a.templates.api.Untargeted;
+import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffectsEffects;
+import com.etherblood.a.templates.implementation.effects.TargetActivatedEffects;
+import com.etherblood.a.templates.implementation.effects.TransformTemplateEffect;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TemplateAliasMaps {
-    
+
     public Map<String, Class<? extends Effect>> getEffects() {
         Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
         effectClasses.put("summon", SummonEffect.class);
@@ -49,6 +56,8 @@ public class TemplateAliasMaps {
         effectClasses.put("fractionalDamage", FractionalDamageEffect.class);
         effectClasses.put("buff", BuffEffect.class);
         effectClasses.put("debuff", DebuffEffect.class);
+        effectClasses.put("transformTemplate", TransformTemplateEffect.class);
+        effectClasses.put("sourceOwnerPhase", SourceOwnerPhaseEffectsEffects.class);
         effectClasses.put("create", CreateCardEffect.class);
         effectClasses.put("targeted", TargetedEffects.class);
         effectClasses.put("particle", ParticleEventEffect.class);
@@ -61,6 +70,7 @@ public class TemplateAliasMaps {
         effectClasses.put("resurrectRandom", ResurrectRandomEffect.class);
         effectClasses.put("kolaghanDamage", KolaghanDamageEffect.class);
         effectClasses.put("tribeActivated", TribeActivatedEffects.class);
+        effectClasses.put("targetActivated", TargetActivatedEffects.class);
         effectClasses.put("targetOwnedActivated", TargetOwnedActivatedEffects.class);
         effectClasses.put("targetFlyingActivated", TargetFlyingActivatedEffects.class);
         effectClasses.put("targetHealthThresholdActivated", TargetHealthThresholdActivatedEffects.class);
@@ -81,5 +91,13 @@ public class TemplateAliasMaps {
         modifierClasses.put("addFractional", AddFractionalModifier.class);
         modifierClasses.put("ownHandCardCountActivated", OwnHandCardCountActivatedModifier.class);
         return modifierClasses;
+    }
+
+    public Map<String, Class<? extends TargetSelection>> getTargetSelection() {
+        Map<String, Class<? extends TargetSelection>> targetClasses = new HashMap<>();
+        targetClasses.put("untargeted", Untargeted.class);
+        targetClasses.put("simple", SimpleTarget.class);
+        targetClasses.put("flyingMinion", FlyingMinionTarget.class);
+        return targetClasses;
     }
 }

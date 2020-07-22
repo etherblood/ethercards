@@ -1,30 +1,38 @@
 {
   "alias": "jaces_phantasm",
   "display": {
-    "name": "Jace's Phantasm",
+    "name": "Jace\u0027s Phantasm",
     "imagePath": "jaces_phantasm.jpg",
     "colors": [
       "BLUE"
     ],
-    "description": "Jace's Phantasm gets +4/+4 as long as an opponent has ten or more cards in their graveyard.",
+    "description": "Jace\u0027s Phantasm gets +4/+4 as long as an opponent has ten or more cards in their graveyard.",
     "flavourText": "In the abstract memories of the Iquati, Jace found interesting ideas to improve upon."
   },
   "manaCost": 3,
-  "tribes":[],
-  "casts": [
+  "tribes": [],
+  "attackModifiers": [
     {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
+      "type": "addOnOpponentThreshold",
+      "threshold": 10,
+      "value": 4
     }
   ],
-  "attackModifiers": [{"type": "addOnOpponentThreshold", "threshold": 10, "value": 4}],
-  "healthModifiers": [{"type": "addOnOpponentThreshold", "threshold": 10, "value": 4}],
+  "healthModifiers": [
+    {
+      "type": "addOnOpponentThreshold",
+      "threshold": 10,
+      "value": 4
+    }
+  ],
   "components": {
     "ATTACK": 1,
     "HEALTH": 1,
     "FLYING": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
 }

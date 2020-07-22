@@ -7,19 +7,15 @@
       "GREEN"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 2,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 1,
     "HEALTH": 2,
     "MANA_POOL_AURA": 1
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 2
 }

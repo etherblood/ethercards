@@ -249,7 +249,7 @@ public class GameService {
 
     private Game simulationGame(Game game) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(game.getSettings(), data, HistoryRandom.producer(), null, false, false, new NoopGameEventListener());
+        MoveService moves = new MoveService(data, game.getSettings().templates, HistoryRandom.producer(), null, false, false, new NoopGameEventListener());
         return new Game(game.getSettings(), data, moves);
     }
 }

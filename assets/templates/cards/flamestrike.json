@@ -9,32 +9,28 @@
     "description": "Deal 4 damage to all enemy minions."
   },
   "manaCost": 8,
-  "casts": [
+  "cast": [
     {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OPPONENT_MINION"
+      ],
       "effects": [
         {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OPPONENT_MINION"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 4
-              }
-            }
-          ]
-        },
-        {
-          "type": "particle",
-          "alias": "flamestrike"
-        },
-        {
-          "type": "selfDiscard"
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 4
+          }
         }
       ]
+    },
+    {
+      "type": "particle",
+      "alias": "flamestrike"
+    },
+    {
+      "type": "selfDiscard"
     }
   ]
 }

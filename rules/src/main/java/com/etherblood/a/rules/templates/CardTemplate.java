@@ -2,11 +2,11 @@ package com.etherblood.a.rules.templates;
 
 import com.etherblood.a.entities.collections.IntMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,7 +15,8 @@ public class CardTemplate {
     private final int id;
     private final boolean isMinion;
     private final Integer manaCost;
-    private final CardCast[] casts;
+    private final TargetSelection castTarget;
+    private final List<Effect> castEffects;
     protected final IntMap components;
     protected final Set<Tribe> tribes;
     protected final List<Effect> onCastEffects;
@@ -27,11 +28,12 @@ public class CardTemplate {
     protected final List<Effect> onDrawEffects;
     protected final Map<Integer, List<StatModifier>> componentModifiers;
 
-    protected CardTemplate(int id, boolean isMinion, Integer manaCost, CardCast[] casts, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<Effect> onDrawEffects, Map<Integer, List<StatModifier>> componentModifiers) {
+    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<Effect> onDrawEffects, Map<Integer, List<StatModifier>> componentModifiers) {
         this.id = id;
         this.isMinion = isMinion;
         this.manaCost = manaCost;
-        this.casts = casts;
+        this.castTarget = Objects.requireNonNull(castTarget);
+        this.castEffects = Collections.unmodifiableList(new ArrayList<>(castEffects));
         this.tribes = Collections.unmodifiableSet(EnumSet.copyOf(tribes));
         this.onCastEffects = Collections.unmodifiableList(new ArrayList<>(onCastEffects));
         this.onSummonEffects = Collections.unmodifiableList(new ArrayList<>(onSummonEffects));
@@ -56,16 +58,12 @@ public class CardTemplate {
         return manaCost;
     }
 
-    public CardCast getAttackPhaseCast() {
-        return Arrays.stream(casts).filter(c -> c.isAttackCast()).findFirst().orElse(null);
+    public TargetSelection getCastTarget() {
+        return castTarget;
     }
 
-    public CardCast getBlockPhaseCast() {
-        return Arrays.stream(casts).filter(c -> c.isBlockCast()).findFirst().orElse(null);
-    }
-
-    public CardCast[] getCasts() {
-        return casts;
+    public List<Effect> getCastEffects() {
+        return castEffects;
     }
 
     public String getTemplateName() {

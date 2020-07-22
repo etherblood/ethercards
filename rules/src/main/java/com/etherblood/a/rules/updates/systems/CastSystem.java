@@ -4,8 +4,6 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import java.util.function.IntUnaryOperator;
@@ -42,13 +40,12 @@ public class CastSystem {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
             CardTemplate template = templates.getCard(cardTemplateId);
-            int owner = data.get(castSource, core.OWNER);
-            CardCast cast;
-            if (data.get(owner, core.ACTIVE_PLAYER_PHASE) == PlayerPhase.ATTACK) {
-                cast = template.getAttackPhaseCast();
+            if (target == ~0) {
+                assert template.getCastTarget().isValidTarget(data, templates, castSource, null);
             } else {
-                cast = template.getBlockPhaseCast();
+                assert template.getCastTarget().isValidTarget(data, templates, castSource, target);
             }
+            int owner = data.get(castSource, core.OWNER);
             Integer manaCost = template.getManaCost();
             if (manaCost != null && manaCost != 0) {
                 int mana = data.get(owner, core.MANA);
@@ -58,7 +55,7 @@ public class CastSystem {
                 }
                 data.set(owner, core.MANA, mana);
             }
-            for (Effect effect : cast.getEffects()) {
+            for (Effect effect : template.getCastEffects()) {
                 effect.apply(data, templates, random, events, castSource, target);
             }
 

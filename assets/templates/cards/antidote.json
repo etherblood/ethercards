@@ -8,45 +8,45 @@
     ],
     "description": "Cure up to 5 Poisoned, draw a card."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 2,
+      "type": "debuff",
+      "components": {
+        "POISONED": 5
+      }
+    },
+    {
+      "type": "targeted",
+      "targeting": "ALL",
       "targets": [
-        "OWN_MINION",
-        "OPPONENT_MINION",
-        "OWN_HERO",
-        "OPPONENT_HERO"
+        "OWNER"
       ],
       "effects": [
         {
-          "type": "debuff",
+          "type": "buff",
           "components": {
-            "POISONED": 5
+            "DRAW_CARDS_REQUEST": 1
           }
-        },
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DRAW_CARDS_REQUEST": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "particle",
-          "alias": "antidote"
-        },
-        {
-          "type": "selfDiscard"
         }
       ]
+    },
+    {
+      "type": "particle",
+      "alias": "antidote"
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 2,
+  "target": {
+    "type": "simple",
+    "requiresTarget": false,
+    "filters": [
+      "OWN_MINION",
+      "OPPONENT_MINION",
+      "OWN_HERO",
+      "OPPONENT_HERO"
+    ]
+  }
 }

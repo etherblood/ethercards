@@ -6,11 +6,10 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.CardCastBuilder;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.targeting.TargetFilters;
+import com.etherblood.a.rules.templates.TargetSelection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -35,14 +34,15 @@ public class TemplatesParser {
     private final Map<String, Integer> componentAliases = new HashMap<>();
     private final Gson aliasGson;
 
-    public TemplatesParser(Components components, Map<String, Class<? extends Effect>> effectClasses, Map<String, Class<? extends StatModifier>> modifierClasses) {
+    public TemplatesParser(Components components, Map<String, Class<? extends Effect>> effectClasses, Map<String, Class<? extends StatModifier>> modifierClasses, Map<String, Class<? extends TargetSelection>> targetClasses) {
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
         aliasGson = new GsonBuilder()
                 .registerTypeAdapter(Effect.class, new EffectDeserializer(effectClasses, x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(StatModifier.class, new StatModifierDeserializer(modifierClasses))
-                .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(componentAliases::get))
+                .registerTypeAdapter(TargetSelection.class, new TargetSelectionDeserializer(targetClasses))
+                .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .create();
     }
 
@@ -104,33 +104,20 @@ public class TemplatesParser {
                 builder.setImagePath(null);
             }
 
-            JsonArray casts = cardJson.getAsJsonArray("casts");
-            if (casts != null) {
-                for (JsonElement castElement : casts) {
-                    JsonObject castJson = castElement.getAsJsonObject();
-                    CardCastBuilder cast = builder.newCast();
-                    JsonPrimitive manaCost = castJson.getAsJsonPrimitive("manaCost");
-                    if (manaCost != null) {
-                        builder.setManaCost(manaCost.getAsInt());
-                    }
-                    if (castJson.has("targets")) {
-                        cast.setTargets(aliasGson.fromJson(castJson.getAsJsonArray("targets"), TargetFilters[].class));
-                    }
-                    if (castJson.has("targetOptional")) {
-                        cast.setTargetOptional(castJson.get("targetOptional").getAsBoolean());
-                    }
-                    for (JsonElement jsonElement : castJson.getAsJsonArray("effects")) {
-                        JsonObject effectJson = jsonElement.getAsJsonObject();
-                        cast.addEffect(aliasGson.fromJson(effectJson, Effect.class));
-                    }
-                    if (castJson.has("attackCast")) {
-                        cast.setAttackCast(castJson.get("attackCast").getAsBoolean());
-                    }
-                    if (castJson.has("blockCast")) {
-                        cast.setBlockCast(castJson.get("blockCast").getAsBoolean());
-                    }
+            JsonElement targetJson = cardJson.get("target");
+            if (targetJson != null) {
+                builder.setCastTarget(aliasGson.fromJson(targetJson, TargetSelection.class));
+            } else {
+                builder.setCastTarget(new Untargeted());
+            }
+
+            JsonArray castEffects = cardJson.getAsJsonArray("cast");
+            if (castEffects != null) {
+                for (JsonElement castEffect : castEffects) {
+                    builder.castEffect(aliasGson.fromJson(castEffect, Effect.class));
                 }
             }
+
             JsonElement manaCost = cardJson.get("manaCost");
             if (manaCost != null) {
                 builder.setManaCost(manaCost.getAsInt());

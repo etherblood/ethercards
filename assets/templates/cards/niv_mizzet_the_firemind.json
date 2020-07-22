@@ -14,15 +14,6 @@
   "tribes": [
     "DRAGON"
   ],
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "onDraw": [
     {
       "type": "targeted",
@@ -45,5 +36,10 @@
     "ATTACK": 4,
     "HEALTH": 4,
     "FLYING": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
 }

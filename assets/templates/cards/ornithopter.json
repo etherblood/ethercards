@@ -7,19 +7,15 @@
       "NEUTRAL"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 0,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 2,
     "FLYING": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 0
 }

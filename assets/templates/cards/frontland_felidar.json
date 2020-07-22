@@ -8,19 +8,15 @@
       "WHITE"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 4,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 3,
     "HEALTH": 5,
     "VIGILANCE": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 4
 }

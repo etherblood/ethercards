@@ -13,15 +13,6 @@
     "HEALTH": 7,
     "REACH": true
   },
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "onDeath": [
     {
       "type": "soulshift",
@@ -30,5 +21,10 @@
   ],
   "tribes": [
     "SPIRIT"
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
   ]
 }

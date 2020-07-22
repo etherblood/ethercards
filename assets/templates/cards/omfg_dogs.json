@@ -9,25 +9,21 @@
     "description": "Summon three 1/1 dogs."
   },
   "manaCost": 3,
-  "casts": [
+  "cast": [
     {
-      "effects": [
-        {
-          "type": "summon",
-          "minionId": "dog"
-        },
-        {
-          "type": "summon",
-          "minionId": "dog"
-        },
-        {
-          "type": "summon",
-          "minionId": "dog"
-        },
-        {
-          "type": "selfDiscard"
-        }
-      ]
+      "type": "summon",
+      "minionId": "dog"
+    },
+    {
+      "type": "summon",
+      "minionId": "dog"
+    },
+    {
+      "type": "summon",
+      "minionId": "dog"
+    },
+    {
+      "type": "selfDiscard"
     }
   ]
 }

@@ -8,34 +8,25 @@
     ],
     "description": "Attack-Phase: Draw a Bee Drone. Block-Phase: Draw a Bee Queen."
   },
-  "casts": [
+  "manaCost": 1,
+  "cast": [
     {
-      "attackCast": true,
-      "blockCast": false,
-      "manaCost": 1,
-      "effects": [
+      "type": "sourceOwnerPhase",
+      "block": [
+        {
+          "type": "drawTemplate",
+          "cardId": "bee_queen"
+        }
+      ],
+      "attack": [
         {
           "type": "drawTemplate",
           "cardId": "bee_drone"
-        },
-        {
-          "type": "selfDiscard"
         }
       ]
     },
     {
-      "attackCast": false,
-      "blockCast": true,
-      "manaCost": 1,
-      "effects": [
-        {
-          "type": "drawTemplate",
-          "cardId": "bee_queen"
-        },
-        {
-          "type": "selfDiscard"
-        }
-      ]
+      "type": "selfDiscard"
     }
   ]
 }

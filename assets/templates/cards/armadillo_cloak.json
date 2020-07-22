@@ -9,31 +9,31 @@
     ],
     "description": "Give a minion +2/+2, Trample and Lifelink."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 3,
-      "targets": [
-        "OWN_MINION",
-        "OPPONENT_MINION"
-      ],
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "ATTACK": 2,
-            "HEALTH": 2,
-            "TRAMPLE": 1,
-            "LIFELINK": 1
-          }
-        },
-        {
-          "type": "particle",
-          "alias": "armadillo_cloak"
-        },
-        {
-          "type": "selfDiscard"
-        }
-      ]
+      "type": "buff",
+      "components": {
+        "ATTACK": 2,
+        "HEALTH": 2,
+        "TRAMPLE": 1,
+        "LIFELINK": 1
+      }
+    },
+    {
+      "type": "particle",
+      "alias": "armadillo_cloak"
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 3,
+  "target": {
+    "type": "simple",
+    "requiresTarget": false,
+    "filters": [
+      "OWN_MINION",
+      "OPPONENT_MINION"
+    ]
+  }
 }

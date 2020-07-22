@@ -8,30 +8,30 @@
     ],
     "description": "Give a minion or hero +0/+6."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 3,
-      "targets": [
-        "OWN_MINION",
-        "OPPONENT_MINION",
-        "OWN_HERO",
-        "OPPONENT_HERO"
-      ],
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "HEALTH": 6
-          }
-        },
-        {
-          "type": "particle",
-          "alias": "slagwurm_armor"
-        },
-        {
-          "type": "selfDiscard"
-        }
-      ]
+      "type": "buff",
+      "components": {
+        "HEALTH": 6
+      }
+    },
+    {
+      "type": "particle",
+      "alias": "slagwurm_armor"
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 3,
+  "target": {
+    "type": "simple",
+    "requiresTarget": true,
+    "filters": [
+      "OWN_MINION",
+      "OPPONENT_MINION",
+      "OWN_HERO",
+      "OPPONENT_HERO"
+    ]
+  }
 }

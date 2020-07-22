@@ -29,7 +29,8 @@ public class SelectOpponentAppstate extends AbstractAppState {
 
         container = new Container();
         toggleTeamSizeButton = new Button("");
-        toggleTeamSizeButton.addClickCommands(x -> toggleTeamSize());
+        // commented out because gui does not support 2 vs 2 yet
+        // toggleTeamSizeButton.addClickCommands(x -> toggleTeamSize());
         container.addChild(toggleTeamSizeButton);
         container.setLocalTranslation(500, 600, 0);
         container.addChild(new Label("Humans per team:"));

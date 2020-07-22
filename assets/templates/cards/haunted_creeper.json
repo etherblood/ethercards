@@ -8,16 +8,6 @@
     ],
     "description": "Summon two 1/1 spectral spiders when this dies."
   },
-  "casts": [
-    {
-      "manaCost": 2,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 1,
     "HEALTH": 2,
@@ -32,5 +22,11 @@
       "type": "summon",
       "minionId": "spectral_spider"
     }
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 2
 }

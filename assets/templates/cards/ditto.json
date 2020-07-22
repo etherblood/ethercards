@@ -9,24 +9,35 @@
     "description": "Transform into a copy of a minion."
   },
   "manaCost": 5,
-  "casts": [
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 3
+  },
+  "cast": [
     {
-      "targets": [
-        "OWN_MINION",
-        "OPPONENT_MINION"
-      ],
-      "effects": [
+      "type": "targetActivated",
+      "targeted": [
         {
           "type": "ditto"
-        }, {
+        },
+        {
           "type": "selfSummon",
           "skipComponents": true
+        }
+      ],
+      "untargeted": [
+        {
+          "type": "selfSummon"
         }
       ]
     }
   ],
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 1
+  "target": {
+    "type": "simple",
+    "requiresTarget": false,
+    "filters": [
+      "OWN_MINION",
+      "OPPONENT_MINION"
+    ]
   }
 }

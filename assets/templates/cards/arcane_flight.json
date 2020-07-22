@@ -10,29 +10,29 @@
     "flavourText": "The Tolarian Academies are known for their magical research, powerful sorcerers, and accidental destruction of ecosystems."
   },
   "manaCost": 2,
-  "casts": [
+  "cast": [
     {
-      "targets": [
-        "OWN_MINION",
-        "OPPONENT_MINION"
-      ],
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "ATTACK": 1,
-            "HEALTH": 1,
-            "FLYING": true
-          }
-        },
-        {
-          "type": "particle",
-          "alias": "arcane_flight"
-        },
-        {
-          "type": "selfDiscard"
-        }
-      ]
+      "type": "buff",
+      "components": {
+        "ATTACK": 1,
+        "HEALTH": 1,
+        "FLYING": true
+      }
+    },
+    {
+      "type": "particle",
+      "alias": "arcane_flight"
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "target": {
+    "type": "simple",
+    "requiresTarget": true,
+    "filters": [
+      "OWN_MINION",
+      "OPPONENT_MINION"
+    ]
+  }
 }

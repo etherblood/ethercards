@@ -7,16 +7,6 @@
       "GREEN"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 1,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 3,
@@ -24,5 +14,11 @@
     "VIGILANCE": true,
     "FAST_TO_DEFEND": true,
     "FLYING": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 1
 }

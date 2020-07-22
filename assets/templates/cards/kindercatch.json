@@ -8,16 +8,6 @@
     ],
     "flavourText": "In the forest villages of Kessig, parents feed their children wormwood and other bitter herbs, hoping to make them less palatable to things that roam the night."
   },
-  "casts": [
-    {
-      "manaCost": 6,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 6,
     "HEALTH": 6
@@ -30,5 +20,11 @@
   ],
   "tribes": [
     "SPIRIT"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 6
 }

@@ -7,16 +7,6 @@
       "BLUE"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 9,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 4,
     "HEALTH": 12,
@@ -25,5 +15,11 @@
   },
   "tribes": [
     "DRAGON"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 9
 }

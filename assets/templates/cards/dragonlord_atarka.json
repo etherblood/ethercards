@@ -9,96 +9,6 @@
     ],
     "description": "Randomly deal 1 damage to an enemy 5 times."
   },
-  "casts": [
-    {
-      "manaCost": 7,
-      "effects": [
-        {
-          "type": "selfSummon"
-        },
-        {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OPPONENT_MINION",
-            "OPPONENT_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OPPONENT_MINION",
-            "OPPONENT_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OPPONENT_MINION",
-            "OPPONENT_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OPPONENT_MINION",
-            "OPPONENT_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OPPONENT_MINION",
-            "OPPONENT_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 1
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 6,
     "HEALTH": 6,
@@ -107,5 +17,91 @@
   },
   "tribes": [
     "DRAGON"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OPPONENT_MINION",
+        "OPPONENT_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 1
+          }
+        }
+      ]
+    }
+  ],
+  "manaCost": 7
 }

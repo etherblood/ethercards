@@ -8,16 +8,6 @@
     ],
     "description": "When Kokusho, the Evening Star dies, each opponent loses 5 life. You gain 5 life."
   },
-  "casts": [
-    {
-      "manaCost": 6,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 5,
     "HEALTH": 5,
@@ -58,5 +48,11 @@
   "tribes": [
     "DRAGON",
     "SPIRIT"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 6
 }

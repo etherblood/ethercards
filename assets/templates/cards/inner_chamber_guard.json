@@ -9,18 +9,14 @@
     "flavourText": "\"It seems that each time I visit Lord Konda his guards are more on edge, perhaps even more eager for the war to reach them.\"\n—Masako the Humorless"
   },
   "manaCost": 2,
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 3,
     "BUSHIDO": 2
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
 }

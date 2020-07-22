@@ -9,16 +9,6 @@
     "description": "Whenever you summon a creature, you may draw a card.",
     "flavourText": "For each creature that arrives in its audience, the sage imparts another piece of ancient wisdom for all to hear."
   },
-  "casts": [
-    {
-      "manaCost": 6,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 4,
     "HEALTH": 5
@@ -53,5 +43,11 @@
       "type": "soulshift",
       "power": 5
     }
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 6
 }

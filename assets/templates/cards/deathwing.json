@@ -9,51 +9,6 @@
     ],
     "description": "Destroy all other minions and discard your hand."
   },
-  "casts": [
-    {
-      "manaCost": 10,
-      "effects": [
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OPPONENT_MINION",
-            "OWN_MINION"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DEATH_REQUEST": true
-              }
-            }
-          ]
-        },
-        {
-          "type": "particle",
-          "alias": "deathwing"
-        },
-        {
-          "type": "selfSummon"
-        },
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DISCARD_CARDS": 1000000
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 12,
     "HEALTH": 12,
@@ -61,5 +16,46 @@
   },
   "tribes": [
     "DRAGON"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OPPONENT_MINION",
+        "OWN_MINION"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "particle",
+      "alias": "deathwing"
+    },
+    {
+      "type": "selfSummon"
+    },
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWNER"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DISCARD_CARDS": 1000000
+          }
+        }
+      ]
+    }
+  ],
+  "manaCost": 10
 }

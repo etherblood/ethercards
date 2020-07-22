@@ -7,18 +7,9 @@
       "WHITE"
     ],
     "description": "Yuumi can not be targeted or attacked after surviving damage.",
-    "flavourText": "We've got the zoomies!."
+    "flavourText": "We\u0027ve got the zoomies!."
   },
   "manaCost": 3,
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 3,
     "HEALTH": 4
@@ -39,6 +30,11 @@
           }
         }
       ]
+    }
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
     }
   ]
 }

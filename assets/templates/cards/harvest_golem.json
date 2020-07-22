@@ -8,16 +8,6 @@
     ],
     "description": "Summon a 2/1 Damaged Golem when this dies."
   },
-  "casts": [
-    {
-      "manaCost": 3,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 2,
     "HEALTH": 3
@@ -27,5 +17,11 @@
       "type": "summon",
       "minionId": "damaged_golem"
     }
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 3
 }

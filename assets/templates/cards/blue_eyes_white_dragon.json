@@ -8,21 +8,17 @@
       "BLUE"
     ]
   },
-  "casts": [
+  "onSummon": [
     {
-      "manaCost": 8,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
+      "type": "fusion",
+      "materialIds": [
+        "blue_eyes_white_dragon",
+        "blue_eyes_white_dragon",
+        "blue_eyes_white_dragon"
+      ],
+      "resultId": "blue_eyes_ultimate_dragon"
     }
   ],
-  "onSummon": [{
-    "type": "fusion",
-    "materialIds": ["blue_eyes_white_dragon", "blue_eyes_white_dragon", "blue_eyes_white_dragon"],
-    "resultId": "blue_eyes_ultimate_dragon"
-  }],
   "components": {
     "ATTACK": 8,
     "HEALTH": 7,
@@ -30,5 +26,11 @@
   },
   "tribes": [
     "DRAGON"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 8
 }

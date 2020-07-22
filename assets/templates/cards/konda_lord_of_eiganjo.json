@@ -7,21 +7,17 @@
       "WHITE"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 8,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 3,
     "HEALTH": 3,
     "BUSHIDO": 5,
     "VIGILANCE": true,
     "INDESTRUCTIBLE": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 8
 }

@@ -8,16 +8,6 @@
     ],
     "flavourText": "\"The most insidious thing in the world is nonsense that sounds just plausible enough to listen to.\"\n—Lazav"
   },
-  "casts": [
-    {
-      "manaCost": 2,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 5,
@@ -31,5 +21,11 @@
   ],
   "tribes": [
     "SPIRIT"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 2
 }

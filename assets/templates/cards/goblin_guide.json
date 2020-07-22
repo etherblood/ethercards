@@ -8,20 +8,16 @@
     ],
     "description": "The defending player draws 1 card each time this attacks."
   },
-  "casts": [
-    {
-      "manaCost": 1,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 2,
     "HEALTH": 2,
     "GIVE_DRAWS_ON_ATTACK": 1,
     "FAST_TO_ATTACK": true
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 1
 }

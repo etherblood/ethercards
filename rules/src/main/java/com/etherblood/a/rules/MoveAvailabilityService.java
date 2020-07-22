@@ -1,11 +1,8 @@
 package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.templates.CardCast;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.targeting.TargetUtil;
 import com.etherblood.a.rules.updates.EffectiveStatsService;
-import java.util.OptionalInt;
 
 public class MoveAvailabilityService {
 
@@ -280,35 +277,7 @@ public class MoveAvailabilityService {
             return false;
         }
         CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
-        CardCast cast;
-        OptionalInt phase = data.getOptional(player, core.ACTIVE_PLAYER_PHASE);
-        if (phase.isPresent()) {
-            switch (phase.getAsInt()) {
-                case PlayerPhase.ATTACK:
-                    cast = template.getAttackPhaseCast();
-                    if (cast == null) {
-                        if (throwOnFail) {
-                            throw new IllegalArgumentException("Failed to cast, castable #" + castable + " cannot be cast in attack phase.");
-                        }
-                        return false;
-                    }
-                    break;
-                case PlayerPhase.BLOCK:
-                    cast = template.getBlockPhaseCast();
-                    if (cast == null) {
-                        if (throwOnFail) {
-                            throw new IllegalArgumentException("Failed to cast, castable #" + castable + " cannot be cast in block phase.");
-                        }
-                        return false;
-                    }
-                    break;
-                default:
-                    if (throwOnFail) {
-                        throw new IllegalArgumentException("Failed to cast, casting is not possible during current phase.");
-                    }
-                    return false;
-            }
-        } else {
+        if (!data.has(player, core.ACTIVE_PLAYER_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, player #" + player + " is not the active player.");
             }
@@ -324,44 +293,18 @@ public class MoveAvailabilityService {
     }
 
     public boolean canCast(int player, int castable, Integer target, boolean throwOnFail) {
+        if (target != null && data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to cast, target #" + target + " cannot be targeted.");
+            }
+            return false;
+        }
         CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
-        OptionalInt phase = data.getOptional(player, core.ACTIVE_PLAYER_PHASE);
-        if (phase.isPresent()) {
-            CardCast cast = null;
-            if (phase.getAsInt() == PlayerPhase.ATTACK) {
-                cast = template.getAttackPhaseCast();
-            } else if (phase.getAsInt() == PlayerPhase.BLOCK) {
-                cast = template.getBlockPhaseCast();
+        if (!template.getCastTarget().isValidTarget(data, templates, castable, target)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
             }
-            if (cast != null) {
-                if (target != null) {
-                    if (!cast.isTargeted()) {
-                        if (throwOnFail) {
-                            throw new IllegalArgumentException("Failed to cast, target #" + target + " was given, but cast is untargeted.");
-                        }
-                        return false;
-                    }
-                    if (data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
-                        if (throwOnFail) {
-                            throw new IllegalArgumentException("Failed to cast, target #" + target + " cannot be targeted.");
-                        }
-                        return false;
-                    }
-                    if (!TargetUtil.isValidTarget(data, castable, target, cast.getTargets())) {
-                        if (throwOnFail) {
-                            throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
-                        }
-                        return false;
-                    }
-                } else {
-                    if (cast.isTargeted() && !cast.isTargetOptional()) {
-                        if (throwOnFail) {
-                            throw new IllegalArgumentException("Failed to cast, no target was given, but cast is targeted.");
-                        }
-                        return false;
-                    }
-                }
-            }
+            return false;
         }
         return canCast(player, castable, throwOnFail);
     }

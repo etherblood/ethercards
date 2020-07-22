@@ -13,9 +13,11 @@ import java.util.function.Function;
 
 public class ComponentsDeserializer implements JsonDeserializer<IntMap> {
 
+    private final Function<String, Integer> cardAliases;
     private final Function<String, Integer> componentAliases;
 
-    public ComponentsDeserializer(Function<String, Integer> componentAliases) {
+    public ComponentsDeserializer(Function<String, Integer> cardAliases, Function<String, Integer> componentAliases) {
+        this.cardAliases = cardAliases;
         this.componentAliases = componentAliases;
     }
 
@@ -41,6 +43,10 @@ public class ComponentsDeserializer implements JsonDeserializer<IntMap> {
                 }
                 if (primitive.isBoolean()) {
                     result.set(component, primitive.getAsBoolean() ? 1 : 0);
+                    continue;
+                }
+                if (primitive.isString()) {
+                    result.set(component, cardAliases.apply(primitive.getAsString()));
                     continue;
                 }
             }

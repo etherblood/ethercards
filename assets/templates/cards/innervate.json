@@ -8,44 +8,40 @@
     ],
     "description": "Gain 2 Mana. Your hero gains 3 Poisoned."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 0,
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWNER"
+      ],
       "effects": [
         {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "MANA": 2
-              }
-            }
-          ]
-        },
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWN_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "POISONED": 3
-              }
-            }
-          ]
-        },
-        {
-          "type": "selfDiscard"
+          "type": "buff",
+          "components": {
+            "MANA": 2
+          }
         }
       ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWN_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "POISONED": 3
+          }
+        }
+      ]
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 0
 }

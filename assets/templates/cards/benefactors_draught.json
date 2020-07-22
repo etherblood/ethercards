@@ -1,54 +1,50 @@
 {
   "alias": "benefactors_draught",
   "display": {
-    "name": "Benefactor's Draught",
+    "name": "Benefactor\u0027s Draught",
     "imagePath": "benefactors_draught.png",
     "colors": [
       "GREEN"
     ],
     "description": "Untap all creatures. Draw a card."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 2,
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWN_HERO",
+        "OPPONENT_HERO",
+        "OWN_MINION",
+        "OPPONENT_MINION"
+      ],
       "effects": [
         {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWN_HERO",
-            "OPPONENT_HERO",
-            "OWN_MINION",
-            "OPPONENT_MINION"
-          ],
-          "effects": [
-            {
-              "type": "debuff",
-              "components": {
-                "TIRED": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DRAW_CARDS_REQUEST": 1
-              }
-            }
-          ]
-        },
-        {
-          "type": "selfDiscard"
+          "type": "debuff",
+          "components": {
+            "TIRED": 1
+          }
         }
       ]
+    },
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWNER"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DRAW_CARDS_REQUEST": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 2
 }

@@ -15,30 +15,6 @@
     "HEALTH": 1,
     "CANNOT_BE_BLOCKED": true
   },
-  "casts": [
-    {
-      "effects": [
-        {
-          "type": "selfSummon"
-        },
-        {
-          "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OWN_HERO"
-          ],
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "HEALTH": 3
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "onDeath": [
     {
       "type": "soulshift",
@@ -47,5 +23,25 @@
   ],
   "tribes": [
     "SPIRIT"
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    },
+    {
+      "type": "targeted",
+      "targeting": "ANY",
+      "targets": [
+        "OWN_HERO"
+      ],
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "HEALTH": 3
+          }
+        }
+      ]
+    }
   ]
 }

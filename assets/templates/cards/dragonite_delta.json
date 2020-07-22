@@ -8,16 +8,6 @@
       "NEUTRAL"
     ]
   },
-  "casts": [
-    {
-      "manaCost": 8,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 7,
     "HEALTH": 10,
@@ -26,5 +16,11 @@
   },
   "tribes": [
     "DRAGON"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 8
 }

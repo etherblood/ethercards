@@ -8,33 +8,29 @@
     ],
     "description": "Cut each heroes health in half."
   },
-  "casts": [
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 3
+  },
+  "cast": [
     {
-      "manaCost": 5,
+      "type": "selfSummon"
+    },
+    {
+      "type": "targeted",
+      "targeting": "ALL",
+      "targets": [
+        "OWN_HERO",
+        "OPPONENT_HERO"
+      ],
       "effects": [
         {
-          "type": "selfSummon"
-        },
-        {
-          "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWN_HERO",
-            "OPPONENT_HERO"
-          ],
-          "effects": [
-            {
-              "type": "fractionalDamage",
-              "quotient": 1,
-              "divident": 2
-            }
-          ]
+          "type": "fractionalDamage",
+          "quotient": 1,
+          "divident": 2
         }
       ]
     }
   ],
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 3
-  }
+  "manaCost": 5
 }

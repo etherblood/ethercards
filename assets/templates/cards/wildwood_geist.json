@@ -6,31 +6,40 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Wildwood Geist gets +2/+2 as long as it's your turn.",
+    "description": "Wildwood Geist gets +2/+2 as long as it\u0027s your turn.",
     "flavourText": "The geists that dwell in the deep forests of Kessig are as untamable as the woods themselves."
   },
-  "casts": [
-    {
-      "manaCost": 4,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "onDeath": [
     {
       "type": "soulshift",
       "power": 3
     }
   ],
-  "componentModifiers": {"HEALTH": [{"type": "addOnOwnTurn", "value": 2}],"ATTACK": [{"type": "addOnOwnTurn", "value": 2}]},
+  "componentModifiers": {
+    "HEALTH": [
+      {
+        "type": "addOnOwnTurn",
+        "value": 2
+      }
+    ],
+    "ATTACK": [
+      {
+        "type": "addOnOwnTurn",
+        "value": 2
+      }
+    ]
+  },
   "tribes": [
     "SPIRIT"
   ],
   "components": {
     "ATTACK": 3,
     "HEALTH": 3
-  }
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 4
 }

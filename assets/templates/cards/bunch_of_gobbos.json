@@ -8,26 +8,22 @@
     ],
     "description": "Summon 3 Fast 1/1 Goblins."
   },
-  "casts": [
+  "cast": [
     {
-      "manaCost": 4,
-      "effects": [
-        {
-          "type": "summon",
-          "minionId": "goblin"
-        },
-        {
-          "type": "summon",
-          "minionId": "goblin"
-        },
-        {
-          "type": "summon",
-          "minionId": "goblin"
-        },
-        {
-          "type": "selfDiscard"
-        }
-      ]
+      "type": "summon",
+      "minionId": "goblin"
+    },
+    {
+      "type": "summon",
+      "minionId": "goblin"
+    },
+    {
+      "type": "summon",
+      "minionId": "goblin"
+    },
+    {
+      "type": "selfDiscard"
     }
-  ]
+  ],
+  "manaCost": 4
 }

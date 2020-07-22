@@ -6,25 +6,42 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Masumaro, First to Live's power and toughness are each equal to twice the number of cards in your hand.",
-    "flavourText": "\"In the waning moments of war, humanity's most ancient ancestors return. But whose side shall they make their own?\"\n—Isao, Enlightened Bushi"
+    "description": "Masumaro, First to Live\u0027s power and toughness are each equal to twice the number of cards in your hand.",
+    "flavourText": "\"In the waning moments of war, humanity\u0027s most ancient ancestors return. But whose side shall they make their own?\"\n—Isao, Enlightened Bushi"
   },
-  "casts": [
-    {
-      "manaCost": 8,
-      "effects": [
-        {
-          "type": "selfSummon"
-        }
-      ]
-    }
-  ],
   "components": {
     "ATTACK": 0,
     "HEALTH": 0
   },
-  "componentModifiers": {"HEALTH": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}],"ATTACK": [{"type": "addFractional", "modifier": {"type": "addOwnHandCardCount"}, "quotient": 2, "divident": 1}]},
+  "componentModifiers": {
+    "HEALTH": [
+      {
+        "type": "addFractional",
+        "modifier": {
+          "type": "addOwnHandCardCount"
+        },
+        "quotient": 2,
+        "divident": 1
+      }
+    ],
+    "ATTACK": [
+      {
+        "type": "addFractional",
+        "modifier": {
+          "type": "addOwnHandCardCount"
+        },
+        "quotient": 2,
+        "divident": 1
+      }
+    ]
+  },
   "tribes": [
     "SPIRIT"
-  ]
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 8
 }
