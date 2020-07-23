@@ -6,7 +6,6 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
-import java.util.OptionalInt;
 
 public class ZoneService {
 

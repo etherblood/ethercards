@@ -25,7 +25,7 @@
         {
           "type": "buff",
           "components": {
-            "DISCARD_CARDS": 1
+            "PLAYER_DISCARD_CARDS": 1
           }
         }
       ],

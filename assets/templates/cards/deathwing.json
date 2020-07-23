@@ -50,7 +50,7 @@
         {
           "type": "buff",
           "components": {
-            "DISCARD_CARDS": 1000000
+            "PLAYER_DISCARD_CARDS": 1000000
           }
         }
       ],

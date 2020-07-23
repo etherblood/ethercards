@@ -42,6 +42,7 @@ import com.etherblood.a.templates.api.Untargeted;
 import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffectsEffects;
 import com.etherblood.a.templates.implementation.effects.TargetActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.TransformTemplateEffect;
+import com.etherblood.a.templates.implementation.targets.OwnHandcardWithManacostTarget;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +99,7 @@ public class TemplateAliasMaps {
         targetClasses.put("untargeted", Untargeted.class);
         targetClasses.put("simple", SimpleTarget.class);
         targetClasses.put("flyingMinion", FlyingMinionTarget.class);
+        targetClasses.put("ownHandcardWithManacost", OwnHandcardWithManacostTarget.class);
         return targetClasses;
     }
 }

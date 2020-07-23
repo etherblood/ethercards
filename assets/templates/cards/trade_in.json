@@ -1,0 +1,48 @@
+{
+  "alias": "trade_in",
+  "display": {
+    "name": "Trade-In",
+    "imagePath": "trade_in.png",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Discard a card with 8 Mana Cost; Draw 2 cards."
+  },
+  "manaCost": 1,
+  "cast": [
+    {
+      "type": "buff",
+      "components": {
+        "DISCARD": true
+      }
+    },
+    {
+      "type": "targeted",
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DRAW_CARDS_REQUEST": 2
+          }
+        }
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER"
+        ]
+      }
+    },
+    {
+      "type": "selfDiscard"
+    }
+  ],
+  "target": {
+    "type": "ownHandcardWithManacost",
+    "requiresTarget": true,
+    "relation": "EQUAL",
+    "value": 8,
+    "selection": "USER"
+  }
+}

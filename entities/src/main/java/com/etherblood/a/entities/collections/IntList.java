@@ -32,12 +32,12 @@ public class IntList implements Iterable<Integer> {
     }
 
     public int get(int index) {
-        assert index < size;
+        assert inRange(index);
         return data[index];
     }
 
     public void set(int index, int value) {
-        assert index < size;
+        assert inRange(index);
         data[index] = value;
     }
 
@@ -69,6 +69,7 @@ public class IntList implements Iterable<Integer> {
     }
 
     public int removeAt(int index) {
+        assert inRange(index);
         int previous = data[index];
         System.arraycopy(data, index + 1, data, index, --size - index);
         return previous;
@@ -82,6 +83,7 @@ public class IntList implements Iterable<Integer> {
     }
 
     public int swapRemoveAt(int index) {
+        assert inRange(index);
         int previous = data[index];
         data[index] = data[--size];
         return previous;
@@ -152,6 +154,8 @@ public class IntList implements Iterable<Integer> {
     }
 
     public void swap(int index1, int index2) {
+        assert inRange(index1);
+        assert inRange(index2);
         int tmp = get(index1);
         set(index1, get(index2));
         set(index2, tmp);
@@ -186,11 +190,14 @@ public class IntList implements Iterable<Integer> {
 
             @Override
             public void remove() {
-                removeAt(i);
-                i--;
+                removeAt(--i);
             }
 
         };
+    }
+
+    private boolean inRange(int index) {
+        return 0 <= index && index < size;
     }
 
 }

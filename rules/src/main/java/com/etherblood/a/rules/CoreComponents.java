@@ -22,7 +22,8 @@ public class CoreComponents implements ComponentsModule {
     public final int DAMAGE_SURVIVAL_ACTION;
     public final int DRAW_CARDS_REQUEST;
     public final int DRAW_CARDS_ACTION;
-    public final int DISCARD_CARDS;
+    public final int PLAYER_DISCARD_CARDS;
+    public final int DISCARD;
     public final int PLAYER_RESULT_REQUEST;
     public final int PLAYER_RESULT;
     public final int TEAM_RESULT;
@@ -117,7 +118,8 @@ public class CoreComponents implements ComponentsModule {
         MANA_POOL_AURA_GROWTH = register.applyAsInt("MANA_POOL_AURA_GROWTH");
         DRAW_CARDS_REQUEST = register.applyAsInt("DRAW_CARDS_REQUEST");
         DRAW_CARDS_ACTION = register.applyAsInt("DRAW_CARDS_ACTION");
-        DISCARD_CARDS = register.applyAsInt("DISCARD_CARDS");
+        PLAYER_DISCARD_CARDS = register.applyAsInt("PLAYER_DISCARD_CARDS");
+        DISCARD = register.applyAsInt("DISCARD");
         DRAWS_PER_TURN = register.applyAsInt("DRAWS_PER_TURN");
         DRAWS_ON_ATTACK = register.applyAsInt("DRAWS_ON_ATTACK");
         GIVE_DRAWS_ON_ATTACK = register.applyAsInt("GIVE_DRAWS_ON_ATTACK");

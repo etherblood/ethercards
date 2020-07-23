@@ -15,6 +15,7 @@ import com.etherblood.a.rules.updates.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ZoneService;
 import java.util.OptionalInt;
+import java.util.PrimitiveIterator;
 import java.util.function.IntUnaryOperator;
 
 public class ResolveSystem {
@@ -47,7 +48,8 @@ public class ResolveSystem {
             } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
                     || data.list(core.DEATH_REQUEST).nonEmpty()
                     || data.list(core.DRAW_CARDS_REQUEST).nonEmpty()
-                    || data.list(core.DISCARD_CARDS).nonEmpty()
+                    || data.list(core.PLAYER_DISCARD_CARDS).nonEmpty()
+                    || data.list(core.DISCARD).nonEmpty()
                     || data.list(core.PLAYER_RESULT_REQUEST).nonEmpty());
         } while (survive());
     }
@@ -62,21 +64,29 @@ public class ResolveSystem {
 
     private void discard() {
         ZoneService zoneService = new ZoneService(data, templates);
-        for (int player : data.list(core.DISCARD_CARDS)) {
-            int cards = data.get(player, core.DISCARD_CARDS);
+        for (int player : data.list(core.PLAYER_DISCARD_CARDS)) {
+            int cards = data.get(player, core.PLAYER_DISCARD_CARDS);
             IntList handCards = data.list(core.IN_HAND_ZONE);
-            for (int i = handCards.size() - 1; i >= 0; i--) {
-                if (!data.hasValue(handCards.get(i), core.OWNER, player)) {
-                    handCards.swapRemoveAt(i);
+            PrimitiveIterator.OfInt iterator = handCards.iterator();
+            while (iterator.hasNext()) {
+                int card = iterator.nextInt();
+                if (!data.hasValue(card, core.OWNER, player)) {
+                    iterator.remove();
                 }
             }
-            cards = Math.min(cards, handCards.size());
-            for (int i = 0; i < cards; i++) {
-                int card = handCards.swapRemoveAt(random.applyAsInt(handCards.size()));
+            for (int i = 0; i < cards && handCards.nonEmpty(); i++) {
+                int index = random.applyAsInt(handCards.size());
+                int card = handCards.swapRemoveAt(index);
+                data.set(card, core.DISCARD, 1);
+            }
+            data.remove(player, core.PLAYER_DISCARD_CARDS);
+        }
+        for (int card : data.list(core.DISCARD)) {
+            if (data.has(card, core.IN_HAND_ZONE)) {
                 data.remove(card, core.IN_HAND_ZONE);
                 zoneService.addToGraveyard(card);
             }
-            data.remove(player, core.DISCARD_CARDS);
+            data.remove(card, core.DISCARD);
         }
     }
 
