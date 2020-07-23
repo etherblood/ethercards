@@ -16,6 +16,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class TemplateMigrationMain {
 
@@ -40,34 +41,43 @@ public class TemplateMigrationMain {
     }
 
     private static void update(JsonObject template) {
-        if (true) {
-            return;
+        updateObject(template);
+    }
+    
+    private static void updateObject(JsonObject object) {
+        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+            JsonElement value = entry.getValue();
+            if(value.isJsonArray()) {
+                updateArray(value.getAsJsonArray());
+            }
+            if(value.isJsonObject()) {
+                updateObject(value.getAsJsonObject());
+            }
         }
-        JsonArray casts = template.getAsJsonArray("casts");
-        if (casts != null) {
-            if (casts.size() > 1) {
-                throw new IllegalStateException();
+        if(object.has("type") && object.has("targets")) {
+            String type = object.get("type").getAsString();
+            JsonElement prevTargets = object.get("targets");
+            if(type.equals("targeted") && prevTargets.isJsonArray()) {
+                JsonElement filters = object.remove("targets");
+                JsonElement select = object.remove("targeting");
+                
+                JsonObject targets = new JsonObject();
+                targets.add("select", select);
+                targets.add("filters", filters);
+                targets.addProperty("type", "simple");
+                object.add("targets", targets);
             }
-            for (JsonElement castElement : casts) {
-                JsonObject cast = castElement.getAsJsonObject();
-                if (template.has("cast")) {
-                    throw new IllegalStateException();
-                }
-                template.add("cast", cast.get("effects"));
-                if (!template.has("manaCost")) {
-                    template.add("manaCost", cast.get("manaCost"));
-                }
-                if (cast.has("targets")) {
-                    boolean requiresTarget = cast.has("targetOptional") && !cast.get("targetOptional").getAsBoolean();
-
-                    JsonObject target = new JsonObject();
-                    target.addProperty("type", "simple");
-                    target.addProperty("requiresTarget", requiresTarget);
-                    target.add("filters", cast.get("targets"));
-                    template.add("target", target);
-                }
+        }
+    }
+    
+    private static void updateArray(JsonArray array) {
+        for (JsonElement value : array) {
+            if(value.isJsonArray()) {
+                updateArray(value.getAsJsonArray());
             }
-            template.remove("casts");
+            if(value.isJsonObject()) {
+                updateObject(value.getAsJsonObject());
+            }
         }
     }
 

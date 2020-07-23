@@ -11,6 +11,7 @@ import java.util.function.IntUnaryOperator;
  */
 public interface TargetSelection {
 
+    //TODO: move this field into template, it is only used for casts
     default boolean requiresTarget() {
         return false;
     }
