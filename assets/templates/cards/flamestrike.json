@@ -12,10 +12,6 @@
   "cast": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OPPONENT_MINION"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -23,7 +19,14 @@
             "DAMAGE_REQUEST": 4
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OPPONENT_MINION"
+        ]
+      }
     },
     {
       "type": "particle",

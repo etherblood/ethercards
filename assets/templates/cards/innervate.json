@@ -11,10 +11,6 @@
   "cast": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWNER"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -22,14 +18,17 @@
             "MANA": 2
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWN_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -37,7 +36,14 @@
             "POISONED": 3
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWN_HERO"
+        ]
+      }
     },
     {
       "type": "selfDiscard"

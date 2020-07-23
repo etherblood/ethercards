@@ -11,13 +11,6 @@
   "cast": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWN_HERO",
-        "OPPONENT_HERO",
-        "OWN_MINION",
-        "OPPONENT_MINION"
-      ],
       "effects": [
         {
           "type": "debuff",
@@ -25,14 +18,20 @@
             "TIRED": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWN_HERO",
+          "OPPONENT_HERO",
+          "OWN_MINION",
+          "OPPONENT_MINION"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWNER"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -40,7 +39,14 @@
             "DRAW_CARDS_REQUEST": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER"
+        ]
+      }
     },
     {
       "type": "selfDiscard"

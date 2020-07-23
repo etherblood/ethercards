@@ -18,18 +18,21 @@
     },
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWN_HERO",
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "fractionalDamage",
           "quotient": 1,
           "divident": 2
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWN_HERO",
+          "OPPONENT_HERO"
+        ]
+      }
     }
   ],
   "manaCost": 5

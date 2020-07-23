@@ -18,11 +18,6 @@
     },
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWNER",
-        "OPPONENT"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -30,7 +25,15 @@
             "DRAW_CARDS_REQUEST": 2
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER",
+          "OPPONENT"
+        ]
+      }
     }
   ],
   "manaCost": 3

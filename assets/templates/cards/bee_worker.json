@@ -26,10 +26,6 @@
   "onDeath": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWNER"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -37,7 +33,14 @@
             "DELAYED_MANA": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER"
+        ]
+      }
     }
   ],
   "cast": [

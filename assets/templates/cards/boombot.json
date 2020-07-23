@@ -12,11 +12,6 @@
   "onDeath": [
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OPPONENT_MINION",
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -28,7 +23,15 @@
           "type": "particle",
           "alias": "boombot"
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      }
     }
   ],
   "components": {

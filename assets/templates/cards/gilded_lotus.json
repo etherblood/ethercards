@@ -11,10 +11,6 @@
   "cast": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWNER"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -22,7 +18,14 @@
             "MANA_POOL": 3
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER"
+        ]
+      }
     },
     {
       "type": "selfDiscard"

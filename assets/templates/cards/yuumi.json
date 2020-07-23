@@ -17,10 +17,6 @@
   "onSurvive": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "SOURCE"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -29,7 +25,14 @@
             "CANNOT_BE_CAST_TARGETED": true
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "SOURCE"
+        ]
+      }
     }
   ],
   "cast": [

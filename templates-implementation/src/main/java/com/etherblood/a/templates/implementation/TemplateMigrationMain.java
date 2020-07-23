@@ -62,9 +62,9 @@ public class TemplateMigrationMain {
                 JsonElement select = object.remove("targeting");
                 
                 JsonObject targets = new JsonObject();
+                targets.addProperty("type", "simple");
                 targets.add("select", select);
                 targets.add("filters", filters);
-                targets.addProperty("type", "simple");
                 object.add("targets", targets);
             }
         }

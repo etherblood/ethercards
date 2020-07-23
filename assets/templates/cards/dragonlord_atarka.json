@@ -24,11 +24,6 @@
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OPPONENT_MINION",
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -36,15 +31,18 @@
             "DAMAGE_REQUEST": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OPPONENT_MINION",
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -52,15 +50,18 @@
             "DAMAGE_REQUEST": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OPPONENT_MINION",
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -68,15 +69,18 @@
             "DAMAGE_REQUEST": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OPPONENT_MINION",
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -84,15 +88,18 @@
             "DAMAGE_REQUEST": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OPPONENT_MINION",
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -100,7 +107,15 @@
             "DAMAGE_REQUEST": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      }
     }
   ],
   "manaCost": 7

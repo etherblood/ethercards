@@ -21,10 +21,6 @@
     },
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OPPONENT"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -32,7 +28,14 @@
             "DISCARD_CARDS": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OPPONENT"
+        ]
+      }
     }
   ],
   "tribes": [

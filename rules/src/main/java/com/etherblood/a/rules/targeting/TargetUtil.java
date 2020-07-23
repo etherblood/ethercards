@@ -8,35 +8,6 @@ import java.util.List;
 
 public class TargetUtil {
 
-    public static boolean isValidTarget(EntityData data, int source, int target, TargetFilters[] targets) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        List<TargetFilters> targetTypes = Arrays.asList(targets);
-        if (target == source) {
-            return targetTypes.contains(TargetFilters.SOURCE);
-        }
-        int sourceOwner = data.get(source, core.OWNER);
-        if (sourceOwner == target) {
-            return targetTypes.contains(TargetFilters.OWNER);
-        }
-        if (data.has(target, core.IN_BATTLE_ZONE) && !data.has(target, core.DEATH_REQUEST)) {
-            int targetOwner = data.get(target, core.OWNER);
-            if (data.has(target, core.HERO)) {
-                if (sourceOwner == targetOwner) {
-                    return targetTypes.contains(TargetFilters.OWN_HERO);
-                }
-                return targetTypes.contains(TargetFilters.OPPONENT_HERO);
-            }
-            if (sourceOwner == targetOwner) {
-                return targetTypes.contains(TargetFilters.OWN_MINION);
-            }
-            return targetTypes.contains(TargetFilters.OPPONENT_MINION);
-        }
-        if (data.has(target, core.PLAYER_INDEX)) {
-            return targetTypes.contains(TargetFilters.OPPONENT);
-        }
-        return false;
-    }
-
     public static IntList findValidTargets(EntityData data, int source, TargetFilters[] targets) {
         List<TargetFilters> targetTypes = Arrays.asList(targets);
         assert !targetTypes.contains(null);
@@ -85,9 +56,6 @@ public class TargetUtil {
                     availableTargets.add(player);
                 }
             }
-        }
-        for (int target : availableTargets) {
-            assert isValidTarget(data, source, target, targets);
         }
         return availableTargets;
     }

@@ -16,10 +16,6 @@
   "onDeath": [
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWN_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -27,14 +23,17 @@
             "HEALTH": 5
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWN_HERO"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OPPONENT_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -42,7 +41,14 @@
             "DAMAGE_REQUEST": 5
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OPPONENT_HERO"
+        ]
+      }
     }
   ],
   "tribes": [

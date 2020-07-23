@@ -16,10 +16,6 @@
   "onCast": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "SOURCE"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -28,7 +24,14 @@
             "HEALTH": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "SOURCE"
+        ]
+      }
     }
   ],
   "cast": [

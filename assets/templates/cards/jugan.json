@@ -16,10 +16,6 @@
   "onDeath": [
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWN_MINION"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -28,14 +24,17 @@
             "HEALTH": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWN_MINION"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWN_MINION"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -44,14 +43,17 @@
             "HEALTH": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWN_MINION"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWN_MINION"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -60,14 +62,17 @@
             "HEALTH": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWN_MINION"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWN_MINION"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -76,14 +81,17 @@
             "HEALTH": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWN_MINION"
+        ]
+      }
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWN_MINION"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -92,7 +100,14 @@
             "HEALTH": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWN_MINION"
+        ]
+      }
     }
   ],
   "tribes": [

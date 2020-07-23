@@ -41,10 +41,6 @@
       "effects": [
         {
           "type": "targeted",
-          "targeting": "ANY",
-          "targets": [
-            "OWN_HERO"
-          ],
           "effects": [
             {
               "type": "buff",
@@ -52,7 +48,14 @@
                 "HEALTH": 7
               }
             }
-          ]
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OWN_HERO"
+            ]
+          }
         }
       ]
     }

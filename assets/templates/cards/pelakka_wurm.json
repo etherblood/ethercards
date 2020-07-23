@@ -12,10 +12,6 @@
   "onDeath": [
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWNER"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -23,7 +19,14 @@
             "DRAW_CARDS_REQUEST": 1
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWNER"
+        ]
+      }
     }
   ],
   "components": {
@@ -37,10 +40,6 @@
     },
     {
       "type": "targeted",
-      "targeting": "ANY",
-      "targets": [
-        "OWN_HERO"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -48,7 +47,14 @@
             "HEALTH": 7
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ANY",
+        "filters": [
+          "OWN_HERO"
+        ]
+      }
     }
   ],
   "manaCost": 8

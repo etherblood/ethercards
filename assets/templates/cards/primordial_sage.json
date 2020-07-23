@@ -19,10 +19,6 @@
       "effects": [
         {
           "type": "targeted",
-          "targeting": "ALL",
-          "targets": [
-            "OWNER"
-          ],
           "effects": [
             {
               "type": "buff",
@@ -30,7 +26,14 @@
                 "DRAW_CARDS_REQUEST": 1
               }
             }
-          ]
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
         }
       ]
     }

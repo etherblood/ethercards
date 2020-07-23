@@ -12,10 +12,6 @@
   "cast": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "SOURCE"
-      ],
       "effects": [
         {
           "type": "sourceOwnerPhase",
@@ -32,7 +28,14 @@
             }
           ]
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "SOURCE"
+        ]
+      }
     },
     {
       "type": "selfSummon"

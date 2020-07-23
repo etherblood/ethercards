@@ -20,11 +20,6 @@
   "cast": [
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OPPONENT_MINION",
-        "OWN_MINION"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -32,7 +27,15 @@
             "DEATH_REQUEST": true
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OPPONENT_MINION",
+          "OWN_MINION"
+        ]
+      }
     },
     {
       "type": "particle",
@@ -43,10 +46,6 @@
     },
     {
       "type": "targeted",
-      "targeting": "ALL",
-      "targets": [
-        "OWNER"
-      ],
       "effects": [
         {
           "type": "buff",
@@ -54,7 +53,14 @@
             "DISCARD_CARDS": 1000000
           }
         }
-      ]
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER"
+        ]
+      }
     }
   ],
   "manaCost": 10
