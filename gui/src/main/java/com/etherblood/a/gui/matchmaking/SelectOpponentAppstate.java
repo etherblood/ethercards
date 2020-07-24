@@ -14,7 +14,7 @@ import com.simsilica.lemur.Slider;
 public class SelectOpponentAppstate extends AbstractAppState {
 
     private int teamSize = 1;
-    private final int strength = -10_000;
+    private final int strength = 10_000;
 
     private final Node guiNode;
     private final Container container;

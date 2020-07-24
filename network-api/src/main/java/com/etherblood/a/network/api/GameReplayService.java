@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
 import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.templates.implementation.TemplateAliasMaps;
+import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,8 +51,7 @@ public class GameReplayService {
         componentsBuilder.registerModule(CoreComponents::new);
         Components components = componentsBuilder.build();
 
-        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
-        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
+        TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, new TemplateAliasMapsImpl()));
 
         Map<String, Integer> cardAliasMap = new HashMap<>();
         RawGameSetup gameData = replay.setup;

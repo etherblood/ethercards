@@ -1,5 +1,6 @@
 package com.etherblood.a.templates.api;
 
+import com.etherblood.a.templates.api.deserializers.ComponentsDeserializer;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
@@ -10,6 +11,7 @@ import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.TargetSelection;
+import com.etherblood.a.templates.api.deserializers.TemplateObjectDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -34,14 +36,15 @@ public class TemplatesParser {
     private final Map<String, Integer> componentAliases = new HashMap<>();
     private final Gson aliasGson;
 
-    public TemplatesParser(Components components, Map<String, Class<? extends Effect>> effectClasses, Map<String, Class<? extends StatModifier>> modifierClasses, Map<String, Class<? extends TargetSelection>> targetClasses) {
+    public TemplatesParser(Components components, TemplateClassAliasMap templateClassAliasMap) {
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
         aliasGson = new GsonBuilder()
-                .registerTypeAdapter(Effect.class, new EffectDeserializer(effectClasses, x -> registerIfAbsent(cardAliases, x), componentAliases::get))
-                .registerTypeAdapter(StatModifier.class, new StatModifierDeserializer(modifierClasses))
-                .registerTypeAdapter(TargetSelection.class, new TargetSelectionDeserializer(targetClasses))
+                .registerTypeAdapter(Effect.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getEffects(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
+                .registerTypeAdapter(StatModifier.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getStatModifiers(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
+                .registerTypeAdapter(TargetSelection.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetSelections(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
+                .registerTypeAdapter(TargetPredicate.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetPredicates(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .create();
     }

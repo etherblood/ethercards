@@ -16,7 +16,7 @@ import com.etherblood.a.templates.api.DisplayCardTemplate;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
-import com.etherblood.a.templates.implementation.TemplateAliasMaps;
+import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.jme3.app.SimpleApplication;
@@ -81,8 +81,7 @@ public class GameApplication extends SimpleApplication {
         componentsBuilder.registerModule(CoreComponents::new);
         Components components = componentsBuilder.build();
 
-        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
-        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/cards/" + x + ".json", JsonElement.class), new TemplatesParser(components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
+        TemplatesLoader templatesLoader = new TemplatesLoader(x -> load("templates/cards/" + x + ".json", JsonElement.class), new TemplatesParser(components, new TemplateAliasMapsImpl()));
         String[] cardAliases = load("templates/card_pool.json", String[].class);
         Map<String, Integer> cardAliasToId = new LinkedHashMap<>();
         for (String card : cardAliases) {

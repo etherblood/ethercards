@@ -1,8 +1,8 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.a.templates.api.deserializers;
 
-import com.etherblood.a.templates.api.filedtypes.CardId;
+import com.etherblood.a.templates.api.deserializers.filedtypes.CardId;
 import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.templates.api.filedtypes.ComponentId;
+import com.etherblood.a.templates.api.deserializers.filedtypes.ComponentId;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

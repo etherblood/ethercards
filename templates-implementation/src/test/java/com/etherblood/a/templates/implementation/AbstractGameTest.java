@@ -49,12 +49,11 @@ public abstract class AbstractGameTest {
     }
 
     public AbstractGameTest(int... teamSizes) {
-        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
         GameSettingsBuilder settingsBuilder = new GameSettingsBuilder();
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
+        loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, new TemplateAliasMapsImpl()));
         String[] cardPool = new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class);
         for (String card : cardPool) {
             loader.registerCardAlias(card);

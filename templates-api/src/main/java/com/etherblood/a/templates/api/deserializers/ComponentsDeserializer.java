@@ -1,4 +1,4 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.a.templates.api.deserializers;
 
 import com.etherblood.a.entities.collections.IntMap;
 import com.google.gson.JsonDeserializationContext;

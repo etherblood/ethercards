@@ -39,10 +39,27 @@
     }
   ],
   "target": {
-    "type": "ownHandcardWithManacost",
+    "type": "component",
     "requiresTarget": true,
-    "relation": "EQUAL",
-    "value": 8,
-    "selection": "USER"
+    "component": "IN_HAND_ZONE",
+    "predicate": {
+      "type": "allOf",
+      "predicates": [
+        {
+          "type": "source",
+          "isSource": false
+        },
+        {
+          "type": "manaCostIs",
+          "relation": "EQUAL",
+          "value": 8
+        },
+        {
+          "type": "hasSourceOwner",
+          "hasSourceOwner": true
+        }
+      ]
+    },
+    "select": "USER"
   }
 }

@@ -22,7 +22,7 @@ import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
-import com.etherblood.a.templates.implementation.TemplateAliasMaps;
+import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,8 +91,7 @@ public class TestSandbox {
         ComponentsBuilder componentsBuilder = new ComponentsBuilder();
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
-        TemplateAliasMaps templateAliasMaps = new TemplateAliasMaps();
-        TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, templateAliasMaps.getEffects(), templateAliasMaps.getStatModifiers(), templateAliasMaps.getTargetSelection()));
+        TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, new TemplateAliasMapsImpl()));
 
         RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
         rawLibrary.hero = "elderwood_ahri";

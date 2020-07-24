@@ -1,5 +1,6 @@
 package com.etherblood.a.templates.implementation;
 
+import com.etherblood.a.templates.api.TemplateClassAliasMap;
 import com.etherblood.a.templates.implementation.effects.TargetedEffects;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.StatModifier;
@@ -42,12 +43,26 @@ import com.etherblood.a.templates.api.Untargeted;
 import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffectsEffects;
 import com.etherblood.a.templates.implementation.effects.TargetActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.TransformTemplateEffect;
-import com.etherblood.a.templates.implementation.targets.OwnHandcardWithManacostTarget;
+import com.etherblood.a.templates.implementation.predicates.AllOfPredicate;
+import com.etherblood.a.templates.implementation.predicates.AnyOfPredicate;
+import com.etherblood.a.templates.implementation.predicates.BoolPredicate;
+import com.etherblood.a.templates.implementation.predicates.FlyingPredicate;
+import com.etherblood.a.templates.implementation.predicates.HasSourceOwnerPredicate;
+import com.etherblood.a.templates.implementation.predicates.HasSourceTeamPredicate;
+import com.etherblood.a.templates.implementation.predicates.HealthIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.HeroPredicate;
+import com.etherblood.a.templates.implementation.predicates.ManaCostIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.NoneOfPredicate;
+import com.etherblood.a.templates.implementation.predicates.SourcePredicate;
+import com.etherblood.a.templates.implementation.targets.ComponentTarget;
+import com.etherblood.a.templates.implementation.targets.SourceTarget;
 import java.util.HashMap;
 import java.util.Map;
+import com.etherblood.a.templates.api.TargetPredicate;
 
-public class TemplateAliasMaps {
+public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
 
+    @Override
     public Map<String, Class<? extends Effect>> getEffects() {
         Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
         effectClasses.put("summon", SummonEffect.class);
@@ -82,6 +97,7 @@ public class TemplateAliasMaps {
         return effectClasses;
     }
 
+    @Override
     public Map<String, Class<? extends StatModifier>> getStatModifiers() {
         Map<String, Class<? extends StatModifier>> modifierClasses = new HashMap<>();
         modifierClasses.put("addOwnSpiritCount", AddOwnSpiritCountModifier.class);
@@ -94,12 +110,31 @@ public class TemplateAliasMaps {
         return modifierClasses;
     }
 
-    public Map<String, Class<? extends TargetSelection>> getTargetSelection() {
+    @Override
+    public Map<String, Class<? extends TargetSelection>> getTargetSelections() {
         Map<String, Class<? extends TargetSelection>> targetClasses = new HashMap<>();
         targetClasses.put("untargeted", Untargeted.class);
         targetClasses.put("simple", SimpleTarget.class);
         targetClasses.put("flyingMinion", FlyingMinionTarget.class);
-        targetClasses.put("ownHandcardWithManacost", OwnHandcardWithManacostTarget.class);
+        targetClasses.put("component", ComponentTarget.class);
+        targetClasses.put("source", SourceTarget.class);
+        return targetClasses;
+    }
+    
+    @Override
+    public Map<String, Class<? extends TargetPredicate>> getTargetPredicates() {
+        Map<String, Class<? extends TargetPredicate>> targetClasses = new HashMap<>();
+        targetClasses.put("bool", BoolPredicate.class);
+        targetClasses.put("noneOf", NoneOfPredicate.class);
+        targetClasses.put("anyOf", AnyOfPredicate.class);
+        targetClasses.put("allOf", AllOfPredicate.class);
+        targetClasses.put("flying", FlyingPredicate.class);
+        targetClasses.put("healthIs", HealthIsPredicate.class);
+        targetClasses.put("manaCostIs", ManaCostIsPredicate.class);
+        targetClasses.put("hero", HeroPredicate.class);
+        targetClasses.put("source", SourcePredicate.class);
+        targetClasses.put("hasSourceOwner", HasSourceOwnerPredicate.class);
+        targetClasses.put("hasSourceTeam", HasSourceTeamPredicate.class);
         return targetClasses;
     }
 }

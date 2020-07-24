@@ -1,4 +1,4 @@
-package com.etherblood.a.templates.api.filedtypes;
+package com.etherblood.a.templates.api.deserializers.filedtypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
