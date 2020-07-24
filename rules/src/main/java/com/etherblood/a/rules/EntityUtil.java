@@ -20,9 +20,7 @@ public class EntityUtil {
             throw new IllegalArgumentException();
         }
         for (int component = 0; component < source.getComponents().size(); component++) {
-            for (int entity : destination.list(component)) {
-                destination.remove(entity, component);
-            }
+            destination.clear(component);
             for (int entity : source.list(component)) {
                 destination.set(entity, component, source.get(entity, component));
             }

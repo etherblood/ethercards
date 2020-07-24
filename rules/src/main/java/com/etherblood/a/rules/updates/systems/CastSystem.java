@@ -59,7 +59,7 @@ public class CastSystem {
                 effect.apply(data, templates, random, events, castSource, target);
             }
 
-            data.remove(castSource, core.CAST_TARGET);
         }
+        data.clear(core.CAST_TARGET);
     }
 }

@@ -31,8 +31,13 @@
     }
   ],
   "target": {
-    "type": "flyingMinion",
+    "type": "component",
     "requiresTarget": false,
+    "component": "IN_BATTLE_ZONE",
+    "predicate": {
+      "type": "flying",
+      "isFlying": true
+    },
     "select": "USER"
   },
   "components": {

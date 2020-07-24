@@ -79,15 +79,15 @@ public class ResolveSystem {
                 int card = handCards.swapRemoveAt(index);
                 data.set(card, core.DISCARD, 1);
             }
-            data.remove(player, core.PLAYER_DISCARD_CARDS);
         }
+        data.clear(core.PLAYER_DISCARD_CARDS);
         for (int card : data.list(core.DISCARD)) {
             if (data.has(card, core.IN_HAND_ZONE)) {
                 data.remove(card, core.IN_HAND_ZONE);
                 zoneService.addToGraveyard(card);
             }
-            data.remove(card, core.DISCARD);
         }
+        data.clear(core.DISCARD);
     }
 
     private void draw() {
@@ -97,8 +97,8 @@ public class ResolveSystem {
             if (cards > 0) {
                 data.set(player, core.DRAW_CARDS_ACTION, cards);
             }
-            data.remove(player, core.DRAW_CARDS_REQUEST);
         }
+        data.clear(core.DRAW_CARDS_REQUEST);
         for (int player : data.list(core.DRAW_CARDS_ACTION)) {
             int cards = data.get(player, core.DRAW_CARDS_ACTION);
 
@@ -116,8 +116,8 @@ public class ResolveSystem {
         for (int player : data.list(core.DRAW_CARDS_ACTION)) {
             int cards = data.get(player, core.DRAW_CARDS_ACTION);
             SystemsUtil.drawCards(data, cards, random, player);
-            data.remove(player, core.DRAW_CARDS_ACTION);
         }
+        data.clear(core.DRAW_CARDS_ACTION);
     }
 
     private void damage() {
@@ -128,10 +128,11 @@ public class ResolveSystem {
                     data.set(entity, core.DAMAGE_ACTION, damage);
                 }
             }
-            data.remove(entity, core.DAMAGE_REQUEST);
         }
+        data.clear(core.DAMAGE_REQUEST);
 
-        for (int entity : data.list(core.DAMAGE_ACTION)) {
+        IntList damaged = data.list(core.DAMAGE_ACTION);
+        for (int entity : damaged) {
             int damage = data.get(entity, core.DAMAGE_ACTION);
 
             int templateId = data.get(entity, core.CARD_TEMPLATE);
@@ -141,7 +142,7 @@ public class ResolveSystem {
             }
             events.fire(new DamageEvent(entity, damage));
         }
-        for (int entity : data.list(core.DAMAGE_ACTION)) {
+        for (int entity : damaged) {
             int damage = data.get(entity, core.DAMAGE_ACTION);
             assert data.has(entity, core.IN_BATTLE_ZONE);
 
@@ -158,8 +159,8 @@ public class ResolveSystem {
 
             int health = data.getOptional(entity, core.HEALTH).orElse(0);
             data.set(entity, core.HEALTH, health - damage);
-            data.remove(entity, core.DAMAGE_ACTION);
         }
+        data.clear(core.DAMAGE_ACTION);
     }
 
     private void death() {
@@ -170,9 +171,10 @@ public class ResolveSystem {
                     data.set(entity, core.DEATH_ACTION, deathOptions);
                 }
             }
-            data.remove(entity, core.DEATH_REQUEST);
         }
-        for (int entity : data.list(core.DEATH_ACTION)) {
+        data.clear(core.DEATH_REQUEST);
+        IntList deaths = data.list(core.DEATH_ACTION);
+        for (int entity : deaths) {
 
             if (data.has(entity, core.HERO)) {
                 int owner = data.get(entity, core.OWNER);
@@ -189,11 +191,11 @@ public class ResolveSystem {
         }
 
         ZoneService zoneService = new ZoneService(data, templates);
-        for (int entity : data.list(core.DEATH_ACTION)) {
-            data.remove(entity, core.DEATH_ACTION);
+        for (int entity : deaths) {
             zoneService.removeFromBattle(entity);
             zoneService.addToGraveyard(entity);
         }
+        data.clear(core.DEATH_ACTION);
     }
 
     private void playerResults() {
@@ -202,8 +204,8 @@ public class ResolveSystem {
             int result = data.get(player, core.PLAYER_RESULT_REQUEST);
             data.set(player, core.PLAYER_RESULT, result);
 
-            data.remove(player, core.PLAYER_RESULT_REQUEST);
         }
+        data.clear(core.PLAYER_RESULT_REQUEST);
         if (playerResultRequests.nonEmpty()) {
             IntList teams = data.list(core.TEAM_INDEX);
             for (int team : teams) {
@@ -279,16 +281,16 @@ public class ResolveSystem {
                 data.set(entity, core.DAMAGE_SURVIVAL_ACTION, survival);
                 result = true;
             }
-            data.remove(entity, core.DAMAGE_SURVIVAL_REQUEST);
         }
+        data.clear(core.DAMAGE_SURVIVAL_REQUEST);
         for (int entity : data.list(core.DAMAGE_SURVIVAL_ACTION)) {
             int templateId = data.get(entity, core.CARD_TEMPLATE);
             CardTemplate template = templates.getCard(templateId);
             for (Effect onSurviveEffect : template.getOnSelfSurviveEffects()) {
                 onSurviveEffect.apply(data, templates, random, events, entity, entity);
             }
-            data.remove(entity, core.DAMAGE_SURVIVAL_ACTION);
         }
+        data.clear(core.DAMAGE_SURVIVAL_ACTION);
         return result;
     }
 }

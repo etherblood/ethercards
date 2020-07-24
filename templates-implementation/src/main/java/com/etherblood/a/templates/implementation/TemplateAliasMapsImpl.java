@@ -37,7 +37,6 @@ import com.etherblood.a.templates.implementation.statmodifiers.AddOwnHandCardCou
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnManaPoolModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnSpiritCountModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.OwnHandCardCountActivatedModifier;
-import com.etherblood.a.templates.implementation.targets.FlyingMinionTarget;
 import com.etherblood.a.templates.implementation.targets.SimpleTarget;
 import com.etherblood.a.templates.api.Untargeted;
 import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffectsEffects;
@@ -115,7 +114,6 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         Map<String, Class<? extends TargetSelection>> targetClasses = new HashMap<>();
         targetClasses.put("untargeted", Untargeted.class);
         targetClasses.put("simple", SimpleTarget.class);
-        targetClasses.put("flyingMinion", FlyingMinionTarget.class);
         targetClasses.put("component", ComponentTarget.class);
         targetClasses.put("source", SourceTarget.class);
         return targetClasses;

@@ -193,15 +193,13 @@ public class PhaseSystem {
             SystemsUtil.drawCards(data, draws.get(player), random, player);
         }
         for (int card : data.list(core.MULLIGAN)) {
-            data.remove(card, core.MULLIGAN);
             data.remove(card, core.IN_HAND_ZONE);
             data.set(card, core.IN_LIBRARY_ZONE, 1);
         }
+        data.clear(core.MULLIGAN);
 
         // mulligan components are no longer needed, clean them up
-        for (int card : data.list(core.CANNOT_BE_MULLIGANED)) {
-            data.remove(card, core.CANNOT_BE_MULLIGANED);
-        }
+        data.clear(core.CANNOT_BE_MULLIGANED);
         resolveSystem.run();
     }
 
@@ -289,11 +287,7 @@ public class PhaseSystem {
     }
 
     private void clearTemporaryStats() {
-        for (int minion : data.list(core.TEMPORARY_ATTACK)) {
-            data.remove(minion, core.TEMPORARY_ATTACK);
-        }
-        for (int minion : data.list(core.TEMPORARY_HEALTH)) {
-            data.remove(minion, core.TEMPORARY_HEALTH);
-        }
+        data.clear(core.TEMPORARY_ATTACK);
+        data.clear(core.TEMPORARY_HEALTH);
     }
 }

@@ -52,6 +52,11 @@ public class SimpleEntityData implements EntityData {
         component(component).remove(entity);
     }
 
+    @Override
+    public void clear(int component) {
+        component(component).clear();
+    }
+
     private IntMap component(int component) {
         return map[component];
     }

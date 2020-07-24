@@ -32,4 +32,6 @@ public interface EntityData {
     IntList listInValueOrder(int component);
     
     Components getComponents();
+    
+    void clear(int component);
 }
