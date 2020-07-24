@@ -7,6 +7,10 @@ public class Cast implements Move {
     public final int player, source;
     public final Integer target;
 
+    public Cast(int player, int source) {
+        this(player, source, null);
+    }
+
     public Cast(int player, int source, Integer target) {
         this.player = player;
         this.source = source;

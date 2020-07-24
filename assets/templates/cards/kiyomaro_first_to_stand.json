@@ -26,8 +26,15 @@
     ],
     "VIGILANCE": [
       {
-        "type": "ownHandCardCountActivated",
-        "threshold": 4
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "sourceOwner",
+          "predicate": {
+            "type": "handCardCountIs",
+            "relation": "GREATER_OR_EQUAL",
+            "value": 4
+          }
+        }
       }
     ]
   },
@@ -36,8 +43,15 @@
   ],
   "afterBattle": [
     {
-      "type": "handCardCountActivated",
-      "threshold": 7,
+      "type": "predicateActivated",
+      "predicate": {
+        "type": "sourceOwner",
+        "predicate": {
+          "type": "handCardCountIs",
+          "relation": "GREATER_OR_EQUAL",
+          "value": 7
+        }
+      },
       "effects": [
         {
           "type": "targeted",

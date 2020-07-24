@@ -15,7 +15,20 @@
   },
   "onSummon": [
     {
-      "type": "targetOwnedActivated",
+      "type": "predicateActivated",
+      "predicate": {
+        "type": "allOf",
+        "predicates": [
+          {
+            "type": "isSource",
+            "isSource": false
+          },
+          {
+            "type": "hasSourceOwner",
+            "hasSourceOwner": true
+          }
+        ]
+      },
       "effects": [
         {
           "type": "targeted",

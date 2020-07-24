@@ -12,7 +12,11 @@
   "manaCost": 5,
   "cast": [
     {
-      "type": "targetFlyingActivated",
+      "type": "predicateActivated",
+      "predicate": {
+        "type": "flying",
+        "isFlying": true
+      },
       "effects": [
         {
           "type": "buff",

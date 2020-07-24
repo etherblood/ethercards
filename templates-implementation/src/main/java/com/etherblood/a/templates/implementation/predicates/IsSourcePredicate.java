@@ -4,11 +4,11 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.templates.api.TargetPredicate;
 
-public class SourcePredicate implements TargetPredicate {
+public class IsSourcePredicate implements TargetPredicate {
 
     private final boolean isSource;
 
-    public SourcePredicate(boolean isSource) {
+    public IsSourcePredicate(boolean isSource) {
         this.isSource = isSource;
     }
 

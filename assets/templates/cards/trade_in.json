@@ -46,7 +46,7 @@
       "type": "allOf",
       "predicates": [
         {
-          "type": "source",
+          "type": "isSource",
           "isSource": false
         },
         {

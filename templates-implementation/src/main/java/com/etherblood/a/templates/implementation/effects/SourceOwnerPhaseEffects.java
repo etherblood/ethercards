@@ -8,12 +8,12 @@ import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.Effect;
 import java.util.function.IntUnaryOperator;
 
-public class SourceOwnerPhaseEffectsEffects implements Effect {
+public class SourceOwnerPhaseEffects implements Effect {
 
     public final Effect[] attack;
     public final Effect[] block;
 
-    public SourceOwnerPhaseEffectsEffects(Effect[] attack, Effect[] block) {
+    public SourceOwnerPhaseEffects(Effect[] attack, Effect[] block) {
         this.attack = attack;
         this.block = block;
     }

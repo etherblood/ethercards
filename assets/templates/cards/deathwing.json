@@ -50,7 +50,7 @@
         {
           "type": "buff",
           "components": {
-            "PLAYER_DISCARD_CARDS": 1000000
+            "DISCARD": true
           }
         }
       ],
@@ -58,7 +58,7 @@
         "type": "simple",
         "select": "ALL",
         "filters": [
-          "OWNER"
+          "OWN_HAND"
         ]
       }
     }

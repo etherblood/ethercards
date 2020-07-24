@@ -14,7 +14,6 @@ import com.etherblood.a.templates.implementation.effects.DittoEffect;
 import com.etherblood.a.templates.implementation.effects.DrawCardTemplateEffect;
 import com.etherblood.a.templates.implementation.effects.FractionalDamageEffect;
 import com.etherblood.a.templates.implementation.effects.FusionEffect;
-import com.etherblood.a.templates.implementation.effects.HandCardCountActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.KolaghanDamageEffect;
 import com.etherblood.a.templates.implementation.effects.LathlissTokenEffect;
 import com.etherblood.a.templates.implementation.effects.MultiTriggerEffects;
@@ -26,9 +25,6 @@ import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SpiritCountSoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SummonEffect;
 import com.etherblood.a.templates.implementation.effects.TakeControlEffect;
-import com.etherblood.a.templates.implementation.effects.TargetFlyingActivatedEffects;
-import com.etherblood.a.templates.implementation.effects.TargetHealthThresholdActivatedEffects;
-import com.etherblood.a.templates.implementation.effects.TargetOwnedActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.TribeActivatedEffects;
 import com.etherblood.a.templates.implementation.statmodifiers.AddFractionalModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOnOpponentThresholdModifier;
@@ -36,10 +32,9 @@ import com.etherblood.a.templates.implementation.statmodifiers.AddOnOwnTurnModif
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnHandCardCountModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnManaPoolModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnSpiritCountModifier;
-import com.etherblood.a.templates.implementation.statmodifiers.OwnHandCardCountActivatedModifier;
 import com.etherblood.a.templates.implementation.targets.SimpleTarget;
 import com.etherblood.a.templates.api.Untargeted;
-import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffectsEffects;
+import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffects;
 import com.etherblood.a.templates.implementation.effects.TargetActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.TransformTemplateEffect;
 import com.etherblood.a.templates.implementation.predicates.AllOfPredicate;
@@ -52,12 +47,16 @@ import com.etherblood.a.templates.implementation.predicates.HealthIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HeroPredicate;
 import com.etherblood.a.templates.implementation.predicates.ManaCostIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.NoneOfPredicate;
-import com.etherblood.a.templates.implementation.predicates.SourcePredicate;
+import com.etherblood.a.templates.implementation.predicates.IsSourcePredicate;
 import com.etherblood.a.templates.implementation.targets.ComponentTarget;
 import com.etherblood.a.templates.implementation.targets.SourceTarget;
 import java.util.HashMap;
 import java.util.Map;
 import com.etherblood.a.templates.api.TargetPredicate;
+import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
+import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
+import com.etherblood.a.templates.implementation.statmodifiers.PredicateActivatedModifier;
 
 public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
 
@@ -72,7 +71,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("buff", BuffEffect.class);
         effectClasses.put("debuff", DebuffEffect.class);
         effectClasses.put("transformTemplate", TransformTemplateEffect.class);
-        effectClasses.put("sourceOwnerPhase", SourceOwnerPhaseEffectsEffects.class);
+        effectClasses.put("sourceOwnerPhase", SourceOwnerPhaseEffects.class);
         effectClasses.put("create", CreateCardEffect.class);
         effectClasses.put("targeted", TargetedEffects.class);
         effectClasses.put("particle", ParticleEventEffect.class);
@@ -86,10 +85,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("kolaghanDamage", KolaghanDamageEffect.class);
         effectClasses.put("tribeActivated", TribeActivatedEffects.class);
         effectClasses.put("targetActivated", TargetActivatedEffects.class);
-        effectClasses.put("targetOwnedActivated", TargetOwnedActivatedEffects.class);
-        effectClasses.put("targetFlyingActivated", TargetFlyingActivatedEffects.class);
-        effectClasses.put("targetHealthThresholdActivated", TargetHealthThresholdActivatedEffects.class);
-        effectClasses.put("handCardCountActivated", HandCardCountActivatedEffects.class);
+        effectClasses.put("predicateActivated", PredicateActivatedEffects.class);
         effectClasses.put("multiTrigger", MultiTriggerEffects.class);
         effectClasses.put("fusion", FusionEffect.class);
         effectClasses.put("ditto", DittoEffect.class);
@@ -105,7 +101,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         modifierClasses.put("addOnOpponentThreshold", AddOnOpponentThresholdModifier.class);
         modifierClasses.put("addOnOwnTurn", AddOnOwnTurnModifier.class);
         modifierClasses.put("addFractional", AddFractionalModifier.class);
-        modifierClasses.put("ownHandCardCountActivated", OwnHandCardCountActivatedModifier.class);
+        modifierClasses.put("predicateActivated", PredicateActivatedModifier.class);
         return modifierClasses;
     }
 
@@ -129,10 +125,12 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("flying", FlyingPredicate.class);
         targetClasses.put("healthIs", HealthIsPredicate.class);
         targetClasses.put("manaCostIs", ManaCostIsPredicate.class);
+        targetClasses.put("handCardCountIs", HandCardCountIsPredicate.class);
         targetClasses.put("hero", HeroPredicate.class);
-        targetClasses.put("source", SourcePredicate.class);
+        targetClasses.put("isSource", IsSourcePredicate.class);
         targetClasses.put("hasSourceOwner", HasSourceOwnerPredicate.class);
         targetClasses.put("hasSourceTeam", HasSourceTeamPredicate.class);
+        targetClasses.put("sourceOwner", SourceOwnerPredicate.class);
         return targetClasses;
     }
 }

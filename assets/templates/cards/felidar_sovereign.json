@@ -15,8 +15,12 @@
       "type": "targeted",
       "effects": [
         {
-          "type": "targetHealthThresholdActivated",
-          "threshold": 50,
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "healthIs",
+            "relation": "GREATER_OR_EQUAL",
+            "value": 50
+          },
           "effects": [
             {
               "type": "targeted",
