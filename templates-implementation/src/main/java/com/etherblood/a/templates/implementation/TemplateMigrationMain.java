@@ -28,11 +28,11 @@ public class TemplateMigrationMain {
             try {
                 File file = path.toFile();
                 JsonObject template;
-                try (Reader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+                try (Reader reader = new BufferedReader(new FileReader(file))) {
                     template = gson.fromJson(reader, JsonObject.class);
                 }
                 update(template);
-                try (Writer writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
+                try (Writer writer = new BufferedWriter(new FileWriter(file))) {
                     gson.toJson(template, writer);
                 }
             } catch (Exception ex) {
