@@ -2,7 +2,6 @@ package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.updates.EffectiveStatsService;
 
 public class MoveAvailabilityService {
 

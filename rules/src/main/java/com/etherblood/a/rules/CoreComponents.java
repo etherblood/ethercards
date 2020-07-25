@@ -72,6 +72,7 @@ public class CoreComponents implements ComponentsModule {
     public final int FAST_TO_ATTACK;
     public final int FAST_TO_DEFEND;
     public final int OWN_MINIONS_HASTE_AURA;
+    public final int OWN_MINIONS_ATTACK_AURA;
     public final int OWN_MINIONS_HEALTH_AURA;
     public final int OWN_MINIONS_VENOM_AURA;
     public final int BUSHIDO;
@@ -143,6 +144,7 @@ public class CoreComponents implements ComponentsModule {
         FAST_TO_ATTACK = register.applyAsInt("FAST_TO_ATTACK");
         FAST_TO_DEFEND = register.applyAsInt("FAST_TO_DEFEND");
         OWN_MINIONS_HASTE_AURA = register.applyAsInt("OWN_MINIONS_HASTE_AURA");
+        OWN_MINIONS_ATTACK_AURA = register.applyAsInt("OWN_MINIONS_ATTACK_AURA");
         OWN_MINIONS_HEALTH_AURA = register.applyAsInt("OWN_MINIONS_HEALTH_AURA");
         OWN_MINIONS_VENOM_AURA = register.applyAsInt("OWN_MINIONS_VENOM_AURA");
         DAMAGE_SURVIVAL_REQUEST = register.applyAsInt("DAMAGE_SURVIVAL_REQUEST");

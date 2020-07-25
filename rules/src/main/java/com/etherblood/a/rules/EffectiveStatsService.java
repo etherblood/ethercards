@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.updates;
+package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.CoreComponents;
@@ -19,16 +19,6 @@ public class EffectiveStatsService {
         this.templates = templates;
     }
 
-    public int manaPool(int player) {
-        int manaPool = data.getOptional(player, core.MANA_POOL).orElse(0);
-        for (int minion : data.list(core.MANA_POOL_AURA)) {
-            if (data.hasValue(minion, core.OWNER, player)) {
-                manaPool += data.get(minion, core.MANA_POOL_AURA);
-            }
-        }
-        return manaPool;
-    }
-
     public int attack(int minion) {
         int attack = data.getOptional(minion, core.ATTACK).orElse(0);
         attack += data.getOptional(minion, core.TEMPORARY_ATTACK).orElse(0);
@@ -39,7 +29,36 @@ public class EffectiveStatsService {
                 attack = attackModifier.modify(data, templates, minion, attack);
             }
         }
+        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
+            attack += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_ATTACK_AURA);
+        }
         return attack;
+    }
+
+    public int health(int minion) {
+        int health = data.getOptional(minion, core.HEALTH).orElse(0);
+        health += data.getOptional(minion, core.TEMPORARY_HEALTH).orElse(0);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            for (StatModifier healthModifier : template.getComponentModifiers(core.HEALTH)) {
+                health = healthModifier.modify(data, templates, minion, health);
+            }
+        }
+        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
+            health += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_HEALTH_AURA);
+        }
+        return health;
+    }
+
+    public int manaPool(int player) {
+        int manaPool = data.getOptional(player, core.MANA_POOL).orElse(0);
+        for (int minion : data.list(core.MANA_POOL_AURA)) {
+            if (data.hasValue(minion, core.OWNER, player)) {
+                manaPool += data.get(minion, core.MANA_POOL_AURA);
+            }
+        }
+        return manaPool;
     }
 
     public boolean hasVigilance(int minion) {
@@ -64,22 +83,6 @@ public class EffectiveStatsService {
             }
         }
         return flying >= 1;
-    }
-
-    public int health(int minion) {
-        int health = data.getOptional(minion, core.HEALTH).orElse(0);
-        health += data.getOptional(minion, core.TEMPORARY_HEALTH).orElse(0);
-        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
-        if (templateId.isPresent()) {
-            CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier healthModifier : template.getComponentModifiers(core.HEALTH)) {
-                health = healthModifier.modify(data, templates, minion, health);
-            }
-        }
-        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
-            health += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_HEALTH_AURA);
-        }
-        return health;
     }
 
     public int venom(int minion) {

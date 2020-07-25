@@ -2,7 +2,7 @@ package com.etherblood.a.templates.implementation.predicates;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.updates.EffectiveStatsService;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.templates.api.TargetPredicate;
 
 public class FlyingPredicate implements TargetPredicate {

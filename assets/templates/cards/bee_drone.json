@@ -10,7 +10,7 @@
   "components": {
     "ATTACK": 1,
     "HEALTH": 3,
-    "OWN_MINIONS_VENOM_AURA": 1,
+    "OWN_MINIONS_ATTACK_AURA": 1,
     "FLYING": true
   },
   "cast": [

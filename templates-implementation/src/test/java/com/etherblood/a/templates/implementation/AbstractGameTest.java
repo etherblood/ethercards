@@ -14,7 +14,7 @@ import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.setup.GameSetup;
-import com.etherblood.a.rules.updates.EffectiveStatsService;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;

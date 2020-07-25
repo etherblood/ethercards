@@ -9,7 +9,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.updates.EffectiveStatsService;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;

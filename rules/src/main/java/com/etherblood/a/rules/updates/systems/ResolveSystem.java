@@ -11,7 +11,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.updates.EffectiveStatsService;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.ZoneService;
 import java.util.OptionalInt;

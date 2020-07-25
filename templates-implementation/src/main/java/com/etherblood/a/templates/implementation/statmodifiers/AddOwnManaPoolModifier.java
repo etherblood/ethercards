@@ -4,7 +4,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.StatModifier;
-import com.etherblood.a.rules.updates.EffectiveStatsService;
+import com.etherblood.a.rules.EffectiveStatsService;
 
 public class AddOwnManaPoolModifier implements StatModifier {
 
