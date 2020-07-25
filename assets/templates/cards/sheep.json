@@ -1,0 +1,21 @@
+{
+  "alias": "sheep",
+  "display": {
+    "name": "Sheep",
+    "imagePath": "sheep.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "flavourText": "I am sheep."
+  },
+  "manaCost": 2,
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 2
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
+}

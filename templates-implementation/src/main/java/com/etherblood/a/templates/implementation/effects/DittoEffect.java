@@ -15,7 +15,9 @@ public class DittoEffect implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        data.set(source, core.ORIGINAL_CARD_TEMPLATE, data.get(source, core.CARD_TEMPLATE));
+        if (!data.has(source, core.ORIGINAL_CARD_TEMPLATE)) {
+            data.set(source, core.ORIGINAL_CARD_TEMPLATE, data.get(source, core.CARD_TEMPLATE));
+        }
         IntList blacklist = new IntList(
                 core.OWNER,
                 core.TEAM,
