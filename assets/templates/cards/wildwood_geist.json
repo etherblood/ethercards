@@ -6,7 +6,7 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Wildwood Geist gets +2/+2 as long as it\u0027s your turn.",
+    "description": "Wildwood Geist gets +2/+2 during your upkeep for 1 turn.",
     "flavourText": "The geists that dwell in the deep forests of Kessig are as untamable as the woods themselves."
   },
   "onDeath": [
@@ -15,20 +15,27 @@
       "power": 3
     }
   ],
-  "componentModifiers": {
-    "HEALTH": [
-      {
-        "type": "addOnOwnTurn",
-        "value": 2
-      }
-    ],
-    "ATTACK": [
-      {
-        "type": "addOnOwnTurn",
-        "value": 2
-      }
-    ]
-  },
+  "onUpkeep": [
+    {
+      "type": "targeted",
+      "targets": {
+        "type": "simple",
+        "filters": [
+          "SOURCE"
+        ],
+        "select": "ALL"
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "TEMPORARY_ATTACK": 2,
+            "TEMPORARY_HEALTH": 2
+          }
+        }
+      ]
+    }
+  ],
   "tribes": [
     "SPIRIT"
   ],

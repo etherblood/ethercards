@@ -57,6 +57,8 @@ import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffec
 import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
 import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
+import com.etherblood.a.templates.implementation.predicates.TiredPredicate;
+import com.etherblood.a.templates.implementation.predicates.ZonePredicate;
 import com.etherblood.a.templates.implementation.statmodifiers.PredicateActivatedModifier;
 
 public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
@@ -129,6 +131,8 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("handCardCountIs", HandCardCountIsPredicate.class);
         targetClasses.put("hero", HeroPredicate.class);
         targetClasses.put("minion", MinionPredicate.class);
+        targetClasses.put("tired", TiredPredicate.class);
+        targetClasses.put("zone", ZonePredicate.class);
         targetClasses.put("isSource", IsSourcePredicate.class);
         targetClasses.put("hasSourceOwner", HasSourceOwnerPredicate.class);
         targetClasses.put("hasSourceTeam", HasSourceTeamPredicate.class);

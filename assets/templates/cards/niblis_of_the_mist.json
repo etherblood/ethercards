@@ -1,0 +1,48 @@
+{
+  "alias": "niblis_of_the_mist",
+  "display": {
+    "name": "Niblis of the Mist",
+    "imagePath": "niblis_of_the_mist.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "When Niblis of the Mist enters the battlefield, you may tap target creature.",
+    "flavourText": "\"Not even a roaring fire could thaw the chill it put in my heart.\"\n—Vonn, geist-trapper"
+  },
+  "manaCost": 3,
+  "cast": [
+    {
+      "type": "buff",
+      "components": {
+        "TIRED": true
+      }
+    },
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "target": {
+    "type": "component",
+    "component": "IN_BATTLE_ZONE",
+    "predicate": {
+      "type": "tired",
+      "isTired": false
+    },
+    "select": "USER",
+    "requiresTarget": false
+  },
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 1,
+    "FLYING": true
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 2
+    }
+  ]
+}

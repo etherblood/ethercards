@@ -1,5 +1,6 @@
 package com.etherblood.a.rules;
 
+import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
@@ -66,13 +67,21 @@ public class GameDataPrinter {
     }
 
     public String toMinionString(int minion) {
-        int templateId = game.getData().get(minion, core.CARD_TEMPLATE);
+        EntityData data = game.getData();
+        if (!data.has(minion, core.CARD_TEMPLATE)) {
+            return "#" + minion + " NO_TEMPLATE " + EntityUtil.extractEntityComponents(data, minion);
+        }
+        int templateId = data.get(minion, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(templateId);
-        return "#" + minion + " " + template.getTemplateName() + " (" + game.getData().getOptional(minion, core.ATTACK).orElse(0) + ", " + game.getData().getOptional(minion, core.HEALTH).orElse(0) + ")";
+        return "#" + minion + " " + template.getTemplateName() + " (" + data.getOptional(minion, core.ATTACK).orElse(0) + ", " + data.getOptional(minion, core.HEALTH).orElse(0) + ")";
     }
 
     public String toCardString(int card) {
-        int templateId = game.getData().get(card, core.CARD_TEMPLATE);
+        EntityData data = game.getData();
+        if (!data.has(card, core.CARD_TEMPLATE)) {
+            return "#" + card + " NO_TEMPLATE " + EntityUtil.extractEntityComponents(data, card);
+        }
+        int templateId = data.get(card, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(templateId);
         return "#" + card + " " + template.getTemplateName();
     }

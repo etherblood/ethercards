@@ -6,9 +6,9 @@
     "colors": [
       "GREEN"
     ],
-    "description": "When Carven Caryatid enters the battlefield, draw a card.",
     "flavourText": "So-called \"old wood\" is rare in deforested Ravnica. Statues carved from it are said to house the last of the ancient nature spirits."
   },
+  "manaCost": 3,
   "components": {
     "ATTACK": 2,
     "HEALTH": 5,
@@ -20,25 +20,12 @@
   "cast": [
     {
       "type": "selfSummon"
-    },
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DRAW_CARDS_REQUEST": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWNER"
-        ]
-      }
     }
   ],
-  "manaCost": 3
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 2
+    }
+  ]
 }

@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,11 +28,11 @@ public class TemplateMigrationMain {
             try {
                 File file = path.toFile();
                 JsonObject template;
-                try (Reader reader = new BufferedReader(new FileReader(file))) {
+                try (Reader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
                     template = gson.fromJson(reader, JsonObject.class);
                 }
                 update(template);
-                try (Writer writer = new BufferedWriter(new FileWriter(file))) {
+                try (Writer writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
                     gson.toJson(template, writer);
                 }
             } catch (Exception ex) {
@@ -41,26 +42,29 @@ public class TemplateMigrationMain {
     }
 
     private static void update(JsonObject template) {
+        if (true) {
+            return;
+        }
         updateObject(template);
     }
-    
+
     private static void updateObject(JsonObject object) {
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             JsonElement value = entry.getValue();
-            if(value.isJsonArray()) {
+            if (value.isJsonArray()) {
                 updateArray(value.getAsJsonArray());
             }
-            if(value.isJsonObject()) {
+            if (value.isJsonObject()) {
                 updateObject(value.getAsJsonObject());
             }
         }
-        if(object.has("type") && object.has("targets")) {
+        if (object.has("type") && object.has("targets")) {
             String type = object.get("type").getAsString();
             JsonElement prevTargets = object.get("targets");
-            if(type.equals("targeted") && prevTargets.isJsonArray()) {
+            if (type.equals("targeted") && prevTargets.isJsonArray()) {
                 JsonElement filters = object.remove("targets");
                 JsonElement select = object.remove("targeting");
-                
+
                 JsonObject targets = new JsonObject();
                 targets.addProperty("type", "simple");
                 targets.add("select", select);
@@ -69,13 +73,13 @@ public class TemplateMigrationMain {
             }
         }
     }
-    
+
     private static void updateArray(JsonArray array) {
         for (JsonElement value : array) {
-            if(value.isJsonArray()) {
+            if (value.isJsonArray()) {
                 updateArray(value.getAsJsonArray());
             }
-            if(value.isJsonObject()) {
+            if (value.isJsonObject()) {
                 updateObject(value.getAsJsonObject());
             }
         }
