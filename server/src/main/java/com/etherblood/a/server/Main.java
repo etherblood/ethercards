@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Log.set(Log.LEVEL_INFO);
+        Log.set(Log.LEVEL_DEBUG);
         Properties props = new Properties();
         try ( Reader reader = Files.newBufferedReader(Paths.get("config.properties"))) {
             props.load(reader);

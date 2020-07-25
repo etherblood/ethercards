@@ -24,8 +24,17 @@
     {
       "type": "predicateActivated",
       "predicate": {
-        "type": "minion",
-        "isMinion": false
+        "type": "allOf",
+        "predicates": [
+          {
+            "type": "minion",
+            "isMinion": false
+          },
+          {
+            "type": "hasSourceOwner",
+            "hasSourceOwner": true
+          }
+        ]
       },
       "effects": [
         {
