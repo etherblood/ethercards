@@ -23,99 +23,29 @@
       "type": "selfSummon"
     },
     {
-      "type": "targeted",
+      "type": "multiTrigger",
+      "amount": 3,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 1
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OPPONENT_MINION",
+              "OPPONENT_HERO"
+            ]
           }
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OPPONENT_MINION",
-          "OPPONENT_HERO"
-        ]
-      }
-    },
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OPPONENT_MINION",
-          "OPPONENT_HERO"
-        ]
-      }
-    },
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OPPONENT_MINION",
-          "OPPONENT_HERO"
-        ]
-      }
-    },
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OPPONENT_MINION",
-          "OPPONENT_HERO"
-        ]
-      }
-    },
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OPPONENT_MINION",
-          "OPPONENT_HERO"
-        ]
-      }
+      ]
     }
   ],
   "manaCost": 7

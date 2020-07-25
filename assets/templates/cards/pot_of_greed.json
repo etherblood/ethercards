@@ -1,0 +1,36 @@
+{
+  "alias": "pot_of_greed",
+  "display": {
+    "name": "Pot of Greed",
+    "imagePath": "pot_of_greed.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Draw 2 cards.",
+    "flavourText": "Pot of Greed allows the user to draw 2 more cards from their library and add them to their hand."
+  },
+  "manaCost": 3,
+  "cast": [
+    {
+      "type": "selfDiscard"
+    },
+    {
+      "type": "targeted",
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DRAW_CARDS_REQUEST": 2
+          }
+        }
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OWNER"
+        ]
+      }
+    }
+  ]
+}

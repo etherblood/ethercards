@@ -57,11 +57,15 @@ public class TargetUtil {
                 }
             }
         }
-        if (availableTargets.contains(source)) {
-            availableTargets.swapRemove(source);
-        }
+        int sourceIndex = availableTargets.indexOf(source);
         if (targetTypes.contains(TargetFilters.SOURCE)) {
-            availableTargets.add(source);
+            if (sourceIndex < 0) {
+                availableTargets.add(source);
+            }
+        } else {
+            if (sourceIndex >= 0) {
+                availableTargets.removeAt(sourceIndex);
+            }
         }
         if (targetTypes.contains(TargetFilters.OWNER)) {
             availableTargets.add(sourceOwner);

@@ -11,16 +11,14 @@
   "manaCost": 3,
   "cast": [
     {
-      "type": "summon",
-      "minionId": "dog"
-    },
-    {
-      "type": "summon",
-      "minionId": "dog"
-    },
-    {
-      "type": "summon",
-      "minionId": "dog"
+      "type": "multiTrigger",
+      "amount": 3,
+      "effects": [
+        {
+          "type": "summon",
+          "minionId": "dog"
+        }
+      ]
     },
     {
       "type": "selfDiscard"

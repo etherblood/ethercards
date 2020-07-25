@@ -1,17 +1,17 @@
 {
-  "alias": "release_the_dogs",
+  "alias": "unleash_the_hounds",
   "display": {
-    "name": "Release the Dogs",
-    "imagePath": "release_the_dogs.jpg",
+    "name": "Unleash the Hounds!",
+    "imagePath": "unleash_the_hounds.jpg",
     "colors": [
-      "WHITE"
+      "GREEN"
     ],
-    "description": "Summon four 1/1 dogs."
+    "description": "Lots of dogs!"
   },
   "cast": [
     {
       "type": "multiTrigger",
-      "amount": 4,
+      "amount": 100,
       "effects": [
         {
           "type": "summon",
@@ -23,5 +23,5 @@
       "type": "selfDiscard"
     }
   ],
-  "manaCost": 4
+  "manaCost": 1
 }
