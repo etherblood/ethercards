@@ -1,0 +1,62 @@
+{
+  "alias": "mistral_singer",
+  "display": {
+    "name": "Mistral Singer",
+    "imagePath": "mistral_singer.jpeg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+    "flavourText": "\"I sang of storms, there came a squall. I sang of waves, the seas grew tall. I sang of love, but no voice called.\""
+  },
+  "manaCost": 3,
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 2,
+    "FLYING": true
+  },
+  "onCast": [
+    {
+      "type": "predicateActivated",
+      "predicate": {
+        "type": "allOf",
+        "predicates": [
+          {
+            "type": "minion",
+            "isMinion": false
+          },
+          {
+            "type": "hasSourceOwner",
+            "hasSourceOwner": true
+          }
+        ]
+      },
+      "effects": [
+        {
+          "type": "targeted",
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "SOURCE"
+            ]
+          },
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "TEMPORARY_ATTACK": 1,
+                "TEMPORARY_HEALTH": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

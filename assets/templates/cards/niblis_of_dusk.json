@@ -1,0 +1,71 @@
+{
+  "alias": "niblis_of_dusk",
+  "display": {
+    "name": "Niblis of Dusk",
+    "imagePath": "niblis_of_dusk.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+    "flavourText": "It fuels its lanterns by leaching the warmth from its surroundings."
+  },
+  "manaCost": 3,
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 1,
+    "FLYING": true
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "onDeath": [
+    {
+      "type": "soulshift",
+      "power": 2
+    }
+  ],
+  "onCast": [
+    {
+      "type": "predicateActivated",
+      "predicate": {
+        "type": "allOf",
+        "predicates": [
+          {
+            "type": "minion",
+            "isMinion": false
+          },
+          {
+            "type": "hasSourceOwner",
+            "hasSourceOwner": true
+          }
+        ]
+      },
+      "effects": [
+        {
+          "type": "targeted",
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "SOURCE"
+            ]
+          },
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "TEMPORARY_ATTACK": 1,
+                "TEMPORARY_HEALTH": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
