@@ -1,0 +1,27 @@
+{
+  "alias": "the_white_stone_of_legend",
+  "display": {
+    "name": "The White Stone of Legend",
+    "imagePath": "the_white_stone_of_legend.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "If this card is sent to the Graveyard: Add 1 \"Blue-Eyes White Dragon\" from your Library to your Hand."
+  },
+  "manaCost": 1,
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 1
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "onSelfMovedToGraveyard": [
+    {
+      "type": "drawTemplate",
+      "cardId": "blue_eyes_white_dragon"
+    }
+  ]
+}

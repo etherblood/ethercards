@@ -85,6 +85,10 @@ public class ResolveSystem {
             if (data.has(card, core.IN_HAND_ZONE)) {
                 data.remove(card, core.IN_HAND_ZONE);
                 zoneService.addToGraveyard(card);
+                CardTemplate template = templates.getCard(data.get(card, core.CARD_TEMPLATE));
+                for (Effect effect : template.getOnSelfMovedToGraveyardEffects()) {
+                    effect.apply(data, templates, random, events, card, card);
+                }
             }
         }
         data.clear(core.DISCARD);
@@ -194,6 +198,10 @@ public class ResolveSystem {
         for (int entity : deaths) {
             zoneService.removeFromBattle(entity);
             zoneService.addToGraveyard(entity);
+            CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
+            for (Effect effect : template.getOnSelfMovedToGraveyardEffects()) {
+                effect.apply(data, templates, random, events, entity, entity);
+            }
         }
         data.clear(core.DEATH_ACTION);
     }

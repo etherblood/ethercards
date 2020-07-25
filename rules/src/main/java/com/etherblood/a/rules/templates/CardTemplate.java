@@ -22,13 +22,14 @@ public class CardTemplate {
     protected final List<Effect> onCastEffects;
     protected final List<Effect> onSummonEffects;
     protected final List<Effect> onSelfDeathEffects;
+    protected final List<Effect> onSelfMovedToGraveyardEffects;
     protected final List<Effect> onSelfSurviveEffects;
     protected final List<Effect> onSelfUpkeepEffects;
     protected final List<Effect> afterSelfBattleEffects;
     protected final List<Effect> onDrawEffects;
     protected final Map<Integer, List<StatModifier>> componentModifiers;
 
-    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<Effect> onDrawEffects, Map<Integer, List<StatModifier>> componentModifiers) {
+    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, List<Effect> onCastEffects, List<Effect> onSummonEffects, List<Effect> onDeathEffects, List<Effect> onSelfMovedToGraveyardEffects, List<Effect> onSurviveEffects, List<Effect> onUpkeepEffects, List<Effect> afterBattleEffects, List<Effect> onDrawEffects, Map<Integer, List<StatModifier>> componentModifiers) {
         this.id = id;
         this.isMinion = isMinion;
         this.manaCost = manaCost;
@@ -38,6 +39,7 @@ public class CardTemplate {
         this.onCastEffects = Collections.unmodifiableList(new ArrayList<>(onCastEffects));
         this.onSummonEffects = Collections.unmodifiableList(new ArrayList<>(onSummonEffects));
         this.onSelfDeathEffects = Collections.unmodifiableList(new ArrayList<>(onDeathEffects));
+        this.onSelfMovedToGraveyardEffects = Collections.unmodifiableList(new ArrayList<>(onSelfMovedToGraveyardEffects));
         this.onSelfSurviveEffects = Collections.unmodifiableList(new ArrayList<>(onSurviveEffects));
         this.onSelfUpkeepEffects = Collections.unmodifiableList(new ArrayList<>(onUpkeepEffects));
         this.afterSelfBattleEffects = Collections.unmodifiableList(new ArrayList<>(afterBattleEffects));
@@ -96,6 +98,10 @@ public class CardTemplate {
 
     public List<Effect> getOnSelfDeathEffects() {
         return onSelfDeathEffects;
+    }
+
+    public List<Effect> getOnSelfMovedToGraveyardEffects() {
+        return onSelfMovedToGraveyardEffects;
     }
 
     public List<Effect> getOnSelfSurviveEffects() {

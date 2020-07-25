@@ -138,6 +138,13 @@ public class TemplatesParser {
                     builder.onDeath(aliasGson.fromJson(effectJson, Effect.class));
                 }
             }
+            JsonArray onSelfMovedToGraveyard = cardJson.getAsJsonArray("onSelfMovedToGraveyard");
+            if (onSelfMovedToGraveyard != null) {
+                for (JsonElement jsonElement : onSelfMovedToGraveyard) {
+                    JsonObject effectJson = jsonElement.getAsJsonObject();
+                    builder.onSelfMovedToGraveyard(aliasGson.fromJson(effectJson, Effect.class));
+                }
+            }
             JsonArray onSurvive = cardJson.getAsJsonArray("onSurvive");
             if (onSurvive != null) {
                 for (JsonElement jsonElement : onSurvive) {

@@ -18,6 +18,7 @@ public class CardTemplateBuilder {
     protected final List<Effect> onCastEffects = new ArrayList<>();
     protected final List<Effect> onSummonEffects = new ArrayList<>();
     protected final List<Effect> onDeathEffects = new ArrayList<>();
+    protected final List<Effect> onSelfMovedToGraveyardEffects = new ArrayList<>();
     protected final List<Effect> onSurviveEffects = new ArrayList<>();
     protected final List<Effect> onUpkeepEffects = new ArrayList<>();
     protected final List<Effect> afterBattleEffects = new ArrayList<>();
@@ -51,6 +52,10 @@ public class CardTemplateBuilder {
     public void onDeath(Effect effect) {
         onDeathEffects.add(effect);
     }
+    
+    public void onSelfMovedToGraveyard(Effect effect) {
+        onSelfMovedToGraveyardEffects.add(effect);
+    }
 
     public void onSurvive(Effect effect) {
         onSurviveEffects.add(effect);
@@ -81,7 +86,7 @@ public class CardTemplateBuilder {
     }
 
     public CardTemplate build(int id) {
-        return new CardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, onDrawEffects, componentModifiers);
+        return new CardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, components, tribes, onCastEffects, onSummonEffects, onDeathEffects, onSelfMovedToGraveyardEffects, onSurviveEffects, onUpkeepEffects, afterBattleEffects, onDrawEffects, componentModifiers);
     }
 
 }

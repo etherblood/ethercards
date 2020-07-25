@@ -5,7 +5,6 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
 
 public class SelfDiscardEffect implements Effect {
@@ -13,7 +12,6 @@ public class SelfDiscardEffect implements Effect {
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        data.remove(source, core.IN_HAND_ZONE);
-        new ZoneService(data, templates).addToGraveyard(source);
+        data.set(source, core.DISCARD, 1);
     }
 }
