@@ -1,0 +1,41 @@
+{
+  "alias": "leper_gnome",
+  "display": {
+    "name": "Leper Gnome",
+    "imagePath": "leper_gnome.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "Deathrattle: Deal 2 damage to the enemy hero."
+  },
+  "components": {
+    "ATTACK": 2,
+    "HEALTH": 1
+  },
+  "manaCost": 1,
+  "onDeath": [
+    {
+      "type": "targeted",
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 2
+          }
+        }
+      ],
+      "targets": {
+        "type": "simple",
+        "select": "ALL",
+        "filters": [
+          "OPPONENT_HERO"
+        ]
+      }
+    }
+  ],
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
+}
