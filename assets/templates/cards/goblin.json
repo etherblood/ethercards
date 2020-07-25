@@ -7,8 +7,9 @@
       "RED"
     ]
   },
+  "manaCost": 1,
   "components": {
-    "ATTACK": 1,
+    "ATTACK": 2,
     "HEALTH": 1,
     "FAST_TO_ATTACK": true
   },
@@ -16,6 +17,5 @@
     {
       "type": "selfSummon"
     }
-  ],
-  "manaCost": 1
+  ]
 }

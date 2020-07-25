@@ -6,10 +6,10 @@
     "colors": [
       "RED"
     ],
-    "description": "The defending player draws 1 card each time this attacks."
+    "description": "The defending player draws 1 card each time Goblin Guide attacks."
   },
   "components": {
-    "ATTACK": 2,
+    "ATTACK": 3,
     "HEALTH": 2,
     "GIVE_DRAWS_ON_ATTACK": 1,
     "FAST_TO_ATTACK": true

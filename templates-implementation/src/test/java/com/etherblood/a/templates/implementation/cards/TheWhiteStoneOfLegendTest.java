@@ -1,9 +1,6 @@
 package com.etherblood.a.templates.implementation.cards;
 
 import com.etherblood.a.rules.DeathOptions;
-import com.etherblood.a.rules.EntityUtil;
-import com.etherblood.a.rules.moves.EndAttackPhase;
-import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.templates.implementation.AbstractGameTest;
 import org.junit.jupiter.api.Assertions;
@@ -19,8 +16,6 @@ public class TheWhiteStoneOfLegendTest extends AbstractGameTest {
         data.set(stone, core.DEATH_REQUEST, DeathOptions.NORMAL);
         moves.apply(new Update());
 
-        System.out.println(EntityUtil.toMap(data));
-        
         Assertions.assertTrue(data.has(stone, core.IN_GRAVEYARD_ZONE));
         Assertions.assertTrue(data.has(dragon, core.IN_HAND_ZONE));
     }
@@ -33,8 +28,6 @@ public class TheWhiteStoneOfLegendTest extends AbstractGameTest {
         data.set(stone, core.DISCARD, 1);
         moves.apply(new Update());
         
-        System.out.println(EntityUtil.toMap(data));
-
         Assertions.assertTrue(data.has(stone, core.IN_GRAVEYARD_ZONE));
         Assertions.assertTrue(data.has(dragon, core.IN_HAND_ZONE));
     }

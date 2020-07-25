@@ -55,6 +55,7 @@ import java.util.Map;
 import com.etherblood.a.templates.api.TargetPredicate;
 import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
 import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
 import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
 import com.etherblood.a.templates.implementation.statmodifiers.PredicateActivatedModifier;
 
@@ -127,6 +128,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("manaCostIs", ManaCostIsPredicate.class);
         targetClasses.put("handCardCountIs", HandCardCountIsPredicate.class);
         targetClasses.put("hero", HeroPredicate.class);
+        targetClasses.put("minion", MinionPredicate.class);
         targetClasses.put("isSource", IsSourcePredicate.class);
         targetClasses.put("hasSourceOwner", HasSourceOwnerPredicate.class);
         targetClasses.put("hasSourceTeam", HasSourceTeamPredicate.class);

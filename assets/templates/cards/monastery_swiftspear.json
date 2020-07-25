@@ -1,0 +1,53 @@
+{
+  "alias": "monastery_swiftspear",
+  "display": {
+    "name": "Monastery Swiftspear",
+    "imagePath": "monastery_swiftspear.png",
+    "colors": [
+      "RED"
+    ],
+    "description": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+    "flavourText": "The calligraphy of combat is written with strokes of sudden blood."
+  },
+  "manaCost": 1,
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 2,
+    "FAST_TO_ATTACK": true
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "onCast": [
+    {
+      "type": "predicateActivated",
+      "predicate": {
+        "type": "minion",
+        "isMinion": false
+      },
+      "effects": [
+        {
+          "type": "targeted",
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "SOURCE"
+            ]
+          },
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "TEMPORARY_ATTACK": 1,
+                "TEMPORARY_HEALTH": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

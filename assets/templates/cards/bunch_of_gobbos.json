@@ -6,24 +6,23 @@
     "colors": [
       "RED"
     ],
-    "description": "Summon 3 Fast 1/1 Goblins."
+    "description": "Summon two Fast Attacker 2/1 Goblins.",
+    "flavourText": "I expected more when it said a ´bunch´ of goblins..."
   },
+  "manaCost": 3,
   "cast": [
     {
-      "type": "summon",
-      "minionId": "goblin"
-    },
-    {
-      "type": "summon",
-      "minionId": "goblin"
-    },
-    {
-      "type": "summon",
-      "minionId": "goblin"
+      "type": "multiTrigger",
+      "amount": 2,
+      "effects": [
+        {
+          "type": "summon",
+          "minionId": "goblin"
+        }
+      ]
     },
     {
       "type": "selfDiscard"
     }
-  ],
-  "manaCost": 4
+  ]
 }

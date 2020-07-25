@@ -1,6 +1,7 @@
 package com.etherblood.a.rules.updates.systems;
 
 import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
@@ -25,18 +26,18 @@ public class CastSystem {
     }
 
     public void run() {
-        for (int castSource : data.list(core.CAST_TARGET)) {
-            int target = data.get(castSource, core.CAST_TARGET);
+        IntList casts = data.list(core.CAST_TARGET);
+        for (int castSource : casts) {
             for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
                 int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
                 CardTemplate otherTemplate = templates.getCard(otherTemplateId);
                 for (Effect effect : otherTemplate.getOnCastEffects()) {
-                    effect.apply(data, templates, random, events, other, target);
+                    effect.apply(data, templates, random, events, other, castSource);
                 }
             }
         }
 
-        for (int castSource : data.list(core.CAST_TARGET)) {
+        for (int castSource : casts) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
             CardTemplate template = templates.getCard(cardTemplateId);
