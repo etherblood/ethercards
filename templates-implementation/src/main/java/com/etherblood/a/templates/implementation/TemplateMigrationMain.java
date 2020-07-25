@@ -8,9 +8,11 @@ import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -28,14 +30,14 @@ public class TemplateMigrationMain {
             try {
                 File file = path.toFile();
                 JsonObject template;
-                try (Reader reader = new BufferedReader(new FileReader(file))) {
+                try (Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                     template = gson.fromJson(reader, JsonObject.class);
                 }
                 update(template);
-                try (Writer writer = new BufferedWriter(new FileWriter(file))) {
+                try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
                     gson.toJson(template, writer);
                 }
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 throw new RuntimeException("Error with file " + path, ex);
             }
         });
