@@ -23,6 +23,8 @@
         {
           "type": "ditto"
         }
+      ],
+      "untargeted": [
       ]
     }
   ],

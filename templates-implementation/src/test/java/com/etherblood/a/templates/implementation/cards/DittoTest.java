@@ -76,7 +76,18 @@ public class DittoTest extends AbstractGameTest {
 
         int ornithopter = createCard(player(0), "ornithopter", core.IN_HAND_ZONE);
         moves.apply(new Cast(player(0), ornithopter));
-        
+
         Assertions.assertEquals(1, effectiveStats.attack(ditto));
+    }
+
+    @Test
+    public void noTarget() {
+        data.set(player(0), core.MANA, Integer.MAX_VALUE);
+        int ditto = createCard(player(0), "ditto", core.IN_HAND_ZONE);
+
+        moves.apply(new Cast(player(0), ditto));
+
+        Assertions.assertEquals(getCardId("ditto"), data.get(ditto, core.CARD_TEMPLATE));
+        Assertions.assertTrue(data.has(ditto, core.IN_BATTLE_ZONE));
     }
 }
