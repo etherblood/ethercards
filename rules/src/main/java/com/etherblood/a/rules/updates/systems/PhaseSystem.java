@@ -10,6 +10,7 @@ import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.TriggerService;
+import com.etherblood.a.rules.updates.ZoneService;
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
@@ -193,9 +194,10 @@ public class PhaseSystem {
         for (int player : draws) {
             SystemsUtil.drawCards(data, templates, random, events, player, draws.get(player));
         }
+        ZoneService zoneService = new ZoneService(data, templates, random, events);
         for (int card : data.list(core.MULLIGAN)) {
-            data.remove(card, core.IN_HAND_ZONE);
-            data.set(card, core.IN_LIBRARY_ZONE, 1);
+            zoneService.removeFromHand(card);
+            zoneService.addToLibrary(card);
         }
         data.clear(core.MULLIGAN);
 
