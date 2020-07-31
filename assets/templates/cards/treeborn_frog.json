@@ -1,0 +1,38 @@
+{
+  "alias": "treeborn_frog",
+  "display": {
+    "name": "Treeborn Frog",
+    "imagePath": "treeborn_frog.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "During your upkeep, if you have no minions in play, summon this from your graveyard."
+  },
+  "manaCost": 1,
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 1
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "graveyard": {
+    "TRIGGER_OWNER_UPKEEP": [
+      {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "minionCountIs",
+          "relation": "EQUAL",
+          "value": 0
+        },
+        "effects": [
+          {
+            "type": "selfResurrect"
+          }
+        ]
+      } 
+    ]
+  }
+}

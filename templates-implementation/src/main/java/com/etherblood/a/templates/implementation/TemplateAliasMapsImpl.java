@@ -54,6 +54,8 @@ import java.util.HashMap;
 import java.util.Map;
 import com.etherblood.a.templates.api.TargetPredicate;
 import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
+import com.etherblood.a.templates.implementation.effects.SelfResurrectEffect;
+import com.etherblood.a.templates.implementation.predicates.MinionCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
 import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
@@ -68,6 +70,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
         effectClasses.put("summon", SummonEffect.class);
         effectClasses.put("selfSummon", SelfSummonEffect.class);
+        effectClasses.put("selfResurrect", SelfResurrectEffect.class);
         effectClasses.put("selfDiscard", SelfDiscardEffect.class);
         effectClasses.put("lathlissToken", LathlissTokenEffect.class);
         effectClasses.put("fractionalDamage", FractionalDamageEffect.class);
@@ -129,6 +132,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("healthIs", HealthIsPredicate.class);
         targetClasses.put("manaCostIs", ManaCostIsPredicate.class);
         targetClasses.put("handCardCountIs", HandCardCountIsPredicate.class);
+        targetClasses.put("minionCountIs", MinionCountIsPredicate.class);
         targetClasses.put("hero", HeroPredicate.class);
         targetClasses.put("minion", MinionPredicate.class);
         targetClasses.put("tired", TiredPredicate.class);
