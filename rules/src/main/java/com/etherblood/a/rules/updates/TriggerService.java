@@ -1,16 +1,22 @@
 package com.etherblood.a.rules.updates;
 
 import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntUnaryOperator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TriggerService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TriggerService.class);
 
     private final EntityData data;
     private final CoreComponents core;
@@ -72,23 +78,31 @@ public class TriggerService {
         }
     }
 
-    private void triggerSelf(int triggerTarget, int selfComponent) {
-        if (data.has(triggerTarget, selfComponent)) {
-            trigger(selfComponent, triggerTarget, triggerTarget);
+    private void triggerSelf(int triggerTarget, int triggerComponent) {
+        if (data.has(triggerTarget, triggerComponent)) {
+            trigger(triggerComponent, triggerTarget, triggerTarget);
         }
     }
 
-    private void triggerOthers(int triggerTarget, int otherComponent) {
-        for (int other : data.listInValueOrder(otherComponent)) {
+    private void triggerOthers(int triggerTarget, int triggerComponent) {
+        IntList listInValueOrder = data.listInValueOrder(triggerComponent);
+        for (int other : listInValueOrder) {
             if (other == triggerTarget) {
                 continue;
             }
-            trigger(otherComponent, other, triggerTarget);
+
+            if (data.has(other, triggerComponent)) {
+                trigger(triggerComponent, other, triggerTarget);
+            }
         }
     }
 
     public void trigger(int triggerComponent, int self, int triggerTarget) {
-        for (Effect effect : triggers(self).get(triggerComponent)) {
+        List<Effect> triggers = triggers(self).get(triggerComponent);
+        if (triggers == null) {
+            throw new NullPointerException("Missing " + data.getComponents().getMeta(triggerComponent).name);
+        }
+        for (Effect effect : triggers) {
             effect.apply(data, templates, random, events, self, triggerTarget);
         }
     }

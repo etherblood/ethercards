@@ -5,7 +5,8 @@
     "imagePath": "River_Crocolisk_full.png",
     "colors": [
       "GREEN"
-    ]
+    ],
+    "flavourText": "Edward \"Lefty\" Smith tried to make luggage out of a river crocolisk once."
   },
   "components": {
     "ATTACK": 2,

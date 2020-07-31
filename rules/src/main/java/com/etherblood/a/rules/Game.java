@@ -3,6 +3,7 @@ package com.etherblood.a.rules;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.a.game.events.api.GameEventListener;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,14 @@ public class Game {
 
     public MoveService getMoves() {
         return moves;
+    }
+
+    public GameEventListener getEvents() {
+        return moves.getEvents();
+    }
+
+    public HistoryRandom getRandom() {
+        return moves.getRandom();
     }
 
     public int findPlayerByIndex(int playerIndex) {

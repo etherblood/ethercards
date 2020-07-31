@@ -8,6 +8,9 @@
     ]
   },
   "manaCost": 1,
+  "tribes": [
+    "TOKEN"
+  ],
   "components": {
     "ATTACK": 1,
     "HEALTH": 1

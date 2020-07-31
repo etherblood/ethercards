@@ -150,6 +150,15 @@ public class TemplatesParser {
                     }
                 }
             }
+            JsonObject inLibrary = cardJson.getAsJsonObject("library");
+            if(inLibrary != null) {
+                for (Map.Entry<String, JsonElement> entry : inLibrary.entrySet()) {
+                    JsonArray effects = entry.getValue().getAsJsonArray();
+                    for (JsonElement effectJson : effects) {
+                        builder.inLibrary(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
+                    }
+                }
+            }
             JsonObject inGraveyard = cardJson.getAsJsonObject("graveyard");
             if(inGraveyard != null) {
                 for (Map.Entry<String, JsonElement> entry : inGraveyard.entrySet()) {

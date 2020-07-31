@@ -22,10 +22,11 @@ public class CardTemplate {
     protected final Set<Tribe> tribes;
     protected final Map<Integer, List<Effect>> inBattle;
     protected final Map<Integer, List<Effect>> inHand;
+    protected final Map<Integer, List<Effect>> inLibrary;
     protected final Map<Integer, List<Effect>> inGraveyard;
     protected final Map<Integer, List<StatModifier>> componentModifiers;
 
-    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, Map<Integer, List<Effect>> inBattle, Map<Integer, List<Effect>> inHand, Map<Integer, List<Effect>> inGraveyard, Map<Integer, List<StatModifier>> componentModifiers) {
+    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, Map<Integer, List<Effect>> inBattle, Map<Integer, List<Effect>> inHand, Map<Integer, List<Effect>> inLibrary, Map<Integer, List<Effect>> inGraveyard, Map<Integer, List<StatModifier>> componentModifiers) {
         this.id = id;
         this.isMinion = isMinion;
         this.manaCost = manaCost;
@@ -34,6 +35,7 @@ public class CardTemplate {
         this.tribes = Collections.unmodifiableSet(EnumSet.copyOf(tribes));
         this.inBattle = deepCopy(inBattle);
         this.inHand = deepCopy(inHand);
+        this.inLibrary = deepCopy(inLibrary);
         this.inGraveyard = deepCopy(inGraveyard);
         this.components = new IntMap();
         for (int key : components) {
@@ -95,12 +97,12 @@ public class CardTemplate {
         return inHand;
     }
     
-    public Map<Integer, List<Effect>> getGraveyardTriggers() {
-        return inGraveyard;
+    public Map<Integer, List<Effect>> getLibraryTriggers() {
+        return inLibrary;
     }
     
-    public Map<Integer, List<Effect>> getLibraryTriggers() {
-        return Collections.emptyMap();
+    public Map<Integer, List<Effect>> getGraveyardTriggers() {
+        return inGraveyard;
     }
 
     public List<StatModifier> getComponentModifiers(int component) {

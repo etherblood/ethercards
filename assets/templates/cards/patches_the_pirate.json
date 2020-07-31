@@ -1,0 +1,51 @@
+{
+  "alias": "patches_the_pirate",
+  "display": {
+    "name": "Patches the Pirate",
+    "imagePath": "patches_the_pirate.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "After you play a Pirate, summon this minion from your deck.",
+    "flavourText": "What do sailors yell when Patches steals their treasure chest full of laws and other things being transported to parliament for a vote? \"The Eyes have it!\""
+  },
+  "manaCost": 1,
+  "tribes": [
+    "PIRATE"
+  ],
+  "components": {
+    "ATTACK": 1,
+    "HEALTH": 1,
+    "FAST_TO_ATTACK": true
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "library": {
+    "TRIGGER_OTHER_SUMMON": [
+      {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "hasTribe",
+              "tribe": "PIRATE"
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "type": "selfSummonFromLibrary"
+          }
+        ]
+      } 
+    ]
+  }
+}

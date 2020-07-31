@@ -1,5 +1,6 @@
 package com.etherblood.a.rules;
 
+import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -16,11 +17,14 @@ import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.TargetSelection;
+import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.systems.GameLoopService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalInt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,6 +211,12 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canStart(true);
         }
+
+        TriggerService triggerService = new TriggerService(data, templates, random, eventListener);
+        for (int card : data.list(core.CARD_TEMPLATE)) {
+            triggerService.initEffects(card);
+        }
+
         for (int player : data.list(core.TEAM_INDEX)) {
             data.set(player, core.ACTIVE_TEAM_PHASE, PlayerPhase.MULLIGAN);
         }
@@ -434,6 +444,39 @@ public class MoveService {
                     throw new IllegalStateException("Entities owner has a different team than entity.");
                 }
             }
+
+            for (int card : data.list(core.CARD_TEMPLATE)) {
+                int templateId = data.get(card, core.CARD_TEMPLATE);
+                CardTemplate template = templates.getCard(templateId);
+
+                Map<Integer, List<Effect>> triggers;
+                if (data.has(card, core.IN_BATTLE_ZONE)) {
+                    triggers = template.getBattleTriggers();
+                } else if (data.has(card, core.IN_HAND_ZONE)) {
+                    triggers = template.getHandTriggers();
+                } else if (data.has(card, core.IN_LIBRARY_ZONE)) {
+                    triggers = template.getLibraryTriggers();
+                } else if (data.has(card, core.IN_GRAVEYARD_ZONE)) {
+                    triggers = template.getGraveyardTriggers();
+                } else {
+                    throw new IllegalStateException("Entity with template has no zone.");
+                }
+                for (int triggerComponent : triggers.keySet()) {
+                    if (!data.has(card, triggerComponent)) {
+                        throw new IllegalStateException("Card has unmapped " + data.getComponents().getMeta(triggerComponent).name + " trigger component.");
+                    }
+                }
+
+                // commented out because it is too slow
+//                for (ComponentMeta meta : data.getComponents().getMetas()) {
+//                    if (meta.name.startsWith("TRIGGER_")) {
+//                        if (data.has(card, meta.id) && !triggers.containsKey(meta.id)) {
+//                            throw new IllegalStateException("Card has mapped " + meta.name + " without actually having this trigger active.");
+//                        }
+//                    }
+//                }
+            }
+
             return true;
         } catch (IllegalStateException e) {
             LOG.error("{}", EntityUtil.toMap(data));
@@ -443,5 +486,9 @@ public class MoveService {
 
     public HistoryRandom getRandom() {
         return random;
+    }
+
+    public GameEventListener getEvents() {
+        return eventListener;
     }
 }

@@ -6,6 +6,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
 import com.etherblood.a.rules.PlayerResult;
+import com.etherblood.a.rules.updates.ZoneService;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -94,10 +95,11 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
                 opponentHandCards.add(card);
             }
         }
+        ZoneService zoneService = new ZoneService(data, game.getTemplates(), game.getRandom(), game.getEvents());
         for (int card : opponentHandCards) {
-            data.remove(card, core.IN_HAND_ZONE);
             data.remove(card, core.MULLIGAN);
-            data.set(card, core.IN_LIBRARY_ZONE, 1);
+            zoneService.removeFromHand(card);
+            zoneService.addToLibrary(card);
         }
 
         for (int card : opponentHandCards) {
@@ -110,8 +112,8 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
                 }
             }
             int handCard = ownerLibraryCards.get(random.nextInt(ownerLibraryCards.size()));
-            data.set(handCard, core.IN_HAND_ZONE, 1);
-            data.remove(handCard, core.IN_LIBRARY_ZONE);
+            zoneService.removeFromLibrary(handCard);
+            zoneService.addToHand(handCard);
         }
     }
 

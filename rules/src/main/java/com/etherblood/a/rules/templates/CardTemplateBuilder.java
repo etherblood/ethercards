@@ -17,6 +17,7 @@ public class CardTemplateBuilder {
     protected final Set<Tribe> tribes = EnumSet.noneOf(Tribe.class);
     protected final Map<Integer, List<Effect>> inBattle = new HashMap<>();
     protected final Map<Integer, List<Effect>> inHand = new HashMap<>();
+    protected final Map<Integer, List<Effect>> inLibrary = new HashMap<>();
     protected final Map<Integer, List<Effect>> inGraveyard = new HashMap<>();
     protected final Map<Integer, List<StatModifier>> componentModifiers = new HashMap<>();
 
@@ -44,6 +45,10 @@ public class CardTemplateBuilder {
         inHand.computeIfAbsent(triggerComponent, x -> new ArrayList<>()).add(effect);
     }
 
+    public void inLibrary(int triggerComponent, Effect effect) {
+        inLibrary.computeIfAbsent(triggerComponent, x -> new ArrayList<>()).add(effect);
+    }
+
     public void inGraveyard(int triggerComponent, Effect effect) {
         inGraveyard.computeIfAbsent(triggerComponent, x -> new ArrayList<>()).add(effect);
     }
@@ -61,7 +66,7 @@ public class CardTemplateBuilder {
     }
 
     public CardTemplate build(int id) {
-        return new CardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, components, tribes, inBattle, inHand, inGraveyard, componentModifiers);
+        return new CardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, components, tribes, inBattle, inHand, inLibrary, inGraveyard, componentModifiers);
     }
 
 }

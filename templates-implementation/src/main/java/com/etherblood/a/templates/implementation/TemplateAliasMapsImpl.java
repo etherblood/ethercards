@@ -55,8 +55,10 @@ import java.util.Map;
 import com.etherblood.a.templates.api.TargetPredicate;
 import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.SelfResurrectEffect;
+import com.etherblood.a.templates.implementation.effects.SelfSummonFromLibraryEffect;
 import com.etherblood.a.templates.implementation.predicates.MinionCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.HasTribePredicate;
 import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
 import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
 import com.etherblood.a.templates.implementation.predicates.TiredPredicate;
@@ -70,6 +72,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         Map<String, Class<? extends Effect>> effectClasses = new HashMap<>();
         effectClasses.put("summon", SummonEffect.class);
         effectClasses.put("selfSummon", SelfSummonEffect.class);
+        effectClasses.put("selfSummonFromLibrary", SelfSummonFromLibraryEffect.class);
         effectClasses.put("selfResurrect", SelfResurrectEffect.class);
         effectClasses.put("selfDiscard", SelfDiscardEffect.class);
         effectClasses.put("lathlissToken", LathlissTokenEffect.class);
@@ -141,6 +144,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("hasSourceOwner", HasSourceOwnerPredicate.class);
         targetClasses.put("hasSourceTeam", HasSourceTeamPredicate.class);
         targetClasses.put("sourceOwner", SourceOwnerPredicate.class);
+        targetClasses.put("hasTribe", HasTribePredicate.class);
         return targetClasses;
     }
 }

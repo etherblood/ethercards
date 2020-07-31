@@ -17,8 +17,8 @@ public class DisplayCardTemplate extends CardTemplate {
     private final String alias, name, flavourText, description, imagePath;
     private final List<CardColor> colors;
 
-    public DisplayCardTemplate(int templateId, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, IntMap components, Set<Tribe> tribes, Map<Integer, List<Effect>> inBattle, Map<Integer, List<Effect>> inHand, Map<Integer, List<Effect>> inGraveyard, Map<Integer, List<StatModifier>> componentModifiers) {
-        super(templateId, isMinion, manaCost, castTarget, castEffects, components, tribes, inBattle, inHand, inGraveyard, componentModifiers);
+    public DisplayCardTemplate(int templateId, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, IntMap components, Set<Tribe> tribes, Map<Integer, List<Effect>> inBattle, Map<Integer, List<Effect>> inHand, Map<Integer, List<Effect>> inLibrary, Map<Integer, List<Effect>> inGraveyard, Map<Integer, List<StatModifier>> componentModifiers) {
+        super(templateId, isMinion, manaCost, castTarget, castEffects, components, tribes, inBattle, inHand, inLibrary, inGraveyard, componentModifiers);
         this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;
