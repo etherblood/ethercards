@@ -1,8 +1,6 @@
 package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.StatModifier;
 import java.util.OptionalInt;

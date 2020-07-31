@@ -8,17 +8,19 @@
       "BLUE"
     ]
   },
-  "onSummon": [
-    {
-      "type": "fusion",
-      "materialIds": [
-        "blue_eyes_white_dragon",
-        "blue_eyes_white_dragon",
-        "blue_eyes_white_dragon"
-      ],
-      "resultId": "blue_eyes_ultimate_dragon"
-    }
-  ],
+  "battle": {
+    "TRIGGER_SELF_ENTER_BATTLE": [
+      {
+        "type": "fusion",
+        "materialIds": [
+          "blue_eyes_white_dragon",
+          "blue_eyes_white_dragon",
+          "blue_eyes_white_dragon"
+        ],
+        "resultId": "blue_eyes_ultimate_dragon"
+      }
+    ]
+  },
   "components": {
     "ATTACK": 8,
     "HEALTH": 7,

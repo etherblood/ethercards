@@ -14,30 +14,6 @@
     "HEALTH": 2,
     "FLYING": true
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 3
-    },
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "PLAYER_DISCARD_CARDS": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OPPONENT"
-        ]
-      }
-    }
-  ],
   "tribes": [
     "SPIRIT"
   ],
@@ -45,5 +21,31 @@
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 3
+      },
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "PLAYER_DISCARD_CARDS": 1
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ALL",
+          "filters": [
+            "OPPONENT"
+          ]
+        }
+      }
+    ]
+  }
 }

@@ -7,6 +7,7 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.updates.TriggerService;
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
@@ -18,6 +19,8 @@ public class DittoEffect implements Effect {
         if (!data.has(source, core.ORIGINAL_CARD_TEMPLATE)) {
             data.set(source, core.ORIGINAL_CARD_TEMPLATE, data.get(source, core.CARD_TEMPLATE));
         }
+        TriggerService triggerService = new TriggerService(data, templates, random, events);
+        triggerService.cleanupEffects(source);
         IntList blacklist = new IntList(
                 core.OWNER,
                 core.TEAM,
@@ -28,7 +31,8 @@ public class DittoEffect implements Effect {
                 core.TIRED,
                 core.ORIGINAL_CARD_TEMPLATE,
                 core.ATTACK_TARGET,
-                core.BLOCK_TARGET);
+                core.BLOCK_TARGET,
+                core.SUMMONING_SICKNESS);
         for (ComponentMeta meta : data.getComponents().getMetas()) {
             if (blacklist.contains(meta.id)) {
                 continue;
@@ -40,5 +44,7 @@ public class DittoEffect implements Effect {
                 data.remove(source, meta.id);
             }
         }
+        triggerService.initEffects(source);
+        triggerService.onEnterBattle(source);// FIXME: trigger misuse
     }
 }

@@ -13,20 +13,22 @@
     "HEALTH": 2,
     "REACH": true
   },
-  "onDeath": [
-    {
-      "type": "summon",
-      "minionId": "spectral_spider"
-    },
-    {
-      "type": "summon",
-      "minionId": "spectral_spider"
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 2
+  "manaCost": 2,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "summon",
+        "minionId": "spectral_spider"
+      },
+      {
+        "type": "summon",
+        "minionId": "spectral_spider"
+      }
+    ]
+  }
 }

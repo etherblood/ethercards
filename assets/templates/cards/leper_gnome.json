@@ -13,29 +13,31 @@
     "HEALTH": 1
   },
   "manaCost": 1,
-  "onDeath": [
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 2
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OPPONENT_HERO"
-        ]
-      }
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "DAMAGE_REQUEST": 2
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ALL",
+          "filters": [
+            "OPPONENT_HERO"
+          ]
+        }
+      }
+    ]
+  }
 }

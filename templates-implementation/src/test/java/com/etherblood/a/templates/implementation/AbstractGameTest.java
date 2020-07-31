@@ -16,6 +16,7 @@ import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.setup.GameSetup;
 import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
+import com.etherblood.a.rules.updates.ZoneService;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
@@ -40,9 +41,12 @@ public abstract class AbstractGameTest {
     private final GameSetup setup;
 
     public EntityData data;
+    public HistoryRandom random;
+    public NoopGameEventListener events;
     public MoveService moves;
     public Game game;
     public EffectiveStatsService effectiveStats;
+    public ZoneService zoneService;
 
     public AbstractGameTest() {
         this(1, 1);
@@ -91,9 +95,12 @@ public abstract class AbstractGameTest {
     @BeforeEach
     public void before() {
         data = new SimpleEntityData(settings.components);
-        moves = new MoveService(data, settings.templates, HistoryRandom.producer(new Random(7)::nextInt), new NoopGameEventListener());
+        random = HistoryRandom.producer(new Random(7)::nextInt);
+        events = new NoopGameEventListener();
+        moves = new MoveService(data, settings.templates, random, events);
         game = new Game(settings, data, moves);
         effectiveStats = new EffectiveStatsService(data, templates);
+        zoneService = new ZoneService(data, templates, random, events);
 
         startGame();
     }
@@ -149,7 +156,16 @@ public abstract class AbstractGameTest {
     public int createCard(int owner, int cardTemplate, int zone) {
         assert zone == core.IN_HAND_ZONE || zone == core.IN_GRAVEYARD_ZONE || zone == core.IN_LIBRARY_ZONE;
         int card = SystemsUtil.createCard(data, cardTemplate, owner);
-        data.set(card, zone, 1);
+
+        if (zone == core.IN_HAND_ZONE) {
+            zoneService.addToHand(card);
+        } else if (zone == core.IN_LIBRARY_ZONE) {
+            zoneService.addToLibrary(card);
+        } else if (zone == core.IN_GRAVEYARD_ZONE) {
+            zoneService.addToGraveyard(card);
+        } else {
+            throw new AssertionError(zone);
+        }
         return card;
     }
 
@@ -158,7 +174,7 @@ public abstract class AbstractGameTest {
     }
 
     public int createMinion(int owner, int minionTemplate) {
-        return SystemsUtil.createMinion(data, templates, minionTemplate, owner);
+        return SystemsUtil.createMinion(data, templates, random, events, minionTemplate, owner);
     }
 
     public int getCardId(String alias) {

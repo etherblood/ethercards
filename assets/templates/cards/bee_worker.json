@@ -15,37 +15,39 @@
     "VENOM": 1,
     "FLYING": true
   },
-  "afterBattle": [
-    {
-      "type": "buff",
-      "components": {
-        "DEATH_REQUEST": true
-      }
-    }
-  ],
-  "onDeath": [
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DELAYED_MANA": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWNER"
-        ]
-      }
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "DELAYED_MANA": 1
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ALL",
+          "filters": [
+            "OWNER"
+          ]
+        }
+      }
+    ],
+    "TRIGGER_SELF_FIGHT": [
+      {
+        "type": "buff",
+        "components": {
+          "DEATH_REQUEST": true
+        }
+      }
+    ]
+  }
 }

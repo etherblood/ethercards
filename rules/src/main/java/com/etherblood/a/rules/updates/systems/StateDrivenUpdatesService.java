@@ -4,9 +4,9 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.DeathOptions;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.MoveAvailabilityService;
-import com.etherblood.a.rules.EffectiveStatsService;
 import java.util.function.IntUnaryOperator;
 
 public class StateDrivenUpdatesService {

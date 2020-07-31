@@ -13,12 +13,6 @@
     "HEALTH": 5,
     "CANNOT_ATTACK": true
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 1
-    }
-  ],
   "tribes": [
     "SPIRIT"
   ],
@@ -27,5 +21,13 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 2
+  "manaCost": 2,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 1
+      }
+    ]
+  }
 }

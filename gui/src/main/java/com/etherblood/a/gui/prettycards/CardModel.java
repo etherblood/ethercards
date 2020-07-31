@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class CardModel extends BoardObjectModel {
@@ -242,7 +243,9 @@ public class CardModel extends BoardObjectModel {
                 keywords.add("Venom_Aura_" + template.get(core.OWN_MINIONS_VENOM_AURA));
             }
         }
-        for (Effect effect : template.getOnSelfDeathEffects()) {
+        Map<Integer, List<Effect>> triggers = template.getBattleTriggers();
+        List<Effect> effects = triggers.getOrDefault(core.TRIGGER_SELF_DEATH, Collections.emptyList());
+        for (Effect effect : effects) {
             if (effect instanceof SoulshiftEffect) {
                 SoulshiftEffect soulshift = (SoulshiftEffect) effect;
                 keywords.add("Soulshift_" + soulshift.power);

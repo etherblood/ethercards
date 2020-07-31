@@ -44,45 +44,135 @@ public class TemplateMigrationMain {
     }
 
     private static void update(JsonObject template) {
-        if (true) {
-            return;
+        if (template.has("onDeath")) {
+            JsonObject zone = template.getAsJsonObject("graveyard");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("graveyard", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_DEATH");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_SELF_DEATH", effects);
+            }
+            effects.addAll(template.remove("onDeath").getAsJsonArray());
         }
-        updateObject(template);
+        if (template.has("onSelfMovedToGraveyard")) {
+            JsonObject zone = template.getAsJsonObject("graveyard");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("graveyard", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_ENTER_GRAVEYARD");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_SELF_ENTER_GRAVEYARD", effects);
+            }
+            effects.addAll(template.remove("onSelfMovedToGraveyard").getAsJsonArray());
+        }
+        
+        
+        if (template.has("onSurvive")) {
+            JsonObject zone = template.getAsJsonObject("battle");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("battle", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_SURVIVE");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_SELF_SURVIVE", effects);
+            }
+            effects.addAll(template.remove("onSurvive").getAsJsonArray());
+        }
+        if (template.has("onUpkeep")) {
+            JsonObject zone = template.getAsJsonObject("battle");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("battle", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_OWNER_UPKEEP");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_OWNER_UPKEEP", effects);
+            }
+            effects.addAll(template.remove("onUpkeep").getAsJsonArray());
+        }
+        if (template.has("afterBattle")) {
+            JsonObject zone = template.getAsJsonObject("battle");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("battle", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_FIGHT");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_SELF_FIGHT", effects);
+            }
+            effects.addAll(template.remove("afterBattle").getAsJsonArray());
+        }
+        if (template.has("onCast")) {
+            JsonObject zone = template.getAsJsonObject("battle");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("battle", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_OTHER_CAST");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_OTHER_CAST", effects);
+            }
+            effects.addAll(template.remove("onCast").getAsJsonArray());
+        }
+        if (template.has("onSummon")) {
+            JsonObject zone = template.getAsJsonObject("battle");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("battle", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_OTHER_SUMMON");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_OTHER_SUMMON", effects);
+            }
+            effects.addAll(template.remove("onSummon").getAsJsonArray());
+        }
+        if (template.has("onDraw")) {
+            JsonObject zone = template.getAsJsonObject("battle");
+            if (zone == null) {
+                zone = new JsonObject();
+                template.add("battle", zone);
+            }
+            JsonArray effects = zone.getAsJsonArray("TRIGGER_OWNER_DRAW");
+            if (effects == null) {
+                effects = new JsonArray();
+                zone.add("TRIGGER_OWNER_DRAW", effects);
+            }
+            effects.addAll(template.remove("onDraw").getAsJsonArray());
+        }
     }
 
-    private static void updateObject(JsonObject object) {
+    private static void updateRecursively(JsonObject object) {
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             JsonElement value = entry.getValue();
             if (value.isJsonArray()) {
-                updateArray(value.getAsJsonArray());
+                updateRecursively(value.getAsJsonArray());
             }
             if (value.isJsonObject()) {
-                updateObject(value.getAsJsonObject());
+                updateRecursively(value.getAsJsonObject());
             }
         }
-        if (object.has("type") && object.has("targets")) {
-            String type = object.get("type").getAsString();
-            JsonElement prevTargets = object.get("targets");
-            if (type.equals("targeted") && prevTargets.isJsonArray()) {
-                JsonElement filters = object.remove("targets");
-                JsonElement select = object.remove("targeting");
-
-                JsonObject targets = new JsonObject();
-                targets.addProperty("type", "simple");
-                targets.add("select", select);
-                targets.add("filters", filters);
-                object.add("targets", targets);
-            }
-        }
+        
+        //update here
     }
 
-    private static void updateArray(JsonArray array) {
+    private static void updateRecursively(JsonArray array) {
         for (JsonElement value : array) {
             if (value.isJsonArray()) {
-                updateArray(value.getAsJsonArray());
+                updateRecursively(value.getAsJsonArray());
             }
             if (value.isJsonObject()) {
-                updateObject(value.getAsJsonObject());
+                updateRecursively(value.getAsJsonObject());
             }
         }
     }

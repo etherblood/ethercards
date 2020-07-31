@@ -18,10 +18,12 @@
       "type": "selfSummon"
     }
   ],
-  "onSelfMovedToGraveyard": [
-    {
-      "type": "drawTemplate",
-      "cardId": "blue_eyes_white_dragon"
-    }
-  ]
+  "graveyard": {
+    "TRIGGER_SELF_ENTER_GRAVEYARD": [
+      {
+        "type": "drawTemplate",
+        "cardId": "blue_eyes_white_dragon"
+      }
+    ]
+  }
 }

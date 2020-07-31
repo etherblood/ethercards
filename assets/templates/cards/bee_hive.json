@@ -14,20 +14,22 @@
     "CANNOT_ATTACK": true,
     "CANNOT_BLOCK": true
   },
-  "onUpkeep": [
-    {
-      "type": "summon",
-      "minionId": "bee_worker"
-    },
-    {
-      "type": "summon",
-      "minionId": "bee_worker"
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 4
+  "manaCost": 4,
+  "battle": {
+    "TRIGGER_OWNER_UPKEEP": [
+      {
+        "type": "summon",
+        "minionId": "bee_worker"
+      },
+      {
+        "type": "summon",
+        "minionId": "bee_worker"
+      }
+    ]
+  }
 }

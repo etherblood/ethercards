@@ -13,16 +13,18 @@
     "HEALTH": 2,
     "CANNOT_ATTACK": true
   },
-  "onDeath": [
-    {
-      "type": "summon",
-      "minionId": "nerubian"
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 2
+  "manaCost": 2,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "summon",
+        "minionId": "nerubian"
+      }
+    ]
+  }
 }

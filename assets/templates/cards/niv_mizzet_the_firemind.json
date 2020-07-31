@@ -14,27 +14,6 @@
   "tribes": [
     "DRAGON"
   ],
-  "onDraw": [
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OPPONENT_MINION",
-          "OPPONENT_HERO"
-        ]
-      }
-    }
-  ],
   "components": {
     "ATTACK": 4,
     "HEALTH": 4,
@@ -44,5 +23,28 @@
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_OWNER_DRAW": [
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "DAMAGE_REQUEST": 1
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ANY",
+          "filters": [
+            "OPPONENT_MINION",
+            "OPPONENT_HERO"
+          ]
+        }
+      }
+    ]
+  }
 }

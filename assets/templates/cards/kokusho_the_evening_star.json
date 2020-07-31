@@ -13,44 +13,6 @@
     "HEALTH": 5,
     "FLYING": true
   },
-  "onDeath": [
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "HEALTH": 5
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OWN_HERO"
-        ]
-      }
-    },
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 5
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OPPONENT_HERO"
-        ]
-      }
-    }
-  ],
   "tribes": [
     "DRAGON",
     "SPIRIT"
@@ -60,5 +22,45 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 6
+  "manaCost": 6,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "HEALTH": 5
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ANY",
+          "filters": [
+            "OWN_HERO"
+          ]
+        }
+      },
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "DAMAGE_REQUEST": 5
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ALL",
+          "filters": [
+            "OPPONENT_HERO"
+          ]
+        }
+      }
+    ]
+  }
 }

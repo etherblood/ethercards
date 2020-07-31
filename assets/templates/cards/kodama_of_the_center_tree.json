@@ -12,11 +12,6 @@
   "tribes": [
     "SPIRIT"
   ],
-  "onDeath": [
-    {
-      "type": "spiritCountSoulshift"
-    }
-  ],
   "componentModifiers": {
     "HEALTH": [
       {
@@ -37,5 +32,12 @@
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "spiritCountSoulshift"
+      }
+    ]
+  }
 }

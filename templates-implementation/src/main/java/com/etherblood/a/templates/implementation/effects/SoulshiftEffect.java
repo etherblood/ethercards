@@ -50,7 +50,8 @@ public class SoulshiftEffect implements Effect {
             return;
         }
         int selected = candidates.getRandomItem(random);
-        new ZoneService(data, templates).removeFromGraveyard(selected);
-        data.set(selected, core.IN_HAND_ZONE, 1);
+        ZoneService zoneService = new ZoneService(data, templates, random, events);
+        zoneService.removeFromGraveyard(selected);
+        zoneService.addToHand(selected);
     }
 }

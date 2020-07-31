@@ -33,7 +33,7 @@ public class GameSetup {
             data.set(player, core.PLAYER_INDEX, playerIndex);
             data.set(player, core.TEAM, team);
 
-            int heroEntity = SystemsUtil.createHero(data, templates, playerSetup.heroId, player);
+            int heroEntity = SystemsUtil.createHero(data, templates, null, null, playerSetup.heroId, player);
             data.set(heroEntity, core.SUMMONING_SICKNESS, 1);
 
             for (int cardId : librarySetup) {

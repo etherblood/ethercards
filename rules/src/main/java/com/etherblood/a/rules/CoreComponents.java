@@ -78,6 +78,19 @@ public class CoreComponents implements ComponentsModule {
     public final int BUSHIDO;
     public final int INDESTRUCTIBLE;
 
+    public final int TRIGGER_SELF_CAST;
+    public final int TRIGGER_OTHER_CAST;
+    public final int TRIGGER_SELF_SUMMON;
+    public final int TRIGGER_OTHER_SUMMON;
+
+    public final int TRIGGER_SELF_DEATH;
+    public final int TRIGGER_SELF_ENTER_BATTLE;
+    public final int TRIGGER_SELF_ENTER_GRAVEYARD;
+    public final int TRIGGER_SELF_FIGHT;
+    public final int TRIGGER_SELF_SURVIVE;
+    public final int TRIGGER_OWNER_UPKEEP;
+    public final int TRIGGER_OWNER_DRAW;
+
     public CoreComponents(ToIntFunction<String> register) {
         OWNER = register.applyAsInt("OWNER");
         TEAM = register.applyAsInt("TEAM");
@@ -92,6 +105,8 @@ public class CoreComponents implements ComponentsModule {
         DAMAGE_ACTION = register.applyAsInt("DAMAGE_ACTION");
         DEATH_REQUEST = register.applyAsInt("DEATH_REQUEST");
         DEATH_ACTION = register.applyAsInt("DEATH_ACTION");
+        DAMAGE_SURVIVAL_REQUEST = register.applyAsInt("DAMAGE_SURVIVAL_REQUEST");
+        DAMAGE_SURVIVAL_ACTION = register.applyAsInt("DAMAGE_SURVIVAL_ACTION");
         PLAYER_RESULT_REQUEST = register.applyAsInt("PLAYER_RESULT_REQUEST");
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
         TEAM_RESULT = register.applyAsInt("TEAM_RESULT");
@@ -147,9 +162,21 @@ public class CoreComponents implements ComponentsModule {
         OWN_MINIONS_ATTACK_AURA = register.applyAsInt("OWN_MINIONS_ATTACK_AURA");
         OWN_MINIONS_HEALTH_AURA = register.applyAsInt("OWN_MINIONS_HEALTH_AURA");
         OWN_MINIONS_VENOM_AURA = register.applyAsInt("OWN_MINIONS_VENOM_AURA");
-        DAMAGE_SURVIVAL_REQUEST = register.applyAsInt("DAMAGE_SURVIVAL_REQUEST");
-        DAMAGE_SURVIVAL_ACTION = register.applyAsInt("DAMAGE_SURVIVAL_ACTION");
         BUSHIDO = register.applyAsInt("BUSHIDO");
         INDESTRUCTIBLE = register.applyAsInt("INDESTRUCTIBLE");
+        
+        TRIGGER_SELF_CAST = register.applyAsInt("TRIGGER_SELF_CAST");
+        TRIGGER_OTHER_CAST = register.applyAsInt("TRIGGER_OTHER_CAST");
+        TRIGGER_SELF_SUMMON = register.applyAsInt("TRIGGER_SELF_SUMMON");
+        TRIGGER_OTHER_SUMMON = register.applyAsInt("TRIGGER_OTHER_SUMMON");
+        
+        
+        TRIGGER_SELF_DEATH = register.applyAsInt("TRIGGER_SELF_DEATH");
+        TRIGGER_SELF_ENTER_BATTLE = register.applyAsInt("TRIGGER_SELF_ENTER_BATTLE");
+        TRIGGER_SELF_ENTER_GRAVEYARD = register.applyAsInt("TRIGGER_SELF_ENTER_GRAVEYARD");
+        TRIGGER_OWNER_UPKEEP = register.applyAsInt("TRIGGER_OWNER_UPKEEP");
+        TRIGGER_OWNER_DRAW = register.applyAsInt("TRIGGER_OWNER_DRAW");
+        TRIGGER_SELF_FIGHT = register.applyAsInt("TRIGGER_SELF_FIGHT");
+        TRIGGER_SELF_SURVIVE = register.applyAsInt("TRIGGER_SELF_SURVIVE");
     }
 }

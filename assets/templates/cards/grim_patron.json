@@ -12,16 +12,18 @@
     "ATTACK": 3,
     "HEALTH": 3
   },
-  "onSurvive": [
-    {
-      "type": "summon",
-      "minionId": "grim_patron"
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 5
+  "manaCost": 5,
+  "battle": {
+    "TRIGGER_SELF_SURVIVE": [
+      {
+        "type": "summon",
+        "minionId": "grim_patron"
+      }
+    ]
+  }
 }

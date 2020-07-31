@@ -13,57 +13,59 @@
     "ATTACK": 4,
     "HEALTH": 5
   },
-  "onSummon": [
-    {
-      "type": "predicateActivated",
-      "predicate": {
-        "type": "allOf",
-        "predicates": [
-          {
-            "type": "isSource",
-            "isSource": false
-          },
-          {
-            "type": "hasSourceOwner",
-            "hasSourceOwner": true
-          }
-        ]
-      },
-      "effects": [
-        {
-          "type": "targeted",
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "DRAW_CARDS_REQUEST": 1
-              }
-            }
-          ],
-          "targets": {
-            "type": "simple",
-            "select": "ALL",
-            "filters": [
-              "OWNER"
-            ]
-          }
-        }
-      ]
-    }
-  ],
   "tribes": [
     "SPIRIT"
-  ],
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 5
-    }
   ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 6
+  "manaCost": 6,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 5
+      }
+    ],
+    "TRIGGER_OTHER_SUMMON": [
+      {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "type": "targeted",
+            "effects": [
+              {
+                "type": "buff",
+                "components": {
+                  "DRAW_CARDS_REQUEST": 1
+                }
+              }
+            ],
+            "targets": {
+              "type": "simple",
+              "select": "ALL",
+              "filters": [
+                "OWNER"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

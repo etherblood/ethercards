@@ -13,12 +13,6 @@
     "HEALTH": 7,
     "REACH": true
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 6
-    }
-  ],
   "tribes": [
     "SPIRIT"
   ],
@@ -26,5 +20,13 @@
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 6
+      }
+    ]
+  }
 }

@@ -9,33 +9,6 @@
     "description": "Wildwood Geist gets +2/+2 during your upkeep for 1 turn.",
     "flavourText": "The geists that dwell in the deep forests of Kessig are as untamable as the woods themselves."
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 3
-    }
-  ],
-  "onUpkeep": [
-    {
-      "type": "targeted",
-      "targets": {
-        "type": "simple",
-        "filters": [
-          "SOURCE"
-        ],
-        "select": "ALL"
-      },
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "TEMPORARY_ATTACK": 2,
-            "TEMPORARY_HEALTH": 2
-          }
-        }
-      ]
-    }
-  ],
   "tribes": [
     "SPIRIT"
   ],
@@ -48,5 +21,34 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 4
+  "manaCost": 4,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 3
+      }
+    ],
+    "TRIGGER_OWNER_UPKEEP": [
+      {
+        "type": "targeted",
+        "targets": {
+          "type": "simple",
+          "filters": [
+            "SOURCE"
+          ],
+          "select": "ALL"
+        },
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "TEMPORARY_ATTACK": 2,
+              "TEMPORARY_HEALTH": 2
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

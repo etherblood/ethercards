@@ -12,19 +12,21 @@
     "ATTACK": 9,
     "HEALTH": 7
   },
-  "onDeath": [
-    {
-      "type": "create",
-      "cardId": "malorne",
-      "components": {
-        "IN_LIBRARY_ZONE": 1
-      }
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 8
+  "manaCost": 8,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "create",
+        "cardId": "malorne",
+        "components": {
+          "IN_LIBRARY_ZONE": 1
+        }
+      }
+    ]
+  }
 }

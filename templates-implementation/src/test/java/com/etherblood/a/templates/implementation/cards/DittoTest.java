@@ -29,24 +29,24 @@ public class DittoTest extends AbstractGameTest {
         Assertions.assertEquals(3, minions.size());
         Assertions.assertEquals(getCardId("blue_eyes_ultimate_dragon"), data.get(ultimateDragon, core.CARD_TEMPLATE));
         Assertions.assertEquals(player(0), data.get(ultimateDragon, core.OWNER));
-        Assertions.assertTrue( data.has(ultimateDragon, core.SUMMONING_SICKNESS));
+        Assertions.assertTrue(data.has(ultimateDragon, core.SUMMONING_SICKNESS));
     }
-    
+
     @Test
     public void cloneDamage() {
         data.set(player(0), core.MANA, Integer.MAX_VALUE);
         int dragon = createMinion(player(0), "blue_eyes_white_dragon");
-        
+
         data.set(dragon, core.DAMAGE_REQUEST, 3);
         moves.apply(new Update());
-        
+
         int ditto = createCard(player(0), "ditto", core.IN_HAND_ZONE);
 
         moves.apply(new Cast(player(0), ditto, dragon));
-        
+
         Assertions.assertEquals(effectiveStats.health(dragon), effectiveStats.health(ditto));
     }
-    
+
     @Test
     public void leaving_battle_reverts_clone() {
         data.set(player(0), core.MANA, Integer.MAX_VALUE);
@@ -54,12 +54,29 @@ public class DittoTest extends AbstractGameTest {
         int ditto = createCard(player(0), "ditto", core.IN_HAND_ZONE);
 
         moves.apply(new Cast(player(0), ditto, dragon));
-        
+
         Assertions.assertEquals(getCardId("blue_eyes_white_dragon"), data.get(ditto, core.CARD_TEMPLATE));
-        
+
         data.set(ditto, core.DEATH_REQUEST, DeathOptions.NORMAL);
         moves.apply(new Update());
-        
+
         Assertions.assertEquals(getCardId("ditto"), data.get(ditto, core.CARD_TEMPLATE));
+    }
+
+    @Test
+    public void cloneForgottenAncient() {
+        data.set(player(0), core.MANA, Integer.MAX_VALUE);
+        int forgottenAncient = createMinion(player(1), "forgotten_ancient");
+        int ditto = createCard(player(0), "ditto", core.IN_HAND_ZONE);
+
+        moves.apply(new Cast(player(0), ditto, forgottenAncient));
+
+        Assertions.assertEquals(getCardId("forgotten_ancient"), data.get(ditto, core.CARD_TEMPLATE));
+        Assertions.assertEquals(0, effectiveStats.attack(ditto));
+
+        int ornithopter = createCard(player(0), "ornithopter", core.IN_HAND_ZONE);
+        moves.apply(new Cast(player(0), ornithopter));
+        
+        Assertions.assertEquals(1, effectiveStats.attack(ditto));
     }
 }

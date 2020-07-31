@@ -12,15 +12,17 @@
     "ATTACK": 1,
     "HEALTH": 1
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 7
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 7
+      }
+    ]
+  }
 }

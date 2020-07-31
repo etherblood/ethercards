@@ -9,12 +9,6 @@
     ],
     "description": "Whenever an opponent summons a creature with the same name as a card in their graveyard, that player loses 10 life."
   },
-  "onSummon": [
-    {
-      "type": "kolaghanDamage",
-      "damage": "10"
-    }
-  ],
   "components": {
     "ATTACK": 6,
     "HEALTH": 5,
@@ -31,5 +25,13 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 7
+  "manaCost": 7,
+  "battle": {
+    "TRIGGER_OTHER_SUMMON": [
+      {
+        "type": "kolaghanDamage",
+        "damage": "10"
+      }
+    ]
+  }
 }

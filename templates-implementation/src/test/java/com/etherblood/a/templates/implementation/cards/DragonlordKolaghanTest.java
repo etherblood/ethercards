@@ -3,7 +3,6 @@ package com.etherblood.a.templates.implementation.cards;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.templates.implementation.AbstractGameTest;
-import com.etherblood.a.templates.implementation.effects.KolaghanDamageEffect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,11 +20,7 @@ public class DragonlordKolaghanTest extends AbstractGameTest {
 
         int actualHealth = data.get(hero(0), core.HEALTH);
         CardTemplate template = game.getTemplates().getCard(getCardId("dragonlord_kolaghan"));
-        int expectedDamage = template.getOnSummonEffects().stream()
-                .filter(KolaghanDamageEffect.class::isInstance)
-                .map(KolaghanDamageEffect.class::cast)
-                .mapToInt(x -> x.damage)
-                .sum();
+        int expectedDamage = 10;
         Assertions.assertEquals(previousHealth - expectedDamage, actualHealth);
     }
 }

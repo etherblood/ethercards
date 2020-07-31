@@ -7,6 +7,7 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
+import com.etherblood.a.rules.updates.TriggerService;
 import java.util.function.IntUnaryOperator;
 
 public class CastSystem {
@@ -16,6 +17,7 @@ public class CastSystem {
     private final IntUnaryOperator random;
     private final GameEventListener events;
     private final CoreComponents core;
+    private final TriggerService triggerService;
 
     public CastSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
@@ -23,20 +25,11 @@ public class CastSystem {
         this.random = random;
         this.events = events;
         this.core = data.getComponents().getModule(CoreComponents.class);
+        this.triggerService = new TriggerService(data, templates, random, events);
     }
 
     public void run() {
         IntList casts = data.list(core.CAST_TARGET);
-        for (int castSource : casts) {
-            for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-                int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
-                CardTemplate otherTemplate = templates.getCard(otherTemplateId);
-                for (Effect effect : otherTemplate.getOnCastEffects()) {
-                    effect.apply(data, templates, random, events, other, castSource);
-                }
-            }
-        }
-
         for (int castSource : casts) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
@@ -60,6 +53,9 @@ public class CastSystem {
                 effect.apply(data, templates, random, events, castSource, target);
             }
 
+        }
+        for (int castSource : casts) {
+            triggerService.onCast(castSource);
         }
         data.clear(core.CAST_TARGET);
     }

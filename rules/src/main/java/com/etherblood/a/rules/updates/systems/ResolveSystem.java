@@ -7,12 +7,11 @@ import com.etherblood.a.game.events.api.events.DamageEvent;
 import com.etherblood.a.game.events.api.events.DeathEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.DeathOptions;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerResult;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
+import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.ZoneService;
 import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
@@ -25,6 +24,7 @@ public class ResolveSystem {
     private final GameTemplates templates;
     private final IntUnaryOperator random;
     private final GameEventListener events;
+    private final TriggerService triggerService;
 
     public ResolveSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
@@ -32,6 +32,7 @@ public class ResolveSystem {
         this.templates = templates;
         this.random = random;
         this.events = events;
+        this.triggerService = new TriggerService(data, templates, random, events);
     }
 
     public void run() {
@@ -63,7 +64,7 @@ public class ResolveSystem {
     }
 
     private void discard() {
-        ZoneService zoneService = new ZoneService(data, templates);
+        ZoneService zoneService = new ZoneService(data, templates, random, events);
         for (int player : data.list(core.PLAYER_DISCARD_CARDS)) {
             int cards = data.get(player, core.PLAYER_DISCARD_CARDS);
             IntList handCards = data.list(core.IN_HAND_ZONE);
@@ -83,12 +84,8 @@ public class ResolveSystem {
         data.clear(core.PLAYER_DISCARD_CARDS);
         for (int card : data.list(core.DISCARD)) {
             if (data.has(card, core.IN_HAND_ZONE)) {
-                data.remove(card, core.IN_HAND_ZONE);
+                zoneService.removeFromHand(card);
                 zoneService.addToGraveyard(card);
-                CardTemplate template = templates.getCard(data.get(card, core.CARD_TEMPLATE));
-                for (Effect effect : template.getOnSelfMovedToGraveyardEffects()) {
-                    effect.apply(data, templates, random, events, card, card);
-                }
             }
         }
         data.clear(core.DISCARD);
@@ -106,20 +103,13 @@ public class ResolveSystem {
         for (int player : data.list(core.DRAW_CARDS_ACTION)) {
             int cards = data.get(player, core.DRAW_CARDS_ACTION);
 
-            //triggers
-            for (int minion : data.list(core.IN_BATTLE_ZONE)) {
-                int templateId = data.get(minion, core.CARD_TEMPLATE);
-                CardTemplate template = templates.getCard(templateId);
-                for (Effect onDrawEffect : template.getOnDrawEffects()) {
-                    for (int i = 0; i < cards; i++) {
-                        onDrawEffect.apply(data, templates, random, events, minion, player);
-                    }
-                }
+            for (int i = 0; i < cards; i++) {
+                triggerService.onDraw(player);
             }
         }
         for (int player : data.list(core.DRAW_CARDS_ACTION)) {
             int cards = data.get(player, core.DRAW_CARDS_ACTION);
-            SystemsUtil.drawCards(data, cards, random, player);
+            SystemsUtil.drawCards(data, templates, random, events, player, cards);
         }
         data.clear(core.DRAW_CARDS_ACTION);
     }
@@ -139,9 +129,7 @@ public class ResolveSystem {
         for (int entity : damaged) {
             int damage = data.get(entity, core.DAMAGE_ACTION);
 
-            int templateId = data.get(entity, core.CARD_TEMPLATE);
-            CardTemplate template = templates.getCard(templateId);
-            if (!template.getOnSelfSurviveEffects().isEmpty()) {
+            if (data.has(entity, core.TRIGGER_SELF_SURVIVE)) {
                 data.set(entity, core.DAMAGE_SURVIVAL_REQUEST, damage);
             }
             events.fire(new DamageEvent(entity, damage));
@@ -177,31 +165,21 @@ public class ResolveSystem {
             }
         }
         data.clear(core.DEATH_REQUEST);
+        ZoneService zoneService = new ZoneService(data, templates, random, events);
         IntList deaths = data.list(core.DEATH_ACTION);
         for (int entity : deaths) {
-
             if (data.has(entity, core.HERO)) {
                 int owner = data.get(entity, core.OWNER);
                 data.set(owner, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
             }
 
-            int templateId = data.get(entity, core.CARD_TEMPLATE);
-            CardTemplate template = templates.getCard(templateId);
-            for (Effect onDeathEffect : template.getOnSelfDeathEffects()) {
-                onDeathEffect.apply(data, templates, random, events, entity, entity);
-            }
-
+            triggerService.onDeath(entity);
             events.fire(new DeathEvent(entity));
         }
 
-        ZoneService zoneService = new ZoneService(data, templates);
         for (int entity : deaths) {
             zoneService.removeFromBattle(entity);
             zoneService.addToGraveyard(entity);
-            CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
-            for (Effect effect : template.getOnSelfMovedToGraveyardEffects()) {
-                effect.apply(data, templates, random, events, entity, entity);
-            }
         }
         data.clear(core.DEATH_ACTION);
     }
@@ -292,11 +270,7 @@ public class ResolveSystem {
         }
         data.clear(core.DAMAGE_SURVIVAL_REQUEST);
         for (int entity : data.list(core.DAMAGE_SURVIVAL_ACTION)) {
-            int templateId = data.get(entity, core.CARD_TEMPLATE);
-            CardTemplate template = templates.getCard(templateId);
-            for (Effect onSurviveEffect : template.getOnSelfSurviveEffects()) {
-                onSurviveEffect.apply(data, templates, random, events, entity, entity);
-            }
+            triggerService.onSurvive(entity);
         }
         data.clear(core.DAMAGE_SURVIVAL_ACTION);
         return result;

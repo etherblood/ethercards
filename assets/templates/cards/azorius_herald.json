@@ -15,12 +15,6 @@
     "HEALTH": 1,
     "CANNOT_BE_BLOCKED": true
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 2
-    }
-  ],
   "tribes": [
     "SPIRIT"
   ],
@@ -46,5 +40,13 @@
         ]
       }
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 2
+      }
+    ]
+  }
 }

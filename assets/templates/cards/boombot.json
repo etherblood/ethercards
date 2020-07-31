@@ -9,31 +9,6 @@
     "description": "Deal 2 damage to a random enemy when this dies."
   },
   "manaCost": 1,
-  "onDeath": [
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 2
-          }
-        },
-        {
-          "type": "particle",
-          "alias": "boombot"
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OPPONENT_MINION",
-          "OPPONENT_HERO"
-        ]
-      }
-    }
-  ],
   "components": {
     "ATTACK": 1,
     "HEALTH": 1
@@ -42,5 +17,32 @@
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "DAMAGE_REQUEST": 2
+            }
+          },
+          {
+            "type": "particle",
+            "alias": "boombot"
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ANY",
+          "filters": [
+            "OPPONENT_MINION",
+            "OPPONENT_HERO"
+          ]
+        }
+      }
+    ]
+  }
 }

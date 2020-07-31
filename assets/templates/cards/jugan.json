@@ -13,33 +13,6 @@
     "HEALTH": 5,
     "FLYING": true
   },
-  "onDeath": [
-    {
-      "type": "multiTrigger",
-      "amount": 5,
-      "effects": [
-        {
-          "type": "targeted",
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "ATTACK": 1,
-                "HEALTH": 1
-              }
-            }
-          ],
-          "targets": {
-            "type": "simple",
-            "select": "ANY",
-            "filters": [
-              "OWN_MINION"
-            ]
-          }
-        }
-      ]
-    }
-  ],
   "tribes": [
     "DRAGON",
     "SPIRIT"
@@ -49,5 +22,34 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 6
+  "manaCost": 6,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "multiTrigger",
+        "amount": 5,
+        "effects": [
+          {
+            "type": "targeted",
+            "effects": [
+              {
+                "type": "buff",
+                "components": {
+                  "ATTACK": 1,
+                  "HEALTH": 1
+                }
+              }
+            ],
+            "targets": {
+              "type": "simple",
+              "select": "ANY",
+              "filters": [
+                "OWN_MINION"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

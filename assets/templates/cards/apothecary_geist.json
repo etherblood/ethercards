@@ -15,12 +15,6 @@
     "HEALTH": 3,
     "FLYING": true
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 3
-    }
-  ],
   "tribes": [
     "SPIRIT"
   ],
@@ -52,5 +46,13 @@
         }
       ]
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 3
+      }
+    ]
+  }
 }

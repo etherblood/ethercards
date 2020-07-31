@@ -14,12 +14,6 @@
     "CANNOT_ATTACK": true,
     "FLYING": true
   },
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 4
-    }
-  ],
   "tribes": [
     "SPIRIT"
   ],
@@ -28,5 +22,13 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 5
+  "manaCost": 5,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 4
+      }
+    ]
+  }
 }

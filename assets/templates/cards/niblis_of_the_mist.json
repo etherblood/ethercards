@@ -39,10 +39,12 @@
   "tribes": [
     "SPIRIT"
   ],
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 2
-    }
-  ]
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 2
+      }
+    ]
+  }
 }

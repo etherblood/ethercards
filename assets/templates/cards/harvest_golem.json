@@ -12,16 +12,18 @@
     "ATTACK": 2,
     "HEALTH": 3
   },
-  "onDeath": [
-    {
-      "type": "summon",
-      "minionId": "damaged_golem"
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 3
+  "manaCost": 3,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "summon",
+        "minionId": "damaged_golem"
+      }
+    ]
+  }
 }

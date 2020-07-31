@@ -131,62 +131,35 @@ public class TemplatesParser {
                     builder.addTribe(aliasGson.fromJson(tribe, Tribe.class));
                 }
             }
-            JsonArray onDeath = cardJson.getAsJsonArray("onDeath");
-            if (onDeath != null) {
-                for (JsonElement jsonElement : onDeath) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.onDeath(aliasGson.fromJson(effectJson, Effect.class));
+            
+            JsonObject inBattle = cardJson.getAsJsonObject("battle");
+            if(inBattle != null) {
+                for (Map.Entry<String, JsonElement> entry : inBattle.entrySet()) {
+                    JsonArray effects = entry.getValue().getAsJsonArray();
+                    for (JsonElement effectJson : effects) {
+                        builder.inBattle(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
+                    }
                 }
             }
-            JsonArray onSelfMovedToGraveyard = cardJson.getAsJsonArray("onSelfMovedToGraveyard");
-            if (onSelfMovedToGraveyard != null) {
-                for (JsonElement jsonElement : onSelfMovedToGraveyard) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.onSelfMovedToGraveyard(aliasGson.fromJson(effectJson, Effect.class));
+            JsonObject inHand = cardJson.getAsJsonObject("hand");
+            if(inHand != null) {
+                for (Map.Entry<String, JsonElement> entry : inHand.entrySet()) {
+                    JsonArray effects = entry.getValue().getAsJsonArray();
+                    for (JsonElement effectJson : effects) {
+                        builder.inHand(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
+                    }
                 }
             }
-            JsonArray onSurvive = cardJson.getAsJsonArray("onSurvive");
-            if (onSurvive != null) {
-                for (JsonElement jsonElement : onSurvive) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.onSurvive(aliasGson.fromJson(effectJson, Effect.class));
+            JsonObject inGraveyard = cardJson.getAsJsonObject("graveyard");
+            if(inGraveyard != null) {
+                for (Map.Entry<String, JsonElement> entry : inGraveyard.entrySet()) {
+                    JsonArray effects = entry.getValue().getAsJsonArray();
+                    for (JsonElement effectJson : effects) {
+                        builder.inGraveyard(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
+                    }
                 }
             }
-            JsonArray onUpkeep = cardJson.getAsJsonArray("onUpkeep");
-            if (onUpkeep != null) {
-                for (JsonElement jsonElement : onUpkeep) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.onUpkeep(aliasGson.fromJson(effectJson, Effect.class));
-                }
-            }
-            JsonArray afterBattle = cardJson.getAsJsonArray("afterBattle");
-            if (afterBattle != null) {
-                for (JsonElement jsonElement : afterBattle) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.afterBattle(aliasGson.fromJson(effectJson, Effect.class));
-                }
-            }
-            JsonArray onCast = cardJson.getAsJsonArray("onCast");
-            if (onCast != null) {
-                for (JsonElement jsonElement : onCast) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.onCast(aliasGson.fromJson(effectJson, Effect.class));
-                }
-            }
-            JsonArray onSummon = cardJson.getAsJsonArray("onSummon");
-            if (onSummon != null) {
-                for (JsonElement jsonElement : onSummon) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.onSummon(aliasGson.fromJson(effectJson, Effect.class));
-                }
-            }
-            JsonArray onDraw = cardJson.getAsJsonArray("onDraw");
-            if (onDraw != null) {
-                for (JsonElement jsonElement : onDraw) {
-                    JsonObject effectJson = jsonElement.getAsJsonObject();
-                    builder.onDraw(aliasGson.fromJson(effectJson, Effect.class));
-                }
-            }
+            
             JsonObject componentModifiers = cardJson.getAsJsonObject("componentModifiers");
             if (componentModifiers != null) {
                 for (Map.Entry<String, JsonElement> entry : componentModifiers.entrySet()) {

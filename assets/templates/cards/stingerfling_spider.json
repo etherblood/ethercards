@@ -12,6 +12,9 @@
   "manaCost": 5,
   "cast": [
     {
+      "type": "selfSummon"
+    },
+    {
       "type": "predicateActivated",
       "predicate": {
         "type": "flying",
@@ -29,9 +32,6 @@
           "alias": "stingerfling_spider"
         }
       ]
-    },
-    {
-      "type": "selfSummon"
     }
   ],
   "target": {

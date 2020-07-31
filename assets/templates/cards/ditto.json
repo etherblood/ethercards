@@ -15,19 +15,13 @@
   },
   "cast": [
     {
+      "type": "selfSummon"
+    },
+    {
       "type": "targetActivated",
       "targeted": [
         {
           "type": "ditto"
-        },
-        {
-          "type": "selfSummon",
-          "skipComponents": true
-        }
-      ],
-      "untargeted": [
-        {
-          "type": "selfSummon"
         }
       ]
     }

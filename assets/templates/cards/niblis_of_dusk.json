@@ -23,49 +23,51 @@
   "tribes": [
     "SPIRIT"
   ],
-  "onDeath": [
-    {
-      "type": "soulshift",
-      "power": 2
-    }
-  ],
-  "onCast": [
-    {
-      "type": "predicateActivated",
-      "predicate": {
-        "type": "allOf",
-        "predicates": [
-          {
-            "type": "minion",
-            "isMinion": false
-          },
-          {
-            "type": "hasSourceOwner",
-            "hasSourceOwner": true
-          }
-        ]
-      },
-      "effects": [
-        {
-          "type": "targeted",
-          "targets": {
-            "type": "simple",
-            "select": "ALL",
-            "filters": [
-              "SOURCE"
-            ]
-          },
-          "effects": [
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 2
+      }
+    ],
+    "TRIGGER_OTHER_CAST": [
+      {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
             {
-              "type": "buff",
-              "components": {
-                "TEMPORARY_ATTACK": 1,
-                "TEMPORARY_HEALTH": 1
-              }
+              "type": "minion",
+              "isMinion": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
             }
           ]
-        }
-      ]
-    }
-  ]
+        },
+        "effects": [
+          {
+            "type": "targeted",
+            "targets": {
+              "type": "simple",
+              "select": "ALL",
+              "filters": [
+                "SOURCE"
+              ]
+            },
+            "effects": [
+              {
+                "type": "buff",
+                "components": {
+                  "TEMPORARY_ATTACK": 1,
+                  "TEMPORARY_HEALTH": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -13,31 +13,33 @@
     "ATTACK": 0,
     "HEALTH": 3
   },
-  "onCast": [
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "ATTACK": 1,
-            "HEALTH": 1
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "SOURCE"
-        ]
-      }
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
   ],
-  "manaCost": 4
+  "manaCost": 4,
+  "battle": {
+    "TRIGGER_OTHER_CAST": [
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "ATTACK": 1,
+              "HEALTH": 1
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ALL",
+          "filters": [
+            "SOURCE"
+          ]
+        }
+      }
+    ]
+  }
 }

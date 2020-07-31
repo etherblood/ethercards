@@ -41,42 +41,44 @@
   "tribes": [
     "SPIRIT"
   ],
-  "afterBattle": [
-    {
-      "type": "predicateActivated",
-      "predicate": {
-        "type": "sourceOwner",
-        "predicate": {
-          "type": "handCardCountIs",
-          "relation": "GREATER_OR_EQUAL",
-          "value": 7
-        }
-      },
-      "effects": [
-        {
-          "type": "targeted",
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "HEALTH": 7
-              }
-            }
-          ],
-          "targets": {
-            "type": "simple",
-            "select": "ANY",
-            "filters": [
-              "OWN_HERO"
-            ]
-          }
-        }
-      ]
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_FIGHT": [
+      {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "sourceOwner",
+          "predicate": {
+            "type": "handCardCountIs",
+            "relation": "GREATER_OR_EQUAL",
+            "value": 7
+          }
+        },
+        "effects": [
+          {
+            "type": "targeted",
+            "effects": [
+              {
+                "type": "buff",
+                "components": {
+                  "HEALTH": 7
+                }
+              }
+            ],
+            "targets": {
+              "type": "simple",
+              "select": "ANY",
+              "filters": [
+                "OWN_HERO"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

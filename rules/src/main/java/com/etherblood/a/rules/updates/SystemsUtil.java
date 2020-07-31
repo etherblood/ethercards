@@ -1,15 +1,12 @@
 package com.etherblood.a.rules.updates;
 
-import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.BattleEvent;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.Effect;
-
 import java.util.function.IntUnaryOperator;
 
 public class SystemsUtil {
@@ -87,19 +84,9 @@ public class SystemsUtil {
             increase(data, attacker, core.POISONED, blockerVenom);
         }
 
-        int attackerTemplateId = data.get(attacker, core.CARD_TEMPLATE);
-        CardTemplate attackerTemplate = templates.getCard(attackerTemplateId);
-        for (Effect afterBattleEffect : attackerTemplate.getAfterSelfBattleEffects()) {
-            //TODO: blocker & attacker should be passed as arguments after improving targeting
-            afterBattleEffect.apply(data, templates, random, events, attacker, attacker);
-        }
-
-        int blockerTemplateId = data.get(blocker, core.CARD_TEMPLATE);
-        CardTemplate blockerTemplate = templates.getCard(blockerTemplateId);
-        for (Effect afterBattleEffect : blockerTemplate.getAfterSelfBattleEffects()) {
-            //TODO: blocker & attacker should be passed as arguments after improving targeting
-            afterBattleEffect.apply(data, templates, random, events, blocker, blocker);
-        }
+        TriggerService triggerService = new TriggerService(data, templates, random, events);
+        triggerService.onFight(attacker);
+        triggerService.onFight(blocker);
     }
 
     public static void damage(EntityData data, int target, int damage) {
@@ -120,9 +107,9 @@ public class SystemsUtil {
         return card;
     }
 
-    public static int createHero(EntityData data, GameTemplates templates, int templateId, int owner) {
+    public static int createHero(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int templateId, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int hero = createMinion(data, templates, templateId, owner);
+        int hero = createMinion(data, templates, random, events, templateId, owner);
         data.set(hero, core.HERO, 1);
         //TODO: mana growth & draws should be somehow added to the player, not their hero
         SystemsUtil.increase(data, hero, core.MANA_POOL_AURA_GROWTH, 1);
@@ -132,21 +119,16 @@ public class SystemsUtil {
 
     public static int summonMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int minionTemplate, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        int minion = createMinion(data, templates, minionTemplate, owner);
+        int minion = createMinion(data, templates, random, events, minionTemplate, owner);
         data.set(minion, core.SUMMONING_SICKNESS, 1);
-        for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
-            CardTemplate otherTemplate = templates.getCard(otherTemplateId);
-            for (Effect effect : otherTemplate.getOnSummonEffects()) {
-                effect.apply(data, templates, random, events, other, minion);
-            }
-        }
+        TriggerService triggerService = new TriggerService(data, templates, random, events);
+        triggerService.onSummoned(minion);
         return minion;
     }
 
-    public static int createMinion(EntityData data, GameTemplates templates, int templateId, int owner) {
+    public static int createMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int templateId, int owner) {
         int minion = createCard(data, templateId, owner);
-        new ZoneService(data, templates).addToBattle(minion, true);
+        new ZoneService(data, templates, random, events).addToBattle(minion, true);
         return minion;
     }
 
@@ -161,9 +143,10 @@ public class SystemsUtil {
         throw new AssertionError();
     }
 
-    public static void drawCards(EntityData data, int amount, IntUnaryOperator random, int player) {
+    public static void drawCards(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int player, int amount) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         assert data.has(player, core.PLAYER_INDEX);
+        ZoneService zoneService = new ZoneService(data, templates, random, events);
         IntList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
         IntList myLibraryCards = new IntList();
         for (int card : allLibraryCards) {
@@ -174,16 +157,16 @@ public class SystemsUtil {
 
         if (amount >= myLibraryCards.size()) {
             for (int card : myLibraryCards) {
-                data.remove(card, core.IN_LIBRARY_ZONE);
-                data.set(card, core.IN_HAND_ZONE, 1);
+                zoneService.removeFromLibrary(card);
+                zoneService.addToHand(card);
             }
             amount -= myLibraryCards.size();
             myLibraryCards.clear();
         } else {
             while (amount > 0) {
                 int card = myLibraryCards.swapRemoveAt(random.applyAsInt(myLibraryCards.size()));
-                data.remove(card, core.IN_LIBRARY_ZONE);
-                data.set(card, core.IN_HAND_ZONE, 1);
+                zoneService.removeFromLibrary(card);
+                zoneService.addToHand(card);
                 amount--;
             }
         }

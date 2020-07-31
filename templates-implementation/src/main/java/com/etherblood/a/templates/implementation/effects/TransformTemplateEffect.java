@@ -8,6 +8,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.templates.api.deserializers.filedtypes.CardId;
 import java.util.function.IntUnaryOperator;
 
@@ -26,34 +27,36 @@ public class TransformTemplateEffect implements Effect {
         if (!data.has(target, core.ORIGINAL_CARD_TEMPLATE)) {
             data.set(target, core.ORIGINAL_CARD_TEMPLATE, data.get(target, core.CARD_TEMPLATE));
         }
+
+        TriggerService triggerService = new TriggerService(data, templates, random, events);
+        triggerService.cleanupEffects(target);
         data.set(target, core.CARD_TEMPLATE, template);
-
-        if (data.has(target, core.IN_BATTLE_ZONE)) {
-            CardTemplate cardTemplate = templates.getCard(template);
-            IntList blacklist = new IntList(
-                    core.OWNER,
-                    core.TEAM,
-                    core.IN_BATTLE_ZONE,
-                    core.IN_GRAVEYARD_ZONE,
-                    core.IN_HAND_ZONE,
-                    core.IN_LIBRARY_ZONE,
-                    core.TIRED,
-                    core.ORIGINAL_CARD_TEMPLATE,
-                    core.CARD_TEMPLATE,
-                    core.ATTACK_TARGET,
-                    core.BLOCK_TARGET);
-            for (ComponentMeta meta : data.getComponents().getMetas()) {
-                if (blacklist.contains(meta.id)) {
-                    continue;
-                }
-
-                if (cardTemplate.has(meta.id)) {
-                    data.set(target, meta.id, cardTemplate.get(meta.id));
-                } else {
-                    data.remove(target, meta.id);
-                }
+        CardTemplate cardTemplate = templates.getCard(template);
+        IntList blacklist = new IntList(
+                core.OWNER,
+                core.TEAM,
+                core.IN_BATTLE_ZONE,
+                core.IN_GRAVEYARD_ZONE,
+                core.IN_HAND_ZONE,
+                core.IN_LIBRARY_ZONE,
+                core.TIRED,
+                core.ORIGINAL_CARD_TEMPLATE,
+                core.CARD_TEMPLATE,
+                core.ATTACK_TARGET,
+                core.BLOCK_TARGET);
+        for (ComponentMeta meta : data.getComponents().getMetas()) {
+            if (blacklist.contains(meta.id)) {
+                continue;
             }
-            data.set(target, core.SUMMONING_SICKNESS, 1);
+
+            if (cardTemplate.has(meta.id)) {
+                data.set(target, meta.id, cardTemplate.get(meta.id));
+            } else {
+                data.remove(target, meta.id);
+            }
         }
+        data.set(target, core.SUMMONING_SICKNESS, 1);
+        triggerService.initEffects(target);
+        triggerService.onEnterBattle(target);// FIXME: trigger misuse
     }
 }

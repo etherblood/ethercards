@@ -7,6 +7,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
 
@@ -38,16 +39,10 @@ public class ResurrectRandomEffect implements Effect {
         }
         int resurrectMinion = candidates.getRandomItem(random);
 
-        ZoneService zoneService = new ZoneService(data, templates);
+        ZoneService zoneService = new ZoneService(data, templates, random, events);
         zoneService.removeFromGraveyard(resurrectMinion);
         zoneService.addToBattle(resurrectMinion, true);
         data.set(resurrectMinion, core.SUMMONING_SICKNESS, 1);
-        for (int other : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            int otherTemplateId = data.get(other, core.CARD_TEMPLATE);
-            CardTemplate otherTemplate = templates.getCard(otherTemplateId);
-            for (Effect effect : otherTemplate.getOnSummonEffects()) {
-                effect.apply(data, templates, random, events, other, resurrectMinion);
-            }
-        }
+        new TriggerService(data, templates, random, events).onSummoned(resurrectMinion);
     }
 }

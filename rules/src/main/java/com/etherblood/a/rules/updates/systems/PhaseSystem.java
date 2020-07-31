@@ -5,12 +5,11 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.updates.SystemsUtil;
+import com.etherblood.a.rules.updates.TriggerService;
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
@@ -22,6 +21,7 @@ public class PhaseSystem {
     private final IntUnaryOperator random;
     private final GameEventListener events;
     private final ResolveSystem resolveSystem;
+    private final TriggerService triggerService;
 
     public PhaseSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, ResolveSystem resolveSystem) {
         this.data = data;
@@ -30,6 +30,7 @@ public class PhaseSystem {
         this.random = random;
         this.events = events;
         this.resolveSystem = resolveSystem;
+        this.triggerService = new TriggerService(data, templates, random, events);
     }
 
     public void run() {
@@ -190,7 +191,7 @@ public class PhaseSystem {
             draws.set(owner, draws.getOrElse(owner, 0) + 1);
         }
         for (int player : draws) {
-            SystemsUtil.drawCards(data, draws.get(player), random, player);
+            SystemsUtil.drawCards(data, templates, random, events, player, draws.get(player));
         }
         for (int card : data.list(core.MULLIGAN)) {
             data.remove(card, core.IN_HAND_ZONE);
@@ -261,27 +262,20 @@ public class PhaseSystem {
                 SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
             });
         }
-        for (int player : data.list(core.ACTIVE_PLAYER_PHASE)) {
+        IntList activePlayers = data.list(core.ACTIVE_PLAYER_PHASE);
+        for (int player : activePlayers) {
             assert data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
             assert data.hasValue(player, core.TEAM, team);
             int mana = new EffectiveStatsService(data, templates).manaPool(player);
             OptionalInt delayedMana = data.getOptional(player, core.DELAYED_MANA);
-            if(delayedMana.isPresent()) {
+            if (delayedMana.isPresent()) {
                 mana += delayedMana.getAsInt();
                 data.remove(player, core.DELAYED_MANA);
             }
             data.set(player, core.MANA, mana);
         }
-        for (int minion : data.listInValueOrder(core.IN_BATTLE_ZONE)) {
-            if (!data.hasValue(minion, core.TEAM, team)) {
-                continue;
-            }
-
-            int templateId = data.get(minion, core.CARD_TEMPLATE);
-            CardTemplate template = templates.getCard(templateId);
-            for (Effect onUpkeepEffect : template.getOnSelfUpkeepEffects()) {
-                onUpkeepEffect.apply(data, templates, random, events, minion, minion);
-            }
+        for (int activePlayer : activePlayers) {
+            triggerService.onUpkeep(activePlayer);
         }
         resolveSystem.run();
     }

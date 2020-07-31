@@ -14,30 +14,32 @@
     "ATTACK": 3,
     "HEALTH": 4
   },
-  "onSurvive": [
-    {
-      "type": "targeted",
-      "effects": [
-        {
-          "type": "buff",
-          "components": {
-            "CANNOT_BE_ATTACKED": true,
-            "CANNOT_BE_CAST_TARGETED": true
-          }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "SOURCE"
-        ]
-      }
-    }
-  ],
   "cast": [
     {
       "type": "selfSummon"
     }
-  ]
+  ],
+  "battle": {
+    "TRIGGER_SELF_SURVIVE": [
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "CANNOT_BE_ATTACKED": true,
+              "CANNOT_BE_CAST_TARGETED": true
+            }
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ALL",
+          "filters": [
+            "SOURCE"
+          ]
+        }
+      }
+    ]
+  }
 }
