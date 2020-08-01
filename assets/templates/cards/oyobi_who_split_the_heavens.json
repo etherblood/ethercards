@@ -1,0 +1,61 @@
+{
+  "alias": "oyobi_who_split_the_heavens",
+  "display": {
+    "name": "Oyobi, Who Split the Heavens",
+    "imagePath": "oyobi_who_split_the_heavens.png",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "Whenever you cast a Spirit or Arcane spell, create a 3/3 white Spirit creature token with flying.",
+    "flavourText": "Her angry call split the sky. From that rift descended her champions."
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "manaCost": 7,
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 6,
+    "FLYING": true
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "battle": {
+    "TRIGGER_OTHER_CAST": [
+      {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "anyOf",
+              "predicates": [
+                {
+                  "type": "hasTribe",
+                  "tribe": "SPIRIT"
+                },
+                {
+                  "type": "hasTribe",
+                  "tribe": "ARCANE"
+                }
+              ]
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "type": "summon",
+            "minionId": "oyobi_spirit_token"
+          }
+        ]
+      }
+    ]
+  }
+}

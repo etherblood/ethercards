@@ -1,0 +1,25 @@
+{
+  "alias": "oyobi_spirit_token",
+  "display": {
+    "name": "Spirit",
+    "imagePath": "oyobi_spirit_token.png",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "manaCost": 4,
+  "tribes": [
+    "SPIRIT",
+    "TOKEN"
+  ],
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 3,
+    "FLYING": true
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ]
+}
