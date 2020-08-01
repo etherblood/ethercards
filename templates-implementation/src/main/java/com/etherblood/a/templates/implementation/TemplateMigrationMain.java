@@ -24,7 +24,7 @@ import java.util.Map;
 public class TemplateMigrationMain {
 
     public static void main(String[] args) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         Path folder = Paths.get("../assets/templates/cards/");
         Files.list(folder).forEach(path -> {
             try {

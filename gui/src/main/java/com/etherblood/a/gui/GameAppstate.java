@@ -716,7 +716,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 }
             });
         } else if ("f1".equals(name) && isPressed) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
             System.out.println(gson.toJson(EntityUtil.toMap(game.getData())));
         }
     }

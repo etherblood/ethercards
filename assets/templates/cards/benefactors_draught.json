@@ -1,7 +1,7 @@
 {
   "alias": "benefactors_draught",
   "display": {
-    "name": "Benefactor\u0027s Draught",
+    "name": "Benefactor's Draught",
     "imagePath": "benefactors_draught.png",
     "colors": [
       "GREEN"

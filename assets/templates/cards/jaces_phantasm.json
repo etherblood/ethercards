@@ -1,12 +1,12 @@
 {
   "alias": "jaces_phantasm",
   "display": {
-    "name": "Jace\u0027s Phantasm",
+    "name": "Jace's Phantasm",
     "imagePath": "jaces_phantasm.jpg",
     "colors": [
       "BLUE"
     ],
-    "description": "Jace\u0027s Phantasm gets +4/+4 as long as an opponent has ten or more cards in their graveyard.",
+    "description": "Jace's Phantasm gets +4/+4 as long as an opponent has ten or more cards in their graveyard.",
     "flavourText": "In the abstract memories of the Iquati, Jace found interesting ideas to improve upon."
   },
   "manaCost": 3,

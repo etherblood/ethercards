@@ -7,8 +7,8 @@
       "GREEN",
       "BLUE"
     ],
-    "description": "Overbeing of Myth\u0027s power and toughness are each equal to the number of cards in your hand.",
-    "flavourText": "\"She walks among us unseen, learning from our imperfections.\"\n—The Seer\u0027s Parables"
+    "description": "Overbeing of Myth's power and toughness are each equal to the number of cards in your hand.",
+    "flavourText": "\"She walks among us unseen, learning from our imperfections.\"\n—The Seer's Parables"
   },
   "components": {
     "ATTACK": 0,

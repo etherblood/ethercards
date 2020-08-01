@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 public class LibraryIO {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     public static RawLibraryTemplate load(String name) {
         Path path = Paths.get(name);

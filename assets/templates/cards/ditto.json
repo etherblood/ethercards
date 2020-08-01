@@ -24,8 +24,7 @@
           "type": "ditto"
         }
       ],
-      "untargeted": [
-      ]
+      "untargeted": []
     }
   ],
   "target": {
