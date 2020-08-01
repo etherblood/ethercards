@@ -1,0 +1,56 @@
+{
+  "alias": "iname_death_aspect",
+  "display": {
+    "name": "Iname, Death Aspect",
+    "imagePath": "iname_death_aspect.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "When Iname, Death Aspect enters the battlefield, put all your Spirit cards from your library into your graveyard.",
+    "flavourText": "Iname revels in sadistic glee at the crushing of souls, but soon mourns the lives so cruelly cut short. So the cycle begins anew."
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 4
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 6,
+  "battle": {
+    "TRIGGER_SELF_ENTER_BATTLE": [
+      {
+        "type": "targeted",
+        "targets": {
+          "type": "component",
+          "component": "IN_LIBRARY_ZONE",
+          "select": "ALL",
+          "predicate": {
+            "type": "allOf",
+            "predicates": [
+              {
+                "type": "hasSourceOwner",
+                "hasSourceOwner": true
+              },
+              {
+                "type": "hasTribe",
+                "tribe": "SPIRIT"
+              }
+            ]
+          }
+        },
+        "effects": [
+          {
+            "type": "moveToZone",
+            "zone": "IN_GRAVEYARD_ZONE"
+          }
+        ]
+      }
+    ]
+  }
+}

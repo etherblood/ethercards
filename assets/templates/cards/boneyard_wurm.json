@@ -1,0 +1,62 @@
+{
+  "alias": "boneyard_wurm",
+  "display": {
+    "name": "Boneyard Wurm",
+    "imagePath": "boneyard_wurm.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Boneyard Wurm's power and toughness are each equal to the number of creature cards in your graveyard.",
+    "flavourText": "The only thing it likes more than discovering a pit of bones is adding to it."
+  },
+  "manaCost": 2,
+  "components": {
+    "ATTACK": 0,
+    "HEALTH": 0
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "componentModifiers": {
+    "HEALTH": [
+      {
+        "type": "addComponentPredicateCount",
+        "component": "IN_GRAVEYARD_ZONE",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            }
+          ]
+        }
+      }
+    ],
+    "ATTACK": [
+      {
+        "type": "addComponentPredicateCount",
+        "component": "IN_GRAVEYARD_ZONE",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

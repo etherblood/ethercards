@@ -1,0 +1,34 @@
+{
+  "alias": "ashen_monstrosity",
+  "display": {
+    "name": "Ashen Monstrosity",
+    "imagePath": "ashen_monstrosity.jpg",
+    "colors": [
+      "RED"
+    ],
+    "flavourText": "There was a dull thunder at the vanguard, then shocked cries in the midst of the column. Moments later, Takada, last of the rearguard, faced the kami alone."
+  },
+  "manaCost": 6,
+  "tribes": [
+    "SPIRIT"
+  ],
+  "components": {
+    "ATTACK": 7,
+    "HEALTH": 4,
+    "RAGE": true,
+    "FAST_TO_ATTACK": true
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "soulshift",
+        "power": 5
+      }
+    ]
+  }
+}

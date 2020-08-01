@@ -1,0 +1,71 @@
+{
+  "alias": "iname_life_aspect",
+  "display": {
+    "name": "Iname, Life Aspect",
+    "imagePath": "iname_life_aspect.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "When Iname, Life Aspect dies, exile it. Return all Spirit cards from your graveyard to your hand.",
+    "flavourText": "Iname rejoices in the dawn of a new life, but soon becomes jealous of the simple joys denied him by his station. So the cycle begins anew."
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "components": {
+    "ATTACK": 4,
+    "HEALTH": 4
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 6,
+  "battle": {
+    "TRIGGER_SELF_DEATH": [
+      {
+        "type": "targeted",
+        "targets": {
+          "type": "component",
+          "component": "IN_GRAVEYARD_ZONE",
+          "select": "ALL",
+          "predicate": {
+            "type": "allOf",
+            "predicates": [
+              {
+                "type": "hasSourceOwner",
+                "hasSourceOwner": true
+              },
+              {
+                "type": "hasTribe",
+                "tribe": "SPIRIT"
+              }
+            ]
+          }
+        },
+        "effects": [
+          {
+            "type": "moveToZone",
+            "zone": "IN_HAND_ZONE"
+          }
+        ]
+      },
+      {
+        "type": "targeted",
+        "targets": {
+          "type": "source",
+          "predicate": {
+            "type": "bool",
+            "value": true
+          }
+        },
+        "effects": [
+          {
+            "type": "exile"
+          }
+        ]
+      }
+    ]
+  }
+}

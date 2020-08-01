@@ -178,8 +178,10 @@ public class ResolveSystem {
         }
 
         for (int entity : deaths) {
-            zoneService.removeFromBattle(entity);
-            zoneService.addToGraveyard(entity);
+            if (data.has(entity, core.IN_BATTLE_ZONE)) {
+                zoneService.removeFromBattle(entity);
+                zoneService.addToGraveyard(entity);
+            }
         }
         data.clear(core.DEATH_ACTION);
     }

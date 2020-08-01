@@ -53,6 +53,8 @@ import com.etherblood.a.templates.implementation.targets.SourceTarget;
 import java.util.HashMap;
 import java.util.Map;
 import com.etherblood.a.templates.api.TargetPredicate;
+import com.etherblood.a.templates.implementation.effects.ExileEffect;
+import com.etherblood.a.templates.implementation.effects.MoveToZoneEffect;
 import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.SelfResurrectEffect;
 import com.etherblood.a.templates.implementation.effects.SelfSummonFromLibraryEffect;
@@ -63,6 +65,7 @@ import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
 import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
 import com.etherblood.a.templates.implementation.predicates.TiredPredicate;
 import com.etherblood.a.templates.implementation.predicates.ZonePredicate;
+import com.etherblood.a.templates.implementation.statmodifiers.AddComponentPredicateCountModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.PredicateActivatedModifier;
 
 public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
@@ -98,6 +101,8 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("multiTrigger", MultiTriggerEffects.class);
         effectClasses.put("fusion", FusionEffect.class);
         effectClasses.put("ditto", DittoEffect.class);
+        effectClasses.put("exile", ExileEffect.class);
+        effectClasses.put("moveToZone", MoveToZoneEffect.class);
         return effectClasses;
     }
 
@@ -111,6 +116,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         modifierClasses.put("addOnOwnTurn", AddOnOwnTurnModifier.class);
         modifierClasses.put("addFractional", AddFractionalModifier.class);
         modifierClasses.put("predicateActivated", PredicateActivatedModifier.class);
+        modifierClasses.put("addComponentPredicateCount", AddComponentPredicateCountModifier.class);
         return modifierClasses;
     }
 
