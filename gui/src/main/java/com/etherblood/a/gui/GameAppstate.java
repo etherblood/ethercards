@@ -26,10 +26,7 @@ import com.destrostudios.cardgui.samples.boardobjects.staticspatial.StaticSpatia
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.transformations.relative.HoveringTransformation;
-import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
-import com.destrostudios.cardgui.zones.CenteredIntervalZone;
-import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.events.ParticleEvent;
@@ -43,8 +40,8 @@ import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
+import com.etherblood.a.gui.soprettyboard.PlayerZonesTemplate;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
-import com.etherblood.a.gui.soprettyboard.ScalingGridCardZone;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
@@ -92,7 +89,7 @@ import org.slf4j.LoggerFactory;
 public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(GameAppstate.class);
-    private static final float ZONE_HEIGHT = 1.3f;
+    private static final Vector2f CARD_SPACE = new Vector2f(1, 1.3f);
     private final Consumer<Move> moveRequester;
     private final GameReplayService gameReplayService;
     private Game game;
@@ -586,15 +583,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private void updateCamera() {
         Vector3f position = new Vector3f();
         Quaternion rotation = new Quaternion();
-        boolean isPlayer1 = userControlledPlayer == game.findPlayerByIndex(1);
-        position.set(0, 3.8661501f, 6.470482f);
-        if (isPlayer1) {
-            position.addLocal(0, 0, -10.339f);
-        }
-        rotation.lookAt(new Vector3f(0, -0.7237764f, -0.6900346f), Vector3f.UNIT_Y);
-        if (isPlayer1) {
-            rotation = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y).multLocal(rotation);
-        }
+        position.set(0, 7f, 3f);
+        rotation.lookAt(Vector3f.ZERO.subtract(position).normalize(), Vector3f.UNIT_Y);
         cameraAppstate.moveTo(position, rotation, 0.3f);
     }
 
@@ -602,29 +592,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
         board.registerVisualizer_Class(ColoredSphere.class, new ColoredSphereVisualizer());
         board.registerVisualizer_Class(StaticSpatial.class, new StaticSpatialVisualizer());
-        board.registerVisualizer_Class(CardZone.class, new DebugZoneVisualizer() {
-
-            @Override
-            protected Geometry createVisualizationObject(AssetManager assetManager) {
-                Geometry geometry = super.createVisualizationObject(assetManager);
-                geometry.setCullHint(Spatial.CullHint.Always);
-                return geometry;
-            }
-
-            @Override
-            protected Vector2f getSize(CardZone zone) {
-                for (PlayerZones playerZones : playerZones.values()) {
-                    if (zone == playerZones.getDeckZone()) {
-                        return new Vector2f(1, ZONE_HEIGHT);
-                    } else if (zone == playerZones.getHandZone()) {
-                        return new Vector2f(5, ZONE_HEIGHT - 0.1f);
-                    } else if (zone == playerZones.getBoardZone()) {
-                        return new Vector2f(5, ZONE_HEIGHT);
-                    }
-                }
-                return super.getSize(zone);
-            }
-        });
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
         board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardPainterJME, battleFullArt));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
@@ -637,39 +604,20 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 .build()));
         IntList players = game.getData().list(core.PLAYER_INDEX);
 
-        Vector3f offset = new Vector3f(0, 0, ZONE_HEIGHT);
-        float directionX = 1;
-        float directionZ = 1;
         Quaternion zoneRotation = Quaternion.IDENTITY;
 
         for (int player : players) {
+            PlayerZonesTemplate playerZoneTemplate = new PlayerZonesTemplate(new Vector4f(-5, 0, 10, 3f), CARD_SPACE);
             if (game.getData().hasValue(player, core.PLAYER_INDEX, 1)) {
-                directionX *= -1;
-                directionZ *= -1;
                 zoneRotation = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y);
             }
 
-            float x = -2.65f;
-            float z = 1.3f;
-            ScalingGridCardZone boardZone = new ScalingGridCardZone(offset.add(x, 0, directionZ * z).subtract(0.5f, 0, 0.7f), zoneRotation, new Vector4f(0, 0, 6, 1.5f), new Vector2f(1, 1.4f));
-
-            x = -3.75f;
-            SimpleIntervalZone deckZone = new SimpleIntervalZone(offset.add(x, 0, directionZ * z), zoneRotation, new Vector3f(0, 0.01f, 0));
-
-            z = 0.35f;
-            float graveyardScale = 0.5f;
-            SimpleIntervalZone graveyardZone = new SimpleIntervalZone(offset.add(x, 0, directionZ * z), zoneRotation, new Vector3f(graveyardScale, graveyardScale, graveyardScale), new Vector3f(0, 0.01f, 0));
-
-            x = 0;
-            z = 3;
-            Quaternion handRotation = zoneRotation.mult(new Quaternion().fromAngleAxis(FastMath.QUARTER_PI, Vector3f.UNIT_X));
-            CenteredIntervalZone handZone = new CenteredIntervalZone(offset.add(directionX * x, 0, directionZ * z), handRotation, new Vector3f(0.85f, 1, 1));
-
-            board.addZone(deckZone);
-            board.addZone(graveyardZone);
-            board.addZone(handZone);
-            board.addZone(boardZone);
-            playerZones.put(player, new PlayerZones(deckZone, graveyardZone, handZone, boardZone));
+            PlayerZones playerZone = playerZoneTemplate.create(Vector3f.ZERO, zoneRotation);
+            board.addZone(playerZone.getDeckZone());
+            board.addZone(playerZone.getGraveyardZone());
+            board.addZone(playerZone.getHandZone());
+            board.addZone(playerZone.getBoardZone());
+            playerZones.put(player, playerZone);
         }
         return new BoardAppState(board, rootNode, BoardSettings.builder()
                 .hoverInspectionDelay(1f)

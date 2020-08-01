@@ -2,12 +2,16 @@ package com.etherblood.a.gui;
 
 import com.destrostudios.cardgui.CardZone;
 
-
 /**
  *
  * @author Carl
  */
 public class PlayerZones {
+
+    private final CardZone deckZone;
+    private final CardZone graveyardZone;
+    private final CardZone handZone;
+    private final CardZone boardZone;
 
     public PlayerZones(CardZone deckZone, CardZone graveyardZone, CardZone handZone, CardZone boardZone) {
         this.deckZone = deckZone;
@@ -15,10 +19,6 @@ public class PlayerZones {
         this.handZone = handZone;
         this.boardZone = boardZone;
     }
-    private CardZone deckZone;
-    private CardZone graveyardZone;
-    private CardZone handZone;
-    private CardZone boardZone;
 
     public CardZone getDeckZone() {
         return deckZone;

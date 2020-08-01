@@ -29,6 +29,11 @@ public class ScalingGridCardZone extends CardZone {
     }
 
     @Override
+    public Vector3f getCardPosition(Vector3f zonePosition) {
+        return position().getCurrentValue().add(getCardRotation(zonePosition).mult(getLocalCardPosition(zonePosition)));
+    }
+
+    @Override
     protected Vector3f getLocalCardPosition(Vector3f zonePosition) {
         updateScalingGrid();
         int index = (int) zonePosition.x;
@@ -57,20 +62,20 @@ public class ScalingGridCardZone extends CardZone {
 
         float scaleNumerator = 1;
         float scaleDenominator = 1;
-        int nextCols = (int) width + 1;
-        int nextRows = (int) height + 1;
-        while (Math.floor(width * scaleDenominator / scaleNumerator) * Math.floor(height * scaleDenominator / scaleNumerator) < numCards) {
-            if (width * nextRows >= height * nextCols) {
+        int x = (int) width;
+        int y = (int) height;
+        while (x * y < numCards) {
+            if (width * (y + 1) >= height * (x + 1)) {
                 scaleNumerator = width;
-                scaleDenominator = nextCols++;
+                scaleDenominator = ++x;
             } else {
                 scaleNumerator = height;
-                scaleDenominator = nextRows++;
+                scaleDenominator = ++y;
             }
         }
-
-        rows = nextRows - 1;
-        columns = nextCols - 1;
+        assert scaleNumerator <= scaleDenominator;
+        columns = x;
+        rows = y;
         scale = scaleNumerator / scaleDenominator;
     }
 }

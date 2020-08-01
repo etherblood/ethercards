@@ -87,7 +87,7 @@ public class ForestBoardAppstate extends VisualBoardAppstate {
         material.setFloat("DiffuseMap_2_scale", getTextureScale(terrain, 4, triPlanarMapping));
 
         terrain.setMaterial(material);
-        terrain.setLocalTranslation(0, -0.8f, 1.4f);
+        terrain.setLocalTranslation(0, -0.8f, 0);
         terrain.setLocalScale(0.035f, 0.006f, 0.035f);
         terrain.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         mainApplication.getRootNode().attachChild(terrain);
