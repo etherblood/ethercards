@@ -6,7 +6,7 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Summons two 0/0 Bee Workers each turn, they die after battle and offer 1 Delayed Mana when they die."
+    "description": "Summons one 0/0 Bee Worker each turn, which dies after battle and gives 1 Delayed Mana on death."
   },
   "components": {
     "ATTACK": 0,
@@ -19,13 +19,9 @@
       "type": "selfSummon"
     }
   ],
-  "manaCost": 4,
+  "manaCost": 3,
   "battle": {
     "TRIGGER_OWNER_UPKEEP": [
-      {
-        "type": "summon",
-        "minionId": "bee_worker"
-      },
       {
         "type": "summon",
         "minionId": "bee_worker"
