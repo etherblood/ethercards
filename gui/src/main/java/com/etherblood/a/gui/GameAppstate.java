@@ -299,10 +299,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         assetManager = stateManager.getApplication().getAssetManager();
         endPhaseButton = createButton(assetManager);
 
-        if (game.findPlayerByIndex(0) != userControlledPlayer) {
-            endPhaseButtonNode.setLocalRotation(new Quaternion().fromAngles(0, FastMath.PI, 0));
-            endPhaseButtonNode.setLocalTranslation(1, 0.8f, 1);
-        }
         endPhaseButtonNode.attachChild(endPhaseButton);
         rootNode.attachChild(endPhaseButtonNode);
 
@@ -695,9 +691,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         button.setMaterial(mat);
 
-        button.setLocalScale(0.3f);
-        button.setLocalTranslation(3.3f, 0.5f, 1);
-        button.setLocalRotation(new Quaternion().fromAngles(-FastMath.QUARTER_PI, 0, 0));
+        button.setLocalScale(0.4f);
+        button.setLocalTranslation(3.9f, 0.5f, 0.3f);
+        button.setLocalRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI / 2 - FastMath.HALF_PI, 0, 0));
         return button;
     }
 
