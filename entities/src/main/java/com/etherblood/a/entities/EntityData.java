@@ -28,6 +28,8 @@ public interface EntityData {
     void remove(int entity, int component);
 
     IntList list(int component);
+
+    IntList listOrdered(int component, int orderComponent);
     
     IntList listInValueOrder(int component);
     

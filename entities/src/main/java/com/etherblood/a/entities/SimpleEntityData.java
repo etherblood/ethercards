@@ -2,6 +2,7 @@ package com.etherblood.a.entities;
 
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.entities.collections.IntMap;
+import java.util.Arrays;
 import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
@@ -86,14 +87,36 @@ public class SimpleEntityData implements EntityData {
     }
 
     @Override
+    public IntList listOrdered(int component, int orderComponent) {
+        IntMap componentMap = component(component);
+        if (componentMap.isEmpty()) {
+            return new IntList(0);
+        }
+        IntMap orderMap = component(orderComponent);
+        long[] entityOrderValues = new long[componentMap.size()];
+        int index = 0;
+        PrimitiveIterator.OfInt iterator = componentMap.iterator();
+        while (iterator.hasNext()) {
+            int entity = iterator.nextInt();
+            entityOrderValues[index++] = Integer.toUnsignedLong(entity) | ((long) orderMap.get(entity) << 32);
+        }
+        Arrays.sort(entityOrderValues);
+        IntList list = new IntList(componentMap.size());
+        for (long packedKeyValue : entityOrderValues) {
+            list.add((int) packedKeyValue);
+        }
+        return list;
+    }
+
+    @Override
     public IntList listInValueOrder(int component) {
-        IntMap componentMaps = component(component);
-        if (componentMaps.isEmpty()) {
+        IntMap componentMap = component(component);
+        if (componentMap.isEmpty()) {
             return new IntList(0);
         }
 
-        PrimitiveIterator.OfLong packedKeyValueIterator = componentMaps.packedKeyValueIterator();
-        Spliterator.OfLong spliterator = Spliterators.spliterator(packedKeyValueIterator, componentMaps.size(), Spliterator.NONNULL);
+        PrimitiveIterator.OfLong packedKeyValueIterator = componentMap.packedKeyValueIterator();
+        Spliterator.OfLong spliterator = Spliterators.spliterator(packedKeyValueIterator, componentMap.size(), Spliterator.NONNULL);
         LongStream stream = StreamSupport.longStream(spliterator, false);
         IntList list = new IntList();
         stream.sorted().mapToInt(x -> (int) x).forEachOrdered(list::add);

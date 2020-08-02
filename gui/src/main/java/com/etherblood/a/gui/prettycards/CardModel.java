@@ -148,6 +148,9 @@ public class CardModel extends BoardObjectModel {
             if (data.has(entityId, core.OWN_MINIONS_VENOM_AURA)) {
                 keywords.add("Venom_Aura_" + data.get(entityId, core.OWN_MINIONS_VENOM_AURA));
             }
+            if (data.has(entityId, core.REGENERATION)) {
+                keywords.add("Regeneration_" + data.get(entityId, core.REGENERATION));
+            }
         } else {
             if (template.has(core.ATTACK)) {
                 setAttack(template.get(core.ATTACK));
@@ -242,6 +245,9 @@ public class CardModel extends BoardObjectModel {
             }
             if (template.has(core.OWN_MINIONS_VENOM_AURA)) {
                 keywords.add("Venom_Aura_" + template.get(core.OWN_MINIONS_VENOM_AURA));
+            }
+            if (template.has(core.REGENERATION)) {
+                keywords.add("Regeneration_" + template.get(core.REGENERATION));
             }
         }
         Map<Integer, List<Effect>> triggers = template.getBattleTriggers();

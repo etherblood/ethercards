@@ -14,7 +14,7 @@
   ],
   "components": {
     "ATTACK": 7,
-    "HEALTH": 4,
+    "HEALTH": 5,
     "RAGE": true,
     "FAST_TO_ATTACK": true
   },

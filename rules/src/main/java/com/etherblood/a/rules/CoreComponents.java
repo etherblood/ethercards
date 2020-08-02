@@ -77,6 +77,7 @@ public class CoreComponents implements ComponentsModule {
     public final int OWN_MINIONS_VENOM_AURA;
     public final int BUSHIDO;
     public final int INDESTRUCTIBLE;
+    public final int REGENERATION;
 
     public final int TRIGGER_SELF_CAST;
     public final int TRIGGER_OTHER_CAST;
@@ -164,6 +165,7 @@ public class CoreComponents implements ComponentsModule {
         OWN_MINIONS_VENOM_AURA = register.applyAsInt("OWN_MINIONS_VENOM_AURA");
         BUSHIDO = register.applyAsInt("BUSHIDO");
         INDESTRUCTIBLE = register.applyAsInt("INDESTRUCTIBLE");
+        REGENERATION = register.applyAsInt("REGENERATION");
         
         TRIGGER_SELF_CAST = register.applyAsInt("TRIGGER_SELF_CAST");
         TRIGGER_OTHER_CAST = register.applyAsInt("TRIGGER_OTHER_CAST");

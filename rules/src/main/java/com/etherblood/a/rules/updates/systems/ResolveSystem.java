@@ -10,6 +10,7 @@ import com.etherblood.a.rules.DeathOptions;
 import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerResult;
+import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.ZoneService;
@@ -156,12 +157,26 @@ public class ResolveSystem {
     }
 
     private void death() {
-        for (int entity : data.list(core.DEATH_REQUEST)) {
+        IntList deathRequests = data.listOrdered(core.DEATH_REQUEST, core.IN_BATTLE_ZONE);
+        for (int entity : deathRequests) {
             int deathOptions = data.get(entity, core.DEATH_REQUEST);
             if (data.has(entity, core.IN_BATTLE_ZONE)) {
-                if (deathOptions == DeathOptions.SACRIFICE || !data.has(entity, core.INDESTRUCTIBLE)) {
-                    data.set(entity, core.DEATH_ACTION, deathOptions);
+                if (deathOptions != DeathOptions.SACRIFICE) {
+                    if (data.has(entity, core.INDESTRUCTIBLE)) {
+                        continue;
+                    }
+                    if (data.has(entity, core.REGENERATION)) {
+                        int regeneration = data.get(entity, core.REGENERATION);
+                        int owner = data.get(entity, core.OWNER);
+                        int mana = data.getOptional(owner, core.MANA).orElse(0);
+                        if (regeneration <= mana) {
+                            data.set(owner, core.MANA, mana - regeneration);
+                            regenerate(entity);
+                            continue;
+                        }
+                    }
                 }
+                data.set(entity, core.DEATH_ACTION, deathOptions);
             }
         }
         data.clear(core.DEATH_REQUEST);
@@ -184,6 +199,24 @@ public class ResolveSystem {
             }
         }
         data.clear(core.DEATH_ACTION);
+    }
+
+    private void regenerate(int entity) {
+        CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
+        data.set(entity, core.HEALTH, template.get(core.HEALTH));
+        data.set(entity, core.TIRED, 1);
+        data.remove(entity, core.ATTACK_TARGET);
+        data.remove(entity, core.BLOCK_TARGET);
+        for (int other : data.list(core.ATTACK_TARGET)) {
+            if (data.hasValue(other, core.ATTACK_TARGET, entity)) {
+                data.remove(other, core.ATTACK_TARGET);
+            }
+        }
+        for (int other : data.list(core.BLOCK_TARGET)) {
+            if (data.hasValue(other, core.BLOCK_TARGET, entity)) {
+                data.remove(other, core.BLOCK_TARGET);
+            }
+        }
     }
 
     private void playerResults() {
