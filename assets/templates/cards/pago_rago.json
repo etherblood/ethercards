@@ -1,0 +1,23 @@
+{
+  "alias": "pago_rago",
+  "display": {
+    "name": "Pago, the Raging Parrot",
+    "imagePath": "pago_rago.png",
+    "colors": [
+      "RED"
+    ]
+  },
+  "components": {
+    "ATTACK": 7,
+    "HEALTH": 7,
+    "RAGE": true,
+    "FAST_TO_ATTACK": true,
+    "TRAMPLE": true
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "manaCost": 3
+}

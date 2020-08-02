@@ -13,7 +13,6 @@ import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
-import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameDataPrinter;
@@ -21,7 +20,6 @@ import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
-import com.etherblood.a.network.api.messages.IdentifyRequest;
 import com.etherblood.a.network.api.messages.matchmaking.GameStarted;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
@@ -213,6 +211,9 @@ public class GameService {
         for (RawPlayerSetup player : players) {
             if (player.name.equalsIgnoreCase("yalee")) {
                 replaceCards(player.library, "raigeki", "fabi_raigeki");
+            }
+            if (player.name.equalsIgnoreCase("pago")) {
+                replaceCards(player.library, "pago", "pago_rago");
             }
 
             if (player.name.equalsIgnoreCase("destroflyer")) {

@@ -2,7 +2,7 @@ package com.etherblood.a.ai.bots.mcts;
 
 import com.etherblood.a.ai.BotGame;
 import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
-import com.etherblood.a.ai.bots.evaluation.TeamEvaluation;
+import com.etherblood.a.ai.bots.evaluation.SimpleTeamEvaluation;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -15,5 +15,5 @@ public class MctsBotSettings<Move, Game extends BotGame<Move, Game>> {
     public float raveMultiplier = 1;
     public float firstPlayUrgency = 10;
     public Random random = new Random();
-    public Function<Game, float[]> evaluation = new RolloutToEvaluation<>(new Random(), 10, new TeamEvaluation<Move, Game>()::evaluate)::evaluate;
+    public Function<Game, float[]> evaluation = new RolloutToEvaluation<>(new Random(), 10, new SimpleTeamEvaluation<Move, Game>()::evaluate)::evaluate;
 }

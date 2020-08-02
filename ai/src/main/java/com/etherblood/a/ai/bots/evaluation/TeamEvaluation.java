@@ -38,7 +38,7 @@ public class TeamEvaluation<Move, Game extends BotGame<Move, Game>> {
             score += 10 * data.getOptional(minion, core.MANA_POOL_AURA).orElse(0);
             int minionCount = playerMinionCount.getOrElse(player, 0);
             if (minionCount > 1) {
-                score += 10 * (minionCount - 1) * (data.getOptional(minion, core.OWN_MINIONS_HEALTH_AURA).orElse(0) + data.getOptional(minion, core.OWN_MINIONS_VENOM_AURA).orElse(0));
+                score += 10 * (minionCount - 1) * (data.getOptional(minion, core.OWN_MINIONS_HEALTH_AURA).orElse(0) + data.getOptional(minion, core.OWN_MINIONS_ATTACK_AURA).orElse(0));
             }
             teamScores.set(team, score);
         }

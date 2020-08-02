@@ -6,8 +6,12 @@ import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.messages.IdentifyRequest;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuthenticationService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AuthenticationService.class);
 
     private final JwtParser jwtParser;
     private final Map<Integer, JwtAuthentication> connectionIdToAuthentication = new ConcurrentHashMap<>();
@@ -18,7 +22,9 @@ public class AuthenticationService {
     }
 
     public void onIdentify(Connection connection, IdentifyRequest identify) {
-        connectionIdToAuthentication.put(connection.getID(), jwtParser.verify(identify.jwt));
+        JwtAuthentication authentication = jwtParser.verify(identify.jwt);
+        LOG.info("Connection {} identified as {} (id={})", connection.getID(), authentication.user.login, authentication.user.id);
+        connectionIdToAuthentication.put(connection.getID(), authentication);
     }
 
     public AutoCloseable setContext(Connection connection) {

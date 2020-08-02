@@ -3,7 +3,7 @@ package com.etherblood.a.ai.bots;
 import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
-import com.etherblood.a.ai.bots.evaluation.TeamEvaluation;
+import com.etherblood.a.ai.bots.evaluation.SimpleTeamEvaluation;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
@@ -51,7 +51,7 @@ public class TestSandbox {
         // Note: This is not a benchmark, asserts are enabled
         Game game = startGame(random, teamSize);
 
-        Function<MoveBotGame, float[]> simple = new TeamEvaluation<Move, MoveBotGame>()::evaluate;
+        Function<MoveBotGame, float[]> simple = new SimpleTeamEvaluation<Move, MoveBotGame>()::evaluate;
 
         List<MctsBot> bots = new ArrayList<>();
         for (int i = 0; i < 2 * teamSize; i++) {
