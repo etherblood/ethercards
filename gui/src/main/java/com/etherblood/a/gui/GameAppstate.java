@@ -35,11 +35,13 @@ import com.etherblood.a.gui.arrows.ColoredConnectionArrowVisualizer;
 import com.etherblood.a.gui.particles.ColorModel;
 import com.etherblood.a.gui.particles.ColoredSphere;
 import com.etherblood.a.gui.particles.ColoredSphereVisualizer;
+import com.etherblood.a.gui.prettycards.BoardZone;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
+import com.etherblood.a.gui.soprettyboard.BoardTemplate;
 import com.etherblood.a.gui.soprettyboard.PlayerZonesTemplate;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.network.api.GameReplayService;
@@ -78,6 +80,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
@@ -474,6 +477,21 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 card.clearInteractivity();
                 minionModel.setGlow(null);
             }
+            boolean isFaceUp;
+            switch (minionModel.getZone()) {
+                case LIBRARY:
+                    isFaceUp = false;
+                    break;
+                case HAND:
+                    int ownTeam = data.get(userControlledPlayer, core.TEAM);
+                    isFaceUp = data.hasValue(cardEntity, core.TEAM, ownTeam);
+                    break;
+                default:
+                    isFaceUp = true;
+                    break;
+            }
+            minionModel.setFaceUp(isFaceUp);
+
             board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index++)));
         }
     }
@@ -521,10 +539,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private Interactivity castInteractivity(int player, int castable) {
-        CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
-        int cardTemplate = game.getData().get(castable, core.CARD_TEMPLATE);
+        EntityData data = game.getData();
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        int cardTemplate = data.get(castable, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(cardTemplate);
-        IntList validTargets = template.getCastTarget().getValidTargets(game.getData(), game.getTemplates(), castable);
+        IntList validTargets = template.getCastTarget().getValidTargets(data, game.getTemplates(), castable);
         if (validTargets.nonEmpty()) {
             return new AimToTargetInteractivity(TargetSnapMode.VALID) {
                 @Override
@@ -572,6 +591,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             card = inner;
             visualCards.put(myCard, card);
             objectEntities.put(card, myCard);
+            card.getModel().setFaceUp(false);// hide cards by default until they were updated
 
             card.position().addRelativeTransformation(new HoveringTransformation(0.1f, 4), () -> data.has(myCard, core.IN_BATTLE_ZONE) && data.has(myCard, core.FLYING));
             card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> data.has(myCard, core.TIRED));
@@ -589,7 +609,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private BoardAppState initBoardGui() {
-        CoreComponents core = game.getData().getComponents().getModule(CoreComponents.class);
+        EntityData data = game.getData();
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         board.registerVisualizer_Class(ColoredSphere.class, new ColoredSphereVisualizer());
         board.registerVisualizer_Class(StaticSpatial.class, new StaticSpatialVisualizer());
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
@@ -602,17 +623,16 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 .arcHeight(0.1f)
                 .width(0.25f)
                 .build()));
-        IntList players = game.getData().list(core.PLAYER_INDEX);
+        IntList players = data.list(core.PLAYER_INDEX);
 
-        Quaternion zoneRotation = Quaternion.IDENTITY;
-
+        Map<Integer, IntList> teamToPlayer = new LinkedHashMap<>();
         for (int player : players) {
-            PlayerZonesTemplate playerZoneTemplate = new PlayerZonesTemplate(new Vector4f(-5, 0, 10, 3f), CARD_SPACE);
-            if (game.getData().hasValue(player, core.PLAYER_INDEX, 1)) {
-                zoneRotation = new Quaternion().fromAngleAxis(FastMath.PI, Vector3f.UNIT_Y);
-            }
-
-            PlayerZones playerZone = playerZoneTemplate.create(Vector3f.ZERO, zoneRotation);
+            teamToPlayer.computeIfAbsent(data.get(player, core.TEAM), x -> new IntList()).add(player);
+        }
+        BoardTemplate boardTemplate = new BoardTemplate(userControlledPlayer, teamToPlayer, new Vector2f(10, 3), CARD_SPACE);
+        for (Map.Entry<Integer, PlayerZones> entry : boardTemplate.getPlayerZones().entrySet()) {
+            int player = entry.getKey();
+            PlayerZones playerZone = entry.getValue();
             board.addZone(playerZone.getDeckZone());
             board.addZone(playerZone.getGraveyardZone());
             board.addZone(playerZone.getHandZone());
@@ -628,16 +648,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private boolean isInspectable(TransformedBoardObject<?> transformedBoardObject) {
         if (transformedBoardObject instanceof Card) {
-            Card<?> card = (Card<?>) transformedBoardObject;
-            CardZone cardZone = card.getZonePosition().getZone();
-            for (PlayerZones playerZones : playerZones.values()) {
-                if ((cardZone == playerZones.getBoardZone())) {
-                    return true;
-                }
-                if ((cardZone == playerZones.getGraveyardZone())) {
-                    return true;
-                }
-            }
+            Card<CardModel> card = (Card<CardModel>) transformedBoardObject;
+            return card.getModel().isFaceUp();
         }
         return false;
     }

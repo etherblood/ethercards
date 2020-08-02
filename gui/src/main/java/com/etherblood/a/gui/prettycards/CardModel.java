@@ -23,6 +23,7 @@ public class CardModel extends BoardObjectModel {
     private DisplayCardTemplate template;
     private Integer attack, health;
     private boolean damaged, foil;
+    private boolean faceUp = true;
     private ColorRGBA glow;
     private List<String> keywords = new ArrayList<>();
     private BoardZone zone;
@@ -260,7 +261,11 @@ public class CardModel extends BoardObjectModel {
     }
 
     public boolean isFaceUp() {
-        return zone != BoardZone.LIBRARY;
+        return faceUp;
+    }
+
+    public void setFaceUp(boolean faceUp) {
+        updateIfNotEquals(this.faceUp, faceUp, () -> this.faceUp = faceUp);
     }
 
     public BoardZone getZone() {
