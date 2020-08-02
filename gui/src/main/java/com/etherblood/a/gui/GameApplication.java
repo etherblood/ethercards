@@ -7,6 +7,7 @@ import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.gui.matchmaking.MatchOpponents;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
+import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
@@ -47,7 +48,6 @@ public class GameApplication extends SimpleApplication {
     private final String hostUrl;
     private final boolean battleFullArt;
     private CardImages cardImages;
-    private MyDeckBuilderAppstate deckBuilderAppstate;
     private Future<GameReplayService> futureGameReplayService;
     private GameClient client;
 
@@ -100,8 +100,7 @@ public class GameApplication extends SimpleApplication {
             presetLibrary.hero = cleanAlias("elderwood_ahri");
             presetLibrary.cards = presetLibrary.cards.entrySet().stream().collect(Collectors.toMap(x -> cleanAlias(x.getKey()), x -> x.getValue()));
         }
-        deckBuilderAppstate = new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components);
-        stateManager.attach(deckBuilderAppstate);
+        stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components));
     }
 
     private static String cleanAlias(String alias) {
@@ -138,6 +137,7 @@ public class GameApplication extends SimpleApplication {
         stateManager.attach(new CameraAppState());
         stateManager.attach(new ButtonAppstate());
         stateManager.attach(new HudTextAppstate(guiNode, guiFont));
+        stateManager.attach(new ForestBoardAppstate(rootNode));
 
         cardImages = new CardImages(assetManager);
 
@@ -150,17 +150,26 @@ public class GameApplication extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        if (stateManager.getState(GameAppstate.class) != null) {
+        GameAppstate gameAppstate = stateManager.getState(GameAppstate.class);
+        if (gameAppstate != null) {
+            if (gameAppstate.isGameCompleted()) {
+                selectedLibrary = null;
+                selectedOpponents = null;
+                futureGameReplayService = null;
+                client.stop();
+                client = null;
+                stateManager.detach(gameAppstate);
+            }
             return;
         }
         if (selectedLibrary == null) {
+            MyDeckBuilderAppstate deckBuilderAppstate = stateManager.getState(MyDeckBuilderAppstate.class);
             if (deckBuilderAppstate == null) {
                 startDeckbuilder();
             } else if (deckBuilderAppstate.getResult() != null) {
                 selectedLibrary = deckBuilderAppstate.getResult();
                 LibraryIO.store("library.json", selectedLibrary);
                 stateManager.detach(deckBuilderAppstate);
-                deckBuilderAppstate = null;
             }
         }
         if (selectedLibrary == null) {

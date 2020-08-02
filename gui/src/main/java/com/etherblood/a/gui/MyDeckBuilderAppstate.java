@@ -50,6 +50,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private final RawLibraryTemplate presetLibrary;
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
     private final ActionListener saveLibraryListener = new ActionListener() {
+        @Override
         public void onAction(String name, boolean isPressed, float tpf) {
             if (isPressed) {
                 completeResult();
@@ -57,6 +58,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         }
     };
     private final ActionListener nextPage = new ActionListener() {
+        @Override
         public void onAction(String name, boolean isPressed, float tpf) {
             if (isPressed && deckBuilderAppState.getCollectionPage() + 1 < deckBuilderAppState.getCollectionPagesCount()) {
                 deckBuilderAppState.goToNextColletionPage();
@@ -64,17 +66,20 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         }
     };
     private final ActionListener previousPage = new ActionListener() {
+        @Override
         public void onAction(String name, boolean isPressed, float tpf) {
             if (isPressed && deckBuilderAppState.getCollectionPage() > 0) {
                 deckBuilderAppState.goToPreviousCollectionPage();
             }
         }
     };
+    private final Node rootNode;
     private final Node guiNode;
     private final Button saveButton;
 
     public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, Node guiNode, RawLibraryTemplate presetLibrary, Components components) {
         this.presetLibrary = presetLibrary;
+        this.rootNode = rootNode;
         this.guiNode = guiNode;
 
         Comparator<CardModel> cardOrder = Comparator.comparingInt(this::getManaCost);
@@ -176,7 +181,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.addListener(nextPage, "right");
         inputManager.addListener(previousPage, "left");
         stateManager.getState(CameraAppState.class).moveTo(new Vector3f(-0.25036395f, 15.04817f, 1), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
-        stateManager.attach(new ForestBoardAppstate(0));
     }
 
     @Override
@@ -186,7 +190,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.removeListener(saveLibraryListener);
         inputManager.removeListener(nextPage);
         inputManager.removeListener(previousPage);
-        stateManager.detach(stateManager.getState(ForestBoardAppstate.class));
 
         guiNode.detachChild(saveButton);
     }

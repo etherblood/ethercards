@@ -65,4 +65,8 @@ public class GameClient {
         client.start();
         client.connect(10_000, address, NetworkUtil.TCP_PORT);
     }
+    
+    public void stop() {
+        client.stop();
+    }
 }

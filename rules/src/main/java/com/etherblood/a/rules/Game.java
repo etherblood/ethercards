@@ -62,6 +62,7 @@ public class Game {
 
     public boolean isGameOver() {
         //TODO: called very often, can performance be improved?
+        assert data.list(core.PLAYER_INDEX).nonEmpty();
         return data.list(core.PLAYER_INDEX).size() == data.list(core.PLAYER_RESULT).size();
     }
 

@@ -35,15 +35,14 @@ import com.etherblood.a.gui.arrows.ColoredConnectionArrowVisualizer;
 import com.etherblood.a.gui.particles.ColorModel;
 import com.etherblood.a.gui.particles.ColoredSphere;
 import com.etherblood.a.gui.particles.ColoredSphereVisualizer;
-import com.etherblood.a.gui.prettycards.BoardZone;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.BoardTemplate;
-import com.etherblood.a.gui.soprettyboard.PlayerZonesTemplate;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
+import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
@@ -72,7 +71,6 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.math.Vector4f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -107,6 +105,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final Node rootNode;
     private final String assetsPath;
     private final boolean battleFullArt;
+    private boolean gameCompleted = false;
 
     private CameraAppState cameraAppstate;
     private HudTextAppstate hudAppstate;
@@ -372,6 +371,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 default:
                     throw new AssertionError();
             }
+        } else if (game.isGameOver()) {
+            endPhaseButton.setCullHint(Spatial.CullHint.Dynamic);
+            endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_game.png"));
         } else {
             endPhaseButton.setCullHint(Spatial.CullHint.Always);
         }
@@ -656,6 +658,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             return;
         }
         if ("space".equals(name) && isPressed) {
+            if (game.isGameOver()) {
+                gameCompleted = true;
+                return;
+            }
+
             EntityData data = game.getData();
             CoreComponents core = data.getComponents().getModule(CoreComponents.class);
             data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
@@ -695,6 +702,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         button.setLocalTranslation(3.9f, 0.5f, 0.3f);
         button.setLocalRotation(new Quaternion().fromAngles(FastMath.QUARTER_PI / 2 - FastMath.HALF_PI, 0, 0));
         return button;
+    }
+
+    public boolean isGameCompleted() {
+        return gameCompleted;
     }
 
 }

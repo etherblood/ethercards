@@ -43,6 +43,8 @@ public class Main {
         settings.setAudioRenderer(null);
         app.setSettings(settings);
         app.setShowSettings(false);
+        app.setDisplayStatView(false);
+        app.setDisplayFps(false);
         app.start();
     }
 }
