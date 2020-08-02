@@ -5,7 +5,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.network.api.NetworkUtil;
 import com.etherblood.a.network.api.jwt.JwtParser;
-import com.etherblood.a.network.api.matchmaking.GameRequest;
+import com.etherblood.a.network.api.messages.IdentifyRequest;
+import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
@@ -29,16 +30,19 @@ public class GameServer {
         NetworkUtil.init(server.getKryo());
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
         Matchmaker matchmaker = new Matchmaker(-1, BOT_NAME, botLibrary);
-        GameService gameService = new GameService(server, jwtParser, assetLoader, matchmaker, scheduledThreadPoolExecutor);
+        AuthenticationService authenticationService = new AuthenticationService(jwtParser);
+        GameService gameService = new GameService(server, authenticationService, assetLoader, matchmaker, scheduledThreadPoolExecutor);
         server.addListener(new Listener() {
 
             @Override
             public void received(Connection connection, Object object) {
-                try {
+                try (AutoCloseable authentication = authenticationService.setContext(connection)) {
                     if (object instanceof Move) {
                         gameService.onMoveRequest(connection, (Move) object);
                     } else if (object instanceof GameRequest) {
                         gameService.onGameRequest(connection, (GameRequest) object);
+                    } else if (object instanceof IdentifyRequest) {
+                        authenticationService.onIdentify(connection, (IdentifyRequest) object);
                     }
                 } catch (Throwable t) {
                     LOG.error("Error when handling message {} for connection {}.", object, connection.getID(), t);
@@ -49,6 +53,7 @@ public class GameServer {
             public void disconnected(Connection connection) {
                 try {
                     gameService.onDisconnect(connection);
+                    authenticationService.onDisconnect(connection);
                 } catch (Throwable t) {
                     LOG.error("Error when handling disconnect for connection {}.", connection.getID(), t);
                 }

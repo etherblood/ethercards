@@ -2,6 +2,7 @@ package com.etherblood.a.gui;
 
 import com.etherblood.a.gui.matchmaking.SelectOpponentAppstate;
 import com.etherblood.a.client.GameClient;
+import com.etherblood.a.client.GameReplayView;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.gui.matchmaking.MatchOpponents;
@@ -9,7 +10,6 @@ import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.gui.soprettyboard.PostFilterAppstate;
-import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
@@ -48,7 +48,7 @@ public class GameApplication extends SimpleApplication {
     private final String hostUrl;
     private final boolean battleFullArt;
     private CardImages cardImages;
-    private Future<GameReplayService> futureGameReplayService;
+    private Future<GameReplayView> futureGameReplayService;
     private GameClient client;
 
     private MatchOpponents selectedOpponents;
@@ -67,7 +67,8 @@ public class GameApplication extends SimpleApplication {
         client = new GameClient(assetLoader);
         try {
             client.start(hostUrl);
-            futureGameReplayService = client.requestGame(authentication.rawJwt, selectedLibrary, selectedOpponents.strength, selectedOpponents.teamHumanCounts, selectedOpponents.teamSize);
+            client.identify(authentication.rawJwt);
+            futureGameReplayService = client.requestGame(selectedLibrary, selectedOpponents.strength, selectedOpponents.teamHumanCounts, selectedOpponents.teamSize);
             stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -194,13 +195,13 @@ public class GameApplication extends SimpleApplication {
 
         if (futureGameReplayService.isDone()) {
             stateManager.getState(HudTextAppstate.class).setText("");
-            GameReplayService gameReplayService;
+            GameReplayView gameReplayService;
             try {
                 gameReplayService = futureGameReplayService.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
-            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService, authentication, cardImages, rootNode, assetsPath, battleFullArt));
+            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService.gameReplay, cardImages, rootNode, assetsPath, battleFullArt, gameReplayService.playerIndex));
             futureGameReplayService = null;
         }
     }

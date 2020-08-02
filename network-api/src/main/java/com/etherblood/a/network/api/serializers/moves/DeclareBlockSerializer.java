@@ -6,7 +6,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.etherblood.a.rules.moves.DeclareBlock;
 
-public class BlockSerializer extends Serializer<DeclareBlock> {
+public class DeclareBlockSerializer extends Serializer<DeclareBlock> {
 
     @Override
     public void write(Kryo kryo, Output output, DeclareBlock t) {

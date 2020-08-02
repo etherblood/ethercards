@@ -116,12 +116,12 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private final Map<Animation, BoardObject> particleMapBoardObjects = new HashMap<>();
 
-    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, JwtAuthentication authentication, CardImages cardImages, Node rootNode, String assetsPath, boolean battleFullArt) {
+    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, CardImages cardImages, Node rootNode, String assetsPath, boolean battleFullArt, int playerIndex) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
         events = new QueueEventListener();
         this.game = gameReplayService.createInstance(events);
-        this.userControlledPlayer = game.findPlayerByIndex(gameReplayService.getPlayerIndex(authentication.user.id));
+        this.userControlledPlayer = game.findPlayerByIndex(playerIndex);
         this.cardImages = cardImages;
         this.rootNode = rootNode;
         this.assetsPath = assetsPath;

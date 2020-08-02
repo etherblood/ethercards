@@ -1,10 +1,12 @@
 package com.etherblood.a.network.api;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.etherblood.a.network.api.messages.IdentifyRequest;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
-import com.etherblood.a.network.api.matchmaking.GameRequest;
-import com.etherblood.a.network.api.serializers.moves.BlockSerializer;
+import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
+import com.etherblood.a.network.api.messages.matchmaking.GameStarted;
+import com.etherblood.a.network.api.serializers.moves.DeclareBlockSerializer;
 import com.etherblood.a.network.api.serializers.moves.CastSerializer;
 import com.etherblood.a.network.api.serializers.moves.DeclareAttackSerializer;
 import com.etherblood.a.network.api.serializers.moves.DeclareMulliganSerializer;
@@ -33,7 +35,9 @@ public class NetworkUtil {
     public static void init(Kryo kryo) {
 //        kryo.register(UUID.class, new UuidSerializer());
         
+        kryo.register(IdentifyRequest.class);
         kryo.register(GameRequest.class);
+        kryo.register(GameStarted.class);
         kryo.register(RawGameSetup.class);
         kryo.register(RawPlayerSetup[].class);
         kryo.register(RawPlayerSetup.class);
@@ -44,8 +48,8 @@ public class NetworkUtil {
         kryo.register(LinkedTreeMap.class);
 
         kryo.register(Start.class);
-        kryo.register(DeclareBlock.class, new BlockSerializer());
         kryo.register(Cast.class, new CastSerializer());
+        kryo.register(DeclareBlock.class, new DeclareBlockSerializer());
         kryo.register(DeclareAttack.class, new DeclareAttackSerializer());
         kryo.register(DeclareMulligan.class, new DeclareMulliganSerializer());
         kryo.register(EndAttackPhase.class, new EndAttackPhaseSerializer());

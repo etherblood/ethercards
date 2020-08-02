@@ -14,13 +14,15 @@ import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.etherblood.a.network.api.jwt.JwtParser;
-import com.etherblood.a.network.api.matchmaking.GameRequest;
+import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameDataPrinter;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
+import com.etherblood.a.network.api.messages.IdentifyRequest;
+import com.etherblood.a.network.api.messages.matchmaking.GameStarted;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
@@ -51,7 +53,7 @@ public class GameService {
     private static final Logger LOG = LoggerFactory.getLogger(GameService.class);
 
     private final Server server;
-    private final JwtParser jwtParser;
+    private final AuthenticationService authenticationService;
     private final Function<String, JsonElement> assetLoader;
     private final Matchmaker matchmaker;
 
@@ -62,9 +64,9 @@ public class GameService {
     private final Map<UUID, Future<Move>> botMoves = new HashMap<>();
     private final ExecutorService executor;
 
-    public GameService(Server server, JwtParser jwtParser, Function<String, JsonElement> assetLoader, Matchmaker matchmaker, ExecutorService executor) {
+    public GameService(Server server, AuthenticationService authenticationService, Function<String, JsonElement> assetLoader, Matchmaker matchmaker, ExecutorService executor) {
         this.server = server;
-        this.jwtParser = jwtParser;
+        this.authenticationService = authenticationService;
         this.assetLoader = assetLoader;
         this.matchmaker = matchmaker;
         this.executor = executor;
@@ -85,7 +87,7 @@ public class GameService {
     }
 
     public synchronized void onGameRequest(Connection connection, GameRequest request) {
-        matchmaker.enqueue(MatchmakeRequest.of(request, connection.getID(), jwtParser));
+        matchmaker.enqueue(MatchmakeRequest.of(request, connection.getID(), authenticationService.getAuthentication().user));
         matchmake();
     }
 
@@ -201,7 +203,7 @@ public class GameService {
             games.put(gameId, game);
             for (GamePlayerMapping playerMapping : result.playerMappings) {
                 Connection connection = getConnection(playerMapping.connectionId);
-                connection.sendTCP(setup);
+                connection.sendTCP(new GameStarted(playerMapping.playerIndex, setup));
                 connection.sendTCP(moveReplay);
             }
         }

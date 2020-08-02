@@ -1,23 +1,20 @@
-package com.etherblood.a.network.api.matchmaking;
+package com.etherblood.a.network.api.messages.matchmaking;
 
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 
 public class GameRequest {
 
-    public String jwt;
     public RawLibraryTemplate library;
     public int strength;
     public int[] teamHumanCounts;
     public int teamSize;
 
-    public GameRequest(String jwt, RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
-        this.jwt = jwt;
+    public GameRequest(RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
         this.library = library;
         this.strength = strength;
         this.teamHumanCounts = teamHumanCounts;
         this.teamSize = teamSize;
     }
-
 
     GameRequest() {
     }

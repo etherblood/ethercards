@@ -5,8 +5,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.network.api.NetworkUtil;
-import com.etherblood.a.templates.api.setup.RawGameSetup;
-import com.etherblood.a.network.api.matchmaking.GameRequest;
+import com.etherblood.a.network.api.messages.IdentifyRequest;
+import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
+import com.etherblood.a.network.api.messages.matchmaking.GameStarted;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 public class GameClient {
 
     private final Client client;
-    private final AtomicReference<CompletableFuture<GameReplayService>> gameRequest = new AtomicReference<>(null);
+    private final AtomicReference<CompletableFuture<GameReplayView>> gameRequest = new AtomicReference<>(null);
 
     public GameClient(Function<String, JsonElement> assetLoader) {
         client = new Client(1024 * 1024, 1024 * 1024);
@@ -29,12 +30,13 @@ public class GameClient {
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                CompletableFuture<GameReplayService> future = gameRequest.get();
-                if (object instanceof RawGameSetup) {
-                    future.complete(new GameReplayService((RawGameSetup) object, assetLoader));
+                CompletableFuture<GameReplayView> future = gameRequest.get();
+                if (object instanceof GameStarted) {
+                    GameStarted gameStarted = (GameStarted) object;
+                    future.complete(new GameReplayView(new GameReplayService(gameStarted.setup, assetLoader), gameStarted.playerIndex));
                 } else if (object instanceof MoveReplay) {
                     try {
-                        future.get().apply((MoveReplay) object);
+                        future.get().gameReplay.apply((MoveReplay) object);
                     } catch (InterruptedException | ExecutionException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -48,13 +50,17 @@ public class GameClient {
         gameRequest.set(null);
     }
 
-    public Future<GameReplayService> requestGame(String jwt, RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
-        CompletableFuture<GameReplayService> future = new CompletableFuture<>();
+    public Future<GameReplayView> requestGame(RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
+        CompletableFuture<GameReplayView> future = new CompletableFuture<>();
         if (gameRequest.compareAndSet(null, future)) {
-            client.sendTCP(new GameRequest(jwt, library, strength, teamHumanCounts, teamSize));
+            client.sendTCP(new GameRequest(library, strength, teamHumanCounts, teamSize));
             return future;
         }
         throw new IllegalStateException();
+    }
+    
+    public void identify(String jwt) {
+        client.sendTCP(new IdentifyRequest(jwt));
     }
 
     public void requestMove(Move move) {

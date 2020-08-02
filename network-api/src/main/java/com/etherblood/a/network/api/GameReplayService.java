@@ -23,8 +23,6 @@ import java.util.Collections;
 import java.util.function.Function;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameReplayService {
 
@@ -53,15 +51,11 @@ public class GameReplayService {
 
         TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, new TemplateAliasMapsImpl()));
 
-        Map<String, Integer> cardAliasMap = new HashMap<>();
         RawGameSetup gameData = replay.setup;
         for (RawPlayerSetup player : gameData.players) {
-            cardAliasMap.put(player.library.hero, loader.registerCardAlias(player.library.hero));
-            for (String card : player.library.cards.keySet()) {
-                cardAliasMap.put(card, loader.registerCardAlias(card));
-            }
+            loader.parseLibrary(player.library);
         }
-        cardAliasMap.put(THE_COIN, loader.registerCardAlias(THE_COIN));
+        loader.registerCardAlias(THE_COIN);
         GameSettingsBuilder builder = new GameSettingsBuilder();
         builder.components = components;
         builder.templates = loader.buildGameTemplates();
@@ -69,7 +63,7 @@ public class GameReplayService {
         EntityData data = new SimpleEntityData(settings.components);
         MoveService moves = new MoveService(data, settings.templates, HistoryRandom.producer(), Collections.emptyList(), true, true, listener);
         Game game = new Game(settings, data, moves);
-        gameData.toGameSetup(cardAliasMap::get).setup(data, game.getTemplates());
+        gameData.toGameSetup(loader::registerCardAlias).setup(data, game.getTemplates());
         updateInstance(game);
         return game;
     }
@@ -117,7 +111,7 @@ public class GameReplayService {
         updateCachedGame();
         return cachedGame.findPlayerByIndex(playerIndex);
     }
-    
+
     public synchronized boolean hasPlayerWon(int player) {
         updateCachedGame();
         return cachedGame.hasPlayerWon(player);
