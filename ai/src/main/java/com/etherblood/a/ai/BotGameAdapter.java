@@ -40,14 +40,6 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
     }
 
     @Override
-    public int activePlayerIndex() {
-        for (int player : game.getData().list(core.ACTIVE_PLAYER_PHASE)) {
-            return game.getData().get(player, core.PLAYER_INDEX);
-        }
-        throw new AssertionError();
-    }
-
-    @Override
     public float[] resultPlayerScores() {
         if (!isGameOver()) {
             throw new IllegalStateException();

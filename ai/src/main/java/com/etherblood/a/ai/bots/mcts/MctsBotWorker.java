@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,27 +114,41 @@ class MctsBotWorker implements Runnable, Callable<Void> {
     }
 
     private Move uctSelect(MctsNode node, MctsRaveScores raveScores) {
-        int activePlayerIndex = simulationGame.activePlayerIndex();
+        int activePlayerIndex = -1;
+        if (simulationGame.isPlayerIndexActive(botPlayerIndex)) {
+            activePlayerIndex = botPlayerIndex;
+        } else {
+            for (int playerIndex = 0; playerIndex < playerCount; playerIndex++) {
+                if (simulationGame.isPlayerIndexActive(playerIndex)) {
+                    activePlayerIndex = playerIndex;
+                    break;
+                }
+            }
+        }
+        assert activePlayerIndex >= 0 : "there is no active player";
+        //TODO: generate moves for all active players instead, WARNING: might need special handling in root since we only want own moves there
         List<Move> moves = simulationGame.generateMoves(activePlayerIndex);
+
         if (moves.size() == 1) {
             return moves.get(0);
         }
         List<Move> bestMoves = new ArrayList<>();
         float bestValue = Float.NEGATIVE_INFINITY;
         for (Move move : moves) {
+            int movePlayerIndex = activePlayerIndex;//TODO: use player from move instead
             float score;
             MctsNode child = getChild(node, move);
             if (child == null) {
                 score = firstPlayUrgency;
             } else {
-                score = calcUtc(node.visits(), child.visits(), child.score(activePlayerIndex));
+                score = calcUtc(node.visits(), child.visits(), child.score(movePlayerIndex));
             }
 
             MctsRaveScore raveScore = raveScores.get(move);
             if (raveScore == null) {
                 raveScore = raveScores.get(null);
             }
-            float raveValue = raveScore.getScore(activePlayerIndex) / (node.visits() + 1);
+            float raveValue = raveScore.getScore(movePlayerIndex) / (node.visits() + 1);
             score += raveMultiplier * raveValue;
 
             if (score > bestValue) {

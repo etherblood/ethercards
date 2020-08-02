@@ -22,8 +22,6 @@ public interface BotGame<T, V extends BotGame<T, V>> {
 
     int playerCount();
 
-    int activePlayerIndex();
-
     boolean isPlayerIndexActive(int playerIndex);
 
     float[] resultPlayerScores();
