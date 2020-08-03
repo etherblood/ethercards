@@ -20,10 +20,10 @@ import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
+import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
 import com.etherblood.a.network.api.messages.matchmaking.GameStarted;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
-import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.server.matchmaking.BotRequest;
 import com.etherblood.a.server.matchmaking.MatchmakeRequest;
@@ -73,19 +73,15 @@ public class GameService {
     public synchronized void onDisconnect(Connection connection) {
         matchmaker.remove(connection.getID());
         for (GamePlayerMapping player : players) {
-            if (player.connectionId == connection.getID()) {
-                LOG.info("Game_{} surrendering for player {} due to disconnect.", player.gameId, player.playerId);
-                GameReplayService game = games.get(player.gameId);
-                makeMove(player.gameId, new Surrender(game.getPlayerEntity(player.playerIndex)));
-                assert game.isGameOver();
-                assert !games.containsKey(player.gameId);
-                return;
+            if (player.connectionId != null && player.connectionId == connection.getID()) {
+                player.connectionId = null;
+                LOG.info("Game_{} {} (id={}, playerIndex={}) disconnected.", player.gameId, player.user.login, player.user.id, player.playerIndex);
             }
         }
     }
 
     public synchronized void onGameRequest(Connection connection, GameRequest request) {
-        matchmaker.enqueue(MatchmakeRequest.of(request, connection.getID(), authenticationService.getAuthentication().user));
+        matchmaker.enqueue(MatchmakeRequest.of(request, connection.getID(), authenticationService.getUser()));
         matchmake();
     }
 
@@ -128,6 +124,11 @@ public class GameService {
                 bots.remove(bot);
             }
         }
+    }
+
+    public synchronized List<GamePlayerMapping> findCurrentUserGames() {
+        JwtAuthenticationUser user = authenticationService.getUser();
+        return players.stream().filter(player -> player.user.id == user.id).collect(Collectors.toList());
     }
 
     public synchronized void botMoves() throws Exception {
@@ -243,10 +244,13 @@ public class GameService {
     }
 
     private GamePlayerMapping getPlayerByConnectionId(int connectionId) {
-        return players.stream().filter(x -> x.connectionId == connectionId).findAny().get();
+        return players.stream().filter(x -> x.connectionId != null && x.connectionId == connectionId).findAny().get();
     }
 
-    private Connection getConnection(int connectionId) {
+    private Connection getConnection(Integer connectionId) {
+        if (connectionId == null) {
+            return null;
+        }
         return Arrays.stream(server.getConnections()).filter(x -> x.getID() == connectionId).findAny().orElse(null);
     }
 

@@ -1,17 +1,18 @@
 package com.etherblood.a.server;
 
+import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
 import java.util.UUID;
 
 public class GamePlayerMapping {
 
     public final UUID gameId;
-    public final long playerId;
+    public final JwtAuthenticationUser user;
     public final int playerIndex;
-    public final int connectionId;
+    public Integer connectionId;
 
-    public GamePlayerMapping(UUID gameId, long playerId, int playerIndex, int connectionId) {
+    public GamePlayerMapping(UUID gameId, JwtAuthenticationUser user, int playerIndex, Integer connectionId) {
         this.gameId = gameId;
-        this.playerId = playerId;
+        this.user = user;
         this.playerIndex = playerIndex;
         this.connectionId = connectionId;
     }

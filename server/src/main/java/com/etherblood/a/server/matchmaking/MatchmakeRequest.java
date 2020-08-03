@@ -9,9 +9,8 @@ import org.bouncycastle.util.Arrays;
 public class MatchmakeRequest {
 
     // user info
-    public final long userId;
+    public final JwtAuthenticationUser user;
     public final int connectionId;
-    public final String name;
     public final RawLibraryTemplate library;
 
     //match settings
@@ -23,10 +22,9 @@ public class MatchmakeRequest {
     public final int teamCount;
     public final int humanCount;
 
-    public MatchmakeRequest(long userId, int connectionId, String name, RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
-        this.userId = userId;
+    public MatchmakeRequest(JwtAuthenticationUser user, int connectionId, RawLibraryTemplate library, int strength, int[] teamHumanCounts, int teamSize) {
+        this.user = user;
         this.connectionId = connectionId;
-        this.name = name;
         this.library = library;
         this.strength = strength;
         this.teamHumanCounts = teamHumanCounts;
@@ -40,7 +38,7 @@ public class MatchmakeRequest {
     }
 
     public static MatchmakeRequest of(GameRequest request, int connectionId, JwtAuthenticationUser user) {
-        return new MatchmakeRequest(user.id, connectionId, user.login, request.library, request.strength, Arrays.clone(request.teamHumanCounts), request.teamSize);
+        return new MatchmakeRequest(user, connectionId, request.library, request.strength, Arrays.clone(request.teamHumanCounts), request.teamSize);
     }
 
 }

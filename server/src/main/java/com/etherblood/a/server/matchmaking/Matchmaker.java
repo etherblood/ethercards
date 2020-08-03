@@ -90,11 +90,11 @@ public class Matchmaker {
                 RawPlayerSetup playerSetup = new RawPlayerSetup();
                 if (teamPlayerIndex < teamHumanCount) {
                     MatchmakeRequest request = requests.get(nextRequest++);
-                    playerSetup.id = request.userId;
-                    playerSetup.name = request.name;
+                    playerSetup.id = request.user.id;
+                    playerSetup.name = request.user.login;
                     playerSetup.library = request.library;
 
-                    playerMappings.add(new GamePlayerMapping(gameId, request.userId, globalPlayerIndex, request.connectionId));
+                    playerMappings.add(new GamePlayerMapping(gameId, request.user, globalPlayerIndex, request.connectionId));
                 } else {
                     playerSetup.id = botId;
                     playerSetup.name = botName;

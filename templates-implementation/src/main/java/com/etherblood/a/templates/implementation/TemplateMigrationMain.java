@@ -28,14 +28,14 @@ public class TemplateMigrationMain {
         Path folder = Paths.get("../assets/templates/cards/");
         Files.list(folder).forEach(path -> {
             try {
-                File file = path.toFile();
                 JsonObject template;
-                try (Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+                try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                     template = gson.fromJson(reader, JsonObject.class);
                 }
                 update(template);
-                try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+                try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
                     gson.toJson(template, writer);
+                    writer.flush();
                 }
             } catch (IOException ex) {
                 throw new RuntimeException("Error with file " + path, ex);
@@ -44,112 +44,7 @@ public class TemplateMigrationMain {
     }
 
     private static void update(JsonObject template) {
-        if (template.has("onDeath")) {
-            JsonObject zone = template.getAsJsonObject("graveyard");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("graveyard", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_DEATH");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_SELF_DEATH", effects);
-            }
-            effects.addAll(template.remove("onDeath").getAsJsonArray());
-        }
-        if (template.has("onSelfMovedToGraveyard")) {
-            JsonObject zone = template.getAsJsonObject("graveyard");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("graveyard", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_ENTER_GRAVEYARD");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_SELF_ENTER_GRAVEYARD", effects);
-            }
-            effects.addAll(template.remove("onSelfMovedToGraveyard").getAsJsonArray());
-        }
-        
-        
-        if (template.has("onSurvive")) {
-            JsonObject zone = template.getAsJsonObject("battle");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("battle", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_SURVIVE");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_SELF_SURVIVE", effects);
-            }
-            effects.addAll(template.remove("onSurvive").getAsJsonArray());
-        }
-        if (template.has("onUpkeep")) {
-            JsonObject zone = template.getAsJsonObject("battle");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("battle", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_OWNER_UPKEEP");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_OWNER_UPKEEP", effects);
-            }
-            effects.addAll(template.remove("onUpkeep").getAsJsonArray());
-        }
-        if (template.has("afterBattle")) {
-            JsonObject zone = template.getAsJsonObject("battle");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("battle", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_SELF_FIGHT");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_SELF_FIGHT", effects);
-            }
-            effects.addAll(template.remove("afterBattle").getAsJsonArray());
-        }
-        if (template.has("onCast")) {
-            JsonObject zone = template.getAsJsonObject("battle");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("battle", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_OTHER_CAST");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_OTHER_CAST", effects);
-            }
-            effects.addAll(template.remove("onCast").getAsJsonArray());
-        }
-        if (template.has("onSummon")) {
-            JsonObject zone = template.getAsJsonObject("battle");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("battle", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_OTHER_SUMMON");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_OTHER_SUMMON", effects);
-            }
-            effects.addAll(template.remove("onSummon").getAsJsonArray());
-        }
-        if (template.has("onDraw")) {
-            JsonObject zone = template.getAsJsonObject("battle");
-            if (zone == null) {
-                zone = new JsonObject();
-                template.add("battle", zone);
-            }
-            JsonArray effects = zone.getAsJsonArray("TRIGGER_OWNER_DRAW");
-            if (effects == null) {
-                effects = new JsonArray();
-                zone.add("TRIGGER_OWNER_DRAW", effects);
-            }
-            effects.addAll(template.remove("onDraw").getAsJsonArray());
-        }
+
     }
 
     private static void updateRecursively(JsonObject object) {
@@ -162,7 +57,7 @@ public class TemplateMigrationMain {
                 updateRecursively(value.getAsJsonObject());
             }
         }
-        
+
         //update here
     }
 

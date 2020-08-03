@@ -22,9 +22,11 @@ import java.util.function.Function;
 public class GameClient {
 
     private final Client client;
+    private final String version;
     private final AtomicReference<CompletableFuture<GameReplayView>> gameRequest = new AtomicReference<>(null);
 
-    public GameClient(Function<String, JsonElement> assetLoader) {
+    public GameClient(Function<String, JsonElement> assetLoader, String version) {
+        this.version = version;
         client = new Client(1024 * 1024, 1024 * 1024);
         NetworkUtil.init(client.getKryo());
         client.addListener(new Listener() {
@@ -60,7 +62,7 @@ public class GameClient {
     }
     
     public void identify(String jwt) {
-        client.sendTCP(new IdentifyRequest(jwt));
+        client.sendTCP(new IdentifyRequest(version, jwt));
     }
 
     public void requestMove(Move move) {

@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 public class GameApplication extends SimpleApplication {
 
     private final JwtAuthentication authentication;
+    private final String version;
     private final String assetsPath;
     private final String hostUrl;
     private final boolean battleFullArt;
@@ -54,17 +55,18 @@ public class GameApplication extends SimpleApplication {
     private MatchOpponents selectedOpponents;
     private RawLibraryTemplate selectedLibrary;
 
-    public GameApplication(Properties properties, JwtAuthentication authentication) {
+    public GameApplication(Properties properties, JwtAuthentication authentication, String version) {
         this.authentication = authentication;
         this.assetsPath = properties.getProperty("assets");
         this.hostUrl = properties.getProperty("hostUrl");
         this.battleFullArt = Boolean.parseBoolean(properties.getProperty("battleFullArt"));
+        this.version = version;
     }
 
     private void requestGame() {
         Function<String, JsonElement> assetLoader = x -> load("templates/cards/" + x + ".json", JsonElement.class);
 
-        client = new GameClient(assetLoader);
+        client = new GameClient(assetLoader, version);
         try {
             client.start(hostUrl);
             client.identify(authentication.rawJwt);
@@ -98,13 +100,13 @@ public class GameApplication extends SimpleApplication {
             presetLibrary.hero = "elderwood_ahri";
             presetLibrary.cards = new HashMap<>();
         } else {
-            presetLibrary.hero = cleanAlias("elderwood_ahri");
-            presetLibrary.cards = presetLibrary.cards.entrySet().stream().collect(Collectors.toMap(x -> cleanAlias(x.getKey()), x -> x.getValue()));
+            presetLibrary.hero = migrateAlias("elderwood_ahri");
+            presetLibrary.cards = presetLibrary.cards.entrySet().stream().collect(Collectors.toMap(x -> migrateAlias(x.getKey()), x -> x.getValue()));
         }
         stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components));
     }
 
-    private static String cleanAlias(String alias) {
+    private static String migrateAlias(String alias) {
         if (alias.endsWith(".json")) {
             alias = alias.substring(0, alias.length() - ".json".length());
         }

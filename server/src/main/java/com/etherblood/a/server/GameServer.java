@@ -25,12 +25,12 @@ public class GameServer {
 
     private final Server server;
 
-    public GameServer(JwtParser jwtParser, Function<String, JsonElement> assetLoader, RawLibraryTemplate botLibrary) {
+    public GameServer(JwtParser jwtParser, Function<String, JsonElement> assetLoader, RawLibraryTemplate botLibrary, String version) {
         server = new Server(1024 * 1024, 1024 * 1024);
         NetworkUtil.init(server.getKryo());
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
         Matchmaker matchmaker = new Matchmaker(-1, BOT_NAME, botLibrary);
-        AuthenticationService authenticationService = new AuthenticationService(jwtParser);
+        AuthenticationService authenticationService = new AuthenticationService(jwtParser, version);
         GameService gameService = new GameService(server, authenticationService, assetLoader, matchmaker, scheduledThreadPoolExecutor);
         server.addListener(new Listener() {
 
