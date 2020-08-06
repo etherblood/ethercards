@@ -10,10 +10,11 @@ import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
+import com.etherblood.a.network.api.GameReplay;
 import com.etherblood.a.network.api.GameReplayService;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
-import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
+import com.etherblood.a.network.api.messages.match.MatchRequest;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameDataPrinter;
 import com.etherblood.a.rules.HistoryRandom;
@@ -21,7 +22,10 @@ import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
 import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
-import com.etherblood.a.network.api.messages.matchmaking.GameStarted;
+import com.etherblood.a.network.api.messages.IdentifyRequest;
+import com.etherblood.a.network.api.messages.match.ConnectedToMatchUpdate;
+import com.etherblood.a.network.api.messages.match.MoveRequest;
+import com.etherblood.a.network.api.messages.match.MoveUpdate;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Update;
@@ -31,6 +35,7 @@ import com.etherblood.a.server.matchmaking.MatchmakeResult;
 import com.etherblood.a.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,6 +48,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +76,19 @@ public class GameService {
         this.executor = executor;
     }
 
+    public synchronized void onIdentify(Connection connection, IdentifyRequest identifyRequest) {
+        JwtAuthenticationUser user = authenticationService.getUser();
+        for (GamePlayerMapping player : players) {
+            if (player.connectionId == null && player.user.equals(user)) {
+                player.connectionId = connection.getID();
+                GameReplayService game = games.get(player.gameId);
+                connection.sendTCP(new ConnectedToMatchUpdate(game.cloneReplay(), player.playerIndex));
+                LOG.info("Game_{} {} (id={}, playerIndex={}) reconnected.", player.gameId, player.user.login, player.user.id, player.playerIndex);
+                break;
+            }
+        }
+    }
+
     public synchronized void onDisconnect(Connection connection) {
         matchmaker.remove(connection.getID());
         for (GamePlayerMapping player : players) {
@@ -80,12 +99,13 @@ public class GameService {
         }
     }
 
-    public synchronized void onGameRequest(Connection connection, GameRequest request) {
+    public synchronized void onGameRequest(Connection connection, MatchRequest request) {
         matchmaker.enqueue(MatchmakeRequest.of(request, connection.getID(), authenticationService.getUser()));
         matchmake();
     }
 
-    public synchronized void onMoveRequest(Connection connection, Move move) {
+    public synchronized void onMoveRequest(Connection connection, MoveRequest moveRequest) {
+        Move move = moveRequest.move;
         if (move instanceof Update) {
             return;
         }
@@ -103,7 +123,7 @@ public class GameService {
         for (GamePlayerMapping player : getPlayersByGameId(gameId)) {
             Connection other = getConnection(player.connectionId);
             if (other != null) {
-                other.sendTCP(moveReplay);
+                other.sendTCP(new MoveUpdate(moveReplay));
             }
         }
         Future<Move> botMove = botMoves.remove(gameId);
@@ -177,7 +197,7 @@ public class GameService {
             applyPlayerEasterEggs(setup.players);
             UUID gameId = result.gameId;
             GameReplayService game = new GameReplayService(setup, assetLoader);
-            MoveReplay moveReplay = game.apply(new Start());
+            game.apply(new Start());
 
             LOG.info("Game_{} started.", gameId);
             players.addAll(result.playerMappings);
@@ -200,10 +220,10 @@ public class GameService {
             }
 
             games.put(gameId, game);
+            GameReplay replay = game.cloneReplay();
             for (GamePlayerMapping playerMapping : result.playerMappings) {
                 Connection connection = getConnection(playerMapping.connectionId);
-                connection.sendTCP(new GameStarted(playerMapping.playerIndex, setup));
-                connection.sendTCP(moveReplay);
+                connection.sendTCP(new ConnectedToMatchUpdate(replay, playerMapping.playerIndex));
             }
         }
     }

@@ -34,10 +34,16 @@ public class GameReplayService {
     private Game cachedGame = null;
 
     public GameReplayService(RawGameSetup setup, Function<String, JsonElement> assetLoader) {
+        this(new GameReplay(setup, new ArrayList<>()), assetLoader);
+    }
+
+    public GameReplayService(GameReplay replay, Function<String, JsonElement> assetLoader) {
+        this.replay = replay;
         this.assetLoader = assetLoader;
-        replay = new GameReplay();
-        replay.setup = setup;
-        replay.moves = new ArrayList<>();
+    }
+
+    public synchronized GameReplay cloneReplay() {
+        return new GameReplay(replay);
     }
 
     public Game createInstance() {

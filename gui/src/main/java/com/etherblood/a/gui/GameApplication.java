@@ -36,8 +36,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -49,7 +47,6 @@ public class GameApplication extends SimpleApplication {
     private final String hostUrl;
     private final boolean battleFullArt;
     private CardImages cardImages;
-    private Future<GameReplayView> futureGameReplayService;
     private GameClient client;
 
     private MatchOpponents selectedOpponents;
@@ -64,17 +61,8 @@ public class GameApplication extends SimpleApplication {
     }
 
     private void requestGame() {
-        Function<String, JsonElement> assetLoader = x -> load("templates/cards/" + x + ".json", JsonElement.class);
-
-        client = new GameClient(assetLoader, version);
-        try {
-            client.start(hostUrl);
-            client.identify(authentication.rawJwt);
-            futureGameReplayService = client.requestGame(selectedLibrary, selectedOpponents.strength, selectedOpponents.teamHumanCounts, selectedOpponents.teamSize);
-            stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        client.requestGame(selectedLibrary, selectedOpponents.strength, selectedOpponents.teamHumanCounts, selectedOpponents.teamSize);
+        stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
 
     }
 
@@ -149,6 +137,15 @@ public class GameApplication extends SimpleApplication {
         getInputManager().addMapping("right", new KeyTrigger(KeyInput.KEY_RIGHT));
         getInputManager().addMapping("left", new KeyTrigger(KeyInput.KEY_LEFT));
         startDeckbuilder();
+
+        Function<String, JsonElement> assetLoader = x -> load("templates/cards/" + x + ".json", JsonElement.class);
+        client = new GameClient(assetLoader, version);
+        try {
+            client.start(hostUrl);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        client.identify(authentication.rawJwt);
     }
 
     @Override
@@ -156,56 +153,65 @@ public class GameApplication extends SimpleApplication {
         GameAppstate gameAppstate = stateManager.getState(GameAppstate.class);
         if (gameAppstate != null) {
             if (gameAppstate.isGameCompleted()) {
-                selectedLibrary = null;
-                selectedOpponents = null;
-                futureGameReplayService = null;
-                client.stop();
-                client = null;
                 stateManager.detach(gameAppstate);
             }
             return;
         }
-        if (selectedLibrary == null) {
+        if (client.getGame() == null) {
+            if (selectedLibrary == null) {
+                MyDeckBuilderAppstate deckBuilderAppstate = stateManager.getState(MyDeckBuilderAppstate.class);
+                if (deckBuilderAppstate == null) {
+                    startDeckbuilder();
+                } else if (deckBuilderAppstate.getResult() != null) {
+                    selectedLibrary = deckBuilderAppstate.getResult();
+                    LibraryIO.store("library.json", selectedLibrary);
+                    stateManager.detach(deckBuilderAppstate);
+                }
+            }
+            if (selectedLibrary == null) {
+                return;
+            }
+
+            if (selectedOpponents == null) {
+                SelectOpponentAppstate selectOpponentAppstate = stateManager.getState(SelectOpponentAppstate.class);
+                if (selectOpponentAppstate == null) {
+                    stateManager.attach(new SelectOpponentAppstate(guiNode, assetManager));
+                } else if (selectOpponentAppstate.getMatchOpponents() != null) {
+                    selectedOpponents = selectOpponentAppstate.getMatchOpponents();
+                    stateManager.detach(selectOpponentAppstate);
+                }
+            }
+            if (selectedOpponents == null) {
+                return;
+            }
+
+            if (!client.isGameRequested()) {
+                requestGame();
+            }
+        } else {
+            stateManager.getState(HudTextAppstate.class).setText("");
+            GameReplayView gameReplayService = client.getGame();
+            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService.gameReplay, cardImages, rootNode, assetsPath, battleFullArt, gameReplayService.playerIndex));
+            selectedLibrary = null;
+            selectedOpponents = null;
+
+            SelectOpponentAppstate selectOpponentAppstate = stateManager.getState(SelectOpponentAppstate.class);
+            if (selectOpponentAppstate != null) {
+                stateManager.detach(selectOpponentAppstate);
+            }
+
             MyDeckBuilderAppstate deckBuilderAppstate = stateManager.getState(MyDeckBuilderAppstate.class);
-            if (deckBuilderAppstate == null) {
-                startDeckbuilder();
-            } else if (deckBuilderAppstate.getResult() != null) {
-                selectedLibrary = deckBuilderAppstate.getResult();
-                LibraryIO.store("library.json", selectedLibrary);
+            if (deckBuilderAppstate != null) {
+                LibraryIO.store("library.json", deckBuilderAppstate.getResult());
                 stateManager.detach(deckBuilderAppstate);
             }
         }
-        if (selectedLibrary == null) {
-            return;
-        }
+    }
 
-        if (selectedOpponents == null) {
-            SelectOpponentAppstate selectOpponentAppstate = stateManager.getState(SelectOpponentAppstate.class);
-            if (selectOpponentAppstate == null) {
-                stateManager.attach(new SelectOpponentAppstate(guiNode, assetManager));
-            } else if (selectOpponentAppstate.getMatchOpponents() != null) {
-                selectedOpponents = selectOpponentAppstate.getMatchOpponents();
-                stateManager.detach(selectOpponentAppstate);
-            }
-        }
-        if (selectedOpponents == null) {
-            return;
-        }
-        if (futureGameReplayService == null) {
-            requestGame();
-        }
-
-        if (futureGameReplayService.isDone()) {
-            stateManager.getState(HudTextAppstate.class).setText("");
-            GameReplayView gameReplayService;
-            try {
-                gameReplayService = futureGameReplayService.get();
-            } catch (InterruptedException | ExecutionException ex) {
-                throw new RuntimeException(ex);
-            }
-            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService.gameReplay, cardImages, rootNode, assetsPath, battleFullArt, gameReplayService.playerIndex));
-            futureGameReplayService = null;
-        }
+    @Override
+    public void destroy() {
+        super.destroy();
+        client.stop();
     }
 
     private <T> T load(String path, Class<T> type) {

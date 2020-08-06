@@ -6,8 +6,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.network.api.NetworkUtil;
 import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.messages.IdentifyRequest;
-import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
-import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.network.api.messages.match.MatchRequest;
+import com.etherblood.a.network.api.messages.match.MoveRequest;
 import com.etherblood.a.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
@@ -36,13 +36,16 @@ public class GameServer {
 
             @Override
             public void received(Connection connection, Object object) {
+                if (object instanceof IdentifyRequest) {
+                    authenticationService.onIdentify(connection, (IdentifyRequest) object);
+                }
                 try (AutoCloseable authentication = authenticationService.setContext(connection)) {
-                    if (object instanceof Move) {
-                        gameService.onMoveRequest(connection, (Move) object);
-                    } else if (object instanceof GameRequest) {
-                        gameService.onGameRequest(connection, (GameRequest) object);
+                    if (object instanceof MoveRequest) {
+                        gameService.onMoveRequest(connection, (MoveRequest) object);
+                    } else if (object instanceof MatchRequest) {
+                        gameService.onGameRequest(connection, (MatchRequest) object);
                     } else if (object instanceof IdentifyRequest) {
-                        authenticationService.onIdentify(connection, (IdentifyRequest) object);
+                        gameService.onIdentify(connection, (IdentifyRequest) object);
                     }
                 } catch (Throwable t) {
                     LOG.error("Error when handling message {} for connection {}.", object, connection.getID(), t);

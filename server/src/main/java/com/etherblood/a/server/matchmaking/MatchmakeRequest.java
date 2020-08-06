@@ -1,7 +1,7 @@
 package com.etherblood.a.server.matchmaking;
 
 import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
-import com.etherblood.a.network.api.messages.matchmaking.GameRequest;
+import com.etherblood.a.network.api.messages.match.MatchRequest;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import java.util.stream.IntStream;
 import org.bouncycastle.util.Arrays;
@@ -37,7 +37,7 @@ public class MatchmakeRequest {
         return teamSize == other.teamSize && strength == other.strength && Arrays.areEqual(teamHumanCounts, other.teamHumanCounts);
     }
 
-    public static MatchmakeRequest of(GameRequest request, int connectionId, JwtAuthenticationUser user) {
+    public static MatchmakeRequest of(MatchRequest request, int connectionId, JwtAuthenticationUser user) {
         return new MatchmakeRequest(user, connectionId, request.library, request.strength, Arrays.clone(request.teamHumanCounts), request.teamSize);
     }
 

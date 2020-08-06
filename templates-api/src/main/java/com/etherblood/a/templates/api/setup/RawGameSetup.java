@@ -2,6 +2,8 @@ package com.etherblood.a.templates.api.setup;
 
 import com.etherblood.a.rules.setup.GameSetup;
 import com.etherblood.a.rules.setup.PlayerSetup;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.ToIntFunction;
@@ -13,6 +15,17 @@ public class RawGameSetup {
     public String theCoinAlias;
     public int startingPlayersHandCardCount = 3;
     public int otherPlayersHandCardCount = 4;
+
+    public RawGameSetup(RawGameSetup other) {
+        this.teamCount = other.teamCount;
+        this.players = Arrays.stream(other.players).map(RawPlayerSetup::new).toArray(RawPlayerSetup[]::new);
+        this.theCoinAlias = other.theCoinAlias;
+        this.startingPlayersHandCardCount = other.startingPlayersHandCardCount;
+        this.otherPlayersHandCardCount = other.otherPlayersHandCardCount;
+    }
+
+    public RawGameSetup() {
+    }
 
     public GameSetup toGameSetup(ToIntFunction<String> cardAliasResolver) {
         GameSetup setup = new GameSetup();
