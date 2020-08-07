@@ -90,7 +90,7 @@ public class ButtonAppstate extends AbstractAppState {
     @Override
     public void stateDetached(AppStateManager stateManager) {
         inputManager.removeListener(actionListener);
-        inputManager.deleteTrigger(BUTTON_MOUSE_CLICK_MAPPING, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.deleteMapping(BUTTON_MOUSE_CLICK_MAPPING);
         inputManager = null;
         camera = null;
 

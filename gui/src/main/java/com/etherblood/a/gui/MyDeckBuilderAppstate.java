@@ -18,7 +18,6 @@ import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
-import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
-    private static final int CARD_COPIES_LIMIT = 100;
+    private static final int CARD_COPIES_LIMIT = 1000;
     private RawLibraryTemplate result = null;
     private final RawLibraryTemplate presetLibrary;
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
@@ -161,7 +160,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         saveButton = new Button("Save");
         saveButton.setFontSize(50);
         saveButton.addClickCommands(x -> completeResult());
-        saveButton.setLocalTranslation(1400, 100, 0);
+        saveButton.setLocalTranslation(100, 100, 0);
     }
 
     private int getManaCost(CardModel card) {

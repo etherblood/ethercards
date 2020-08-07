@@ -24,6 +24,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 import com.simsilica.lemur.GuiGlobals;
@@ -132,10 +133,22 @@ public class GameApplication extends SimpleApplication {
 
         cardImages = new CardImages(assetManager);
 
-        getInputManager().addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
-        getInputManager().addMapping("f1", new KeyTrigger(KeyInput.KEY_F1));
-        getInputManager().addMapping("right", new KeyTrigger(KeyInput.KEY_RIGHT));
-        getInputManager().addMapping("left", new KeyTrigger(KeyInput.KEY_LEFT));
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        inputManager.addMapping("toggleMenu", new KeyTrigger(KeyInput.KEY_ESCAPE));
+        inputManager.addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("f1", new KeyTrigger(KeyInput.KEY_F1));
+        inputManager.addMapping("right", new KeyTrigger(KeyInput.KEY_RIGHT));
+        inputManager.addMapping("left", new KeyTrigger(KeyInput.KEY_LEFT));
+
+        inputManager.addListener(new ActionListener() {
+            @Override
+            public void onAction(String name, boolean isPressed, float tpf) {
+                if (isPressed) {
+                    toggleMenu();
+                }
+            }
+
+        }, "toggleMenu");
         startDeckbuilder();
 
         Function<String, JsonElement> assetLoader = x -> load("templates/cards/" + x + ".json", JsonElement.class);
@@ -154,6 +167,7 @@ public class GameApplication extends SimpleApplication {
         if (gameAppstate != null) {
             if (gameAppstate.isGameCompleted()) {
                 stateManager.detach(gameAppstate);
+                client.resetGame();
             }
             return;
         }
@@ -216,6 +230,15 @@ public class GameApplication extends SimpleApplication {
 
     private <T> T load(String path, Class<T> type) {
         return new Gson().fromJson(assetManager.loadAsset(new AssetKey<JsonElement>(path)), type);
+    }
+
+    private void toggleMenu() {
+        MenuAppstate state = stateManager.getState(MenuAppstate.class);
+        if (state != null) {
+            stateManager.detach(state);
+        } else {
+            stateManager.attach(new MenuAppstate(guiNode));
+        }
     }
 
 }

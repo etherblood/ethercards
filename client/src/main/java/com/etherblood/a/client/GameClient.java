@@ -54,7 +54,7 @@ public class GameClient {
         return game.get();
     }
 
-    public void reset() {
+    public void resetGame() {
         game.set(null);
         gameRequested = false;
     }

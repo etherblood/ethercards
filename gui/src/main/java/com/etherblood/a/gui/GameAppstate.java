@@ -42,9 +42,7 @@ import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.soprettyboard.BoardTemplate;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
-import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.a.network.api.GameReplayService;
-import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
@@ -57,6 +55,7 @@ import com.etherblood.a.rules.moves.EndAttackPhase;
 import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
+import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -682,6 +681,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
             System.out.println(gson.toJson(EntityUtil.toMap(game.getData())));
         }
+    }
+    
+    public void surrender() {
+        requestMove(new Surrender(userControlledPlayer));
     }
 
     private void requestMove(Move move) {

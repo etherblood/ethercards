@@ -40,10 +40,14 @@ public class Main {
         JwtAuthentication authentication = jwtParser.verify(jwt);
         System.out.println("Logged in as " + authentication.user.login);
 
+        UserSettings userSettings = UserSettings.instance();
+        userSettings.load();
+
         GameApplication app = new GameApplication(properties, authentication, version);
         AppSettings settings = new AppSettings(true);
-        settings.setWidth(1600);
-        settings.setHeight(900);
+        settings.setFullscreen(userSettings.isFullscreen());
+        settings.setWidth(userSettings.getScreenWidth());
+        settings.setHeight(userSettings.getScreenHeight());
         settings.setTitle("a");
         settings.setFrameRate(60);
         settings.setAudioRenderer(null);
