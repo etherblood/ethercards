@@ -56,6 +56,8 @@ import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Surrender;
+import com.etherblood.a.rules.moves.UseAbility;
+import com.etherblood.a.rules.templates.ActivatedAbility;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -184,6 +186,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                     shootColorSphere(particle.source, particle.target, ColorRGBA.Red);
                     break;
                 }
+                case "cannon_soldier":
                 case "boombot":
                 case "stingerfling_spider":
                 case "flesh_to_dust": {
@@ -569,6 +572,46 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         };
     }
 
+    private Interactivity activatedAbilityInteractivity(int player, int entity) {
+        EntityData data = game.getData();
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        int cardTemplate = data.get(entity, core.CARD_TEMPLATE);
+        CardTemplate template = game.getTemplates().getCard(cardTemplate);
+        ActivatedAbility ability;
+        if (data.has(entity, core.IN_BATTLE_ZONE)) {
+            ability = template.getBattleAbility();
+        } else {
+            throw new AssertionError();
+        }
+        IntList validTargets = ability.getTarget().getValidTargets(data, game.getTemplates(), entity);
+        if (validTargets.nonEmpty()) {
+            return new AimToTargetInteractivity(TargetSnapMode.VALID) {
+                @Override
+                public boolean isValid(BoardObject target) {
+                    if (target instanceof Card) {
+                        int targetId = objectEntities.get(target);
+                        List<Move> moves = game.getMoves().generate(false);
+                        return moves.stream().anyMatch(new UseAbility(player, entity, targetId)::equals);
+                    }
+                    return false;
+                }
+
+                @Override
+                public void trigger(BoardObject source, BoardObject target) {
+                    int targetId = objectEntities.get(target);
+                    requestMove(new UseAbility(player, entity, targetId));
+                }
+            };
+        }
+        return new DragToPlayInteractivity() {
+
+            @Override
+            public void trigger(BoardObject boardObject, BoardObject target) {
+                requestMove(new UseAbility(player, entity, null));
+            }
+        };
+    }
+
     private Interactivity mulliganInteractivity(int player, int card) {
         return new DragToPlayInteractivity() {
 
@@ -682,7 +725,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             System.out.println(gson.toJson(EntityUtil.toMap(game.getData())));
         }
     }
-    
+
     public void surrender() {
         requestMove(new Surrender(userControlledPlayer));
     }

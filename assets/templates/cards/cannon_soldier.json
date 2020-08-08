@@ -1,0 +1,61 @@
+{
+  "alias": "cannon_soldier",
+  "display": {
+    "name": "Cannon Soldier",
+    "imagePath": "cannon_soldier.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Tap, sacrifice 1 minion, deal 3 damage to a random opponent."
+  },
+  "manaCost": 4,
+  "components": {
+    "ATTACK": 3,
+    "HEALTH": 3
+  },
+  "cast": [
+    {
+      "type": "selfSummon"
+    }
+  ],
+  "battleAbility": {
+    "selfTap": true,
+    "target": {
+      "type": "simple",
+      "requiresTarget": true,
+      "filters": [
+        "OWN_MINION"
+      ]
+    },
+    "effects": [
+      {
+        "type": "buff",
+        "components": {
+          "DEATH_REQUEST": 2
+        }
+      },
+      {
+        "type": "targeted",
+        "effects": [
+          {
+            "type": "buff",
+            "components": {
+              "DAMAGE_REQUEST": 3
+            }
+          },
+          {
+            "type": "particle",
+            "alias": "cannon_soldier"
+          }
+        ],
+        "targets": {
+          "type": "simple",
+          "select": "ANY",
+          "filters": [
+            "OPPONENT_HERO"
+          ]
+        }
+      }
+    ]
+  }
+}

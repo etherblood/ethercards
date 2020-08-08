@@ -1,6 +1,7 @@
 package com.etherblood.a.rules;
 
 import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.rules.templates.ActivatedAbility;
 import com.etherblood.a.rules.templates.CardTemplate;
 
 public class MoveAvailabilityService {
@@ -275,13 +276,13 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
         if (!data.has(player, core.ACTIVE_PLAYER_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, player #" + player + " is not the active player.");
             }
             return false;
         }
+        CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
         if (template.getManaCost() != null && template.getManaCost() > data.getOptional(player, core.MANA).orElse(0)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, castable #" + castable + ", player #" + player + " does not have enough mana.");
@@ -306,6 +307,76 @@ public class MoveAvailabilityService {
             return false;
         }
         return canCast(player, castable, throwOnFail);
+    }
+
+    public boolean canUseAbility(int player, int source, boolean throwOnFail) {
+        if (!data.hasValue(source, core.OWNER, player)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, player #" + player + " does not own source #" + source + ".");
+            }
+            return false;
+        }
+        if (!data.has(player, core.ACTIVE_PLAYER_PHASE)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, player #" + player + " is not the active player.");
+            }
+            return false;
+        }
+        if (data.has(player, core.SUMMONING_SICKNESS)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, source #" + source + " has summoning sickness.");
+            }
+            return false;
+        }
+        CardTemplate template = templates.getCard(data.get(source, core.CARD_TEMPLATE));
+        ActivatedAbility ability = null;
+        if (data.has(source, core.IN_BATTLE_ZONE)) {
+            ability = template.getBattleAbility();
+        }
+        if (ability == null) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, source #" + source + " has no activated ability in current zone.");
+            }
+            return false;
+        }
+        if (ability.isSelfTap() && data.has(source, core.TIRED)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, source #" + source + " is tired.");
+            }
+            return false;
+        }
+        if (ability.getManaCost() != null && ability.getManaCost() > data.getOptional(player, core.MANA).orElse(0)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, source #" + source + ", player #" + player + " does not have enough mana.");
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public boolean canUseAbility(int player, int source, Integer target, boolean throwOnFail) {
+        if (target != null && data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, target #" + target + " cannot be targeted.");
+            }
+            return false;
+        }
+        CardTemplate template = templates.getCard(data.get(source, core.CARD_TEMPLATE));
+
+        ActivatedAbility ability = null;
+        if (data.has(source, core.IN_BATTLE_ZONE)) {
+            ability = template.getBattleAbility();
+        }
+
+        if (ability != null) {
+            if (!ability.getTarget().isValidTarget(data, templates, source, target)) {
+                if (throwOnFail) {
+                    throw new IllegalArgumentException("Failed to use ability, target #" + target + " is not valid.");
+                }
+                return false;
+            }
+        }
+        return canUseAbility(player, source, throwOnFail);
     }
 
     public boolean canDeclareMulligan(int player, int card, boolean throwOnFail) {

@@ -38,6 +38,6 @@ public class DisplayCardTemplateBuilder extends CardTemplateBuilder {
 
     @Override
     public DisplayCardTemplate build(int id) {
-        return new DisplayCardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, alias, name, flavourText, description, imagePath, colors, components, tribes, inBattle, inHand, inLibrary, inGraveyard, componentModifiers);
+        return new DisplayCardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, alias, name, flavourText, description, imagePath, colors, components, tribes, inBattle, inHand, inLibrary, inGraveyard, componentModifiers, battleAbility);
     }
 }

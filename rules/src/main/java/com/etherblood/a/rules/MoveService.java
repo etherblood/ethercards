@@ -16,6 +16,8 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
+import com.etherblood.a.rules.moves.UseAbility;
+import com.etherblood.a.rules.templates.ActivatedAbility;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.TargetSelection;
@@ -92,6 +94,16 @@ public class MoveService {
                             }
                         }
                     }
+                    for (int minion : minions) {
+                        if (!moveAvailability.canUseAbility(player, minion, false)) {
+                            continue;
+                        }
+                        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
+                        ActivatedAbility ability = template.getBattleAbility();
+                        if (ability != null) {
+                            addUseAbilityMoves(player, minion, ability.getTarget(), result);
+                        }
+                    }
                     for (int handCard : data.list(core.IN_HAND_ZONE)) {
                         if (!moveAvailability.canCast(player, handCard, false)) {
                             continue;
@@ -163,6 +175,23 @@ public class MoveService {
         }
     }
 
+    private void addUseAbilityMoves(int player, int entity, TargetSelection targeting, List<Move> result) {
+        IntList targets = targeting.getValidTargets(data, templates, entity);
+        if (targets.isEmpty()) {
+            if (!targeting.requiresTarget()) {
+                if (moveAvailability.canUseAbility(player, entity, null, false)) {
+                    result.add(new UseAbility(player, entity, null));
+                }
+            }
+        } else {
+            for (int target : targets) {
+                if (moveAvailability.canUseAbility(player, entity, target, false)) {
+                    result.add(new UseAbility(player, entity, target));
+                }
+            }
+        }
+    }
+
     public void apply(Move move) {
         Runnable runnable;
         if (move instanceof DeclareBlock) {
@@ -174,6 +203,9 @@ public class MoveService {
         } else if (move instanceof DeclareAttack) {
             DeclareAttack declareAttack = (DeclareAttack) move;
             runnable = () -> declareAttack(declareAttack.player, declareAttack.source, declareAttack.target);
+        } else if (move instanceof UseAbility) {
+            UseAbility useAbility = (UseAbility) move;
+            runnable = () -> useAbility(useAbility.player, useAbility.source, useAbility.target);
         } else if (move instanceof DeclareMulligan) {
             DeclareMulligan declareMulligan = (DeclareMulligan) move;
             runnable = () -> declareMulligan(declareMulligan.player, declareMulligan.card);
@@ -255,6 +287,14 @@ public class MoveService {
             moveAvailability.canDeclareAttack(player, attacker, target, true);
         }
         data.set(attacker, core.ATTACK_TARGET, target);
+        update();
+    }
+
+    private void useAbility(int player, int source, int target) {
+        if (validateMoves) {
+            moveAvailability.canUseAbility(player, source, target, true);
+        }
+        data.set(source, core.USE_ABILITY_TARGET, target);
         update();
     }
 

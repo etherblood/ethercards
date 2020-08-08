@@ -72,13 +72,11 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             }
         }
     };
-    private final Node rootNode;
     private final Node guiNode;
-    private final Button saveButton;
+    private final Button selectButton;
 
     public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, Node guiNode, RawLibraryTemplate presetLibrary, Components components) {
         this.presetLibrary = presetLibrary;
-        this.rootNode = rootNode;
         this.guiNode = guiNode;
 
         Comparator<CardModel> cardOrder = Comparator.comparingInt(this::getManaCost);
@@ -157,10 +155,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
         deckBuilderAppState.setDeck(deck);
 
-        saveButton = new Button("Save");
-        saveButton.setFontSize(50);
-        saveButton.addClickCommands(x -> completeResult());
-        saveButton.setLocalTranslation(100, 100, 0);
+        selectButton = new Button("Select");
+        selectButton.setFontSize(50);
+        selectButton.addClickCommands(x -> completeResult());
+        selectButton.setLocalTranslation(100, 100, 0);
     }
 
     private int getManaCost(CardModel card) {
@@ -173,7 +171,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
     @Override
     public void stateAttached(AppStateManager stateManager) {
-        guiNode.attachChild(saveButton);
+        guiNode.attachChild(selectButton);
         stateManager.attach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
         inputManager.addListener(saveLibraryListener, "space");
@@ -190,7 +188,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.removeListener(nextPage);
         inputManager.removeListener(previousPage);
 
-        guiNode.detachChild(saveButton);
+        guiNode.detachChild(selectButton);
     }
 
     private void completeResult() {

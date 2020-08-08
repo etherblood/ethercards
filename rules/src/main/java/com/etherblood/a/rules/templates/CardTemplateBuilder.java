@@ -20,6 +20,7 @@ public class CardTemplateBuilder {
     protected final Map<Integer, List<Effect>> inLibrary = new HashMap<>();
     protected final Map<Integer, List<Effect>> inGraveyard = new HashMap<>();
     protected final Map<Integer, List<StatModifier>> componentModifiers = new HashMap<>();
+    protected ActivatedAbility battleAbility;
 
     public void setCastTarget(TargetSelection castTarget) {
         this.castTarget = castTarget;
@@ -65,8 +66,12 @@ public class CardTemplateBuilder {
         componentModifiers.computeIfAbsent(component, x -> new ArrayList<>()).add(modifier);
     }
 
+    public void setBattleAbility(ActivatedAbility battleAbility) {
+        this.battleAbility = battleAbility;
+    }
+
     public CardTemplate build(int id) {
-        return new CardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, components, tribes, inBattle, inHand, inLibrary, inGraveyard, componentModifiers);
+        return new CardTemplate(id, !components.isEmpty(), manaCost, castTarget, castEffects, components, tribes, inBattle, inHand, inLibrary, inGraveyard, componentModifiers, battleAbility);
     }
 
 }

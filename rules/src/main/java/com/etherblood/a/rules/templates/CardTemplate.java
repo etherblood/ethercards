@@ -25,8 +25,9 @@ public class CardTemplate {
     protected final Map<Integer, List<Effect>> inLibrary;
     protected final Map<Integer, List<Effect>> inGraveyard;
     protected final Map<Integer, List<StatModifier>> componentModifiers;
+    protected final ActivatedAbility battleAbility;
 
-    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, Map<Integer, List<Effect>> inBattle, Map<Integer, List<Effect>> inHand, Map<Integer, List<Effect>> inLibrary, Map<Integer, List<Effect>> inGraveyard, Map<Integer, List<StatModifier>> componentModifiers) {
+    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, Map<Integer, List<Effect>> inBattle, Map<Integer, List<Effect>> inHand, Map<Integer, List<Effect>> inLibrary, Map<Integer, List<Effect>> inGraveyard, Map<Integer, List<StatModifier>> componentModifiers, ActivatedAbility battleAbility) {
         this.id = id;
         this.isMinion = isMinion;
         this.manaCost = manaCost;
@@ -43,8 +44,9 @@ public class CardTemplate {
         }
         this.componentModifiers = Collections.unmodifiableMap(componentModifiers.entrySet().stream()
                 .collect(Collectors.toMap(x -> x.getKey(), x -> Collections.unmodifiableList(new ArrayList<>(x.getValue())))));
+        this.battleAbility = battleAbility;
     }
-    
+
     private <K, V> Map<K, List<V>> deepCopy(Map<K, List<V>> map) {
         Map<K, List<V>> result = new HashMap<>();
         for (Map.Entry<K, List<V>> entry : map.entrySet()) {
@@ -88,21 +90,25 @@ public class CardTemplate {
     public boolean has(int component, int value) {
         return components.getOrElse(component, ~value) == value;
     }
-    
+
     public Map<Integer, List<Effect>> getBattleTriggers() {
         return inBattle;
     }
-    
+
     public Map<Integer, List<Effect>> getHandTriggers() {
         return inHand;
     }
-    
+
     public Map<Integer, List<Effect>> getLibraryTriggers() {
         return inLibrary;
     }
-    
+
     public Map<Integer, List<Effect>> getGraveyardTriggers() {
         return inGraveyard;
+    }
+
+    public ActivatedAbility getBattleAbility() {
+        return battleAbility;
     }
 
     public List<StatModifier> getComponentModifiers(int component) {

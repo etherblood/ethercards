@@ -12,6 +12,7 @@ import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
+import com.etherblood.a.rules.moves.UseAbility;
 import com.etherblood.a.rules.templates.CardTemplate;
 
 public class GameDataPrinter {
@@ -53,6 +54,10 @@ public class GameDataPrinter {
         if (move instanceof DeclareAttack) {
             DeclareAttack attack = (DeclareAttack) move;
             return "DeclareAttack " + toMinionString(attack.source) + " -> " + toMinionString(attack.target);
+        }
+        if (move instanceof UseAbility) {
+            UseAbility useAbility = (UseAbility) move;
+            return "UseAbility " + toMinionString(useAbility.source) + " -> " + toMinionString(useAbility.target);
         }
         if (move instanceof Start) {
             return "Start";

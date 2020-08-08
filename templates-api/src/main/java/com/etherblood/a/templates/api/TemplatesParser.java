@@ -7,6 +7,7 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.templates.ActivatedAbility;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.Effect;
@@ -131,9 +132,9 @@ public class TemplatesParser {
                     builder.addTribe(aliasGson.fromJson(tribe, Tribe.class));
                 }
             }
-            
+
             JsonObject inBattle = cardJson.getAsJsonObject("battle");
-            if(inBattle != null) {
+            if (inBattle != null) {
                 for (Map.Entry<String, JsonElement> entry : inBattle.entrySet()) {
                     JsonArray effects = entry.getValue().getAsJsonArray();
                     for (JsonElement effectJson : effects) {
@@ -142,7 +143,7 @@ public class TemplatesParser {
                 }
             }
             JsonObject inHand = cardJson.getAsJsonObject("hand");
-            if(inHand != null) {
+            if (inHand != null) {
                 for (Map.Entry<String, JsonElement> entry : inHand.entrySet()) {
                     JsonArray effects = entry.getValue().getAsJsonArray();
                     for (JsonElement effectJson : effects) {
@@ -151,7 +152,7 @@ public class TemplatesParser {
                 }
             }
             JsonObject inLibrary = cardJson.getAsJsonObject("library");
-            if(inLibrary != null) {
+            if (inLibrary != null) {
                 for (Map.Entry<String, JsonElement> entry : inLibrary.entrySet()) {
                     JsonArray effects = entry.getValue().getAsJsonArray();
                     for (JsonElement effectJson : effects) {
@@ -160,7 +161,7 @@ public class TemplatesParser {
                 }
             }
             JsonObject inGraveyard = cardJson.getAsJsonObject("graveyard");
-            if(inGraveyard != null) {
+            if (inGraveyard != null) {
                 for (Map.Entry<String, JsonElement> entry : inGraveyard.entrySet()) {
                     JsonArray effects = entry.getValue().getAsJsonArray();
                     for (JsonElement effectJson : effects) {
@@ -168,7 +169,7 @@ public class TemplatesParser {
                     }
                 }
             }
-            
+
             JsonObject componentModifiers = cardJson.getAsJsonObject("componentModifiers");
             if (componentModifiers != null) {
                 for (Map.Entry<String, JsonElement> entry : componentModifiers.entrySet()) {
@@ -177,6 +178,19 @@ public class TemplatesParser {
                         builder.modifyComponent(component, modifier);
                     }
                 }
+            }
+
+            JsonObject battleAbilityJson = cardJson.getAsJsonObject("battleAbility");
+            if (battleAbilityJson != null) {
+                TargetSelection target = aliasGson.fromJson(battleAbilityJson.get("target"), TargetSelection.class);
+                Effect[] effects = aliasGson.fromJson(battleAbilityJson.get("effects"), Effect[].class);
+                JsonElement selfTapJson = battleAbilityJson.get("selfTap");
+                JsonElement manaCostJson = battleAbilityJson.get("manaCost");
+                builder.setBattleAbility(new ActivatedAbility(
+                        target,
+                        Arrays.asList(effects),
+                        manaCostJson == null ? null : manaCostJson.getAsInt(),
+                        selfTapJson != null && selfTapJson.getAsBoolean()));
             }
 
             JsonObject cardComponents = cardJson.getAsJsonObject("components");

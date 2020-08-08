@@ -26,8 +26,10 @@ public class GameLoopService {
         ResolveSystem resolveSystem = new ResolveSystem(data, templates, random, events);
         PhaseSystem phaseSystem = new PhaseSystem(data, templates, random, events, resolveSystem);
         CastSystem castSystem = new CastSystem(data, templates, random, events);
+        UseAbilitySystem abilitySystem = new UseAbilitySystem(data, templates, random, events);
         
         castSystem.run();
+        abilitySystem.run();
         resolveSystem.run();
         phaseSystem.run();
     }
