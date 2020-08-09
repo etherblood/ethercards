@@ -8,20 +8,28 @@
     ],
     "description": "Summon three 1/1 dogs."
   },
-  "manaCost": 3,
-  "cast": [
-    {
-      "type": "multiTrigger",
-      "amount": 3,
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
       "effects": [
         {
-          "type": "summon",
-          "minionId": "dog"
+          "type": "multiTrigger",
+          "amount": 3,
+          "effects": [
+            {
+              "type": "summon",
+              "minionId": "dog"
+            }
+          ]
+        },
+        {
+          "type": "selfDiscard"
         }
       ]
-    },
-    {
-      "type": "selfDiscard"
     }
-  ]
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

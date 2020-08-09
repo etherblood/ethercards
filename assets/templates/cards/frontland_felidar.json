@@ -8,15 +8,24 @@
       "WHITE"
     ]
   },
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 5,
-    "VIGILANCE": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 4
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 5,
+      "VIGILANCE": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

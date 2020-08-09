@@ -6,12 +6,10 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
-import com.etherblood.a.templates.api.deserializers.filedtypes.ComponentsMap;
 import java.util.function.IntUnaryOperator;
 
 public class BuffEffect implements Effect {
 
-    @ComponentsMap
     public final IntMap components;
 
     public BuffEffect(IntMap components) {

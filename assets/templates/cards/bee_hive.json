@@ -8,24 +8,33 @@
     ],
     "description": "Summons one 0/0 Bee Worker each turn, which dies after battle and gives 1 Delayed Mana on death."
   },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 5,
-    "CANNOT_ATTACK": true,
-    "CANNOT_BLOCK": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 3,
+  },
   "battle": {
-    "TRIGGER_OWNER_UPKEEP": [
-      {
-        "type": "summon",
-        "minionId": "bee_worker"
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 5,
+      "CANNOT_ATTACK": true,
+      "CANNOT_BLOCK": true
+    },
+    "passive": {
+      "TRIGGER_OWNER_UPKEEP": [
+        {
+          "type": "summon",
+          "minionId": "bee_worker"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

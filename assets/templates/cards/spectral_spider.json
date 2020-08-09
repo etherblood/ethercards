@@ -7,18 +7,27 @@
       "BLACK"
     ]
   },
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 1,
-    "REACH": true
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 1
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1,
+      "REACH": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

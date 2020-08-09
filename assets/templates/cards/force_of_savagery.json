@@ -7,15 +7,24 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 8,
-    "HEALTH": 0,
-    "TRAMPLE": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 2
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 8,
+      "HEALTH": 0,
+      "TRAMPLE": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

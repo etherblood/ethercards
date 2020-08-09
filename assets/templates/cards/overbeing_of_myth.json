@@ -10,30 +10,39 @@
     "description": "Overbeing of Myth's power and toughness are each equal to the number of cards in your hand.",
     "flavourText": "\"She walks among us unseen, learning from our imperfections.\"\n—The Seer's Parables"
   },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 0,
-    "DRAWS_PER_TURN": 1
-  },
-  "componentModifiers": {
-    "HEALTH": [
-      {
-        "type": "addOwnHandCardCount"
-      }
-    ],
-    "ATTACK": [
-      {
-        "type": "addOwnHandCardCount"
-      }
-    ]
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 7
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 0,
+      "DRAWS_PER_TURN": 1
+    },
+    "componentModifiers": {
+      "HEALTH": [
+        {
+          "type": "addOwnHandCardCount"
+        }
+      ],
+      "ATTACK": [
+        {
+          "type": "addOwnHandCardCount"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

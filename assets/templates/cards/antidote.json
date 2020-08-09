@@ -8,48 +8,56 @@
     ],
     "description": "Cure up to 5 Poisoned, draw a card."
   },
-  "cast": [
-    {
-      "type": "debuff",
-      "components": {
-        "POISONED": 5
-      }
-    },
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "target": {
+        "type": "simple",
+        "requiresTarget": false,
+        "filters": [
+          "OWN_MINION",
+          "OPPONENT_MINION",
+          "OWN_HERO",
+          "OPPONENT_HERO"
+        ]
+      },
       "effects": [
         {
-          "type": "buff",
+          "type": "debuff",
           "components": {
-            "DRAW_CARDS_REQUEST": 1
+            "POISONED": 5
           }
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "antidote"
+        },
+        {
+          "type": "selfDiscard"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWNER"
-        ]
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "antidote"
-    },
-    {
-      "type": "selfDiscard"
+      ]
     }
-  ],
-  "manaCost": 2,
-  "target": {
-    "type": "simple",
-    "requiresTarget": false,
-    "filters": [
-      "OWN_MINION",
-      "OPPONENT_MINION",
-      "OWN_HERO",
-      "OPPONENT_HERO"
-    ]
-  }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

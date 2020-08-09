@@ -9,29 +9,38 @@
     ],
     "description": "Whenever an opponent summons a creature with the same name as a card in their graveyard, that player loses 10 life."
   },
-  "components": {
-    "ATTACK": 6,
-    "HEALTH": 5,
-    "OWN_MINIONS_HASTE_AURA": true,
-    "FAST_TO_ATTACK": true,
-    "FAST_TO_DEFEND": true,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 7,
+  },
   "battle": {
-    "TRIGGER_OTHER_SUMMON": [
-      {
-        "type": "kolaghanDamage",
-        "damage": "10"
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 6,
+      "HEALTH": 5,
+      "OWN_MINIONS_HASTE_AURA": true,
+      "FAST_TO_ATTACK": true,
+      "FAST_TO_DEFEND": true,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_OTHER_SUMMON": [
+        {
+          "type": "kolaghanDamage",
+          "damage": "10"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

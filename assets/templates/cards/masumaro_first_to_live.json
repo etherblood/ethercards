@@ -9,39 +9,48 @@
     "description": "Masumaro, First to Live's power and toughness are each equal to twice the number of cards in your hand.",
     "flavourText": "\"In the waning moments of war, humanity's most ancient ancestors return. But whose side shall they make their own?\"\n—Isao, Enlightened Bushi"
   },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 0
-  },
-  "componentModifiers": {
-    "HEALTH": [
-      {
-        "type": "addFractional",
-        "modifier": {
-          "type": "addOwnHandCardCount"
-        },
-        "quotient": 2,
-        "divident": 1
-      }
-    ],
-    "ATTACK": [
-      {
-        "type": "addFractional",
-        "modifier": {
-          "type": "addOwnHandCardCount"
-        },
-        "quotient": 2,
-        "divident": 1
-      }
-    ]
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 8,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 8
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 0
+    },
+    "componentModifiers": {
+      "HEALTH": [
+        {
+          "type": "addFractional",
+          "modifier": {
+            "type": "addOwnHandCardCount"
+          },
+          "quotient": 2,
+          "divident": 1
+        }
+      ],
+      "ATTACK": [
+        {
+          "type": "addFractional",
+          "modifier": {
+            "type": "addOwnHandCardCount"
+          },
+          "quotient": 2,
+          "divident": 1
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

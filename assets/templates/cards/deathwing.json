@@ -9,59 +9,68 @@
     ],
     "description": "Destroy all other minions and discard your hand."
   },
-  "components": {
-    "ATTACK": 12,
-    "HEALTH": 12,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 10,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "DEATH_REQUEST": true
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": true
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OPPONENT_MINION",
+              "OWN_MINION"
+            ]
           }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OPPONENT_MINION",
-          "OWN_MINION"
-        ]
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "deathwing"
-    },
-    {
-      "type": "selfSummon"
-    },
-    {
-      "type": "targeted",
-      "effects": [
+        },
         {
-          "type": "buff",
-          "components": {
-            "DISCARD": true
+          "type": "particle",
+          "alias": "deathwing"
+        },
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DISCARD": true
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWN_HAND"
+            ]
           }
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWN_HAND"
-        ]
-      }
+      ]
     }
-  ],
-  "manaCost": 10
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 12,
+      "HEALTH": 12,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

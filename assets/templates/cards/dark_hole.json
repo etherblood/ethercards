@@ -8,33 +8,41 @@
     ],
     "description": "Kill all minions."
   },
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 8,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "DEATH_REQUEST": true
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": true
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWN_MINION",
+              "OPPONENT_MINION"
+            ]
           }
+        },
+        {
+          "type": "particle",
+          "alias": "dark_hole"
+        },
+        {
+          "type": "selfDiscard"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWN_MINION",
-          "OPPONENT_MINION"
-        ]
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "dark_hole"
-    },
-    {
-      "type": "selfDiscard"
+      ]
     }
-  ],
-  "manaCost": 8
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

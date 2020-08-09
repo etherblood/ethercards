@@ -8,14 +8,12 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.api.deserializers.filedtypes.CardId;
-import com.etherblood.a.templates.api.deserializers.filedtypes.ComponentsMap;
 import java.util.function.IntUnaryOperator;
 
 public class CreateCardEffect implements Effect {
 
     @CardId
     public final int cardId;
-    @ComponentsMap
     public final IntMap components;
 
     public CreateCardEffect(int cardId, IntMap components) {

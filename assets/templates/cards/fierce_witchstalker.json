@@ -8,15 +8,24 @@
     ],
     "flavourText": "While the realm has laws, in the wilds there are other ways of balancing power."
   },
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 4,
-    "TRAMPLE": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 4
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 4,
+      "TRAMPLE": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

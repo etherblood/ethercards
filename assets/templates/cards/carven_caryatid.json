@@ -8,26 +8,35 @@
     ],
     "flavourText": "So-called \"old wood\" is rare in deforested Ravnica. Statues carved from it are said to house the last of the ancient nature spirits."
   },
-  "manaCost": 3,
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 5,
-    "CANNOT_ATTACK": true
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 2
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 5,
+      "CANNOT_ATTACK": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 2
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

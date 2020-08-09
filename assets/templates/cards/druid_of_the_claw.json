@@ -8,37 +8,45 @@
     ],
     "description": "Attack phase: Summon a 4/4 Cat with Haste.\nBlock phase: Summon a 4/6 Bear with Vigilance."
   },
-  "manaCost": 5,
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
       "effects": [
         {
-          "type": "sourceOwnerPhase",
-          "block": [
+          "type": "targeted",
+          "effects": [
             {
-              "type": "transformTemplate",
-              "template": "druid_of_the_claw_bear"
+              "type": "sourceOwnerPhase",
+              "block": [
+                {
+                  "type": "transformTemplate",
+                  "template": "druid_of_the_claw_bear"
+                }
+              ],
+              "attack": [
+                {
+                  "type": "transformTemplate",
+                  "template": "druid_of_the_claw_cat"
+                }
+              ]
             }
           ],
-          "attack": [
-            {
-              "type": "transformTemplate",
-              "template": "druid_of_the_claw_cat"
-            }
-          ]
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "SOURCE"
+            ]
+          }
+        },
+        {
+          "type": "selfSummon"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "SOURCE"
-        ]
-      }
-    },
-    {
-      "type": "selfSummon"
+      ]
     }
-  ]
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

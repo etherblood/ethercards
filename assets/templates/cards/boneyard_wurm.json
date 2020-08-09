@@ -9,54 +9,63 @@
     "description": "Boneyard Wurm's power and toughness are each equal to the number of creature cards in your graveyard.",
     "flavourText": "The only thing it likes more than discovering a pit of bones is adding to it."
   },
-  "manaCost": 2,
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 0
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "componentModifiers": {
-    "HEALTH": [
-      {
-        "type": "addComponentPredicateCount",
-        "component": "IN_GRAVEYARD_ZONE",
-        "predicate": {
-          "type": "allOf",
-          "predicates": [
-            {
-              "type": "hasSourceOwner",
-              "hasSourceOwner": true
-            },
-            {
-              "type": "minion",
-              "isMinion": true
-            }
-          ]
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 0
+    },
+    "componentModifiers": {
+      "HEALTH": [
+        {
+          "type": "addComponentPredicateCount",
+          "component": "IN_GRAVEYARD_ZONE",
+          "predicate": {
+            "type": "allOf",
+            "predicates": [
+              {
+                "type": "hasSourceOwner",
+                "hasSourceOwner": true
+              },
+              {
+                "type": "minion",
+                "isMinion": true
+              }
+            ]
+          }
         }
-      }
-    ],
-    "ATTACK": [
-      {
-        "type": "addComponentPredicateCount",
-        "component": "IN_GRAVEYARD_ZONE",
-        "predicate": {
-          "type": "allOf",
-          "predicates": [
-            {
-              "type": "hasSourceOwner",
-              "hasSourceOwner": true
-            },
-            {
-              "type": "minion",
-              "isMinion": true
-            }
-          ]
+      ],
+      "ATTACK": [
+        {
+          "type": "addComponentPredicateCount",
+          "component": "IN_GRAVEYARD_ZONE",
+          "predicate": {
+            "type": "allOf",
+            "predicates": [
+              {
+                "type": "hasSourceOwner",
+                "hasSourceOwner": true
+              },
+              {
+                "type": "minion",
+                "isMinion": true
+              }
+            ]
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

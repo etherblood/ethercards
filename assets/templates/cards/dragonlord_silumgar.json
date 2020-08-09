@@ -9,29 +9,38 @@
     ],
     "description": "When Dragonlord Silumgar enters the battlefield, gain control of target minion for as long as you control Dragonlord Silumgar."
   },
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 5,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "bindControl"
-    },
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 7,
+      "target": {
+        "type": "simple",
+        "requiresTarget": false,
+        "filters": [
+          "OWN_HERO",
+          "OPPONENT_MINION"
+        ]
+      },
+      "effects": [
+        {
+          "type": "bindControl"
+        },
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 7,
-  "target": {
-    "type": "simple",
-    "requiresTarget": false,
-    "filters": [
-      "OWN_HERO",
-      "OPPONENT_MINION"
-    ]
-  }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 5,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -7,14 +7,23 @@
       "GREEN"
     ]
   },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 30,
-    "CANNOT_ATTACK": true
-  }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 30,
+      "CANNOT_ATTACK": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

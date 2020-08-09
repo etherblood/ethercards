@@ -8,27 +8,36 @@
     ],
     "flavourText": "The kor's most righteous dead are given the greatest reward: an eternity tied to the land they so cherish."
   },
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 5,
-    "CANNOT_ATTACK": true,
-    "FLYING": true
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 5,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 4
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 5,
+      "CANNOT_ATTACK": true,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 4
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

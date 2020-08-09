@@ -7,16 +7,25 @@
       "GREEN"
     ]
   },
-  "manaCost": 5,
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 4,
-    "FAST_TO_ATTACK": true,
-    "FAST_TO_DEFEND": true
-  }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 4,
+      "FAST_TO_ATTACK": true,
+      "FAST_TO_DEFEND": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -7,17 +7,26 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 3,
-    "VENOM": 1,
-    "FAST_TO_DEFEND": true,
-    "FLYING": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 2
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 3,
+      "VENOM": 1,
+      "FAST_TO_DEFEND": true,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

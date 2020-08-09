@@ -8,20 +8,28 @@
     ],
     "description": "Summon four 1/1 dogs."
   },
-  "cast": [
-    {
-      "type": "multiTrigger",
-      "amount": 4,
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
       "effects": [
         {
-          "type": "summon",
-          "minionId": "dog_token"
+          "type": "multiTrigger",
+          "amount": 4,
+          "effects": [
+            {
+              "type": "summon",
+              "minionId": "dog_token"
+            }
+          ]
+        },
+        {
+          "type": "selfDiscard"
         }
       ]
-    },
-    {
-      "type": "selfDiscard"
     }
-  ],
-  "manaCost": 4
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

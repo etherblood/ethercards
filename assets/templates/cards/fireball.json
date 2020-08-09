@@ -8,30 +8,38 @@
     ],
     "description": "Deal 6 damage to the selected minion or hero."
   },
-  "manaCost": 4,
-  "cast": [
-    {
-      "type": "buff",
-      "components": {
-        "DAMAGE_REQUEST": 6
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "fireball"
-    },
-    {
-      "type": "selfDiscard"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION",
+          "OWN_HERO",
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 6
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "fireball"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
     }
-  ],
-  "target": {
-    "type": "simple",
-    "requiresTarget": true,
-    "filters": [
-      "OWN_MINION",
-      "OWN_HERO",
-      "OPPONENT_MINION",
-      "OPPONENT_HERO"
-    ]
-  }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

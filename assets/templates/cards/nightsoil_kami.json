@@ -1,6 +1,5 @@
 {
   "alias": "nightsoil_kami",
-  "manaCost": 5,
   "display": {
     "name": "Nightsoil Kami",
     "imagePath": "nightsoil_kami.jpg",
@@ -8,24 +7,34 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 6,
-    "HEALTH": 4
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 4
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 6,
+      "HEALTH": 4
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 4
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -1,6 +1,5 @@
 package com.etherblood.a.templates.api.deserializers;
 
-import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.templates.api.deserializers.filedtypes.CardId;
 import com.etherblood.a.templates.api.deserializers.filedtypes.ComponentId;
 import com.google.gson.JsonArray;
@@ -13,7 +12,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.ToIntFunction;
-import com.etherblood.a.templates.api.TargetPredicate;
 
 public class TemplateObjectDeserializer<T> implements JsonDeserializer<T> {
 

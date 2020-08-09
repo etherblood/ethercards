@@ -7,15 +7,24 @@
       "RED"
     ]
   },
-  "manaCost": 2,
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 1,
-    "FAST_TO_ATTACK": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 1,
+      "FAST_TO_ATTACK": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

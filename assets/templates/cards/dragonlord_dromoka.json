@@ -8,19 +8,28 @@
       "WHITE"
     ]
   },
-  "components": {
-    "ATTACK": 5,
-    "HEALTH": 7,
-    "LIFELINK": 1,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 7
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 5,
+      "HEALTH": 7,
+      "LIFELINK": 1,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

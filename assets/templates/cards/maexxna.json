@@ -7,16 +7,25 @@
       "BLACK"
     ]
   },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 8,
-    "VENOM": 4,
-    "REACH": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 7
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 8,
+      "VENOM": 4,
+      "REACH": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

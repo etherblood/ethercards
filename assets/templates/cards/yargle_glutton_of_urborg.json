@@ -1,6 +1,5 @@
 {
   "alias": "yargle_glutton_of_urborg",
-  "manaCost": 5,
   "display": {
     "name": "Yargle, Glutton of Urborg",
     "imagePath": "yargle_glutton_of_urborg.jpg",
@@ -9,24 +8,34 @@
     ],
     "flavourText": "When Belzenlok's lieutenant Yar-Kul grew too ambitious, the Demonlord transformed him into a maggot. The frog that ate the maggot grew and grew, until a ravenous spirit burst from its body."
   },
-  "components": {
-    "ATTACK": 9,
-    "HEALTH": 3
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 4
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 9,
+      "HEALTH": 3
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 4
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

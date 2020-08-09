@@ -9,53 +9,61 @@
     "description": "As an additional cost to cast this spell, discard a card.\nDraw two cards.",
     "flavourText": "No guts, no glory."
   },
-  "manaCost": 2,
-  "cast": [
-    {
-      "type": "buff",
-      "components": {
-        "DISCARD": true
-      }
-    },
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "target": {
+        "type": "component",
+        "requiresTarget": true,
+        "component": "IN_HAND_ZONE",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            }
+          ]
+        },
+        "select": "USER"
+      },
       "effects": [
         {
           "type": "buff",
           "components": {
-            "DRAW_CARDS_REQUEST": 2
+            "DISCARD": true
           }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWNER"
-        ]
-      }
-    },
-    {
-      "type": "selfDiscard"
-    }
-  ],
-  "target": {
-    "type": "component",
-    "requiresTarget": true,
-    "component": "IN_HAND_ZONE",
-    "predicate": {
-      "type": "allOf",
-      "predicates": [
-        {
-          "type": "isSource",
-          "isSource": false
         },
         {
-          "type": "hasSourceOwner",
-          "hasSourceOwner": true
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 2
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
+        },
+        {
+          "type": "selfDiscard"
         }
       ]
-    },
-    "select": "USER"
-  }
+    }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

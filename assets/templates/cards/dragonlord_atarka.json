@@ -9,44 +9,53 @@
     ],
     "description": "Randomly deal 1 damage to an enemy 5 times."
   },
-  "components": {
-    "ATTACK": 6,
-    "HEALTH": 6,
-    "TRAMPLE": true,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
-    },
-    {
-      "type": "multiTrigger",
-      "amount": 3,
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 7,
       "effects": [
         {
-          "type": "targeted",
+          "type": "selfSummon"
+        },
+        {
+          "type": "multiTrigger",
+          "amount": 3,
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 1
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "DAMAGE_REQUEST": 1
+                  }
+                }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ANY",
+                "filters": [
+                  "OPPONENT_MINION",
+                  "OPPONENT_HERO"
+                ]
               }
             }
-          ],
-          "targets": {
-            "type": "simple",
-            "select": "ANY",
-            "filters": [
-              "OPPONENT_MINION",
-              "OPPONENT_HERO"
-            ]
-          }
+          ]
         }
       ]
     }
-  ],
-  "manaCost": 7
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 6,
+      "HEALTH": 6,
+      "TRAMPLE": true,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

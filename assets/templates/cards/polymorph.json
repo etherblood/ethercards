@@ -9,26 +9,34 @@
     "description": "Transform a minion into a 2/2 Sheep.",
     "flavourText": "There was going to be a pun in this flavor text, but it just came out baa-d."
   },
-  "manaCost": 4,
-  "cast": [
-    {
-      "type": "transformTemplate",
-      "template": "sheep"
-    },
-    {
-      "type": "particle",
-      "alias": "polymorph"
-    },
-    {
-      "type": "selfDiscard"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION",
+          "OPPONENT_MINION"
+        ]
+      },
+      "effects": [
+        {
+          "type": "transformTemplate",
+          "template": "sheep"
+        },
+        {
+          "type": "particle",
+          "alias": "polymorph"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
     }
-  ],
-  "target": {
-    "type": "simple",
-    "requiresTarget": true,
-    "filters": [
-      "OWN_MINION",
-      "OPPONENT_MINION"
-    ]
-  }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

@@ -9,43 +9,53 @@
     "description": "After you play a Pirate, summon this minion from your deck.",
     "flavourText": "What do sailors yell when Patches steals their treasure chest full of laws and other things being transported to parliament for a vote? \"The Eyes have it!\""
   },
-  "manaCost": 1,
   "tribes": [
     "PIRATE"
   ],
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 1,
-    "FAST_TO_ATTACK": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1,
+      "FAST_TO_ATTACK": true
+    }
+  },
+  "graveyard": {},
   "library": {
-    "TRIGGER_OTHER_SUMMON": [
-      {
-        "type": "predicateActivated",
-        "predicate": {
-          "type": "allOf",
-          "predicates": [
+    "passive": {
+      "TRIGGER_OTHER_SUMMON": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "allOf",
+            "predicates": [
+              {
+                "type": "hasTribe",
+                "tribe": "PIRATE"
+              },
+              {
+                "type": "hasSourceOwner",
+                "hasSourceOwner": true
+              }
+            ]
+          },
+          "effects": [
             {
-              "type": "hasTribe",
-              "tribe": "PIRATE"
-            },
-            {
-              "type": "hasSourceOwner",
-              "hasSourceOwner": true
+              "type": "selfSummonFromLibrary"
             }
           ]
-        },
-        "effects": [
-          {
-            "type": "selfSummonFromLibrary"
-          }
-        ]
-      }
-    ]
+        }
+      ]
+    }
   }
 }

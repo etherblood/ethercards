@@ -7,17 +7,26 @@
       "WHITE"
     ]
   },
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 3,
-    "BUSHIDO": 5,
-    "VIGILANCE": true,
-    "INDESTRUCTIBLE": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 8,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 8
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3,
+      "BUSHIDO": 5,
+      "VIGILANCE": true,
+      "INDESTRUCTIBLE": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

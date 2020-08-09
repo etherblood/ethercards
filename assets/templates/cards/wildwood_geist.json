@@ -12,43 +12,52 @@
   "tribes": [
     "SPIRIT"
   ],
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 4,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 3
-      }
-    ],
-    "TRIGGER_OWNER_UPKEEP": [
-      {
-        "type": "targeted",
-        "targets": {
-          "type": "simple",
-          "filters": [
-            "SOURCE"
-          ],
-          "select": "ALL"
-        },
-        "effects": [
-          {
-            "type": "buff",
-            "components": {
-              "TEMPORARY_ATTACK": 2,
-              "TEMPORARY_HEALTH": 2
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 3
+        }
+      ],
+      "TRIGGER_OWNER_UPKEEP": [
+        {
+          "type": "targeted",
+          "targets": {
+            "type": "simple",
+            "filters": [
+              "SOURCE"
+            ],
+            "select": "ALL"
+          },
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "TEMPORARY_ATTACK": 2,
+                "TEMPORARY_HEALTH": 2
+              }
             }
-          }
-        ]
-      }
-    ]
-  }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

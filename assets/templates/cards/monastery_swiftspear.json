@@ -9,56 +9,65 @@
     "description": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
     "flavourText": "The calligraphy of combat is written with strokes of sudden blood."
   },
-  "manaCost": 1,
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 2,
-    "FAST_TO_ATTACK": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_OTHER_CAST": [
-      {
-        "type": "predicateActivated",
-        "predicate": {
-          "type": "allOf",
-          "predicates": [
-            {
-              "type": "minion",
-              "isMinion": false
-            },
-            {
-              "type": "hasSourceOwner",
-              "hasSourceOwner": true
-            }
-          ]
-        },
-        "effects": [
-          {
-            "type": "targeted",
-            "targets": {
-              "type": "simple",
-              "select": "ALL",
-              "filters": [
-                "SOURCE"
-              ]
-            },
-            "effects": [
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 2,
+      "FAST_TO_ATTACK": true
+    },
+    "passive": {
+      "TRIGGER_OTHER_CAST": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "allOf",
+            "predicates": [
               {
-                "type": "buff",
-                "components": {
-                  "TEMPORARY_ATTACK": 1,
-                  "TEMPORARY_HEALTH": 1
-                }
+                "type": "minion",
+                "isMinion": false
+              },
+              {
+                "type": "hasSourceOwner",
+                "hasSourceOwner": true
               }
             ]
-          }
-        ]
-      }
-    ]
-  }
+          },
+          "effects": [
+            {
+              "type": "targeted",
+              "targets": {
+                "type": "simple",
+                "select": "ALL",
+                "filters": [
+                  "SOURCE"
+                ]
+              },
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "TEMPORARY_ATTACK": 1,
+                    "TEMPORARY_HEALTH": 1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

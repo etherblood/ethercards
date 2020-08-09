@@ -9,7 +9,6 @@
     "description": "Jace's Phantasm gets +4/+4 as long as an opponent has ten or more cards in their graveyard.",
     "flavourText": "In the abstract memories of the Iquati, Jace found interesting ideas to improve upon."
   },
-  "manaCost": 3,
   "tribes": [],
   "attackModifiers": [
     {
@@ -25,14 +24,24 @@
       "value": 4
     }
   ],
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 1,
-    "FLYING": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -8,30 +8,38 @@
     ],
     "description": "Deal 2 damage to the selected minion or hero."
   },
-  "cast": [
-    {
-      "type": "buff",
-      "components": {
-        "DAMAGE_REQUEST": 2
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "shock"
-    },
-    {
-      "type": "selfDiscard"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION",
+          "OWN_HERO",
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DAMAGE_REQUEST": 2
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "shock"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
     }
-  ],
-  "manaCost": 1,
-  "target": {
-    "type": "simple",
-    "requiresTarget": true,
-    "filters": [
-      "OWN_MINION",
-      "OWN_HERO",
-      "OPPONENT_MINION",
-      "OPPONENT_HERO"
-    ]
-  }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

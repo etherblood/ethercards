@@ -1,6 +1,5 @@
 {
   "alias": "thousand_legged_kami",
-  "manaCost": 7,
   "display": {
     "name": "Thousand-legged Kami",
     "imagePath": "thousand_legged_kami.jpg",
@@ -8,25 +7,35 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 7,
-    "HEALTH": 7,
-    "REACH": true
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 7,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 6
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 7,
+      "HEALTH": 7,
+      "REACH": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 6
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

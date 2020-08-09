@@ -8,22 +8,31 @@
     ],
     "description": "Summon a 2/1 Damaged Golem when this dies."
   },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 3,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "summon",
-        "minionId": "damaged_golem"
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 3
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "summon",
+          "minionId": "damaged_golem"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

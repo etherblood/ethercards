@@ -8,32 +8,40 @@
     ],
     "description": "Kill all enemy minions."
   },
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "DEATH_REQUEST": true
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": true
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OPPONENT_MINION"
+            ]
           }
+        },
+        {
+          "type": "particle",
+          "alias": "raigeki"
+        },
+        {
+          "type": "selfDiscard"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OPPONENT_MINION"
-        ]
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "raigeki"
-    },
-    {
-      "type": "selfDiscard"
+      ]
     }
-  ],
-  "manaCost": 1
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

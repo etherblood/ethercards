@@ -8,26 +8,35 @@
     ],
     "description": "Traproot Kami's toughness is equal to your Mana Pool."
   },
-  "manaCost": 1,
   "tribes": [
     "SPIRIT"
   ],
-  "componentModifiers": {
-    "HEALTH": [
-      {
-        "type": "addOwnManaPool"
-      }
-    ]
-  },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 0,
-    "CANNOT_ATTACK": true,
-    "REACH": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 0,
+      "CANNOT_ATTACK": true,
+      "REACH": true
+    },
+    "componentModifiers": {
+      "HEALTH": [
+        {
+          "type": "addOwnManaPool"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

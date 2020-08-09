@@ -7,20 +7,20 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.ActivatedAbility;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.TargetSelection;
+import com.etherblood.a.templates.api.deserializers.RawZoneEffectsDeserializer;
 import com.etherblood.a.templates.api.deserializers.TemplateObjectDeserializer;
+import com.etherblood.a.templates.api.model.RawCardDisplay;
+import com.etherblood.a.templates.api.model.RawCardTemplate;
+import com.etherblood.a.templates.api.model.RawZoneEffects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -47,6 +47,7 @@ public class TemplatesParser {
                 .registerTypeAdapter(TargetSelection.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetSelections(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(TargetPredicate.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetPredicates(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(x -> registerIfAbsent(cardAliases, x), componentAliases::get))
+                .registerTypeAdapter(RawZoneEffects.class, new RawZoneEffectsDeserializer(componentAliases::get))
                 .create();
     }
 
@@ -74,167 +75,68 @@ public class TemplatesParser {
     }
 
     public DisplayCardTemplate parseCard(JsonObject cardJson) {
-        String alias = cardJson.get("alias").getAsString();
+        RawCardTemplate rawCard = aliasGson.fromJson(cardJson, RawCardTemplate.class);
+
         try {
             DisplayCardTemplateBuilder builder = new DisplayCardTemplateBuilder();
-            builder.setAlias(alias);
-            JsonObject display = cardJson.getAsJsonObject("display");
+            builder.setAlias(rawCard.alias);
+            RawCardDisplay display = rawCard.display;
             if (display != null) {
-                JsonElement colors = display.get("colors");
-                if (colors != null) {
-                    builder.setColors(Arrays.asList(aliasGson.fromJson(colors, CardColor[].class)));
-                }
-                JsonElement name = display.get("name");
-                if (name != null) {
-                    builder.setName(name.getAsString());
-                }
-                JsonElement description = display.get("description");
-                if (description != null) {
-                    builder.setDescription(description.getAsString());
-                }
-                JsonElement flavourText = display.get("flavourText");
-                if (flavourText != null) {
-                    builder.setFlavourText(flavourText.getAsString());
-                }
-                JsonElement imagePath = display.get("imagePath");
-                if (imagePath != null && !imagePath.isJsonNull()) {
-                    builder.setImagePath(imagePath.getAsString());
-                }
-            } else {
-                builder.setColors(Arrays.asList(CardColor.values()));
-                builder.setName("MissingNo #" + alias);
-                builder.setDescription("404");
-                builder.setFlavourText("Nothing here.");
-                builder.setImagePath(null);
+                builder.setColors(display.colors);
+                builder.setDescription(display.description);
+                builder.setFlavourText(display.flavourText);
+                builder.setImagePath(display.imagePath);
+                builder.setName(display.name);
             }
-
-            JsonElement targetJson = cardJson.get("target");
-            if (targetJson != null) {
-                builder.setCastTarget(aliasGson.fromJson(targetJson, TargetSelection.class));
+            builder.setManaCost(rawCard.hand.cast.getManaCost());
+            if (rawCard.hand.cast.getTarget() != null) {
+                builder.setCastTarget(rawCard.hand.cast.getTarget());
             } else {
                 builder.setCastTarget(new Untargeted());
             }
-
-            JsonArray castEffects = cardJson.getAsJsonArray("cast");
-            if (castEffects != null) {
-                for (JsonElement castEffect : castEffects) {
-                    builder.castEffect(aliasGson.fromJson(castEffect, Effect.class));
-                }
+            for (Effect effect : rawCard.hand.cast.getEffects()) {
+                builder.castEffect(effect);
             }
 
-            JsonElement manaCost = cardJson.get("manaCost");
-            if (manaCost != null) {
-                builder.setManaCost(manaCost.getAsInt());
+            for (Tribe tribe : rawCard.tribes) {
+                builder.addTribe(tribe);
             }
-            JsonArray tribes = cardJson.getAsJsonArray("tribes");
-            if (tribes != null) {
-                for (JsonElement tribe : tribes) {
-                    builder.addTribe(aliasGson.fromJson(tribe, Tribe.class));
+            for (Map.Entry<Integer, List<Effect>> entry : rawCard.battle.passive.entrySet()) {
+                for (Effect effect : entry.getValue()) {
+                    builder.inBattle(entry.getKey(), effect);
                 }
             }
-
-            JsonObject inBattle = cardJson.getAsJsonObject("battle");
-            if (inBattle != null) {
-                for (Map.Entry<String, JsonElement> entry : inBattle.entrySet()) {
-                    JsonArray effects = entry.getValue().getAsJsonArray();
-                    for (JsonElement effectJson : effects) {
-                        builder.inBattle(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
-                    }
+            for (Map.Entry<Integer, List<Effect>> entry : rawCard.hand.passive.entrySet()) {
+                for (Effect effect : entry.getValue()) {
+                    builder.inHand(entry.getKey(), effect);
                 }
             }
-            JsonObject inHand = cardJson.getAsJsonObject("hand");
-            if (inHand != null) {
-                for (Map.Entry<String, JsonElement> entry : inHand.entrySet()) {
-                    JsonArray effects = entry.getValue().getAsJsonArray();
-                    for (JsonElement effectJson : effects) {
-                        builder.inHand(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
-                    }
+            for (Map.Entry<Integer, List<Effect>> entry : rawCard.graveyard.passive.entrySet()) {
+                for (Effect effect : entry.getValue()) {
+                    builder.inGraveyard(entry.getKey(), effect);
                 }
             }
-            JsonObject inLibrary = cardJson.getAsJsonObject("library");
-            if (inLibrary != null) {
-                for (Map.Entry<String, JsonElement> entry : inLibrary.entrySet()) {
-                    JsonArray effects = entry.getValue().getAsJsonArray();
-                    for (JsonElement effectJson : effects) {
-                        builder.inLibrary(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
-                    }
-                }
-            }
-            JsonObject inGraveyard = cardJson.getAsJsonObject("graveyard");
-            if (inGraveyard != null) {
-                for (Map.Entry<String, JsonElement> entry : inGraveyard.entrySet()) {
-                    JsonArray effects = entry.getValue().getAsJsonArray();
-                    for (JsonElement effectJson : effects) {
-                        builder.inGraveyard(componentAliases.get(entry.getKey()), aliasGson.fromJson(effectJson, Effect.class));
-                    }
+            for (Map.Entry<Integer, List<Effect>> entry : rawCard.library.passive.entrySet()) {
+                for (Effect effect : entry.getValue()) {
+                    builder.inLibrary(entry.getKey(), effect);
                 }
             }
 
-            JsonObject componentModifiers = cardJson.getAsJsonObject("componentModifiers");
-            if (componentModifiers != null) {
-                for (Map.Entry<String, JsonElement> entry : componentModifiers.entrySet()) {
-                    Integer component = componentAliases.get(entry.getKey());
-                    for (StatModifier modifier : aliasGson.fromJson(entry.getValue(), StatModifier[].class)) {
-                        builder.modifyComponent(component, modifier);
-                    }
+            for (Map.Entry<Integer, List<StatModifier>> entry : rawCard.battle.componentModifiers.entrySet()) {
+                for (StatModifier statModifier : entry.getValue()) {
+                    builder.modifyComponent(entry.getKey(), statModifier);
                 }
             }
 
-            JsonObject battleAbilityJson = cardJson.getAsJsonObject("battleAbility");
-            if (battleAbilityJson != null) {
-                TargetSelection target = aliasGson.fromJson(battleAbilityJson.get("target"), TargetSelection.class);
-                Effect[] effects = aliasGson.fromJson(battleAbilityJson.get("effects"), Effect[].class);
-                JsonElement selfTapJson = battleAbilityJson.get("selfTap");
-                JsonElement manaCostJson = battleAbilityJson.get("manaCost");
-                builder.setBattleAbility(new ActivatedAbility(
-                        target,
-                        Arrays.asList(effects),
-                        manaCostJson == null ? null : manaCostJson.getAsInt(),
-                        selfTapJson != null && selfTapJson.getAsBoolean()));
-            }
-
-            JsonObject cardComponents = cardJson.getAsJsonObject("components");
-            if (cardComponents != null) {
-                for (Map.Entry<String, JsonElement> entry : cardComponents.entrySet()) {
-                    Integer component = componentAliases.get(entry.getKey());
-                    if (component == null) {
-                        throw new NullPointerException("No component found for alias " + alias + ".");
-                    }
-                    JsonElement value = entry.getValue();
-                    if (value.isJsonNull()) {
-                        builder.remove(component);
-                        continue;
-                    }
-                    if (value.isJsonPrimitive()) {
-                        JsonPrimitive primitive = value.getAsJsonPrimitive();
-                        if (primitive.isNumber()) {
-                            builder.set(component, primitive.getAsInt());
-                            continue;
-                        }
-                        if (primitive.isBoolean()) {
-                            builder.set(component, primitive.getAsBoolean() ? 1 : 0);
-                            continue;
-                        }
-                    }
-                    if (value.isJsonObject()) {
-                        JsonObject obj = value.getAsJsonObject();
-                        if (obj.has("minion")) {
-                            int minion = registerIfAbsent(cardAliases, obj.getAsJsonPrimitive("minion").getAsString());
-                            builder.set(component, minion);
-                            continue;
-                        }
-                        if (obj.has("card")) {
-                            int card = registerIfAbsent(cardAliases, obj.getAsJsonPrimitive("card").getAsString());
-                            builder.set(component, card);
-                            continue;
-                        }
-                    }
-                    throw new UnsupportedOperationException(value.toString());
+            builder.setBattleAbility(rawCard.battle.activated);
+            if (rawCard.battle.components != null) {
+                for (int component : rawCard.battle.components) {
+                    builder.set(component, rawCard.battle.components.get(component));
                 }
             }
             return register(builder);
         } catch (Exception ex) {
-            LOG.error("Failed to parse card {}.", alias);
+            LOG.error("Failed to parse card {}.", rawCard.alias);
             throw ex;
         }
     }

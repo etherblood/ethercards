@@ -8,33 +8,42 @@
     ],
     "description": "Your hero gains 5 health."
   },
-  "components": {
-    "ATTACK": 5,
-    "HEALTH": 4,
-    "TRAMPLE": 1
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
-    },
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "HEALTH": 5
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "HEALTH": 5
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OWN_HERO"
+            ]
           }
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OWN_HERO"
-        ]
-      }
+      ]
     }
-  ],
-  "manaCost": 5
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 5,
+      "HEALTH": 4,
+      "TRAMPLE": 1
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

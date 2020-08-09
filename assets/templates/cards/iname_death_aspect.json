@@ -12,45 +12,54 @@
   "tribes": [
     "SPIRIT"
   ],
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 4
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 6,
+  },
   "battle": {
-    "TRIGGER_SELF_ENTER_BATTLE": [
-      {
-        "type": "targeted",
-        "targets": {
-          "type": "component",
-          "component": "IN_LIBRARY_ZONE",
-          "select": "ALL",
-          "predicate": {
-            "type": "allOf",
-            "predicates": [
-              {
-                "type": "hasSourceOwner",
-                "hasSourceOwner": true
-              },
-              {
-                "type": "hasTribe",
-                "tribe": "SPIRIT"
-              }
-            ]
-          }
-        },
-        "effects": [
-          {
-            "type": "moveToZone",
-            "zone": "IN_GRAVEYARD_ZONE"
-          }
-        ]
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 4
+    },
+    "passive": {
+      "TRIGGER_SELF_ENTER_BATTLE": [
+        {
+          "type": "targeted",
+          "targets": {
+            "type": "component",
+            "component": "IN_LIBRARY_ZONE",
+            "select": "ALL",
+            "predicate": {
+              "type": "allOf",
+              "predicates": [
+                {
+                  "type": "hasSourceOwner",
+                  "hasSourceOwner": true
+                },
+                {
+                  "type": "hasTribe",
+                  "tribe": "SPIRIT"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "type": "moveToZone",
+              "zone": "IN_GRAVEYARD_ZONE"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

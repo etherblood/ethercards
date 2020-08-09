@@ -8,31 +8,40 @@
       "BLUE"
     ]
   },
-  "battle": {
-    "TRIGGER_SELF_ENTER_BATTLE": [
-      {
-        "type": "fusion",
-        "materialIds": [
-          "blue_eyes_white_dragon",
-          "blue_eyes_white_dragon",
-          "blue_eyes_white_dragon"
-        ],
-        "resultId": "blue_eyes_ultimate_dragon"
-      }
-    ]
-  },
-  "components": {
-    "ATTACK": 8,
-    "HEALTH": 7,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 8,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 8
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 8,
+      "HEALTH": 7,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_ENTER_BATTLE": [
+        {
+          "type": "fusion",
+          "materialIds": [
+            "blue_eyes_white_dragon",
+            "blue_eyes_white_dragon",
+            "blue_eyes_white_dragon"
+          ],
+          "resultId": "blue_eyes_ultimate_dragon"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

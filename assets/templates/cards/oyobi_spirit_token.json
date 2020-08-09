@@ -7,19 +7,28 @@
       "WHITE"
     ]
   },
-  "manaCost": 4,
   "tribes": [
     "SPIRIT",
     "TOKEN"
   ],
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 3,
-    "FLYING": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

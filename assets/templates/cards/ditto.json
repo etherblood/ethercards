@@ -8,31 +8,40 @@
     ],
     "description": "Transform into a copy of a minion."
   },
-  "manaCost": 5,
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
-    },
-    {
-      "type": "targetActivated",
-      "targeted": [
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "target": {
+        "type": "simple",
+        "requiresTarget": false,
+        "filters": [
+          "OWN_MINION",
+          "OPPONENT_MINION"
+        ]
+      },
+      "effects": [
         {
-          "type": "ditto"
+          "type": "selfSummon"
+        },
+        {
+          "type": "targetActivated",
+          "targeted": [
+            {
+              "type": "ditto"
+            }
+          ],
+          "untargeted": []
         }
-      ],
-      "untargeted": []
+      ]
     }
-  ],
-  "target": {
-    "type": "simple",
-    "requiresTarget": false,
-    "filters": [
-      "OWN_MINION",
-      "OPPONENT_MINION"
-    ]
-  }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

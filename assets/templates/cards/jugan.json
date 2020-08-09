@@ -8,48 +8,57 @@
     ],
     "description": "Randomly distribute five +1/+1 buffs amongst your minions when this dies."
   },
-  "components": {
-    "ATTACK": 5,
-    "HEALTH": 5,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON",
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 6,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "multiTrigger",
-        "amount": 5,
-        "effects": [
-          {
-            "type": "targeted",
-            "effects": [
-              {
-                "type": "buff",
-                "components": {
-                  "ATTACK": 1,
-                  "HEALTH": 1
+    "components": {
+      "ATTACK": 5,
+      "HEALTH": 5,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "multiTrigger",
+          "amount": 5,
+          "effects": [
+            {
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "ATTACK": 1,
+                    "HEALTH": 1
+                  }
                 }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ANY",
+                "filters": [
+                  "OWN_MINION"
+                ]
               }
-            ],
-            "targets": {
-              "type": "simple",
-              "select": "ANY",
-              "filters": [
-                "OWN_MINION"
-              ]
             }
-          }
-        ]
-      }
-    ]
-  }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -1,6 +1,5 @@
 {
   "alias": "apothecary_geist",
-  "manaCost": 4,
   "display": {
     "name": "Apothecary Geist",
     "imagePath": "apothecary_geist.jpg",
@@ -10,49 +9,59 @@
     "description": "When Apothecary Geist enters the battlefield, if you control another Spirit, you gain 3 life.",
     "flavourText": "For some customers, the old apothecary shop still opens its doors."
   },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 3,
-    "FLYING": true
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
-    },
-    {
-      "type": "tribeActivated",
-      "tribe": "SPIRIT",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
       "effects": [
         {
-          "type": "targeted",
+          "type": "selfSummon"
+        },
+        {
+          "type": "tribeActivated",
+          "tribe": "SPIRIT",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "HEALTH": 3
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "HEALTH": 3
+                  }
+                }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ANY",
+                "filters": [
+                  "OWN_HERO"
+                ]
               }
             }
-          ],
-          "targets": {
-            "type": "simple",
-            "select": "ANY",
-            "filters": [
-              "OWN_HERO"
-            ]
-          }
+          ]
         }
       ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 3
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 3,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 3
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

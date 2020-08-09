@@ -8,41 +8,50 @@
     ],
     "description": "Deal 2 damage to a random enemy when this dies."
   },
-  "manaCost": 1,
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 1
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
-    }
-  ],
-  "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "targeted",
-        "effects": [
-          {
-            "type": "buff",
-            "components": {
-              "DAMAGE_REQUEST": 2
-            }
-          },
-          {
-            "type": "particle",
-            "alias": "boombot"
-          }
-        ],
-        "targets": {
-          "type": "simple",
-          "select": "ANY",
-          "filters": [
-            "OPPONENT_MINION",
-            "OPPONENT_HERO"
-          ]
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-      }
-    ]
-  }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 2
+              }
+            },
+            {
+              "type": "particle",
+              "alias": "boombot"
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OPPONENT_MINION",
+              "OPPONENT_HERO"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

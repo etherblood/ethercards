@@ -7,17 +7,26 @@
       "RED"
     ]
   },
-  "components": {
-    "ATTACK": 7,
-    "HEALTH": 7,
-    "RAGE": true,
-    "FAST_TO_ATTACK": true,
-    "TRAMPLE": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 3
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 7,
+      "HEALTH": 7,
+      "RAGE": true,
+      "FAST_TO_ATTACK": true,
+      "TRAMPLE": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -8,36 +8,45 @@
     ],
     "description": "Kodama of the Center Tree's power and toughness are each equal to the number of Spirits you control.\nKodama of the Center Tree has soulshift X, where X is the number of Spirits you control."
   },
-  "manaCost": 5,
   "tribes": [
     "SPIRIT"
   ],
-  "componentModifiers": {
-    "HEALTH": [
-      {
-        "type": "addOwnSpiritCount"
-      }
-    ],
-    "ATTACK": [
-      {
-        "type": "addOwnSpiritCount"
-      }
-    ]
-  },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 0
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "spiritCountSoulshift"
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 0
+    },
+    "componentModifiers": {
+      "HEALTH": [
+        {
+          "type": "addOwnSpiritCount"
+        }
+      ],
+      "ATTACK": [
+        {
+          "type": "addOwnSpiritCount"
+        }
+      ]
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "spiritCountSoulshift"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

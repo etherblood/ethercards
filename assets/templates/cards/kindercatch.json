@@ -8,25 +8,34 @@
     ],
     "flavourText": "In the forest villages of Kessig, parents feed their children wormwood and other bitter herbs, hoping to make them less palatable to things that roam the night."
   },
-  "components": {
-    "ATTACK": 6,
-    "HEALTH": 6
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 6,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 5
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 6,
+      "HEALTH": 6
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 5
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

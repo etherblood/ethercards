@@ -8,27 +8,36 @@
     ],
     "flavourText": "There was a dull thunder at the vanguard, then shocked cries in the midst of the column. Moments later, Takada, last of the rearguard, faced the kami alone."
   },
-  "manaCost": 6,
   "tribes": [
     "SPIRIT"
   ],
-  "components": {
-    "ATTACK": 7,
-    "HEALTH": 5,
-    "RAGE": true,
-    "FAST_TO_ATTACK": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 5
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 7,
+      "HEALTH": 5,
+      "RAGE": true,
+      "FAST_TO_ATTACK": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 5
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

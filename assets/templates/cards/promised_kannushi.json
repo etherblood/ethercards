@@ -1,6 +1,5 @@
 {
   "alias": "promised_kannushi",
-  "manaCost": 1,
   "display": {
     "name": "Promised Kannushi",
     "imagePath": "promised_kannushi.jpg",
@@ -8,21 +7,31 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 1
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 7
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 7
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

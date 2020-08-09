@@ -9,65 +9,74 @@
     "description": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
     "flavourText": "It fuels its lanterns by leaching the warmth from its surroundings."
   },
-  "manaCost": 3,
-  "cast": [
-    {
-      "type": "selfSummon"
-    }
-  ],
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 1,
-    "FLYING": true
-  },
   "tribes": [
     "SPIRIT"
   ],
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 2
-      }
-    ],
-    "TRIGGER_OTHER_CAST": [
-      {
-        "type": "predicateActivated",
-        "predicate": {
-          "type": "allOf",
-          "predicates": [
-            {
-              "type": "minion",
-              "isMinion": false
-            },
-            {
-              "type": "hasSourceOwner",
-              "hasSourceOwner": true
-            }
-          ]
-        },
-        "effects": [
-          {
-            "type": "targeted",
-            "targets": {
-              "type": "simple",
-              "select": "ALL",
-              "filters": [
-                "SOURCE"
-              ]
-            },
-            "effects": [
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 1,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 2
+        }
+      ],
+      "TRIGGER_OTHER_CAST": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "allOf",
+            "predicates": [
               {
-                "type": "buff",
-                "components": {
-                  "TEMPORARY_ATTACK": 1,
-                  "TEMPORARY_HEALTH": 1
-                }
+                "type": "minion",
+                "isMinion": false
+              },
+              {
+                "type": "hasSourceOwner",
+                "hasSourceOwner": true
               }
             ]
-          }
-        ]
-      }
-    ]
-  }
+          },
+          "effects": [
+            {
+              "type": "targeted",
+              "targets": {
+                "type": "simple",
+                "select": "ALL",
+                "filters": [
+                  "SOURCE"
+                ]
+              },
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "TEMPORARY_ATTACK": 1,
+                    "TEMPORARY_HEALTH": 1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

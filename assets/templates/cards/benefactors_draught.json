@@ -8,49 +8,57 @@
     ],
     "description": "Untap all creatures. Draw a card."
   },
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
       "effects": [
         {
-          "type": "debuff",
-          "components": {
-            "TIRED": 1
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "debuff",
+              "components": {
+                "TIRED": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWN_HERO",
+              "OPPONENT_HERO",
+              "OWN_MINION",
+              "OPPONENT_MINION"
+            ]
           }
-        }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWN_HERO",
-          "OPPONENT_HERO",
-          "OWN_MINION",
-          "OPPONENT_MINION"
-        ]
-      }
-    },
-    {
-      "type": "targeted",
-      "effects": [
+        },
         {
-          "type": "buff",
-          "components": {
-            "DRAW_CARDS_REQUEST": 1
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
           }
+        },
+        {
+          "type": "selfDiscard"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWNER"
-        ]
-      }
-    },
-    {
-      "type": "selfDiscard"
+      ]
     }
-  ],
-  "manaCost": 2
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

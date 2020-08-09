@@ -8,16 +8,25 @@
     ],
     "flavourText_disabled_because_it_doesnt_match_the_old_art": "It's as solid as the club in its hand—and about as subtle."
   },
-  "manaCost": 6,
-  "components": {
-    "ATTACK": 5,
-    "HEALTH": 5,
-    "TRAMPLE": 1,
-    "REGENERATION": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 5,
+      "HEALTH": 5,
+      "TRAMPLE": 1,
+      "REGENERATION": 3
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

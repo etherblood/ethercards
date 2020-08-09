@@ -8,54 +8,63 @@
     ],
     "description": "Tap, sacrifice 1 minion, deal 3 damage to a random opponent."
   },
-  "manaCost": 4,
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
-    }
-  ],
-  "battleAbility": {
-    "selfTap": true,
-    "target": {
-      "type": "simple",
-      "requiresTarget": true,
-      "filters": [
-        "OWN_MINION"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
       ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3
     },
-    "effects": [
-      {
-        "type": "buff",
-        "components": {
-          "DEATH_REQUEST": 2
-        }
+    "activated": {
+      "selfTap": true,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION"
+        ]
       },
-      {
-        "type": "targeted",
-        "effects": [
-          {
-            "type": "buff",
-            "components": {
-              "DAMAGE_REQUEST": 3
-            }
-          },
-          {
-            "type": "particle",
-            "alias": "cannon_soldier"
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": 2
           }
-        ],
-        "targets": {
-          "type": "simple",
-          "select": "ANY",
-          "filters": [
-            "OPPONENT_HERO"
-          ]
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 3
+              }
+            },
+            {
+              "type": "particle",
+              "alias": "cannon_soldier"
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OPPONENT_HERO"
+            ]
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

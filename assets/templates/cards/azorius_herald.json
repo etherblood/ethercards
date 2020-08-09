@@ -1,6 +1,5 @@
 {
   "alias": "azorius_herald",
-  "manaCost": 3,
   "display": {
     "name": "Azorius Herald",
     "imagePath": "azorius_herald.jpg",
@@ -10,43 +9,53 @@
     "description": "When Azorius Herald enters the battlefield, you gain 3 life.",
     "flavourText": "\"As peace should be—gentle yet unstoppable.\"\n—Augustin IV"
   },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 1,
-    "CANNOT_BE_BLOCKED": true
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
-    },
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "HEALTH": 3
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "HEALTH": 3
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OWN_HERO"
+            ]
           }
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ANY",
-        "filters": [
-          "OWN_HERO"
-        ]
-      }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 2
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 1,
+      "CANNOT_BE_BLOCKED": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 2
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

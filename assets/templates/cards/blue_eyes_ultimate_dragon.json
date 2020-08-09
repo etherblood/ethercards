@@ -7,20 +7,29 @@
       "BLUE"
     ]
   },
-  "components": {
-    "ATTACK": 30,
-    "HEALTH": 25,
-    "TRAMPLE": true,
-    "VIGILANCE": true,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 24,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 24
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 30,
+      "HEALTH": 25,
+      "TRAMPLE": true,
+      "VIGILANCE": true,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

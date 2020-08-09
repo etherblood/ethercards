@@ -9,13 +9,21 @@
     ],
     "description": "Both players discard as many cards as possible from their hands, then each player draws the same number of cards they discarded."
   },
-  "manaCost": 3,
-  "cast": [
-    {
-      "type": "selfDiscard"
-    },
-    {
-      "type": "cardDestruction"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfDiscard"
+        },
+        {
+          "type": "cardDestruction"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

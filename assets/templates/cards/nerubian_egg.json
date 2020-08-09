@@ -8,23 +8,32 @@
     ],
     "description": "Summon a 3/3 Nerubian with Reach when this dies."
   },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 2,
-    "CANNOT_ATTACK": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 2,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "summon",
-        "minionId": "nerubian"
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 2,
+      "CANNOT_ATTACK": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "summon",
+          "minionId": "nerubian"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

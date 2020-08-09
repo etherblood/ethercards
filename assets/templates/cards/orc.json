@@ -7,14 +7,23 @@
       "RED"
     ]
   },
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 3
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 3
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

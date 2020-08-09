@@ -10,41 +10,50 @@
     "description": "Whenever you draw a card, Niv-Mizzet, the Firemind deals 1 damage to a random enemy minion or hero.",
     "flavourText": "As brilliant as a cut diamond, and with just as cruel an edge."
   },
-  "manaCost": 6,
   "tribes": [
     "DRAGON"
   ],
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 4,
-    "FLYING": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
-    }
-  ],
-  "battle": {
-    "TRIGGER_OWNER_DRAW": [
-      {
-        "type": "targeted",
-        "effects": [
-          {
-            "type": "buff",
-            "components": {
-              "DAMAGE_REQUEST": 1
-            }
-          }
-        ],
-        "targets": {
-          "type": "simple",
-          "select": "ANY",
-          "filters": [
-            "OPPONENT_MINION",
-            "OPPONENT_HERO"
-          ]
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-      }
-    ]
-  }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 4,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_OWNER_DRAW": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OPPONENT_MINION",
+              "OPPONENT_HERO"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

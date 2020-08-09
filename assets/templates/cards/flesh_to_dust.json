@@ -8,28 +8,36 @@
     ],
     "description": "Destroy a minion."
   },
-  "manaCost": 5,
-  "cast": [
-    {
-      "type": "buff",
-      "components": {
-        "DEATH_REQUEST": 1
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "flesh_to_dust"
-    },
-    {
-      "type": "selfDiscard"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION",
+          "OPPONENT_MINION"
+        ]
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": 1
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "flesh_to_dust"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
     }
-  ],
-  "target": {
-    "type": "simple",
-    "requiresTarget": true,
-    "filters": [
-      "OWN_MINION",
-      "OPPONENT_MINION"
-    ]
-  }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

@@ -8,18 +8,27 @@
       "RED"
     ]
   },
-  "components": {
-    "ATTACK": 6,
-    "HEALTH": 5,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 6
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 6,
+      "HEALTH": 5,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -7,16 +7,25 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 3,
-    "OWN_MINIONS_ATTACK_AURA": 1,
-    "FLYING": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 3
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 3,
+      "OWN_MINIONS_ATTACK_AURA": 1,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

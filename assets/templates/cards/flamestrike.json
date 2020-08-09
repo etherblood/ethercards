@@ -8,32 +8,40 @@
     ],
     "description": "Deal 4 damage to all enemy minions."
   },
-  "manaCost": 8,
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 8,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 4
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 4
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OPPONENT_MINION"
+            ]
           }
+        },
+        {
+          "type": "particle",
+          "alias": "flamestrike"
+        },
+        {
+          "type": "selfDiscard"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OPPONENT_MINION"
-        ]
-      }
-    },
-    {
-      "type": "particle",
-      "alias": "flamestrike"
-    },
-    {
-      "type": "selfDiscard"
+      ]
     }
-  ]
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

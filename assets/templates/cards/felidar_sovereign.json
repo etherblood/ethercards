@@ -9,60 +9,69 @@
     "description": "In your upkeep, if you have 50 or more life, you win the game.",
     "flavourText": "It surveys the withering landscape, waiting for a victory only it can see."
   },
-  "manaCost": 6,
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 6,
-    "LIFELINK": true,
-    "VIGILANCE": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_OWNER_UPKEEP": [
-      {
-        "type": "targeted",
-        "effects": [
-          {
-            "type": "predicateActivated",
-            "predicate": {
-              "type": "healthIs",
-              "relation": "GREATER_OR_EQUAL",
-              "value": 50
-            },
-            "effects": [
-              {
-                "type": "targeted",
-                "effects": [
-                  {
-                    "type": "buff",
-                    "components": {
-                      "PLAYER_RESULT_REQUEST": 1
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 6,
+      "LIFELINK": true,
+      "VIGILANCE": true
+    },
+    "passive": {
+      "TRIGGER_OWNER_UPKEEP": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "predicateActivated",
+              "predicate": {
+                "type": "healthIs",
+                "relation": "GREATER_OR_EQUAL",
+                "value": 50
+              },
+              "effects": [
+                {
+                  "type": "targeted",
+                  "effects": [
+                    {
+                      "type": "buff",
+                      "components": {
+                        "PLAYER_RESULT_REQUEST": 1
+                      }
                     }
+                  ],
+                  "targets": {
+                    "type": "simple",
+                    "select": "ALL",
+                    "filters": [
+                      "OWNER"
+                    ]
                   }
-                ],
-                "targets": {
-                  "type": "simple",
-                  "select": "ALL",
-                  "filters": [
-                    "OWNER"
-                  ]
                 }
-              }
+              ]
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWN_HERO"
             ]
           }
-        ],
-        "targets": {
-          "type": "simple",
-          "select": "ALL",
-          "filters": [
-            "OWN_HERO"
-          ]
         }
-      }
-    ]
-  }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

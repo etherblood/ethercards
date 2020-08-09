@@ -8,14 +8,23 @@
     ],
     "flavourText": "The hound sniffed the air and let slip a low growl. General Takeno looked down at the faithful Isamaru and calmed him with a touch. \"Alert the men. The kami are coming.\""
   },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 2
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 1
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 2
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

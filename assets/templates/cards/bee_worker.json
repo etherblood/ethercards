@@ -8,46 +8,55 @@
     ],
     "description": "Dies after Battle. Gain 1 Delayed Mana when this dies."
   },
-  "manaCost": 1,
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 0,
-    "VENOM": 1,
-    "FLYING": true
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "targeted",
-        "effects": [
-          {
-            "type": "buff",
-            "components": {
-              "DELAYED_MANA": 1
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 0,
+      "VENOM": 1,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DELAYED_MANA": 1
+              }
             }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
           }
-        ],
-        "targets": {
-          "type": "simple",
-          "select": "ALL",
-          "filters": [
-            "OWNER"
-          ]
         }
-      }
-    ],
-    "TRIGGER_SELF_FIGHT": [
-      {
-        "type": "buff",
-        "components": {
-          "DEATH_REQUEST": true
+      ],
+      "TRIGGER_SELF_FIGHT": [
+        {
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": true
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

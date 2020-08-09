@@ -9,44 +9,53 @@
     "description": "When Stingerfling Spider enters the battlefield, destroy target creature with flying.",
     "flavourText": "The juiciest prey is that which grows lazy, thinking itself beyond the reach of danger."
   },
-  "manaCost": 5,
-  "cast": [
-    {
-      "type": "selfSummon"
-    },
-    {
-      "type": "predicateActivated",
-      "predicate": {
-        "type": "flying",
-        "isFlying": true
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "target": {
+        "type": "component",
+        "requiresTarget": false,
+        "component": "IN_BATTLE_ZONE",
+        "predicate": {
+          "type": "flying",
+          "isFlying": true
+        },
+        "select": "USER"
       },
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "DEATH_REQUEST": true
-          }
+          "type": "selfSummon"
         },
         {
-          "type": "particle",
-          "alias": "stingerfling_spider"
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "flying",
+            "isFlying": true
+          },
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": true
+              }
+            },
+            {
+              "type": "particle",
+              "alias": "stingerfling_spider"
+            }
+          ]
         }
       ]
     }
-  ],
-  "target": {
-    "type": "component",
-    "requiresTarget": false,
-    "component": "IN_BATTLE_ZONE",
-    "predicate": {
-      "type": "flying",
-      "isFlying": true
-    },
-    "select": "USER"
   },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 5,
-    "REACH": true
-  }
+  "battle": {
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 5,
+      "REACH": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

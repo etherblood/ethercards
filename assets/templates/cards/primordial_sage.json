@@ -9,54 +9,63 @@
     "description": "Whenever you summon a creature, you may draw a card.",
     "flavourText": "For each creature that arrives in its audience, the sage imparts another piece of ancient wisdom for all to hear."
   },
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 5
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 6,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 5
-      }
-    ],
-    "TRIGGER_OTHER_SUMMON": [
-      {
-        "type": "predicateActivated",
-        "predicate": {
-          "type": "hasSourceOwner",
-          "hasSourceOwner": true
-        },
-        "effects": [
-          {
-            "type": "targeted",
-            "effects": [
-              {
-                "type": "buff",
-                "components": {
-                  "DRAW_CARDS_REQUEST": 1
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 5
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 5
+        }
+      ],
+      "TRIGGER_OTHER_SUMMON": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "hasSourceOwner",
+            "hasSourceOwner": true
+          },
+          "effects": [
+            {
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "DRAW_CARDS_REQUEST": 1
+                  }
                 }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ALL",
+                "filters": [
+                  "OWNER"
+                ]
               }
-            ],
-            "targets": {
-              "type": "simple",
-              "select": "ALL",
-              "filters": [
-                "OWNER"
-              ]
             }
-          }
-        ]
-      }
-    ]
-  }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

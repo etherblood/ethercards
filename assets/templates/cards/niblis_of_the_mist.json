@@ -9,42 +9,51 @@
     "description": "When Niblis of the Mist enters the battlefield, you may tap target creature.",
     "flavourText": "\"Not even a roaring fire could thaw the chill it put in my heart.\"\n—Vonn, geist-trapper"
   },
-  "manaCost": 3,
-  "cast": [
-    {
-      "type": "buff",
-      "components": {
-        "TIRED": true
-      }
-    },
-    {
-      "type": "selfSummon"
-    }
-  ],
-  "target": {
-    "type": "component",
-    "component": "IN_BATTLE_ZONE",
-    "predicate": {
-      "type": "tired",
-      "isTired": false
-    },
-    "select": "USER",
-    "requiresTarget": false
-  },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 1,
-    "FLYING": true
-  },
   "tribes": [
     "SPIRIT"
   ],
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "target": {
+        "type": "component",
+        "component": "IN_BATTLE_ZONE",
+        "predicate": {
+          "type": "tired",
+          "isTired": false
+        },
+        "select": "USER",
+        "requiresTarget": false
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "TIRED": true
+          }
+        },
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 2
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 1,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 2
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

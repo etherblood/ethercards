@@ -8,28 +8,36 @@
     ],
     "description": "Gain 3 Mana Pool."
   },
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "MANA_POOL": 3
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA_POOL": 3
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
           }
+        },
+        {
+          "type": "selfDiscard"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWNER"
-        ]
-      }
-    },
-    {
-      "type": "selfDiscard"
+      ]
     }
-  ],
-  "manaCost": 6
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

@@ -8,14 +8,23 @@
     ],
     "flavourText": "Edward \"Lefty\" Smith tried to make luggage out of a river crocolisk once."
   },
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 2
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 3
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

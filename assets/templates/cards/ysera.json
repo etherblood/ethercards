@@ -7,19 +7,28 @@
       "BLUE"
     ]
   },
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 12,
-    "DRAWS_PER_TURN": 1,
-    "FLYING": true
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 9,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 9
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 12,
+      "DRAWS_PER_TURN": 1,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -8,28 +8,36 @@
     ],
     "description": "Gain 1 Mana."
   },
-  "manaCost": 0,
-  "cast": [
-    {
-      "type": "targeted",
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 0,
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "MANA": 1
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
           }
+        },
+        {
+          "type": "selfDiscard"
         }
-      ],
-      "targets": {
-        "type": "simple",
-        "select": "ALL",
-        "filters": [
-          "OWNER"
-        ]
-      }
-    },
-    {
-      "type": "selfDiscard"
+      ]
     }
-  ]
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }

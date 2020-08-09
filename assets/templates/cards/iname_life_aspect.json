@@ -12,60 +12,69 @@
   "tribes": [
     "SPIRIT"
   ],
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 4
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 6,
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "targeted",
-        "targets": {
-          "type": "component",
-          "component": "IN_GRAVEYARD_ZONE",
-          "select": "ALL",
-          "predicate": {
-            "type": "allOf",
-            "predicates": [
-              {
-                "type": "hasSourceOwner",
-                "hasSourceOwner": true
-              },
-              {
-                "type": "hasTribe",
-                "tribe": "SPIRIT"
-              }
-            ]
-          }
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 4
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "targeted",
+          "targets": {
+            "type": "component",
+            "component": "IN_GRAVEYARD_ZONE",
+            "select": "ALL",
+            "predicate": {
+              "type": "allOf",
+              "predicates": [
+                {
+                  "type": "hasSourceOwner",
+                  "hasSourceOwner": true
+                },
+                {
+                  "type": "hasTribe",
+                  "tribe": "SPIRIT"
+                }
+              ]
+            }
+          },
+          "effects": [
+            {
+              "type": "moveToZone",
+              "zone": "IN_HAND_ZONE"
+            }
+          ]
         },
-        "effects": [
-          {
-            "type": "moveToZone",
-            "zone": "IN_HAND_ZONE"
-          }
-        ]
-      },
-      {
-        "type": "targeted",
-        "targets": {
-          "type": "source",
-          "predicate": {
-            "type": "bool",
-            "value": true
-          }
-        },
-        "effects": [
-          {
-            "type": "exile"
-          }
-        ]
-      }
-    ]
-  }
+        {
+          "type": "targeted",
+          "targets": {
+            "type": "source",
+            "predicate": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "effects": [
+            {
+              "type": "exile"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

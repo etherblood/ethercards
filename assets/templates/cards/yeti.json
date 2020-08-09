@@ -8,14 +8,23 @@
     ],
     "flavourText": "He always dreamed of coming down from the mountains and opening a noodle shop, but he never got the nerve."
   },
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 5
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 4
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 5
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

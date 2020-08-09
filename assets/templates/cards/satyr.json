@@ -7,15 +7,24 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 2,
-    "MANA_POOL_AURA": 1
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 2
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 2,
+      "MANA_POOL_AURA": 1
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

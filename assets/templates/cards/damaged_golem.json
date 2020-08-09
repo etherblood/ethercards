@@ -7,14 +7,23 @@
       "BLACK"
     ]
   },
-  "manaCost": 1,
-  "components": {
-    "ATTACK": 2,
-    "HEALTH": 1
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 1
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

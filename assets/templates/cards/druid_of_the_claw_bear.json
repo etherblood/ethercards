@@ -7,15 +7,24 @@
       "GREEN"
     ]
   },
-  "manaCost": 5,
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 6,
-    "VIGILANCE": true
-  }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 6,
+      "VIGILANCE": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -8,31 +8,41 @@
     ],
     "description": "During your upkeep, if you have no minions in play, summon this from your graveyard."
   },
-  "manaCost": 1,
-  "components": {
-    "ATTACK": 1,
-    "HEALTH": 1
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1
+    }
+  },
   "graveyard": {
-    "TRIGGER_OWNER_UPKEEP": [
-      {
-        "type": "predicateActivated",
-        "predicate": {
-          "type": "minionCountIs",
-          "relation": "EQUAL",
-          "value": 0
-        },
-        "effects": [
-          {
-            "type": "selfResurrect"
-          }
-        ]
-      }
-    ]
-  }
+    "passive": {
+      "TRIGGER_OWNER_UPKEEP": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "minionCountIs",
+            "relation": "EQUAL",
+            "value": 0
+          },
+          "effects": [
+            {
+              "type": "selfResurrect"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "library": {}
 }

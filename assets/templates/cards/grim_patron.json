@@ -8,22 +8,31 @@
     ],
     "description": "Summon a 3/3 Grim Patron whenever this survives damage."
   },
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 3
-  },
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 5,
+  },
   "battle": {
-    "TRIGGER_SELF_SURVIVE": [
-      {
-        "type": "summon",
-        "minionId": "grim_patron"
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3
+    },
+    "passive": {
+      "TRIGGER_SELF_SURVIVE": [
+        {
+          "type": "summon",
+          "minionId": "grim_patron"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

@@ -1,6 +1,5 @@
 {
   "alias": "forked_branch_garami",
-  "manaCost": 5,
   "display": {
     "name": "Forked-Branch Garami",
     "imagePath": "forked_branch_garami.jpg",
@@ -8,28 +7,38 @@
       "GREEN"
     ]
   },
-  "components": {
-    "ATTACK": 4,
-    "HEALTH": 4
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
+  },
   "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 4
-      },
-      {
-        "type": "soulshift",
-        "power": 4
-      }
-    ]
-  }
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 4
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 4
+        },
+        {
+          "type": "soulshift",
+          "power": 4
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

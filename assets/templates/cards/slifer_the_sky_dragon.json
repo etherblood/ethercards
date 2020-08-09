@@ -8,30 +8,39 @@
     ],
     "description": "Slifer the Sky Dragon's power and toughness are each equal to the number of cards in your hand."
   },
-  "components": {
-    "ATTACK": 0,
-    "HEALTH": 0,
-    "FLYING": true
-  },
-  "componentModifiers": {
-    "HEALTH": [
-      {
-        "type": "addOwnHandCardCount"
-      }
-    ],
-    "ATTACK": [
-      {
-        "type": "addOwnHandCardCount"
-      }
-    ]
-  },
   "tribes": [
     "DRAGON"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
     }
-  ],
-  "manaCost": 6
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 0,
+      "FLYING": true
+    },
+    "componentModifiers": {
+      "HEALTH": [
+        {
+          "type": "addOwnHandCardCount"
+        }
+      ],
+      "ATTACK": [
+        {
+          "type": "addOwnHandCardCount"
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

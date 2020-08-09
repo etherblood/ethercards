@@ -1,6 +1,5 @@
 {
   "alias": "he_who_hungers",
-  "manaCost": 4,
   "display": {
     "name": "He Who Hungers",
     "imagePath": "he_who_hungers.jpg",
@@ -9,43 +8,53 @@
     ],
     "description": "Your opponent discards a card when this dies."
   },
-  "components": {
-    "ATTACK": 3,
-    "HEALTH": 2,
-    "FLYING": true
-  },
   "tribes": [
     "SPIRIT"
   ],
-  "cast": [
-    {
-      "type": "selfSummon"
-    }
-  ],
-  "battle": {
-    "TRIGGER_SELF_DEATH": [
-      {
-        "type": "soulshift",
-        "power": 3
-      },
-      {
-        "type": "targeted",
-        "effects": [
-          {
-            "type": "buff",
-            "components": {
-              "PLAYER_DISCARD_CARDS": 1
-            }
-          }
-        ],
-        "targets": {
-          "type": "simple",
-          "select": "ALL",
-          "filters": [
-            "OPPONENT"
-          ]
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
         }
-      }
-    ]
-  }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 2,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 3
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "PLAYER_DISCARD_CARDS": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OPPONENT"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
 }

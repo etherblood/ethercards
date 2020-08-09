@@ -8,22 +8,30 @@
     ],
     "description": "Return up to three random minions with mana cost 1 or less from your graveyard to the battlefield."
   },
-  "manaCost": 3,
-  "cast": [
-    {
-      "type": "resurrectRandom",
-      "maxManaCost": 1
-    },
-    {
-      "type": "resurrectRandom",
-      "maxManaCost": 1
-    },
-    {
-      "type": "resurrectRandom",
-      "maxManaCost": 1
-    },
-    {
-      "type": "selfDiscard"
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "resurrectRandom",
+          "maxManaCost": 1
+        },
+        {
+          "type": "resurrectRandom",
+          "maxManaCost": 1
+        },
+        {
+          "type": "resurrectRandom",
+          "maxManaCost": 1
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
     }
-  ]
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
 }
