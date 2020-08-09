@@ -3,6 +3,7 @@ package com.etherblood.a.rules;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.StatModifier;
+import java.util.Collections;
 import java.util.OptionalInt;
 
 public class EffectiveStatsService {
@@ -23,7 +24,7 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier attackModifier : template.getComponentModifiers(core.ATTACK)) {
+            for (StatModifier attackModifier : template.getBattle().getComponentModifiers().getOrDefault(core.ATTACK, Collections.emptyList())) {
                 attack = attackModifier.modify(data, templates, minion, attack);
             }
         }
@@ -39,7 +40,7 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier healthModifier : template.getComponentModifiers(core.HEALTH)) {
+            for (StatModifier healthModifier : template.getBattle().getComponentModifiers().getOrDefault(core.HEALTH, Collections.emptyList())) {
                 health = healthModifier.modify(data, templates, minion, health);
             }
         }
@@ -64,7 +65,7 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier modifier : template.getComponentModifiers(core.VIGILANCE)) {
+            for (StatModifier modifier : template.getBattle().getComponentModifiers().getOrDefault(core.VIGILANCE, Collections.emptyList())) {
                 vigilance = modifier.modify(data, templates, minion, vigilance);
             }
         }
@@ -76,7 +77,7 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier modifier : template.getComponentModifiers(core.FLYING)) {
+            for (StatModifier modifier : template.getBattle().getComponentModifiers().getOrDefault(core.FLYING, Collections.emptyList())) {
                 flying = modifier.modify(data, templates, minion, flying);
             }
         }

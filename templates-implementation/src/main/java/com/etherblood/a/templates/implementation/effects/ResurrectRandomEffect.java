@@ -30,7 +30,8 @@ public class ResurrectRandomEffect implements Effect {
                 continue;
             }
             CardTemplate template = templates.getCard(data.get(dead, core.CARD_TEMPLATE));
-            if (template.isMinion() && template.getManaCost() != null && template.getManaCost() <= maxManaCost) {
+            Integer manaCost = template.getHand().getCast().getManaCost();
+            if (template.isMinion() && manaCost != null && manaCost <= maxManaCost) {
                 candidates.add(dead);
             }
         }

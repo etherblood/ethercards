@@ -1,6 +1,5 @@
 package com.etherblood.a.rules;
 
-import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -17,10 +16,10 @@ import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Surrender;
 import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.moves.UseAbility;
-import com.etherblood.a.rules.templates.ActivatedAbility;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.TargetSelection;
+import com.etherblood.a.rules.templates.ZoneState;
 import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.systems.GameLoopService;
 import java.util.ArrayList;
@@ -94,23 +93,8 @@ public class MoveService {
                             }
                         }
                     }
-                    for (int minion : minions) {
-                        if (!moveAvailability.canUseAbility(player, minion, false)) {
-                            continue;
-                        }
-                        CardTemplate template = templates.getCard(data.get(minion, core.CARD_TEMPLATE));
-                        ActivatedAbility ability = template.getBattleAbility();
-                        if (ability != null) {
-                            addUseAbilityMoves(player, minion, ability.getTarget(), result);
-                        }
-                    }
-                    for (int handCard : data.list(core.IN_HAND_ZONE)) {
-                        if (!moveAvailability.canCast(player, handCard, false)) {
-                            continue;
-                        }
-                        CardTemplate template = templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
-                        addCastMoves(player, handCard, template.getCastTarget(), result);
-                    }
+                    addAllCastMoves(player, result);
+                    addAllUseAbilityMoves(player, result);
                     result.add(new EndAttackPhase(player));
                     break;
                 }
@@ -126,13 +110,8 @@ public class MoveService {
                             }
                         }
                     }
-                    for (int handCard : data.list(core.IN_HAND_ZONE)) {
-                        if (!moveAvailability.canCast(player, handCard, false)) {
-                            continue;
-                        }
-                        CardTemplate template = templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
-                        addCastMoves(player, handCard, template.getCastTarget(), result);
-                    }
+                    addAllCastMoves(player, result);
+                    addAllUseAbilityMoves(player, result);
                     result.add(new EndBlockPhase(player));
                     break;
                 }
@@ -158,6 +137,16 @@ public class MoveService {
         return result;
     }
 
+    private void addAllCastMoves(int player, List<Move> result) {
+        for (int handCard : data.list(core.IN_HAND_ZONE)) {
+            if (!moveAvailability.canCast(player, handCard, false)) {
+                continue;
+            }
+            CardTemplate template = templates.getCard(data.get(handCard, core.CARD_TEMPLATE));
+            addCastMoves(player, handCard, template.getHand().getCast().getTarget(), result);
+        }
+    }
+
     private void addCastMoves(int player, int handCard, TargetSelection targeting, List<Move> result) {
         IntList targets = targeting.getValidTargets(data, templates, handCard);
         if (targets.isEmpty()) {
@@ -172,6 +161,17 @@ public class MoveService {
                     result.add(new Cast(player, handCard, target));
                 }
             }
+        }
+    }
+
+    private void addAllUseAbilityMoves(int player, List<Move> result) {
+        for (int entity : data.list(core.ACTIVATED_ABILITY)) {
+            if (!moveAvailability.canUseAbility(player, entity, false)) {
+                continue;
+            }
+            CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
+            ZoneState zone = template.getActiveZone(entity, data);
+            addUseAbilityMoves(player, entity, zone.getActivated().getTarget(), result);
         }
     }
 
@@ -489,18 +489,7 @@ public class MoveService {
                 int templateId = data.get(card, core.CARD_TEMPLATE);
                 CardTemplate template = templates.getCard(templateId);
 
-                Map<Integer, List<Effect>> triggers;
-                if (data.has(card, core.IN_BATTLE_ZONE)) {
-                    triggers = template.getBattleTriggers();
-                } else if (data.has(card, core.IN_HAND_ZONE)) {
-                    triggers = template.getHandTriggers();
-                } else if (data.has(card, core.IN_LIBRARY_ZONE)) {
-                    triggers = template.getLibraryTriggers();
-                } else if (data.has(card, core.IN_GRAVEYARD_ZONE)) {
-                    triggers = template.getGraveyardTriggers();
-                } else {
-                    throw new IllegalStateException("Entity with template has no zone.");
-                }
+                Map<Integer, List<Effect>> triggers = template.getActiveZone(card, data).getPassive();
                 for (int triggerComponent : triggers.keySet()) {
                     if (!data.has(card, triggerComponent)) {
                         throw new IllegalStateException("Card has unmapped " + data.getComponents().getMeta(triggerComponent).name + " trigger component.");

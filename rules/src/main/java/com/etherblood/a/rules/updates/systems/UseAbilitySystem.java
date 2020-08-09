@@ -35,10 +35,7 @@ public class UseAbilitySystem {
             int cardTemplateId = data.get(abilityUser, core.CARD_TEMPLATE);
             int target = data.get(abilityUser, core.USE_ABILITY_TARGET);
             CardTemplate template = templates.getCard(cardTemplateId);
-            ActivatedAbility ability = null;
-            if (data.has(abilityUser, core.IN_BATTLE_ZONE)) {
-                ability = template.getBattleAbility();
-            }
+            ActivatedAbility ability = template.getActiveZone(abilityUser, data).getActivated();
             if (ability == null) {
                 throw new AssertionError();
             }

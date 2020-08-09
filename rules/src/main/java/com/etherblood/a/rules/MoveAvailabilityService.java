@@ -283,7 +283,7 @@ public class MoveAvailabilityService {
             return false;
         }
         CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
-        if (template.getManaCost() != null && template.getManaCost() > data.getOptional(player, core.MANA).orElse(0)) {
+        if (template.getHand().getCast().getManaCost() != null && template.getHand().getCast().getManaCost() > data.getOptional(player, core.MANA).orElse(0)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, castable #" + castable + ", player #" + player + " does not have enough mana.");
             }
@@ -300,7 +300,7 @@ public class MoveAvailabilityService {
             return false;
         }
         CardTemplate template = templates.getCard(data.get(castable, core.CARD_TEMPLATE));
-        if (!template.getCastTarget().isValidTarget(data, templates, castable, target)) {
+        if (!template.getHand().getCast().getTarget().isValidTarget(data, templates, castable, target)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, target #" + target + " is not valid.");
             }
@@ -310,6 +310,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canUseAbility(int player, int source, boolean throwOnFail) {
+        assert data.has(source, core.ACTIVATED_ABILITY);
         if (!data.hasValue(source, core.OWNER, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to use ability, player #" + player + " does not own source #" + source + ".");
@@ -329,10 +330,7 @@ public class MoveAvailabilityService {
             return false;
         }
         CardTemplate template = templates.getCard(data.get(source, core.CARD_TEMPLATE));
-        ActivatedAbility ability = null;
-        if (data.has(source, core.IN_BATTLE_ZONE)) {
-            ability = template.getBattleAbility();
-        }
+        ActivatedAbility ability = template.getActiveZone(source, data).getActivated();
         if (ability == null) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to use ability, source #" + source + " has no activated ability in current zone.");
@@ -363,11 +361,7 @@ public class MoveAvailabilityService {
         }
         CardTemplate template = templates.getCard(data.get(source, core.CARD_TEMPLATE));
 
-        ActivatedAbility ability = null;
-        if (data.has(source, core.IN_BATTLE_ZONE)) {
-            ability = template.getBattleAbility();
-        }
-
+        ActivatedAbility ability = template.getActiveZone(source, data).getActivated();
         if (ability != null) {
             if (!ability.getTarget().isValidTarget(data, templates, source, target)) {
                 if (throwOnFail) {

@@ -69,7 +69,7 @@ public class CardPainterAWT {
             front.drawString(title, 35, 57);
         }
 //        graphics.drawImage(cardImages.getCachedImage("images/templates/stat.png"), 314, 7, 73, 73, null);
-        Integer manaCost = template.getManaCost();
+        Integer manaCost = template.getHand().getCast().getManaCost();
         if (manaCost != null) {
             drawCardCostManaAmount(front, manaCost, (width - textStartX + 20), (46 + 15), FONTSTATS);
         }
@@ -168,7 +168,7 @@ public class CardPainterAWT {
             front.drawString(title, 35, 57);
 //            graphics.drawString(title, 45, 54);
         }
-        Integer manaCost = template.getManaCost();
+        Integer manaCost = template.getHand().getCast().getManaCost();
         if (manaCost != null) {
             drawCardCostManaAmount(front, manaCost, (width - textStartX + 20), (46 + 15), FONTSTATS);
         }

@@ -3,6 +3,7 @@ package com.etherblood.a.rules.updates;
 import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
@@ -65,8 +66,9 @@ public class ZoneService {
         assertNoZone(entity);
         if (applyComponents) {
             CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
-            for (int component : template.components()) {
-                data.set(entity, component, template.get(component));
+            IntMap components = template.getBattle().getComponents();
+            for (int component : components) {
+                data.set(entity, component, components.get(component));
             }
         }
         data.set(entity, core.IN_BATTLE_ZONE, data.createEntity());

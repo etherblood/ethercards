@@ -1,118 +1,39 @@
 package com.etherblood.a.rules.templates;
 
-import com.etherblood.a.entities.collections.IntMap;
-import java.util.ArrayList;
+import com.etherblood.a.entities.EntityData;
+import com.etherblood.a.rules.CoreComponents;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CardTemplate {
 
     private final int id;
     private final boolean isMinion;
-    private final Integer manaCost;
-    private final TargetSelection castTarget;
-    private final List<Effect> castEffects;
-    protected final IntMap components;
-    protected final Set<Tribe> tribes;
-    protected final Map<Integer, List<Effect>> inBattle;
-    protected final Map<Integer, List<Effect>> inHand;
-    protected final Map<Integer, List<Effect>> inLibrary;
-    protected final Map<Integer, List<Effect>> inGraveyard;
-    protected final Map<Integer, List<StatModifier>> componentModifiers;
-    protected final ActivatedAbility battleAbility;
+    private final Set<Tribe> tribes;
+    private final ZoneState hand;
+    private final ZoneState battle;
+    private final ZoneState graveyard;
+    private final ZoneState library;
 
-    protected CardTemplate(int id, boolean isMinion, Integer manaCost, TargetSelection castTarget, List<Effect> castEffects, IntMap components, Set<Tribe> tribes, Map<Integer, List<Effect>> inBattle, Map<Integer, List<Effect>> inHand, Map<Integer, List<Effect>> inLibrary, Map<Integer, List<Effect>> inGraveyard, Map<Integer, List<StatModifier>> componentModifiers, ActivatedAbility battleAbility) {
+    protected CardTemplate(int id, boolean isMinion, Set<Tribe> tribes, ZoneState hand, ZoneState battle, ZoneState graveyard, ZoneState library) {
         this.id = id;
         this.isMinion = isMinion;
-        this.manaCost = manaCost;
-        this.castTarget = Objects.requireNonNull(castTarget);
-        this.castEffects = Collections.unmodifiableList(new ArrayList<>(castEffects));
-        this.tribes = Collections.unmodifiableSet(EnumSet.copyOf(tribes));
-        this.inBattle = deepCopy(inBattle);
-        this.inHand = deepCopy(inHand);
-        this.inLibrary = deepCopy(inLibrary);
-        this.inGraveyard = deepCopy(inGraveyard);
-        this.components = new IntMap();
-        for (int key : components) {
-            this.components.set(key, components.get(key));
-        }
-        this.componentModifiers = Collections.unmodifiableMap(componentModifiers.entrySet().stream()
-                .collect(Collectors.toMap(x -> x.getKey(), x -> Collections.unmodifiableList(new ArrayList<>(x.getValue())))));
-        this.battleAbility = battleAbility;
-    }
-
-    private <K, V> Map<K, List<V>> deepCopy(Map<K, List<V>> map) {
-        Map<K, List<V>> result = new HashMap<>();
-        for (Map.Entry<K, List<V>> entry : map.entrySet()) {
-            result.put(entry.getKey(), Collections.unmodifiableList(new ArrayList<>(entry.getValue())));
-        }
-        return result;
+        Set<Tribe> tribesCopy = EnumSet.noneOf(Tribe.class);
+        tribesCopy.addAll(tribes);
+        this.tribes = Collections.unmodifiableSet(tribesCopy);
+        this.hand = hand;
+        this.battle = battle;
+        this.graveyard = graveyard;
+        this.library = library;
     }
 
     public int getId() {
         return id;
     }
 
-    public Integer getManaCost() {
-        return manaCost;
-    }
-
-    public TargetSelection getCastTarget() {
-        return castTarget;
-    }
-
-    public List<Effect> getCastEffects() {
-        return castEffects;
-    }
-
     public String getTemplateName() {
         return "#" + id;
-    }
-
-    public Iterable<Integer> components() {
-        return components;
-    }
-
-    public int get(int component) {
-        return components.get(component);
-    }
-
-    public boolean has(int component) {
-        return components.hasKey(component);
-    }
-
-    public boolean has(int component, int value) {
-        return components.getOrElse(component, ~value) == value;
-    }
-
-    public Map<Integer, List<Effect>> getBattleTriggers() {
-        return inBattle;
-    }
-
-    public Map<Integer, List<Effect>> getHandTriggers() {
-        return inHand;
-    }
-
-    public Map<Integer, List<Effect>> getLibraryTriggers() {
-        return inLibrary;
-    }
-
-    public Map<Integer, List<Effect>> getGraveyardTriggers() {
-        return inGraveyard;
-    }
-
-    public ActivatedAbility getBattleAbility() {
-        return battleAbility;
-    }
-
-    public List<StatModifier> getComponentModifiers(int component) {
-        return componentModifiers.getOrDefault(component, Collections.emptyList());
     }
 
     public Set<Tribe> getTribes() {
@@ -121,5 +42,37 @@ public class CardTemplate {
 
     public boolean isMinion() {
         return isMinion;
+    }
+
+    public ZoneState getActiveZone(int entity, EntityData data) {
+        //This method does not belong here, move it into a utility class or a service
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        if (data.has(entity, core.IN_HAND_ZONE)) {
+            return getHand();
+        } else if (data.has(entity, core.IN_BATTLE_ZONE)) {
+            return getBattle();
+        } else if (data.has(entity, core.IN_GRAVEYARD_ZONE)) {
+            return getGraveyard();
+        } else if (data.has(entity, core.IN_LIBRARY_ZONE)) {
+            return getLibrary();
+        } else {
+            throw new AssertionError();
+        }
+    }
+
+    public ZoneState getHand() {
+        return hand;
+    }
+
+    public ZoneState getBattle() {
+        return battle;
+    }
+
+    public ZoneState getGraveyard() {
+        return graveyard;
+    }
+
+    public ZoneState getLibrary() {
+        return library;
     }
 }

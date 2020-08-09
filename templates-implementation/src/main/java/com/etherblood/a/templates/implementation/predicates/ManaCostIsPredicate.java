@@ -22,6 +22,7 @@ public class ManaCostIsPredicate implements TargetPredicate {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int templateId = data.get(target, core.CARD_TEMPLATE);
         CardTemplate template = templates.getCard(templateId);
-        return template.getManaCost() != null && relation.applyTo(template.getManaCost(), value);
+        Integer manaCost = template.getHand().getCast().getManaCost();
+        return manaCost != null && relation.applyTo(manaCost, value);
     }
 }

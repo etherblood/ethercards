@@ -8,6 +8,7 @@ import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.templates.ZoneState;
 import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.templates.api.deserializers.filedtypes.CardId;
 import java.util.function.IntUnaryOperator;
@@ -32,6 +33,7 @@ public class TransformTemplateEffect implements Effect {
         triggerService.cleanupEffects(target);
         data.set(target, core.CARD_TEMPLATE, template);
         CardTemplate cardTemplate = templates.getCard(template);
+        ZoneState activeZone = cardTemplate.getActiveZone(target, data);
         IntList blacklist = new IntList(
                 core.OWNER,
                 core.TEAM,
@@ -49,14 +51,12 @@ public class TransformTemplateEffect implements Effect {
                 continue;
             }
 
-            if (cardTemplate.has(meta.id)) {
-                data.set(target, meta.id, cardTemplate.get(meta.id));
+            if (activeZone.getComponents().hasKey(meta.id)) {
+                data.set(target, meta.id, activeZone.getComponents().get(meta.id));
             } else {
                 data.remove(target, meta.id);
             }
         }
-        data.set(target, core.SUMMONING_SICKNESS, 1);
         triggerService.initEffects(target);
-        triggerService.onEnterBattle(target);// FIXME: trigger misuse
     }
 }

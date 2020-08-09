@@ -40,6 +40,7 @@ import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
+import com.etherblood.a.gui.prettycards.CardModelUpdater;
 import com.etherblood.a.gui.soprettyboard.BoardTemplate;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.network.api.GameReplayService;
@@ -456,7 +457,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         for (int cardEntity : cards) {
             Card<CardModel> card = getOrCreateMinion(cardEntity);
             CardModel minionModel = card.getModel();
-            minionModel.updateFrom(data, game.getTemplates());
+            new CardModelUpdater().updateFromData(minionModel, game.getTemplates(), data);
             if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
                     .anyMatch(cast -> cast.source == cardEntity)) {
                 card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
@@ -478,17 +479,13 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 minionModel.setGlow(null);
             }
             boolean isFaceUp;
-            switch (minionModel.getZone()) {
-                case LIBRARY:
-                    isFaceUp = false;
-                    break;
-                case HAND:
-                    int ownTeam = data.get(userControlledPlayer, core.TEAM);
-                    isFaceUp = data.hasValue(cardEntity, core.TEAM, ownTeam);
-                    break;
-                default:
-                    isFaceUp = true;
-                    break;
+            if (data.has(cardEntity, core.IN_LIBRARY_ZONE)) {
+                isFaceUp = false;
+            } else if (data.has(cardEntity, core.IN_HAND_ZONE)) {
+                int ownTeam = data.get(userControlledPlayer, core.TEAM);
+                isFaceUp = data.hasValue(cardEntity, core.TEAM, ownTeam);
+            } else {
+                isFaceUp = true;
             }
             minionModel.setFaceUp(isFaceUp);
 
@@ -543,7 +540,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int cardTemplate = data.get(castable, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(cardTemplate);
-        IntList validTargets = template.getCastTarget().getValidTargets(data, game.getTemplates(), castable);
+        IntList validTargets = template.getHand().getCast().getTarget().getValidTargets(data, game.getTemplates(), castable);
         if (validTargets.nonEmpty()) {
             return new AimToTargetInteractivity(TargetSnapMode.VALID) {
                 @Override
@@ -577,12 +574,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int cardTemplate = data.get(entity, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(cardTemplate);
-        ActivatedAbility ability;
-        if (data.has(entity, core.IN_BATTLE_ZONE)) {
-            ability = template.getBattleAbility();
-        } else {
-            throw new AssertionError();
-        }
+        ActivatedAbility ability = template.getActiveZone(entity, data).getActivated();
         IntList validTargets = ability.getTarget().getValidTargets(data, game.getTemplates(), entity);
         if (validTargets.nonEmpty()) {
             return new AimToTargetInteractivity(TargetSnapMode.VALID) {

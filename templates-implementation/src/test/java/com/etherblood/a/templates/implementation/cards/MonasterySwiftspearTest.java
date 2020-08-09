@@ -20,8 +20,8 @@ public class MonasterySwiftspearTest extends AbstractGameTest {
         moves.apply(new Cast(player(0), swiftspear2));
 
         CardTemplate template = templates.getCard(getCardId("monastery_swiftspear"));
-        int attack = template.get(core.ATTACK);
-        int health = template.get(core.HEALTH);
+        int attack = template.getBattle().getComponents().get(core.ATTACK);
+        int health = template.getBattle().getComponents().get(core.HEALTH);
         Assertions.assertEquals(attack + 1, effectiveStats.attack(swiftspear1));
         Assertions.assertEquals(health + 1, effectiveStats.health(swiftspear1));
         Assertions.assertEquals(attack, effectiveStats.attack(swiftspear2));
@@ -36,8 +36,8 @@ public class MonasterySwiftspearTest extends AbstractGameTest {
         moves.apply(new Cast(player(0), coin));
 
         CardTemplate template = templates.getCard(getCardId("monastery_swiftspear"));
-        int attack = template.get(core.ATTACK);
-        int health = template.get(core.HEALTH);
+        int attack = template.getBattle().getComponents().get(core.ATTACK);
+        int health = template.getBattle().getComponents().get(core.HEALTH);
         Assertions.assertEquals(attack, effectiveStats.attack(swiftspear));
         Assertions.assertEquals(health, effectiveStats.health(swiftspear));
     }

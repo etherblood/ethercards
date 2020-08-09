@@ -10,17 +10,14 @@ import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderSettings;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.entities.Components;
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.prettycards.CardPainterAWT;
 import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
+import com.etherblood.a.gui.prettycards.CardModelUpdater;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.templates.api.DisplayCardTemplate;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.jme3.app.state.AbstractAppState;
@@ -40,7 +37,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
@@ -83,15 +79,12 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         cardOrder = cardOrder.thenComparing(x -> x.getTemplate().getName());
         cardOrder = cardOrder.thenComparingInt(x -> x.getTemplate().getId());
 
-        EntityData data = new SimpleEntityData(components);
-        int owner = data.createEntity();
-        data.set(owner, components.getModule(CoreComponents.class).TEAM, 0);
-        GameTemplates gameTemplates = new GameTemplates(cards.stream().collect(Collectors.toMap(x -> x.getId(), x -> x)));
+        CoreComponents core = components.getModule(CoreComponents.class);
 
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
-            CardModel cardModel = new CardModel(SystemsUtil.createCard(data, card.getId(), owner));
-            cardModel.updateFrom(data, gameTemplates);
+            CardModel cardModel = new CardModel(-1);
+            new CardModelUpdater().updateFromTemplate(cardModel, card, core);
             allCardModels.add(cardModel);
         }
         allCardModels.sort(cardOrder);
@@ -162,7 +155,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     }
 
     private int getManaCost(CardModel card) {
-        Integer manaCost = card.getTemplate().getManaCost();
+        Integer manaCost = card.getTemplate().getHand().getCast().getManaCost();
         if (manaCost == null) {
             return 0;
         }

@@ -35,12 +35,12 @@ public class CastSystem {
             int target = data.get(castSource, core.CAST_TARGET);
             CardTemplate template = templates.getCard(cardTemplateId);
             if (target == ~0) {
-                assert template.getCastTarget().isValidTarget(data, templates, castSource, null);
+                assert template.getHand().getCast().getTarget().isValidTarget(data, templates, castSource, null);
             } else {
-                assert template.getCastTarget().isValidTarget(data, templates, castSource, target);
+                assert template.getHand().getCast().getTarget().isValidTarget(data, templates, castSource, target);
             }
             int owner = data.get(castSource, core.OWNER);
-            Integer manaCost = template.getManaCost();
+            Integer manaCost = template.getHand().getCast().getManaCost();
             if (manaCost != null && manaCost != 0) {
                 int mana = data.get(owner, core.MANA);
                 mana -= manaCost;
@@ -49,7 +49,7 @@ public class CastSystem {
                 }
                 data.set(owner, core.MANA, mana);
             }
-            for (Effect effect : template.getCastEffects()) {
+            for (Effect effect : template.getHand().getCast().getEffects()) {
                 effect.apply(data, templates, random, events, castSource, target);
             }
 

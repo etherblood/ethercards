@@ -92,6 +92,8 @@ public class CoreComponents implements ComponentsModule {
     public final int TRIGGER_SELF_SURVIVE;
     public final int TRIGGER_OWNER_UPKEEP;
     public final int TRIGGER_OWNER_DRAW;
+    
+    public final int ACTIVATED_ABILITY;
 
     public CoreComponents(ToIntFunction<String> register) {
         OWNER = register.applyAsInt("OWNER");
@@ -174,7 +176,6 @@ public class CoreComponents implements ComponentsModule {
         TRIGGER_SELF_SUMMON = register.applyAsInt("TRIGGER_SELF_SUMMON");
         TRIGGER_OTHER_SUMMON = register.applyAsInt("TRIGGER_OTHER_SUMMON");
         
-        
         TRIGGER_SELF_DEATH = register.applyAsInt("TRIGGER_SELF_DEATH");
         TRIGGER_SELF_ENTER_BATTLE = register.applyAsInt("TRIGGER_SELF_ENTER_BATTLE");
         TRIGGER_SELF_ENTER_GRAVEYARD = register.applyAsInt("TRIGGER_SELF_ENTER_GRAVEYARD");
@@ -182,5 +183,7 @@ public class CoreComponents implements ComponentsModule {
         TRIGGER_OWNER_DRAW = register.applyAsInt("TRIGGER_OWNER_DRAW");
         TRIGGER_SELF_FIGHT = register.applyAsInt("TRIGGER_SELF_FIGHT");
         TRIGGER_SELF_SURVIVE = register.applyAsInt("TRIGGER_SELF_SURVIVE");
+        
+        ACTIVATED_ABILITY = register.applyAsInt("ACTIVATED_ABILITY");
     }
 }

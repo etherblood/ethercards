@@ -32,15 +32,16 @@ public class SoulshiftEffect implements Effect {
             int templateId = data.get(candidate, core.CARD_TEMPLATE);
             CardTemplate template = templates.getCard(templateId);
             if (template.getTribes().contains(Tribe.SPIRIT)) {
-                if (template.getManaCost() != null) {
-                    if (template.getManaCost() > power) {
+                Integer manaCost = template.getHand().getCast().getManaCost();
+                if (manaCost != null) {
+                    if (manaCost > power) {
                         continue;
                     }
-                    if (template.getManaCost() > best) {
+                    if (manaCost > best) {
                         candidates.clear();
-                        best = template.getManaCost();
+                        best = manaCost;
                     }
-                    if (template.getManaCost() == best) {
+                    if (manaCost == best) {
                         candidates.add(candidate);
                     }
                 }

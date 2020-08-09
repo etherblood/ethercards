@@ -4,12 +4,11 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
+import com.etherblood.a.rules.templates.ZoneState;
 import java.util.List;
-import java.util.Map;
 import java.util.function.IntUnaryOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +97,7 @@ public class TriggerService {
     }
 
     public void trigger(int triggerComponent, int self, int triggerTarget) {
-        List<Effect> triggers = triggers(self).get(triggerComponent);
+        List<Effect> triggers = zoneState(self).getPassive().get(triggerComponent);
         if (triggers == null) {
             throw new NullPointerException("Missing " + data.getComponents().getMeta(triggerComponent).name);
         }
@@ -108,32 +107,27 @@ public class TriggerService {
     }
 
     public void cleanupEffects(int entity) {
-        for (int trigger : triggers(entity).keySet()) {
-            assert !triggers(entity).get(trigger).isEmpty();
+        for (int trigger : zoneState(entity).getPassive().keySet()) {
+            assert !zoneState(entity).getPassive().get(trigger).isEmpty();
             data.remove(entity, trigger);
         }
+        data.remove(entity, core.ACTIVATED_ABILITY);
     }
 
     public void initEffects(int entity) {
-        for (int trigger : triggers(entity).keySet()) {
-            assert !triggers(entity).get(trigger).isEmpty();
+        ZoneState zoneState = zoneState(entity);
+        for (int trigger : zoneState.getPassive().keySet()) {
+            assert !zoneState.getPassive().get(trigger).isEmpty();
             data.set(entity, trigger, data.createEntity());
+        }
+        if (zoneState.getActivated() != null) {
+            data.set(entity, core.ACTIVATED_ABILITY, 1);
         }
     }
 
-    private Map<Integer, List<Effect>> triggers(int entity) {
+    private ZoneState zoneState(int entity) {
         int templateId = data.get(entity, core.CARD_TEMPLATE);
         CardTemplate template = templates.getCard(templateId);
-        if (data.has(entity, core.IN_BATTLE_ZONE)) {
-            return template.getBattleTriggers();
-        } else if (data.has(entity, core.IN_HAND_ZONE)) {
-            return template.getHandTriggers();
-        } else if (data.has(entity, core.IN_GRAVEYARD_ZONE)) {
-            return template.getGraveyardTriggers();
-        } else if (data.has(entity, core.IN_LIBRARY_ZONE)) {
-            return template.getLibraryTriggers();
-        } else {
-            throw new AssertionError();
-        }
+        return template.getActiveZone(entity, data);
     }
 }

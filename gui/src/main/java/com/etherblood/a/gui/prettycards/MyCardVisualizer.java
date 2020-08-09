@@ -24,7 +24,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
 
     @Override
     protected void updateVisualizationObject(CardVisualization visualization, Card<CardModel> card, AssetManager assetManager) {
-        if (!card.getModel().isFoil() && card.getModel().getZone() != BoardZone.BATTLE && FULL_CARD_CACHE.containsKey(card.getModel().getTemplate().getAlias())) {
+        if (!card.getModel().isFoil() && !card.getModel().isInBattleZone() && FULL_CARD_CACHE.containsKey(card.getModel().getTemplate().getAlias())) {
             PaintableImage image = FULL_CARD_CACHE.get(card.getModel().getTemplate().getAlias());
             visualization.setCardFront(image);
             image.flipY();
@@ -39,7 +39,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
             PaintableImage back = cardPainter.createPaintable();
             PaintableImage art = cardPainter.createPaintable();
             PaintableImage front = cardPainter.createPaintable();
-            if (card.getModel().getZone() == BoardZone.BATTLE) {
+            if (card.getModel().isInBattleZone()) {
                 if (card.getModel().isInspected()) {
                     cardPainter.drawMinion_Full(card.getModel(), back, art, front);
                 } else {
@@ -54,7 +54,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
                 back.paintSameSizeImage(art);
                 back.paintSameSizeImage(front);
                 visualization.setCardFront(back);
-                if (card.getModel().getZone() != BoardZone.BATTLE) {
+                if (!card.getModel().isInBattleZone()) {
                     FULL_CARD_CACHE.put(card.getModel().getTemplate().getAlias(), back);
                     back.flipY();
                 }

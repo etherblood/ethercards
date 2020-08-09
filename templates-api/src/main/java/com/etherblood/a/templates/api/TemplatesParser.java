@@ -8,19 +8,16 @@ import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.templates.StatModifier;
-import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.TargetSelection;
-import com.etherblood.a.templates.api.deserializers.ZoneStateDeserializer;
+import com.etherblood.a.templates.api.deserializers.RawZoneStateDeserializer;
 import com.etherblood.a.templates.api.deserializers.TemplateObjectDeserializer;
-import com.etherblood.a.templates.api.model.RawCardDisplay;
 import com.etherblood.a.templates.api.model.RawCardTemplate;
-import com.etherblood.a.rules.templates.ZoneState;
+import com.etherblood.a.templates.api.model.RawZoneState;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -47,7 +44,7 @@ public class TemplatesParser {
                 .registerTypeAdapter(TargetSelection.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetSelections(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(TargetPredicate.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetPredicates(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(x -> registerIfAbsent(cardAliases, x), componentAliases::get))
-                .registerTypeAdapter(ZoneState.class, new ZoneStateDeserializer(componentAliases::get))
+                .registerTypeAdapter(RawZoneState.class, new RawZoneStateDeserializer(componentAliases::get))
                 .create();
     }
 
@@ -75,80 +72,33 @@ public class TemplatesParser {
     }
 
     public DisplayCardTemplate parseCard(JsonObject cardJson) {
-        RawCardTemplate rawCard = aliasGson.fromJson(cardJson, RawCardTemplate.class);
-
         try {
-            DisplayCardTemplateBuilder builder = new DisplayCardTemplateBuilder();
-            builder.setAlias(rawCard.alias);
-            RawCardDisplay display = rawCard.display;
-            if (display != null) {
-                builder.setColors(display.colors);
-                builder.setDescription(display.description);
-                builder.setFlavourText(display.flavourText);
-                builder.setImagePath(display.imagePath);
-                builder.setName(display.name);
-            }
-            builder.setManaCost(rawCard.hand.cast.getManaCost());
-            if (rawCard.hand.cast.getTarget() != null) {
-                builder.setCastTarget(rawCard.hand.cast.getTarget());
-            } else {
-                builder.setCastTarget(new Untargeted());
-            }
-            for (Effect effect : rawCard.hand.cast.getEffects()) {
-                builder.castEffect(effect);
-            }
+            RawCardTemplate rawCard = aliasGson.fromJson(cardJson, RawCardTemplate.class);
+            int id = registerIfAbsent(cardAliases, rawCard.alias);
 
-            for (Tribe tribe : rawCard.tribes) {
-                builder.addTribe(tribe);
+            DisplayCardTemplate card = new DisplayCardTemplate(
+                    id,
+                    !rawCard.battle.components.isEmpty(),
+                    rawCard.alias,
+                    rawCard.display.name,
+                    rawCard.display.flavourText,
+                    rawCard.display.description,
+                    rawCard.display.imagePath,
+                    rawCard.display.colors,
+                    rawCard.tribes,
+                    rawCard.hand.toZoneState(),
+                    rawCard.battle.toZoneState(),
+                    rawCard.graveyard.toZoneState(),
+                    rawCard.library.toZoneState());
+            DisplayCardTemplate previous = cards.put(id, card);
+            if (previous != null) {
+                throw new IllegalStateException("Multiple cards registered to same alias: " + rawCard.alias);
             }
-            for (Map.Entry<Integer, List<Effect>> entry : rawCard.battle.passive.entrySet()) {
-                for (Effect effect : entry.getValue()) {
-                    builder.inBattle(entry.getKey(), effect);
-                }
-            }
-            for (Map.Entry<Integer, List<Effect>> entry : rawCard.hand.passive.entrySet()) {
-                for (Effect effect : entry.getValue()) {
-                    builder.inHand(entry.getKey(), effect);
-                }
-            }
-            for (Map.Entry<Integer, List<Effect>> entry : rawCard.graveyard.passive.entrySet()) {
-                for (Effect effect : entry.getValue()) {
-                    builder.inGraveyard(entry.getKey(), effect);
-                }
-            }
-            for (Map.Entry<Integer, List<Effect>> entry : rawCard.library.passive.entrySet()) {
-                for (Effect effect : entry.getValue()) {
-                    builder.inLibrary(entry.getKey(), effect);
-                }
-            }
-
-            for (Map.Entry<Integer, List<StatModifier>> entry : rawCard.battle.componentModifiers.entrySet()) {
-                for (StatModifier statModifier : entry.getValue()) {
-                    builder.modifyComponent(entry.getKey(), statModifier);
-                }
-            }
-
-            builder.setBattleAbility(rawCard.battle.activated);
-            if (rawCard.battle.components != null) {
-                for (int component : rawCard.battle.components) {
-                    builder.set(component, rawCard.battle.components.get(component));
-                }
-            }
-            return register(builder);
+            return card;
         } catch (Exception ex) {
-            LOG.error("Failed to parse card {}.", rawCard.alias);
+            LOG.error("Failed to parse card {}.", cardJson.get("alias"));
             throw ex;
         }
-    }
-
-    public DisplayCardTemplate register(DisplayCardTemplateBuilder builder) {
-        int id = registerIfAbsent(cardAliases, builder.getAlias());
-        DisplayCardTemplate card = builder.build(id);
-        DisplayCardTemplate previous = cards.put(id, card);
-        if (previous != null) {
-            throw new IllegalStateException("Multiple cards registered to same alias: " + builder.getAlias());
-        }
-        return card;
     }
 
     public Set<String> unresolvedCards() {

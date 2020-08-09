@@ -203,7 +203,7 @@ public class ResolveSystem {
 
     private void regenerate(int entity) {
         CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
-        data.set(entity, core.HEALTH, template.get(core.HEALTH));
+        data.set(entity, core.HEALTH, template.getBattle().getComponents().get(core.HEALTH));
         data.set(entity, core.TIRED, 1);
         data.remove(entity, core.ATTACK_TARGET);
         data.remove(entity, core.BLOCK_TARGET);
