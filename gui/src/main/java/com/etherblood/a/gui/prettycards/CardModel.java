@@ -58,6 +58,10 @@ public class CardModel extends BoardObjectModel {
         return template;
     }
 
+    public void setTemplate(DisplayCardTemplate template) {
+        updateIfNotEquals(this.template, template, () -> this.template = template);
+    }
+
     public List<String> getKeywords() {
         return Collections.unmodifiableList(keywords);
     }

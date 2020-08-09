@@ -5,7 +5,6 @@ import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.templates.api.DisplayCardTemplate;
 import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
@@ -19,6 +18,7 @@ public class CardModelUpdater {
 
     public void updateFromTemplate(CardModel model, DisplayCardTemplate template, CoreComponents core) {
         IntMap components = template.getBattle().getComponents();
+        model.setTemplate(template);
         if (components.hasKey(core.ATTACK)) {
             model.setAttack(components.get(core.ATTACK));
         } else {
@@ -135,6 +135,7 @@ public class CardModelUpdater {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int entityId = model.getEntityId();
         DisplayCardTemplate template = (DisplayCardTemplate) templates.getCard(data.get(entityId, core.CARD_TEMPLATE));
+        model.setTemplate(template);
         if (!data.has(entityId, core.IN_BATTLE_ZONE)) {
             updateFromTemplate(model, template, core);
             return;
