@@ -11,11 +11,11 @@ import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.Tribe;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.TargetSelection;
-import com.etherblood.a.templates.api.deserializers.RawZoneEffectsDeserializer;
+import com.etherblood.a.templates.api.deserializers.ZoneStateDeserializer;
 import com.etherblood.a.templates.api.deserializers.TemplateObjectDeserializer;
 import com.etherblood.a.templates.api.model.RawCardDisplay;
 import com.etherblood.a.templates.api.model.RawCardTemplate;
-import com.etherblood.a.templates.api.model.RawZoneEffects;
+import com.etherblood.a.rules.templates.ZoneState;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -47,7 +47,7 @@ public class TemplatesParser {
                 .registerTypeAdapter(TargetSelection.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetSelections(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(TargetPredicate.class, new TemplateObjectDeserializer<>(templateClassAliasMap.getTargetPredicates(), x -> registerIfAbsent(cardAliases, x), componentAliases::get))
                 .registerTypeAdapter(IntMap.class, new ComponentsDeserializer(x -> registerIfAbsent(cardAliases, x), componentAliases::get))
-                .registerTypeAdapter(RawZoneEffects.class, new RawZoneEffectsDeserializer(componentAliases::get))
+                .registerTypeAdapter(ZoneState.class, new ZoneStateDeserializer(componentAliases::get))
                 .create();
     }
 
