@@ -8,7 +8,6 @@
     ],
     "description": "Deal 6 damage to the selected minion or hero."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 4,

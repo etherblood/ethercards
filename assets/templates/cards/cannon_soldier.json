@@ -8,7 +8,6 @@
     ],
     "description": "Tap, sacrifice 1 minion, deal 3 damage to a random opponent."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 4,

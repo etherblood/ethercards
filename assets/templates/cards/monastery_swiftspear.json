@@ -9,7 +9,6 @@
     "description": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
     "flavourText": "The calligraphy of combat is written with strokes of sudden blood."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

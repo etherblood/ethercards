@@ -8,7 +8,6 @@
     ],
     "flavourText": "I am sheep."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 2,

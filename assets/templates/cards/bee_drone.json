@@ -8,7 +8,6 @@
     ],
     "description": "Your other minions have +1 attack."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 3,

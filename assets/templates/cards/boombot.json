@@ -8,7 +8,6 @@
     ],
     "description": "Deal 2 damage to a random enemy when this dies."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

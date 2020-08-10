@@ -8,7 +8,6 @@
     ],
     "description": "Cut each heroes health in half."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,

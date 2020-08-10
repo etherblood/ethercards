@@ -8,7 +8,6 @@
     ],
     "description": "Each player Draws 2 cards."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 3,

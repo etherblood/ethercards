@@ -9,7 +9,6 @@
     "description": "As an additional cost to cast this spell, discard a card.\nDraw two cards.",
     "flavourText": "No guts, no glory."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 2,

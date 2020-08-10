@@ -9,7 +9,6 @@
     ],
     "description": "Give a minion +2/+2, Trample and Lifelink."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 3,

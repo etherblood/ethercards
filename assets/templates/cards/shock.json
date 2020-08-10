@@ -8,7 +8,6 @@
     ],
     "description": "Deal 2 damage to the selected minion or hero."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

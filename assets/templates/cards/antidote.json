@@ -8,7 +8,6 @@
     ],
     "description": "Cure up to 5 Poisoned, draw a card."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 2,

@@ -9,7 +9,6 @@
     "description": "Transform a minion into a 2/2 Sheep.",
     "flavourText": "There was going to be a pun in this flavor text, but it just came out baa-d."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 4,

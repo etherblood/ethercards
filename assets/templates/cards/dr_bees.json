@@ -8,7 +8,6 @@
     ],
     "description": "Shuffle 10 Bee Workers, 5 Bee Warriors, 1 Bee Drone, 1 Bee Queen and 1 Bee Hive into your library."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,

@@ -8,7 +8,6 @@
     ],
     "description": "Shuffle this into your library when it dies."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 8,

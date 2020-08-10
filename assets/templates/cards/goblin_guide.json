@@ -8,7 +8,6 @@
     ],
     "description": "The defending player draws 1 card each time Goblin Guide attacks."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

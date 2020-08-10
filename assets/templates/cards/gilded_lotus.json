@@ -8,7 +8,6 @@
     ],
     "description": "Gain 3 Mana Pool."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 6,

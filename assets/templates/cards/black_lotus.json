@@ -8,7 +8,6 @@
     ],
     "description": "Gain 3 Mana. Your hero gains 5 Poisoned."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 0,

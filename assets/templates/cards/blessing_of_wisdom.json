@@ -8,7 +8,6 @@
     ],
     "description": "Choose a minion, its owner draws a card whenever it blocks or attacks."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

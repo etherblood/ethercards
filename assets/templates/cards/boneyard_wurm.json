@@ -9,7 +9,6 @@
     "description": "Boneyard Wurm's power and toughness are each equal to the number of creature cards in your graveyard.",
     "flavourText": "The only thing it likes more than discovering a pit of bones is adding to it."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 2,

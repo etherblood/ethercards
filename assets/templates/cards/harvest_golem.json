@@ -8,7 +8,6 @@
     ],
     "description": "Summon a 2/1 Damaged Golem when this dies."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 3,

@@ -10,7 +10,6 @@
   "tribes": [
     "DRAGON"
   ],
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 9,

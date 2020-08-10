@@ -8,7 +8,6 @@
     ],
     "description": "Attack-Phase: Draw a Bee Drone. Block-Phase: Draw a Bee Queen."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

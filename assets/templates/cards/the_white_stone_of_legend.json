@@ -8,7 +8,6 @@
     ],
     "description": "If this card is sent to the Graveyard: Add 1 \"Blue-Eyes White Dragon\" from your Library to your Hand."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

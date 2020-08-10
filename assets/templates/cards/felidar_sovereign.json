@@ -9,7 +9,6 @@
     "description": "In your upkeep, if you have 50 or more life, you win the game.",
     "flavourText": "It surveys the withering landscape, waiting for a victory only it can see."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 6,

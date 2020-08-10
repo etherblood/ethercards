@@ -8,7 +8,6 @@
     ],
     "description": "Attack phase: Summon a 4/4 Cat with Haste.\nBlock phase: Summon a 4/6 Bear with Vigilance."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,

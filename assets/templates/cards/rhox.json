@@ -8,7 +8,6 @@
     ],
     "flavourText_disabled_because_it_doesnt_match_the_old_art": "It's as solid as the club in its hand—and about as subtle."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 6,

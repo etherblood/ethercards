@@ -12,7 +12,6 @@
   "tribes": [
     "SPIRIT"
   ],
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 8,
@@ -36,8 +35,7 @@
         },
         "quotient": 2,
         "divident": 1
-      }
-      ,
+      },
       "ATTACK": {
         "type": "addFractional",
         "modifier": {

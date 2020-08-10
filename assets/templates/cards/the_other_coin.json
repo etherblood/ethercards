@@ -8,7 +8,6 @@
     ],
     "description": "A random player wins."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 0,

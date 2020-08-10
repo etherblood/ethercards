@@ -8,7 +8,6 @@
     ],
     "description": "Kill all enemy minions."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 12,

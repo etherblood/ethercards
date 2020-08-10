@@ -8,7 +8,6 @@
     ],
     "description": "Summon two 1/1 Boombots which deal 2 damage to a random enemy when they die."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 7,

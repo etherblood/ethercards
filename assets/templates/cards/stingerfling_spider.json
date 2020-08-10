@@ -9,7 +9,6 @@
     "description": "When Stingerfling Spider enters the battlefield, destroy target creature with flying.",
     "flavourText": "The juiciest prey is that which grows lazy, thinking itself beyond the reach of danger."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,

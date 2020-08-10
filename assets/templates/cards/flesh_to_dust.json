@@ -8,7 +8,6 @@
     ],
     "description": "Destroy a minion."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,

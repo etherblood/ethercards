@@ -8,7 +8,6 @@
     ],
     "description": "Dies after Battle. Gain 1 Delayed Mana when this dies."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

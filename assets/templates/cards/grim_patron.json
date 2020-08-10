@@ -8,7 +8,6 @@
     ],
     "description": "Summon a 3/3 Grim Patron whenever this survives damage."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,

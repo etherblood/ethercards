@@ -8,7 +8,6 @@
     ],
     "description": "Summons one 0/0 Bee Worker each turn, which dies after battle and gives 1 Delayed Mana on death."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 3,

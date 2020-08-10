@@ -8,7 +8,6 @@
     ],
     "description": "Untap all creatures. Draw a card."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 2,

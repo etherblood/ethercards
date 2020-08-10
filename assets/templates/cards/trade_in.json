@@ -8,7 +8,6 @@
     ],
     "description": "Discard a card with 8 Mana Cost; Draw 2 cards."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

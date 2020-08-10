@@ -8,7 +8,6 @@
     ],
     "description": "Summon four 1/1 dogs."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 4,

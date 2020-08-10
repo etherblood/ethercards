@@ -8,7 +8,6 @@
     ],
     "description": "Deathrattle: Deal 2 damage to the enemy hero."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

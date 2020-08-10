@@ -8,7 +8,6 @@
     ],
     "description": "Summon two 1/1 spectral spiders when this dies."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 2,

@@ -8,7 +8,6 @@
     ],
     "description": "Deal 4 damage to all enemy minions."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 8,

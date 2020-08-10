@@ -8,7 +8,6 @@
     ],
     "description": "During your upkeep, if you have no minions in play, summon this from your graveyard."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

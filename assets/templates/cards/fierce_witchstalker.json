@@ -8,7 +8,6 @@
     ],
     "flavourText": "While the realm has laws, in the wilds there are other ways of balancing power."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 4,

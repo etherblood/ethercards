@@ -8,7 +8,6 @@
     ],
     "description": "Your hero gains 5 health."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,

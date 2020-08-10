@@ -9,7 +9,6 @@
     "description": "Summon two Fast Attacker 2/1 Goblins.",
     "flavourText": "I expected more when it said a ´bunch´ of goblins..."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 3,

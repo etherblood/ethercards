@@ -8,7 +8,6 @@
     ],
     "description": "Gain 1 Mana."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 0,

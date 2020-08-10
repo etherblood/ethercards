@@ -8,7 +8,6 @@
     ],
     "description": "Summon a 3/3 Nerubian with Reach when this dies."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 2,

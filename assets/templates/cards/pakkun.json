@@ -12,7 +12,6 @@
     "NINJA",
     "DOG"
   ],
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 1,

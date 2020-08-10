@@ -8,7 +8,6 @@
     ],
     "description": "Transform into a copy of a minion."
   },
-  "version": 1,
   "hand": {
     "cast": {
       "manaCost": 5,
