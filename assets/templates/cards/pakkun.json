@@ -23,7 +23,7 @@
       ]
     },
     "components": {
-      "NINJUTSU": 0
+      "NINJUTSU": 1
     },
     "activated": {
       "selfTap": false,
