@@ -23,6 +23,7 @@ public class PhaseSystem {
     private final GameEventListener events;
     private final ResolveSystem resolveSystem;
     private final TriggerService triggerService;
+    private final ZoneService zoneService;
 
     public PhaseSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, ResolveSystem resolveSystem) {
         this.data = data;
@@ -32,6 +33,7 @@ public class PhaseSystem {
         this.events = events;
         this.resolveSystem = resolveSystem;
         this.triggerService = new TriggerService(data, templates, random, events);
+        this.zoneService = new ZoneService(data, templates, random, events);
     }
 
     public void run() {
@@ -85,6 +87,7 @@ public class PhaseSystem {
 
     private void endBlockPhase(int team) {
         applyBlocks(team);
+        applyNinjutsu(team);
         applyAttacks(team);
         clearTemporaryStats();
         resolveSystem.run();
@@ -102,6 +105,7 @@ public class PhaseSystem {
             if (!data.has(attacker, core.IN_BATTLE_ZONE)) {
                 continue;
             }
+            data.set(attacker, core.BLOCKED, 1);
             if (!bushidoApplied.contains(attacker)) {
                 applyBushido(attacker);
                 bushidoApplied.add(attacker);
@@ -119,6 +123,35 @@ public class PhaseSystem {
             });
         }
         resolveSystem.run();
+    }
+
+    private void applyNinjutsu(int team) {
+        for (int ninja : data.listInValueOrder(core.NINJUTSU_ORDER)) {
+            int attacker = data.get(ninja, core.NINJUTSU_TARGET);
+            if (data.has(attacker, core.ATTACK_TARGET)) {
+                int attackTarget = data.get(attacker, core.ATTACK_TARGET);
+                if (!data.hasValue(attackTarget, core.TEAM, team)) {
+                    continue;
+                }
+                int owner = data.get(ninja, core.OWNER);
+                int mana = data.getOptional(owner, core.MANA).orElse(0);
+                int manaCost = data.get(ninja, core.NINJUTSU);
+                if (mana >= manaCost && !data.has(attacker, core.BLOCKED)) {
+
+                    zoneService.removeFromBattle(attacker);
+                    zoneService.addToHand(attacker);
+
+                    zoneService.removeFromHand(ninja);
+                    zoneService.addToBattle(ninja, true);
+
+                    data.set(ninja, core.ATTACK_TARGET, attackTarget);
+                    data.set(ninja, core.TIRED, 1);
+                    data.set(ninja, core.SUMMONING_SICKNESS, 1);
+                }
+            }
+            data.remove(ninja, core.NINJUTSU_ORDER);
+            data.remove(ninja, core.NINJUTSU_TARGET);
+        }
     }
 
     private void applyBushido(int minion) {
@@ -285,5 +318,6 @@ public class PhaseSystem {
     private void clearTemporaryStats() {
         data.clear(core.TEMPORARY_ATTACK);
         data.clear(core.TEMPORARY_HEALTH);
+        data.clear(core.BLOCKED);
     }
 }

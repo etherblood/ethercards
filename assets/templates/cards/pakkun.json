@@ -1,0 +1,53 @@
+{
+  "alias": "pakkun",
+  "display": {
+    "name": "Pakkun",
+    "imagePath": "pakkun.png",
+    "colors": [
+      "BLUE"
+    ],
+    "flavourText": "\"Look, if you succeed in this mission, I'll even let you touch my paw.\""
+  },
+  "tribes": [
+    "NINJA",
+    "DOG"
+  ],
+  "version": 1,
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    },
+    "components": {
+      "NINJUTSU": 0
+    },
+    "activated": {
+      "selfTap": false,
+      "target": {
+        "type": "component",
+        "requiresTarget": true,
+        "component": "IN_BATTLE_ZONE",
+        "predicate": {
+          "type": "canNinjutsu"
+        }
+      },
+      "effects": [
+        {
+          "type": "ninjutsu"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

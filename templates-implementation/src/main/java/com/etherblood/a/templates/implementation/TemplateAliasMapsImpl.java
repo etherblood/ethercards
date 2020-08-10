@@ -55,9 +55,11 @@ import java.util.Map;
 import com.etherblood.a.templates.api.TargetPredicate;
 import com.etherblood.a.templates.implementation.effects.ExileEffect;
 import com.etherblood.a.templates.implementation.effects.MoveToZoneEffect;
+import com.etherblood.a.templates.implementation.effects.NinjutsuEffect;
 import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.SelfResurrectEffect;
 import com.etherblood.a.templates.implementation.effects.SelfSummonFromLibraryEffect;
+import com.etherblood.a.templates.implementation.predicates.CanNinjutsuPredicate;
 import com.etherblood.a.templates.implementation.predicates.MinionCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HasTribePredicate;
@@ -103,6 +105,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("ditto", DittoEffect.class);
         effectClasses.put("exile", ExileEffect.class);
         effectClasses.put("moveToZone", MoveToZoneEffect.class);
+        effectClasses.put("ninjutsu", NinjutsuEffect.class);
         return effectClasses;
     }
 
@@ -151,6 +154,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("hasSourceTeam", HasSourceTeamPredicate.class);
         targetClasses.put("sourceOwner", SourceOwnerPredicate.class);
         targetClasses.put("hasTribe", HasTribePredicate.class);
+        targetClasses.put("canNinjutsu", CanNinjutsuPredicate.class);
         return targetClasses;
     }
 }

@@ -7,6 +7,10 @@
       "WHITE"
     ]
   },
+  "tribes": [
+    "DOG",
+    "TOKEN"
+  ],
   "version": 1,
   "hand": {
     "cast": {

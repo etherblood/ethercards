@@ -32,6 +32,7 @@ public class DittoEffect implements Effect {
                 core.ORIGINAL_CARD_TEMPLATE,
                 core.ATTACK_TARGET,
                 core.BLOCK_TARGET,
+                core.BLOCKED,
                 core.SUMMONING_SICKNESS);
         for (ComponentMeta meta : data.getComponents().getMetas()) {
             if (blacklist.contains(meta.id)) {

@@ -45,7 +45,8 @@ public class TransformTemplateEffect implements Effect {
                 core.ORIGINAL_CARD_TEMPLATE,
                 core.CARD_TEMPLATE,
                 core.ATTACK_TARGET,
-                core.BLOCK_TARGET);
+                core.BLOCK_TARGET,
+                core.BLOCKED);
         for (ComponentMeta meta : data.getComponents().getMetas()) {
             if (blacklist.contains(meta.id)) {
                 continue;

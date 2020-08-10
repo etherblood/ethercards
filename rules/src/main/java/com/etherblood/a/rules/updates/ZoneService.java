@@ -23,7 +23,7 @@ public class ZoneService {
         this.templates = templates;
         this.triggerService = new TriggerService(data, templates, random, events);
     }
-    
+
     public void addToLibrary(int entity) {
         assertNoZone(entity);
         data.set(entity, core.IN_LIBRARY_ZONE, data.createEntity());
@@ -38,6 +38,11 @@ public class ZoneService {
 
     public void addToHand(int entity) {
         assertNoZone(entity);
+        CardTemplate template = templates.getCard(data.get(entity, core.CARD_TEMPLATE));
+        IntMap components = template.getHand().getComponents();
+        for (int component : components) {
+            data.set(entity, component, components.get(component));
+        }
         data.set(entity, core.IN_HAND_ZONE, data.createEntity());
         triggerService.initEffects(entity);
     }
@@ -46,13 +51,14 @@ public class ZoneService {
         assert data.has(entity, core.IN_HAND_ZONE);
         triggerService.cleanupEffects(entity);
         data.remove(entity, core.IN_HAND_ZONE);
+        clearZoneComponents(entity);
     }
 
     public void addToGraveyard(int entity) {
         assertNoZone(entity);
         data.set(entity, core.IN_GRAVEYARD_ZONE, data.createEntity());
         triggerService.initEffects(entity);
-        
+
         triggerService.onEnterGraveyard(entity);
     }
 
@@ -73,7 +79,7 @@ public class ZoneService {
         }
         data.set(entity, core.IN_BATTLE_ZONE, data.createEntity());
         triggerService.initEffects(entity);
-        
+
         triggerService.onEnterBattle(entity);
     }
 
@@ -85,6 +91,10 @@ public class ZoneService {
             data.remove(entity, core.ORIGINAL_CARD_TEMPLATE);
             data.set(entity, core.CARD_TEMPLATE, template);
         });
+        clearZoneComponents(entity);
+    }
+    
+    private void clearZoneComponents(int entity) {
         //TODO: use a whitelist instead?
         IntList blacklist = new IntList(core.CARD_TEMPLATE, core.OWNER, core.TEAM, core.HERO);
         for (ComponentMeta meta : data.getComponents().getMetas()) {

@@ -8,6 +8,9 @@
     ],
     "flavourText": "The hound sniffed the air and let slip a low growl. General Takeno looked down at the faithful Isamaru and calmed him with a touch. \"Alert the men. The kami are coming.\""
   },
+  "tribes": [
+    "DOG"
+  ],
   "version": 1,
   "hand": {
     "cast": {

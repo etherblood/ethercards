@@ -119,6 +119,10 @@ public class CardModelUpdater {
             keywords.add("Regeneration_" + components.get(core.REGENERATION));
         }
 
+        if (template.getHand().getComponents().hasKey(core.NINJUTSU)) {
+            keywords.add("Ninjutsu_" + template.getHand().getComponents().get(core.NINJUTSU));
+        }
+
         List<Effect> deathEffects = template.getBattle().getPassive().getOrDefault(core.TRIGGER_SELF_DEATH, Collections.emptyList());
         for (Effect effect : deathEffects) {
             if (effect instanceof SoulshiftEffect) {
@@ -130,7 +134,6 @@ public class CardModelUpdater {
         model.setKeywords(keywords);
     }
 
-    //TODO: CardModel should not know anything about data/templates
     public void updateFromData(CardModel model, GameTemplates templates, EntityData data) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int entityId = model.getEntityId();
@@ -241,6 +244,13 @@ public class CardModelUpdater {
         if (data.has(entityId, core.REGENERATION)) {
             keywords.add("Regeneration_" + data.get(entityId, core.REGENERATION));
         }
+
+        if (data.has(entityId, core.NINJUTSU)) {
+            keywords.add("Ninjutsu_" + data.get(entityId, core.NINJUTSU));
+        } else if (!data.has(entityId, core.IN_HAND_ZONE) && template.getHand().getComponents().hasKey(core.NINJUTSU)) {
+            keywords.add("Ninjutsu_" + template.getHand().getComponents().get(core.NINJUTSU));
+        }
+
         Map<Integer, List<Effect>> triggers = template.getBattle().getPassive();
         List<Effect> effects = triggers.getOrDefault(core.TRIGGER_SELF_DEATH, Collections.emptyList());
         for (Effect effect : effects) {
