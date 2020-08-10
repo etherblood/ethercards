@@ -68,7 +68,7 @@ public class EffectiveStatsService {
                 vigilance = modifier.modify(data, templates, minion, minion, vigilance);
             }
         }
-        return vigilance >= 1;
+        return vigilance > 0;
     }
 
     public boolean hasFlying(int minion) {
@@ -81,7 +81,7 @@ public class EffectiveStatsService {
                 flying = modifier.modify(data, templates, minion, minion, flying);
             }
         }
-        return flying >= 1;
+        return flying > 0;
     }
 
     public int venom(int minion) {
@@ -94,14 +94,14 @@ public class EffectiveStatsService {
         if (data.has(minion, core.FAST_TO_ATTACK)) {
             return true;
         }
-        return applyAuras(minion, core.HASTE_AURA, 0) >= 0;
+        return applyAuras(minion, core.HASTE_AURA, 0) > 0;
     }
 
     public boolean isFastToDefend(int minion) {
         if (data.has(minion, core.FAST_TO_DEFEND)) {
             return true;
         }
-        return applyAuras(minion, core.HASTE_AURA, 0) >= 0;
+        return applyAuras(minion, core.HASTE_AURA, 0) > 0;
     }
 
     private int applyAuras(int self, int auraComponent, int stat) {

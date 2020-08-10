@@ -1,0 +1,70 @@
+{
+  "alias": "battleground_geist",
+  "display": {
+    "name": "Battleground Geist",
+    "imagePath": "battleground_geist.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Other Spirit creatures you control get +1/+0.",
+    "flavourText": "Not content to nudge vases and chill drawing rooms, some geists muster spectral armies to claw at the hearts of the living."
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3,
+      "ATTACK_AURA": 1,
+      "FLYING": true
+    },
+    "passive": {
+      "TRIGGER_SELF_DEATH": [
+        {
+          "type": "soulshift",
+          "power": 3
+        }
+      ]
+    },
+    "statModifiers": {
+      "ATTACK_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "SPIRIT"
+            }
+          ]
+        },
+        "value": 1
+      }
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

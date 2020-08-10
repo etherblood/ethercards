@@ -13,19 +13,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class TemplateMigrationMain {
 
     public static void main(String[] args) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         Path folder = Paths.get("../assets/templates/cards/");
+
+        runForTemplates(folder, TemplateMigrationMain::markAsOutdated);
+//        runForTemplates(folder, TemplateMigrationMain::update);
+    }
+
+    private static void runForTemplates(Path folder, Consumer<JsonObject> updater) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         Files.list(folder).forEach(path -> {
             try {
                 JsonObject template;
                 try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                     template = gson.fromJson(reader, JsonObject.class);
                 }
-                update(template);
+                updater.accept(template);
                 try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
                     gson.toJson(template, writer);
                     writer.flush();
@@ -37,7 +44,7 @@ public class TemplateMigrationMain {
     }
 
     private static void update(JsonObject template) {
-        template.remove("version");
+        template.remove("outdated");
     }
 
     private static void updateRecursively(JsonObject object) {
@@ -63,6 +70,10 @@ public class TemplateMigrationMain {
                 updateRecursively(value.getAsJsonObject());
             }
         }
+    }
+
+    private static void markAsOutdated(JsonObject template) {
+        template.addProperty("outdated", true);
     }
 
 }

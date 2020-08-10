@@ -1,0 +1,52 @@
+{
+  "alias": "ninja_of_the_new_moon",
+  "display": {
+    "name": "Ninja of the New Moon",
+    "imagePath": "ninja_of_the_new_moon.png",
+    "colors": [
+      "BLACK"
+    ],
+    "flavourText": "The night is the greatest ally of all."
+  },
+  "tribes": [
+    "SPIRIT",
+    "NINJA"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    },
+    "components": {
+      "NINJUTSU": 4
+    },
+    "activated": {
+      "selfTap": false,
+      "target": {
+        "type": "component",
+        "requiresTarget": true,
+        "component": "IN_BATTLE_ZONE",
+        "predicate": {
+          "type": "canNinjutsu"
+        }
+      },
+      "effects": [
+        {
+          "type": "ninjutsu"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 6,
+      "HEALTH": 3
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

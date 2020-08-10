@@ -1,0 +1,96 @@
+{
+  "alias": "supreme_phantom",
+  "display": {
+    "name": "Supreme Phantom",
+    "imagePath": "supreme_phantom.png",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Other Spirit minions you control get +1/+1.",
+    "flavourText": "A king's knowledge does not vanish when the heart stops beating."
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 3,
+      "ATTACK_AURA": 1,
+      "HEALTH_AURA": 1,
+      "FLYING": true
+    },
+    "statModifiers": {
+      "ATTACK_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "SPIRIT"
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      },
+      "HEALTH_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "SPIRIT"
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      }
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}
