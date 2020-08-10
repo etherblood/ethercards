@@ -28,17 +28,13 @@
       "HEALTH": 0,
       "FLYING": true
     },
-    "componentModifiers": {
-      "HEALTH": [
-        {
-          "type": "addOwnHandCardCount"
-        }
-      ],
-      "ATTACK": [
-        {
-          "type": "addOwnHandCardCount"
-        }
-      ]
+    "statModifiers": {
+      "HEALTH": {
+        "type": "addOwnHandCardCount"
+      },
+      "ATTACK": {
+        "type": "addOwnHandCardCount"
+      }
     }
   },
   "graveyard": {},

@@ -1,5 +1,6 @@
 package com.etherblood.a.rules;
 
+import com.etherblood.a.entities.ComponentMeta;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -18,6 +19,7 @@ import com.etherblood.a.rules.moves.Update;
 import com.etherblood.a.rules.moves.UseAbility;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.Effect;
+import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.TargetSelection;
 import com.etherblood.a.rules.templates.ZoneState;
 import com.etherblood.a.rules.updates.TriggerService;
@@ -504,6 +506,13 @@ public class MoveService {
 //                        }
 //                    }
 //                }
+                ZoneState activeZone = template.getActiveZone(card, data);
+                for (Map.Entry<Integer, StatModifier> entry : activeZone.getStatModifiers().entrySet()) {
+                    ComponentMeta meta = data.getComponents().getMeta(entry.getKey());
+                    if (meta.name.endsWith("_AURA") && !data.has(card, meta.id)) {
+                        throw new IllegalStateException("Entity with template name " + template.getTemplateName() + " has " + meta.name + " modifier without matching component.");
+                    }
+                }
             }
 
             return true;

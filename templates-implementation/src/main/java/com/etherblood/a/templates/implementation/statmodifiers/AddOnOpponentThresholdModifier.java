@@ -18,7 +18,7 @@ public class AddOnOpponentThresholdModifier implements StatModifier {
     }
 
     @Override
-    public int modify(EntityData data, GameTemplates templates, int self, int stat) {
+    public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int owner = data.get(self, core.OWNER);
         IntList graveyard = data.list(core.IN_GRAVEYARD_ZONE);

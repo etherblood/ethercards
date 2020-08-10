@@ -5,7 +5,8 @@
     "imagePath": "bee_queen.gif",
     "colors": [
       "GREEN"
-    ]
+    ],
+    "description": "Your other minions have +1 health."
   },
   "version": 1,
   "hand": {
@@ -23,8 +24,35 @@
       "ATTACK": 0,
       "HEALTH": 1,
       "VENOM": 3,
-      "OWN_MINIONS_HEALTH_AURA": 1,
+      "HEALTH_AURA": 1,
       "FLYING": true
+    },
+    "statModifiers": {
+      "HEALTH_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      }
     }
   },
   "graveyard": {},

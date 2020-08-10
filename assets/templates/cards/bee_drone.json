@@ -5,7 +5,8 @@
     "imagePath": "bee_drone.gif",
     "colors": [
       "GREEN"
-    ]
+    ],
+    "description": "Your other minions have +1 attack."
   },
   "version": 1,
   "hand": {
@@ -22,8 +23,35 @@
     "components": {
       "ATTACK": 1,
       "HEALTH": 3,
-      "OWN_MINIONS_ATTACK_AURA": 1,
+      "ATTACK_AURA": 1,
       "FLYING": true
+    },
+    "statModifiers": {
+      "ATTACK_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      }
     }
   },
   "graveyard": {},

@@ -18,9 +18,9 @@ public class AddComponentPredicateCountModifier implements StatModifier {
     }
 
     @Override
-    public int modify(EntityData data, GameTemplates templates, int self, int stat) {
+    public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
         for (int entity : data.list(component)) {
-            if (predicate.test(data, templates, self, entity)) {
+            if (predicate.test(data, templates, target, entity)) {
                 stat++;
             }
         }

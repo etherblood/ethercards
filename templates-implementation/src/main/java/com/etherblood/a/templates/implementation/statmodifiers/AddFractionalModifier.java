@@ -16,8 +16,8 @@ public class AddFractionalModifier implements StatModifier {
     }
 
     @Override
-    public int modify(EntityData data, GameTemplates templates, int self, int stat) {
-        return stat + modifier.modify(data, templates, self, 0) * quotient / divident;
+    public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
+        return stat + modifier.modify(data, templates, self, target, 0) * quotient / divident;
     }
 
 }

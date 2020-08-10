@@ -30,17 +30,13 @@
       "HEALTH": 0,
       "DRAWS_PER_TURN": 1
     },
-    "componentModifiers": {
-      "HEALTH": [
-        {
-          "type": "addOwnHandCardCount"
-        }
-      ],
-      "ATTACK": [
-        {
-          "type": "addOwnHandCardCount"
-        }
-      ]
+    "statModifiers": {
+      "HEALTH": {
+        "type": "addOwnHandCardCount"
+      },
+      "ATTACK": {
+        "type": "addOwnHandCardCount"
+      }
     }
   },
   "graveyard": {},

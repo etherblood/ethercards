@@ -8,14 +8,14 @@ import java.util.Objects;
 public class ZoneState {
     
     private final IntMap components;
-    private final Map<Integer, List<StatModifier>> componentModifiers;
+    private final Map<Integer, StatModifier> statModifiers;
     private final ActivatedAbility cast;
     private final ActivatedAbility activated;
     private final Map<Integer, List<Effect>> passive;
 
-    public ZoneState(IntMap components, Map<Integer, List<StatModifier>> componentModifiers, ActivatedAbility cast, ActivatedAbility activated, Map<Integer, List<Effect>> passive) {
+    public ZoneState(IntMap components, Map<Integer, StatModifier> statModifiers, ActivatedAbility cast, ActivatedAbility activated, Map<Integer, List<Effect>> passive) {
         this.components = components;
-        this.componentModifiers = Objects.requireNonNull(componentModifiers);
+        this.statModifiers = Objects.requireNonNull(statModifiers);
         this.cast = cast;
         this.activated = activated;
         this.passive = Objects.requireNonNull(passive);
@@ -25,8 +25,8 @@ public class ZoneState {
         return components;
     }
 
-    public Map<Integer, List<StatModifier>> getComponentModifiers() {
-        return componentModifiers;
+    public Map<Integer, StatModifier> getStatModifiers() {
+        return statModifiers;
     }
 
     public ActivatedAbility getCast() {

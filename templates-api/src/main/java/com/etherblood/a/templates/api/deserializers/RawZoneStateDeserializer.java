@@ -32,14 +32,13 @@ public class RawZoneStateDeserializer implements JsonDeserializer<RawZoneState> 
         result.activated = jdc.deserialize(obj.get("activated"), RawActivatedAbility.class);
         result.cast = jdc.deserialize(obj.get("cast"), RawActivatedAbility.class);
         result.components = jdc.deserialize(obj.get("components"), IntMap.class);
-        if(result.components == null) {
+        if (result.components == null) {
             result.components = new IntMap();
         }
-        result.componentModifiers = new LinkedHashMap<>();
-        if (obj.has("componentModifiers")) {
-            for (Map.Entry<String, JsonElement> entry : obj.getAsJsonObject("componentModifiers").entrySet()) {
-                result.componentModifiers.put(componentAliases.applyAsInt(entry.getKey()), jdc.deserialize(entry.getValue(), new TypeToken<List<StatModifier>>() {
-                }.getType()));
+        result.statModifiers = new LinkedHashMap<>();
+        if (obj.has("statModifiers")) {
+            for (Map.Entry<String, JsonElement> entry : obj.getAsJsonObject("statModifiers").entrySet()) {
+                result.statModifiers.put(componentAliases.applyAsInt(entry.getKey()), jdc.deserialize(entry.getValue(), StatModifier.class));
             }
         }
         result.passive = new LinkedHashMap<>();

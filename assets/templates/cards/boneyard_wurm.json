@@ -25,45 +25,41 @@
       "ATTACK": 0,
       "HEALTH": 0
     },
-    "componentModifiers": {
-      "HEALTH": [
-        {
-          "type": "addComponentPredicateCount",
-          "component": "IN_GRAVEYARD_ZONE",
-          "predicate": {
-            "type": "allOf",
-            "predicates": [
-              {
-                "type": "hasSourceOwner",
-                "hasSourceOwner": true
-              },
-              {
-                "type": "minion",
-                "isMinion": true
-              }
-            ]
-          }
+    "statModifiers": {
+      "HEALTH": {
+        "type": "addComponentPredicateCount",
+        "component": "IN_GRAVEYARD_ZONE",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            }
+          ]
         }
-      ],
-      "ATTACK": [
-        {
-          "type": "addComponentPredicateCount",
-          "component": "IN_GRAVEYARD_ZONE",
-          "predicate": {
-            "type": "allOf",
-            "predicates": [
-              {
-                "type": "hasSourceOwner",
-                "hasSourceOwner": true
-              },
-              {
-                "type": "minion",
-                "isMinion": true
-              }
-            ]
-          }
+      },
+      "ATTACK": {
+        "type": "addComponentPredicateCount",
+        "component": "IN_GRAVEYARD_ZONE",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            }
+          ]
         }
-      ]
+      }
     }
   },
   "graveyard": {},

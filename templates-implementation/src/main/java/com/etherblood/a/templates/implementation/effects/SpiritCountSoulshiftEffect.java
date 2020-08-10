@@ -9,10 +9,9 @@ import java.util.function.IntUnaryOperator;
 
 public class SpiritCountSoulshiftEffect implements Effect {
 
-
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int self, int triggerTarget) {
-        int power = new AddOwnSpiritCountModifier().modify(data, templates, self, 0);
+        int power = new AddOwnSpiritCountModifier().modify(data, templates, self, self, 0);
         SoulshiftEffect soulshiftEffect = new SoulshiftEffect(power);
         soulshiftEffect.apply(data, templates, random, events, self, triggerTarget);
     }

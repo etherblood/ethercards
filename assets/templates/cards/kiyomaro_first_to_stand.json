@@ -27,30 +27,25 @@
       "ATTACK": 0,
       "HEALTH": 0
     },
-    "componentModifiers": {
-      "HEALTH": [
-        {
-          "type": "addOwnHandCardCount"
-        }
-      ],
-      "ATTACK": [
-        {
-          "type": "addOwnHandCardCount"
-        }
-      ],
-      "VIGILANCE": [
-        {
-          "type": "predicateActivated",
+    "statModifiers": {
+      "HEALTH": {
+        "type": "addOwnHandCardCount"
+      },
+      "ATTACK": {
+        "type": "addOwnHandCardCount"
+      },
+      "VIGILANCE": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "sourceOwner",
           "predicate": {
-            "type": "sourceOwner",
-            "predicate": {
-              "type": "handCardCountIs",
-              "relation": "GREATER_OR_EQUAL",
-              "value": 4
-            }
+            "type": "handCardCountIs",
+            "relation": "GREATER_OR_EQUAL",
+            "value": 4
           }
-        }
-      ]
+        },
+        "value": 1
+      }
     },
     "passive": {
       "TRIGGER_SELF_FIGHT": [

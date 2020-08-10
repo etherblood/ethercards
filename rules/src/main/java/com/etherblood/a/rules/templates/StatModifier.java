@@ -9,5 +9,5 @@ import com.etherblood.a.rules.GameTemplates;
  */
 public interface StatModifier {
 
-    int modify(EntityData data, GameTemplates templates, int self, int stat);
+    int modify(EntityData data, GameTemplates templates, int self, int target, int stat);
 }

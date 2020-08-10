@@ -37,46 +37,7 @@ public class TemplateMigrationMain {
     }
 
     private static void update(JsonObject template) {
-        int version;
-        if (template.has("version")) {
-            version = template.get("version").getAsInt();
-        } else {
-            version = 0;
-        }
-        switch (version) {
-            case 1:
-                return;
-            case 0:
-                break;
-            default:
-                throw new AssertionError(version);
-        }
-
-        template.addProperty("version", 1);
-
-        JsonObject cast = new JsonObject();
-        cast.add("manaCost", template.remove("manaCost"));
-        cast.add("target", template.remove("target"));
-        cast.add("effects", template.remove("cast"));
-
-        JsonObject hand = new JsonObject();
-        hand.add("cast", cast);
-        hand.add("passive", template.remove("hand"));
-        template.add("hand", hand);
-
-        JsonObject battle = new JsonObject();
-        battle.add("components", template.remove("components"));
-        battle.add("componentModifiers", template.remove("componentModifiers"));
-        battle.add("passive", template.remove("battle"));
-        template.add("battle", battle);
-
-        JsonObject graveyard = new JsonObject();
-        graveyard.add("passive", template.remove("graveyard"));
-        template.add("graveyard", graveyard);
-
-        JsonObject library = new JsonObject();
-        library.add("passive", template.remove("library"));
-        template.add("library", library);
+        template.remove("version");
     }
 
     private static void updateRecursively(JsonObject object) {

@@ -3,7 +3,7 @@ package com.etherblood.a.rules;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.rules.templates.CardTemplate;
 import com.etherblood.a.rules.templates.StatModifier;
-import java.util.Collections;
+import com.etherblood.a.rules.templates.ZoneState;
 import java.util.OptionalInt;
 
 public class EffectiveStatsService {
@@ -24,13 +24,12 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier attackModifier : template.getBattle().getComponentModifiers().getOrDefault(core.ATTACK, Collections.emptyList())) {
-                attack = attackModifier.modify(data, templates, minion, attack);
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.ATTACK);
+            if (modifier != null) {
+                attack = modifier.modify(data, templates, minion, minion, attack);
             }
         }
-        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
-            attack += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_ATTACK_AURA);
-        }
+        attack = applyAuras(minion, core.ATTACK_AURA, attack);
         return attack;
     }
 
@@ -40,13 +39,12 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier healthModifier : template.getBattle().getComponentModifiers().getOrDefault(core.HEALTH, Collections.emptyList())) {
-                health = healthModifier.modify(data, templates, minion, health);
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.HEALTH);
+            if (modifier != null) {
+                health = modifier.modify(data, templates, minion, minion, health);
             }
         }
-        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
-            health += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_HEALTH_AURA);
-        }
+        health = applyAuras(minion, core.HEALTH_AURA, health);
         return health;
     }
 
@@ -65,8 +63,9 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier modifier : template.getBattle().getComponentModifiers().getOrDefault(core.VIGILANCE, Collections.emptyList())) {
-                vigilance = modifier.modify(data, templates, minion, vigilance);
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.VIGILANCE);
+            if (modifier != null) {
+                vigilance = modifier.modify(data, templates, minion, minion, vigilance);
             }
         }
         return vigilance >= 1;
@@ -77,8 +76,9 @@ public class EffectiveStatsService {
         OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
-            for (StatModifier modifier : template.getBattle().getComponentModifiers().getOrDefault(core.FLYING, Collections.emptyList())) {
-                flying = modifier.modify(data, templates, minion, flying);
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.FLYING);
+            if (modifier != null) {
+                flying = modifier.modify(data, templates, minion, minion, flying);
             }
         }
         return flying >= 1;
@@ -86,9 +86,7 @@ public class EffectiveStatsService {
 
     public int venom(int minion) {
         int venom = data.getOptional(minion, core.VENOM).orElse(0);
-        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
-            venom += sumOwnerOtherMinionComponents(minion, core.OWN_MINIONS_VENOM_AURA);
-        }
+        venom = applyAuras(minion, core.VENOM_AURA, venom);
         return venom;
     }
 
@@ -96,56 +94,25 @@ public class EffectiveStatsService {
         if (data.has(minion, core.FAST_TO_ATTACK)) {
             return true;
         }
-        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
-            if (hasOwnerOtherMinionWithComponent(minion, core.OWN_MINIONS_HASTE_AURA)) {
-                return true;
-            }
-        }
-        return false;
+        return applyAuras(minion, core.HASTE_AURA, 0) >= 0;
     }
 
     public boolean isFastToDefend(int minion) {
         if (data.has(minion, core.FAST_TO_DEFEND)) {
             return true;
         }
-        if (data.has(minion, core.IN_BATTLE_ZONE) && !data.has(minion, core.HERO)) {
-            if (hasOwnerOtherMinionWithComponent(minion, core.OWN_MINIONS_HASTE_AURA)) {
-                return true;
-            }
-        }
-        return false;
+        return applyAuras(minion, core.HASTE_AURA, 0) >= 0;
     }
 
-    private boolean hasOwnerOtherMinionWithComponent(int minion, int component) {
-        int owner = data.get(minion, core.OWNER);
-        for (int other : data.list(component)) {
-            if (other == minion) {
-                continue;
-            }
-            if (!data.has(other, core.IN_BATTLE_ZONE)) {
-                continue;
-            }
-            if (data.hasValue(other, core.OWNER, owner)) {
-                return true;
+    private int applyAuras(int self, int auraComponent, int stat) {
+        for (int other : data.listInValueOrder(auraComponent)) {
+            CardTemplate otherTemplate = templates.getCard(data.get(other, core.CARD_TEMPLATE));
+            ZoneState otherZone = otherTemplate.getActiveZone(other, data);
+            StatModifier modifier = otherZone.getStatModifiers().get(auraComponent);
+            if (modifier != null) {
+                stat = modifier.modify(data, templates, other, self, stat);
             }
         }
-        return false;
-    }
-
-    private int sumOwnerOtherMinionComponents(int minion, int component) {
-        int sum = 0;
-        int owner = data.get(minion, core.OWNER);
-        for (int other : data.list(component)) {
-            if (other == minion) {
-                continue;
-            }
-            if (!data.has(other, core.IN_BATTLE_ZONE)) {
-                continue;
-            }
-            if (data.hasValue(other, core.OWNER, owner)) {
-                sum += data.get(other, component);
-            }
-        }
-        return sum;
+        return stat;
     }
 }

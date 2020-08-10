@@ -14,7 +14,7 @@ public class AddOnOwnTurnModifier implements StatModifier {
     }
 
     @Override
-    public int modify(EntityData data, GameTemplates templates, int self, int stat) {
+    public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int owner = data.get(self, core.OWNER);
         if (data.has(owner, core.ACTIVE_PLAYER_PHASE)) {

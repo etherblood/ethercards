@@ -8,7 +8,7 @@ import com.etherblood.a.rules.templates.StatModifier;
 public class AddOwnHandCardCountModifier implements StatModifier {
 
     @Override
-    public int modify(EntityData data, GameTemplates templates, int self, int stat) {
+    public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int owner = data.get(self, core.OWNER);
         for (int minion : data.list(core.IN_HAND_ZONE)) {

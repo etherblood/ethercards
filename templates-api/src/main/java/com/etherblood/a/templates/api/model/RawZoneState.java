@@ -10,7 +10,7 @@ import java.util.Map;
 public class RawZoneState {
 
     public IntMap components;
-    public Map<Integer, List<StatModifier>> componentModifiers;
+    public Map<Integer, StatModifier> statModifiers;
     public RawActivatedAbility cast;
     public RawActivatedAbility activated;
     public Map<Integer, List<Effect>> passive;
@@ -21,7 +21,7 @@ public class RawZoneState {
     public ZoneState toZoneState() {
         return new ZoneState(
                 components,
-                componentModifiers,
+                statModifiers,
                 RawActivatedAbility.toActivatedAbility(cast),
                 RawActivatedAbility.toActivatedAbility(activated),
                 passive);

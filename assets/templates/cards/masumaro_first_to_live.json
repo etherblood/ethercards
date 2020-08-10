@@ -28,27 +28,24 @@
       "ATTACK": 0,
       "HEALTH": 0
     },
-    "componentModifiers": {
-      "HEALTH": [
-        {
-          "type": "addFractional",
-          "modifier": {
-            "type": "addOwnHandCardCount"
-          },
-          "quotient": 2,
-          "divident": 1
-        }
-      ],
-      "ATTACK": [
-        {
-          "type": "addFractional",
-          "modifier": {
-            "type": "addOwnHandCardCount"
-          },
-          "quotient": 2,
-          "divident": 1
-        }
-      ]
+    "statModifiers": {
+      "HEALTH": {
+        "type": "addFractional",
+        "modifier": {
+          "type": "addOwnHandCardCount"
+        },
+        "quotient": 2,
+        "divident": 1
+      }
+      ,
+      "ATTACK": {
+        "type": "addFractional",
+        "modifier": {
+          "type": "addOwnHandCardCount"
+        },
+        "quotient": 2,
+        "divident": 1
+      }
     }
   },
   "graveyard": {},

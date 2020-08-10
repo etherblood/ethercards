@@ -29,12 +29,10 @@
       "CANNOT_ATTACK": true,
       "REACH": true
     },
-    "componentModifiers": {
-      "HEALTH": [
-        {
-          "type": "addOwnManaPool"
-        }
-      ]
+    "statModifiers": {
+      "HEALTH": {
+        "type": "addOwnManaPool"
+      }
     }
   },
   "graveyard": {},

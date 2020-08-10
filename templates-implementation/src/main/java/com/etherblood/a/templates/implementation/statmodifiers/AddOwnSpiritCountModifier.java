@@ -10,7 +10,7 @@ import com.etherblood.a.rules.templates.Tribe;
 public class AddOwnSpiritCountModifier implements StatModifier {
 
     @Override
-    public int modify(EntityData data, GameTemplates templates, int self, int stat) {
+    public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int owner = data.get(self, core.OWNER);
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {

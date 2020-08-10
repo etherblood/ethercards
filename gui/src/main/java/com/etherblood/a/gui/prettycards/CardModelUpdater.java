@@ -93,9 +93,6 @@ public class CardModelUpdater {
         if (components.hasKey(core.CANNOT_BE_CAST_TARGETED)) {
             keywords.add("Untargetable");
         }
-        if (components.hasKey(core.OWN_MINIONS_HASTE_AURA)) {
-            keywords.add("Haste_Aura");
-        }
         if (components.hasKey(core.RAGE)) {
             keywords.add("Rage");
         }
@@ -108,12 +105,6 @@ public class CardModelUpdater {
         }
         if (components.hasKey(core.FATIGUE)) {
             keywords.add("Fatigue_" + components.get(core.FATIGUE));
-        }
-        if (components.hasKey(core.OWN_MINIONS_HEALTH_AURA)) {
-            keywords.add("Health_Aura_" + components.get(core.OWN_MINIONS_HEALTH_AURA));
-        }
-        if (components.hasKey(core.OWN_MINIONS_VENOM_AURA)) {
-            keywords.add("Venom_Aura_" + components.get(core.OWN_MINIONS_VENOM_AURA));
         }
         if (components.hasKey(core.REGENERATION)) {
             keywords.add("Regeneration_" + components.get(core.REGENERATION));
@@ -219,9 +210,6 @@ public class CardModelUpdater {
         if (data.has(entityId, core.CANNOT_BE_CAST_TARGETED)) {
             keywords.add("Untargetable");
         }
-        if (data.has(entityId, core.OWN_MINIONS_HASTE_AURA)) {
-            keywords.add("Haste_Aura");
-        }
         if (data.has(entityId, core.RAGE)) {
             keywords.add("Rage");
         }
@@ -234,12 +222,6 @@ public class CardModelUpdater {
         }
         if (data.has(entityId, core.FATIGUE)) {
             keywords.add("Fatigue_" + data.get(entityId, core.FATIGUE));
-        }
-        if (data.has(entityId, core.OWN_MINIONS_HEALTH_AURA)) {
-            keywords.add("Health_Aura_" + data.get(entityId, core.OWN_MINIONS_HEALTH_AURA));
-        }
-        if (data.has(entityId, core.OWN_MINIONS_VENOM_AURA)) {
-            keywords.add("Venom_Aura_" + data.get(entityId, core.OWN_MINIONS_VENOM_AURA));
         }
         if (data.has(entityId, core.REGENERATION)) {
             keywords.add("Regeneration_" + data.get(entityId, core.REGENERATION));

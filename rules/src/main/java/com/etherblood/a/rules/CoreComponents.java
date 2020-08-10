@@ -72,10 +72,6 @@ public class CoreComponents implements ComponentsModule {
     public final int RAGE;
     public final int FAST_TO_ATTACK;
     public final int FAST_TO_DEFEND;
-    public final int OWN_MINIONS_HASTE_AURA;
-    public final int OWN_MINIONS_ATTACK_AURA;
-    public final int OWN_MINIONS_HEALTH_AURA;
-    public final int OWN_MINIONS_VENOM_AURA;
     public final int BUSHIDO;
     public final int INDESTRUCTIBLE;
     public final int REGENERATION;
@@ -98,6 +94,11 @@ public class CoreComponents implements ComponentsModule {
     public final int NINJUTSU_ORDER;
     public final int NINJUTSU;
     public final int BLOCKED;
+    
+    public final int HASTE_AURA;
+    public final int ATTACK_AURA;
+    public final int HEALTH_AURA;
+    public final int VENOM_AURA;
 
     public CoreComponents(ToIntFunction<String> register) {
         OWNER = register.applyAsInt("OWNER");
@@ -167,10 +168,6 @@ public class CoreComponents implements ComponentsModule {
         RAGE = register.applyAsInt("RAGE");
         FAST_TO_ATTACK = register.applyAsInt("FAST_TO_ATTACK");
         FAST_TO_DEFEND = register.applyAsInt("FAST_TO_DEFEND");
-        OWN_MINIONS_HASTE_AURA = register.applyAsInt("OWN_MINIONS_HASTE_AURA");
-        OWN_MINIONS_ATTACK_AURA = register.applyAsInt("OWN_MINIONS_ATTACK_AURA");
-        OWN_MINIONS_HEALTH_AURA = register.applyAsInt("OWN_MINIONS_HEALTH_AURA");
-        OWN_MINIONS_VENOM_AURA = register.applyAsInt("OWN_MINIONS_VENOM_AURA");
         BUSHIDO = register.applyAsInt("BUSHIDO");
         INDESTRUCTIBLE = register.applyAsInt("INDESTRUCTIBLE");
         REGENERATION = register.applyAsInt("REGENERATION");
@@ -194,5 +191,10 @@ public class CoreComponents implements ComponentsModule {
         NINJUTSU_ORDER = register.applyAsInt("NINJUTSU_ORDER");
         NINJUTSU = register.applyAsInt("NINJUTSU");
         BLOCKED = register.applyAsInt("BLOCKED");
+        
+        HASTE_AURA = register.applyAsInt("HASTE_AURA");
+        ATTACK_AURA = register.applyAsInt("ATTACK_AURA");
+        HEALTH_AURA = register.applyAsInt("HEALTH_AURA");
+        VENOM_AURA = register.applyAsInt("VENOM_AURA");
     }
 }

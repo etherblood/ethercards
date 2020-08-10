@@ -27,17 +27,13 @@
       "ATTACK": 0,
       "HEALTH": 0
     },
-    "componentModifiers": {
-      "HEALTH": [
-        {
-          "type": "addOwnSpiritCount"
-        }
-      ],
-      "ATTACK": [
-        {
-          "type": "addOwnSpiritCount"
-        }
-      ]
+    "statModifiers": {
+      "HEALTH": {
+        "type": "addOwnSpiritCount"
+      },
+      "ATTACK": {
+        "type": "addOwnSpiritCount"
+      }
     },
     "passive": {
       "TRIGGER_SELF_DEATH": [
