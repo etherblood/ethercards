@@ -1,0 +1,128 @@
+{
+  "alias": "pack_leader",
+  "display": {
+    "name": "Pack Leader",
+    "imagePath": "pack_leader.jpg",
+    "colors": [
+      "WHITE"
+    ],
+    "flavourText": "He will be your loyal champion, and his pack your protectors. All he asks for is a full belly, a spot by the fire, and all the love in your heart.",
+    "description": "Other Dogs you control get +1/+1. While Pack Leader attacks, prevent all combat damage that would be dealt to Dogs you control."
+  },
+  "tribes": [
+    "DOG"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 2,
+      "PREVENT_COMBAT_DAMAGE_AURA": 1,
+      "ATTACK_AURA": 1,
+      "HEALTH_AURA": 1
+    },
+    "statModifiers": {
+      "PREVENT_COMBAT_DAMAGE_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "testSource",
+              "predicate": {
+                "type": "isAttacking",
+                "isAttacking": true
+              }
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "DOG"
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      },
+      "ATTACK_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "DOG"
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      },
+      "HEALTH_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "DOG"
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      }
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

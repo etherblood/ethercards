@@ -22,8 +22,7 @@
       "ATTACK": 2,
       "HEALTH": 4,
       "CANNOT_ATTACK": true,
-      "FAST_TO_DEFEND": true,
-      "REACH": true
+      "FAST_TO_DEFEND": true
     }
   },
   "graveyard": {},

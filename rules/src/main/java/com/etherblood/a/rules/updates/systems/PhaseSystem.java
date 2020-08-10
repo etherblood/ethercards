@@ -163,6 +163,7 @@ public class PhaseSystem {
     }
 
     private void applyAttacks(int team) {
+        IntList attackers = new IntList();
         for (int attacker : data.list(core.ATTACK_TARGET)) {
             if (!data.has(attacker, core.IN_BATTLE_ZONE)) {
                 data.remove(attacker, core.ATTACK_TARGET);
@@ -178,8 +179,11 @@ public class PhaseSystem {
                         SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
                     });
                 }
-                data.remove(attacker, core.ATTACK_TARGET);
+                attackers.add(attacker);
             }
+        }
+        for (int attacker : attackers) {
+            data.remove(attacker, core.ATTACK_TARGET);
         }
         resolveSystem.run();
     }

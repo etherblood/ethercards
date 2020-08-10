@@ -104,6 +104,10 @@ public class EffectiveStatsService {
         return applyAuras(minion, core.HASTE_AURA, 0) > 0;
     }
 
+    public boolean preventCombatDamage(int entity) {
+        return applyAuras(entity, core.PREVENT_COMBAT_DAMAGE_AURA, 0) > 0;
+    }
+
     private int applyAuras(int self, int auraComponent, int stat) {
         for (int other : data.listInValueOrder(auraComponent)) {
             CardTemplate otherTemplate = templates.getCard(data.get(other, core.CARD_TEMPLATE));

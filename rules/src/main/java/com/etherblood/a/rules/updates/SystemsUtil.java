@@ -63,8 +63,12 @@ public class SystemsUtil {
         int attackerDamage = stats.attack(attacker);
         int blockerDamage = stats.attack(blocker);
 
-        damage(data, blocker, attackerDamage);
-        damage(data, attacker, blockerDamage);
+        if (!stats.preventCombatDamage(blocker)) {
+            damage(data, blocker, attackerDamage);
+        }
+        if (!stats.preventCombatDamage(attacker)) {
+            damage(data, attacker, blockerDamage);
+        }
 
         if (data.has(attacker, core.LIFELINK)) {
             int attackerOwner = data.get(attacker, core.OWNER);

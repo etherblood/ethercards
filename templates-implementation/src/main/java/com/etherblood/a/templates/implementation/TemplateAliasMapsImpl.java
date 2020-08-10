@@ -63,8 +63,10 @@ import com.etherblood.a.templates.implementation.predicates.CanNinjutsuPredicate
 import com.etherblood.a.templates.implementation.predicates.MinionCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HasTribePredicate;
+import com.etherblood.a.templates.implementation.predicates.IsAttackingPredicate;
 import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
 import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
+import com.etherblood.a.templates.implementation.predicates.TestSourcePredicate;
 import com.etherblood.a.templates.implementation.predicates.TiredPredicate;
 import com.etherblood.a.templates.implementation.predicates.ZonePredicate;
 import com.etherblood.a.templates.implementation.statmodifiers.AddComponentPredicateCountModifier;
@@ -155,6 +157,8 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("sourceOwner", SourceOwnerPredicate.class);
         targetClasses.put("hasTribe", HasTribePredicate.class);
         targetClasses.put("canNinjutsu", CanNinjutsuPredicate.class);
+        targetClasses.put("testSource", TestSourcePredicate.class);
+        targetClasses.put("isAttacking", IsAttackingPredicate.class);
         return targetClasses;
     }
 }
