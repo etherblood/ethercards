@@ -13,17 +13,18 @@ public class PakkunTest extends AbstractGameTest {
 
     @Test
     public void ninjutsu() {
-        data.set(player(0), core.MANA, Integer.MAX_VALUE);
+        data.set(player(0), core.MANA, 1);
         int ornithopter = createMinion(player(0), "ornithopter");
         int pakkun = createCard(player(0), "pakkun", core.IN_HAND_ZONE);
 
-        moves.apply(new UseAbility(player(0), pakkun, ornithopter));
         moves.apply(new DeclareAttack(player(0), ornithopter, hero(1)));
+        moves.apply(new UseAbility(player(0), pakkun, ornithopter));
         moves.apply(new EndAttackPhase(player(0)));
         moves.apply(new EndBlockPhase(player(1)));
 
         Assertions.assertTrue(data.has(pakkun, core.IN_BATTLE_ZONE));
         Assertions.assertTrue(data.has(ornithopter, core.IN_HAND_ZONE));
+        Assertions.assertFalse(data.has(player(0), core.MANA));
     }
 
     @Test
@@ -33,8 +34,8 @@ public class PakkunTest extends AbstractGameTest {
         int otherOrnithopter = createMinion(player(1), "ornithopter");
         int pakkun = createCard(player(0), "pakkun", core.IN_HAND_ZONE);
 
-        moves.apply(new UseAbility(player(0), pakkun, ornithopter));
         moves.apply(new DeclareAttack(player(0), ornithopter, hero(1)));
+        moves.apply(new UseAbility(player(0), pakkun, ornithopter));
         moves.apply(new EndAttackPhase(player(0)));
         moves.apply(new DeclareBlock(player(1), otherOrnithopter, ornithopter));
         moves.apply(new EndBlockPhase(player(1)));

@@ -137,6 +137,7 @@ public class PhaseSystem {
                 int mana = data.getOptional(owner, core.MANA).orElse(0);
                 int manaCost = data.get(ninja, core.NINJUTSU);
                 if (mana >= manaCost && !data.has(attacker, core.BLOCKED)) {
+                    SystemsUtil.decreaseAndRemoveLtZero(data, owner, core.MANA, manaCost);
 
                     zoneService.removeFromBattle(attacker);
                     zoneService.addToHand(attacker);
@@ -231,7 +232,6 @@ public class PhaseSystem {
         for (int player : draws) {
             SystemsUtil.drawCards(data, templates, random, events, player, draws.get(player));
         }
-        ZoneService zoneService = new ZoneService(data, templates, random, events);
         for (int card : data.list(core.MULLIGAN)) {
             zoneService.removeFromHand(card);
             zoneService.addToLibrary(card);

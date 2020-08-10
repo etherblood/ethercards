@@ -19,7 +19,7 @@ public class LibraryIO {
         if (!path.toFile().isFile()) {
             return null;
         }
-        try ( BufferedReader reader = Files.newBufferedReader(path)) {
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
             return GSON.fromJson(reader, RawLibraryTemplate.class);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -27,8 +27,9 @@ public class LibraryIO {
     }
 
     public static void store(String name, RawLibraryTemplate library) {
-        try ( BufferedWriter writer = Files.newBufferedWriter(Paths.get(name))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(name))) {
             GSON.toJson(library, writer);
+            writer.flush();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

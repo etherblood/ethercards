@@ -6,7 +6,7 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Your other minions have +1 health."
+    "description": "Your other minions have +1 health. Tap, pay 2 mana, summon a Bee Worker."
   },
   "hand": {
     "cast": {
@@ -52,6 +52,16 @@
         },
         "value": 1
       }
+    },
+    "activated": {
+      "selfTap": true,
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "summon",
+          "minionId": "bee_worker"
+        }
+      ]
     }
   },
   "graveyard": {},

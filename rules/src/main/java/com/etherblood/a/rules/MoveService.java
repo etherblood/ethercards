@@ -207,7 +207,7 @@ public class MoveService {
             runnable = () -> declareAttack(declareAttack.player, declareAttack.source, declareAttack.target);
         } else if (move instanceof UseAbility) {
             UseAbility useAbility = (UseAbility) move;
-            runnable = () -> useAbility(useAbility.player, useAbility.source, useAbility.target);
+            runnable = () -> useAbility(useAbility.player, useAbility.source, useAbility.target != null ? useAbility.target : ~0);
         } else if (move instanceof DeclareMulligan) {
             DeclareMulligan declareMulligan = (DeclareMulligan) move;
             runnable = () -> declareMulligan(declareMulligan.player, declareMulligan.card);

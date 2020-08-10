@@ -394,6 +394,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             updateZone(graveyardCards.stream().filter(playerFilter).toArray(), zones.getGraveyardZone(), Vector3f.UNIT_Y);
         }
 
+        int team = data.get(userControlledPlayer, core.TEAM);
         for (Map.Entry<Integer, ColoredConnectionArrow> entry : new ArrayList<>(arrows.entrySet())) {
             ColoredConnectionArrow arrow = entry.getValue();
             int minion = entry.getKey();
@@ -403,6 +404,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             }
             OptionalInt blockTarget = data.getOptional(minion, core.BLOCK_TARGET);
             if (blockTarget.isPresent() && arrow.getModel().getTarget() == visualCards.get(blockTarget.getAsInt())) {
+                continue;
+            }
+            OptionalInt ninjutsuTarget = data.getOptional(minion, core.NINJUTSU_TARGET);
+            if (ninjutsuTarget.isPresent() && data.hasValue(minion, core.TEAM, team) && arrow.getModel().getTarget() == visualCards.get(ninjutsuTarget.getAsInt())) {
                 continue;
             }
             arrows.remove(minion);
@@ -436,6 +441,17 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 board.register(arrow);
             } else {
                 arrow.getModel().setColor(color);
+            }
+        }
+        
+        for (int ninja : data.list(core.NINJUTSU_TARGET)) {
+            int target = data.get(ninja, core.NINJUTSU_TARGET);
+            ColoredConnectionArrow arrow = arrows.get(ninja);
+            if (arrow == null && data.hasValue(ninja, core.TEAM, team)) {
+                ColorRGBA color = new ColorRGBA(0.2f, 0f, 0.4f, 0.75f);
+                arrow = new ColoredConnectionArrow(visualCards.get(ninja), visualCards.get(target), color);
+                arrows.put(ninja, arrow);
+                board.register(arrow);
             }
         }
     }
