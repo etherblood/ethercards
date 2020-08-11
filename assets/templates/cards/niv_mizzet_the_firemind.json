@@ -51,6 +51,29 @@
           }
         }
       ]
+    },
+    "activated": {
+      "selfTap": true,
+      "effects": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DRAW_CARDS_REQUEST": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
+        }
+      ]
     }
   },
   "graveyard": {},

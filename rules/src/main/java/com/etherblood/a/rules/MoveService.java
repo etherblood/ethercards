@@ -207,7 +207,7 @@ public class MoveService {
             runnable = () -> declareAttack(declareAttack.player, declareAttack.source, declareAttack.target);
         } else if (move instanceof UseAbility) {
             UseAbility useAbility = (UseAbility) move;
-            runnable = () -> useAbility(useAbility.player, useAbility.source, useAbility.target != null ? useAbility.target : ~0);
+            runnable = () -> useAbility(useAbility.player, useAbility.source, useAbility.target);
         } else if (move instanceof DeclareMulligan) {
             DeclareMulligan declareMulligan = (DeclareMulligan) move;
             runnable = () -> declareMulligan(declareMulligan.player, declareMulligan.card);
@@ -292,11 +292,15 @@ public class MoveService {
         update();
     }
 
-    private void useAbility(int player, int source, int target) {
+    private void useAbility(int player, int source, Integer target) {
         if (validateMoves) {
             moveAvailability.canUseAbility(player, source, target, true);
         }
-        data.set(source, core.USE_ABILITY_TARGET, target);
+        if (target != null) {
+            data.set(source, core.USE_ABILITY_TARGET, target);
+        } else {
+            data.set(source, core.USE_ABILITY_TARGET, ~0);
+        }
         update();
     }
 
@@ -310,11 +314,7 @@ public class MoveService {
 
     private void cast(int player, int castable, Integer target) {
         if (validateMoves) {
-            if (target != null) {
-                moveAvailability.canCast(player, castable, target, true);
-            } else {
-                moveAvailability.canCast(player, castable, null, true);
-            }
+            moveAvailability.canCast(player, castable, target, true);
         }
         String cardName = getCardName(castable);
         try {

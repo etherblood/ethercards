@@ -1,0 +1,32 @@
+{
+  "alias": "charging_troll",
+  "display": {
+    "name": "Charging Troll",
+    "imagePath": "charging_troll.jpg",
+    "colors": [
+      "GREEN",
+      "WHITE"
+    ],
+    "flavourText": "They stop for nothing, not even the end of a battle."
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 4,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 3,
+      "VIGILANCE": true,
+      "REGENERATION": 1
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}
