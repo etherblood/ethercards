@@ -90,8 +90,8 @@ public class CardModelUpdater {
         if (components.hasKey(core.CANNOT_BE_BLOCKED)) {
             keywords.add("Cannot_be_blocked");
         }
-        if (components.hasKey(core.CANNOT_BE_CAST_TARGETED)) {
-            keywords.add("Untargetable");
+        if (components.hasKey(core.HEXPROOF)) {
+            keywords.add("Hexproof");
         }
         if (components.hasKey(core.RAGE)) {
             keywords.add("Rage");
@@ -207,8 +207,8 @@ public class CardModelUpdater {
         if (data.has(entityId, core.CANNOT_BE_BLOCKED)) {
             keywords.add("Cannot_be_blocked");
         }
-        if (data.has(entityId, core.CANNOT_BE_CAST_TARGETED)) {
-            keywords.add("Untargetable");
+        if (data.has(entityId, core.HEXPROOF)) {
+            keywords.add("Hexproof");
         }
         if (data.has(entityId, core.RAGE)) {
             keywords.add("Rage");

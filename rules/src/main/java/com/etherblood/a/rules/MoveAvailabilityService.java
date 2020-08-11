@@ -293,9 +293,9 @@ public class MoveAvailabilityService {
     }
 
     public boolean canCast(int player, int castable, Integer target, boolean throwOnFail) {
-        if (target != null && data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
+        if (target != null && data.has(target, core.HEXPROOF) && !data.hasValue(target, core.TEAM, data.get(castable, core.TEAM))) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to cast, target #" + target + " cannot be targeted.");
+                throw new IllegalArgumentException("Failed to cast, target #" + target + " is hexproof.");
             }
             return false;
         }
@@ -353,9 +353,9 @@ public class MoveAvailabilityService {
     }
 
     public boolean canUseAbility(int player, int source, Integer target, boolean throwOnFail) {
-        if (target != null && data.has(target, core.CANNOT_BE_CAST_TARGETED)) {
+        if (target != null && data.has(target, core.HEXPROOF) && !data.hasValue(target, core.TEAM, data.get(source, core.TEAM))) {
             if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to use ability, target #" + target + " cannot be targeted.");
+                throw new IllegalArgumentException("Failed to use ability, target #" + target + " is hexproof.");
             }
             return false;
         }

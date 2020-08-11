@@ -43,8 +43,8 @@ public class CoreComponents implements ComponentsModule {
     public final int CANNOT_BLOCK;
     public final int CANNOT_BE_ATTACKED;
     public final int CANNOT_BE_BLOCKED;
-    public final int CANNOT_BE_CAST_TARGETED;
     public final int CANNOT_BE_MULLIGANED;
+    public final int HEXPROOF;
     public final int MANA;
     public final int DELAYED_MANA;
     public final int MANA_POOL;
@@ -136,8 +136,8 @@ public class CoreComponents implements ComponentsModule {
         CANNOT_BLOCK = register.applyAsInt("CANNOT_BLOCK");
         CANNOT_BE_ATTACKED = register.applyAsInt("CANNOT_BE_ATTACKED");
         CANNOT_BE_BLOCKED = register.applyAsInt("CANNOT_BE_BLOCKED");
-        CANNOT_BE_CAST_TARGETED = register.applyAsInt("CANNOT_BE_CAST_TARGETED");
         CANNOT_BE_MULLIGANED = register.applyAsInt("CANNOT_BE_MULLIGANED");
+        HEXPROOF = register.applyAsInt("HEXPROOF");
         MANA = register.applyAsInt("MANA");
         DELAYED_MANA = register.applyAsInt("DELAYED_MANA");
         MANA_POOL = register.applyAsInt("MANA_POOL");
