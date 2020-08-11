@@ -14,7 +14,7 @@
   ],
   "hand": {
     "cast": {
-      "manaCost": 5,
+      "manaCost": 4,
       "effects": [
         {
           "type": "selfSummon"
@@ -22,7 +22,7 @@
       ]
     },
     "components": {
-      "NINJUTSU": 4
+      "NINJUTSU": 3
     },
     "activated": {
       "selfTap": false,
@@ -43,7 +43,7 @@
   },
   "battle": {
     "components": {
-      "ATTACK": 6,
+      "ATTACK": 5,
       "HEALTH": 3
     }
   },

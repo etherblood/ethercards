@@ -1,0 +1,82 @@
+{
+  "alias": "mistblade_shinobi",
+  "display": {
+    "name": "Ninja of the Deep Hours",
+    "imagePath": "mistblade_shinobi.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Whenever Mistblade Shinobi fights a hero, return target creature that opponent controls to its owner's hand."
+  },
+  "tribes": [
+    "NINJA"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    },
+    "components": {
+      "NINJUTSU": 1
+    },
+    "activated": {
+      "selfTap": false,
+      "target": {
+        "type": "component",
+        "requiresTarget": true,
+        "component": "IN_BATTLE_ZONE",
+        "predicate": {
+          "type": "canNinjutsu"
+        }
+      },
+      "effects": [
+        {
+          "type": "ninjutsu"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1
+    },
+    "passive": {
+      "TRIGGER_SELF_FIGHT": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "hero",
+            "isHero": true
+          },
+          "effects": [
+            {
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "RECALL_REQUEST": true
+                  }
+                }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ANY",
+                "filters": [
+                  "OPPONENT_MINION"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

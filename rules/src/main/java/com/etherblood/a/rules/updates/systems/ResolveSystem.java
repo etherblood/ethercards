@@ -26,6 +26,7 @@ public class ResolveSystem {
     private final IntUnaryOperator random;
     private final GameEventListener events;
     private final TriggerService triggerService;
+    private final ZoneService zoneService;
 
     public ResolveSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
@@ -34,6 +35,7 @@ public class ResolveSystem {
         this.random = random;
         this.events = events;
         this.triggerService = new TriggerService(data, templates, random, events);
+        this.zoneService = new ZoneService(data, templates, random, events);
     }
 
     public void run() {
@@ -44,11 +46,13 @@ public class ResolveSystem {
                 draw();
                 damage();
                 death();
+                recall();
                 playerResults();
 
                 stateUpdates(state);
             } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
                     || data.list(core.DEATH_REQUEST).nonEmpty()
+                    || data.list(core.RECALL_REQUEST).nonEmpty()
                     || data.list(core.DRAW_CARDS_REQUEST).nonEmpty()
                     || data.list(core.PLAYER_DISCARD_CARDS).nonEmpty()
                     || data.list(core.DISCARD).nonEmpty()
@@ -65,7 +69,6 @@ public class ResolveSystem {
     }
 
     private void discard() {
-        ZoneService zoneService = new ZoneService(data, templates, random, events);
         for (int player : data.list(core.PLAYER_DISCARD_CARDS)) {
             int cards = data.get(player, core.PLAYER_DISCARD_CARDS);
             IntList handCards = data.list(core.IN_HAND_ZONE);
@@ -180,7 +183,6 @@ public class ResolveSystem {
             }
         }
         data.clear(core.DEATH_REQUEST);
-        ZoneService zoneService = new ZoneService(data, templates, random, events);
         IntList deaths = data.list(core.DEATH_ACTION);
         for (int entity : deaths) {
             if (data.has(entity, core.HERO)) {
@@ -199,6 +201,16 @@ public class ResolveSystem {
             }
         }
         data.clear(core.DEATH_ACTION);
+    }
+
+    private void recall() {
+        for (int entity : data.list(core.RECALL_REQUEST)) {
+            if (data.has(entity, core.IN_BATTLE_ZONE)) {
+                zoneService.removeFromBattle(entity);
+                zoneService.addToHand(entity);
+            }
+        }
+        data.clear(core.RECALL_REQUEST);
     }
 
     private void regenerate(int entity) {

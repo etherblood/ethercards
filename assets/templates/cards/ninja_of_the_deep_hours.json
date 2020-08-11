@@ -1,0 +1,82 @@
+{
+  "alias": "ninja_of_the_deep_hours",
+  "display": {
+    "name": "Ninja of the Deep Hours",
+    "imagePath": "ninja_of_the_deep_hours.jpg",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Whenever Ninja of the Deep Hours fights a hero, draw a card."
+  },
+  "tribes": [
+    "NINJA"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    },
+    "components": {
+      "NINJUTSU": 2
+    },
+    "activated": {
+      "selfTap": false,
+      "target": {
+        "type": "component",
+        "requiresTarget": true,
+        "component": "IN_BATTLE_ZONE",
+        "predicate": {
+          "type": "canNinjutsu"
+        }
+      },
+      "effects": [
+        {
+          "type": "ninjutsu"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 2,
+      "HEALTH": 2
+    },
+    "passive": {
+      "TRIGGER_SELF_FIGHT": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "hero",
+            "isHero": true
+          },
+          "effects": [
+            {
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "DRAW_CARDS_REQUEST": 1
+                  }
+                }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ALL",
+                "filters": [
+                  "OWNER"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

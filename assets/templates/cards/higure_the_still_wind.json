@@ -1,0 +1,120 @@
+{
+  "alias": "higure_the_still_wind",
+  "display": {
+    "name": "Higure, the Still Wind",
+    "imagePath": "higure_the_still_wind.png",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Whenever Higure, the Still Wind fights a hero, draw a Ninja. \n Pay 2 Mana: Target Ninja creature can't be blocked this turn."
+  },
+  "tribes": [
+    "NINJA"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    },
+    "components": {
+      "NINJUTSU": 4
+    },
+    "activated": {
+      "selfTap": false,
+      "target": {
+        "type": "component",
+        "requiresTarget": true,
+        "component": "IN_BATTLE_ZONE",
+        "predicate": {
+          "type": "canNinjutsu"
+        }
+      },
+      "effects": [
+        {
+          "type": "ninjutsu"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 4
+    },
+    "passive": {
+      "TRIGGER_SELF_FIGHT": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "hero",
+            "isHero": true
+          },
+          "effects": [
+            {
+              "type": "targeted",
+              "targets": {
+                "type": "component",
+                "component": "IN_LIBRARY_ZONE",
+                "select": "ANY",
+                "predicate": {
+                  "type": "allOf",
+                  "predicates": [
+                    {
+                      "type": "hasSourceOwner",
+                      "hasSourceOwner": true
+                    },
+                    {
+                      "type": "hasTribe",
+                      "tribe": "NINJA"
+                    }
+                  ]
+                }
+              },
+              "effects": [
+                {
+                  "type": "moveToZone",
+                  "zone": "IN_HAND_ZONE"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "activated": {
+      "manaCost": 2,
+      "target": {
+        "type": "component",
+        "component": "IN_BATTLE_ZONE",
+        "requiresTarget": true,
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "NINJA"
+            }
+          ]
+        }
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "CANNOT_BE_BLOCKED": true
+          }
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}
