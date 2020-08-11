@@ -11,11 +11,11 @@
         <module>gui</module>
         <module>ai</module>
         <module>network-api</module>
-        <module>server</module>
         <module>client</module>
         <module>game-events-api</module>
         <module>templates-api</module>
         <module>templates-implementation</module>
+        <module>game-server</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

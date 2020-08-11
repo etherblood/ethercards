@@ -1,4 +1,4 @@
-package com.etherblood.a.server;
+package com.etherblood.a.game.server;
 
 import com.etherblood.a.ai.MoveBotGame;
 import com.etherblood.a.ai.bots.Bot;

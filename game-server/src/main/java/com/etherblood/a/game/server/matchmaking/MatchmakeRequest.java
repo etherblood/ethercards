@@ -1,4 +1,4 @@
-package com.etherblood.a.server.matchmaking;
+package com.etherblood.a.game.server.matchmaking;
 
 import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
 import com.etherblood.a.network.api.messages.match.MatchRequest;

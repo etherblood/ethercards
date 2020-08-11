@@ -1,4 +1,4 @@
-package com.etherblood.a.server;
+package com.etherblood.a.game.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.etherblood.a.network.api.jwt.JwtAuthentication;

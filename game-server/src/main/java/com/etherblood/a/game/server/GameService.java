@@ -1,4 +1,4 @@
-package com.etherblood.a.server;
+package com.etherblood.a.game.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
@@ -29,10 +29,10 @@ import com.etherblood.a.network.api.messages.match.MoveUpdate;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Update;
-import com.etherblood.a.server.matchmaking.BotRequest;
-import com.etherblood.a.server.matchmaking.MatchmakeRequest;
-import com.etherblood.a.server.matchmaking.MatchmakeResult;
-import com.etherblood.a.server.matchmaking.Matchmaker;
+import com.etherblood.a.game.server.matchmaking.BotRequest;
+import com.etherblood.a.game.server.matchmaking.MatchmakeRequest;
+import com.etherblood.a.game.server.matchmaking.MatchmakeResult;
+import com.etherblood.a.game.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 

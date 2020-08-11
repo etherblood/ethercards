@@ -1,6 +1,6 @@
-package com.etherblood.a.server.matchmaking;
+package com.etherblood.a.game.server.matchmaking;
 
-import com.etherblood.a.server.GamePlayerMapping;
+import com.etherblood.a.game.server.GamePlayerMapping;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import java.util.Collections;
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.etherblood.a.server.matchmaking;
+package com.etherblood.a.game.server.matchmaking;
 
 import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.server.GamePlayerMapping;
+import com.etherblood.a.game.server.GamePlayerMapping;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;

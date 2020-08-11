@@ -1,4 +1,4 @@
-package com.etherblood.a.server;
+package com.etherblood.a.game.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -8,7 +8,7 @@ import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.messages.IdentifyRequest;
 import com.etherblood.a.network.api.messages.match.MatchRequest;
 import com.etherblood.a.network.api.messages.match.MoveRequest;
-import com.etherblood.a.server.matchmaking.Matchmaker;
+import com.etherblood.a.game.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.io.IOException;

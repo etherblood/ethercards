@@ -6,7 +6,7 @@
         <artifactId>a</artifactId>
         <version>0.1.0</version>
     </parent>
-    <artifactId>server</artifactId>
+    <artifactId>game-server</artifactId>
     <packaging>jar</packaging>
     
     <repositories>
@@ -110,4 +110,5 @@
             <version>2.13.3</version>
         </dependency>
     </dependencies>
+    <name>game-server</name>
 </project>

@@ -1,4 +1,4 @@
-package com.etherblood.a.server;
+package com.etherblood.a.game.server;
 
 import com.esotericsoftware.minlog.Log;
 import com.etherblood.a.network.api.jwt.JwtParser;

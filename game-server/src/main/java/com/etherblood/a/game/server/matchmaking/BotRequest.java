@@ -1,4 +1,4 @@
-package com.etherblood.a.server.matchmaking;
+package com.etherblood.a.game.server.matchmaking;
 
 public class BotRequest {
 
