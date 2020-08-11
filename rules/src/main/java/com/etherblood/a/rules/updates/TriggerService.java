@@ -32,33 +32,33 @@ public class TriggerService {
     }
 
     public void onSummoned(int minion) {
-        triggerSelf(minion, core.TRIGGER_SELF_SUMMON);
+        triggerSelf(minion, core.TRIGGER_SELF_SUMMON, minion);
         triggerOthers(minion, core.TRIGGER_OTHER_SUMMON);
     }
 
     public void onCast(int minion) {
-        triggerSelf(minion, core.TRIGGER_SELF_CAST);
+        triggerSelf(minion, core.TRIGGER_SELF_CAST, minion);
         triggerOthers(minion, core.TRIGGER_OTHER_CAST);
     }
 
     public void onDeath(int minion) {
-        triggerSelf(minion, core.TRIGGER_SELF_DEATH);
+        triggerSelf(minion, core.TRIGGER_SELF_DEATH, minion);
     }
 
     public void onEnterBattle(int card) {
-        triggerSelf(card, core.TRIGGER_SELF_ENTER_BATTLE);
+        triggerSelf(card, core.TRIGGER_SELF_ENTER_BATTLE, card);
     }
 
     public void onEnterGraveyard(int card) {
-        triggerSelf(card, core.TRIGGER_SELF_ENTER_GRAVEYARD);
+        triggerSelf(card, core.TRIGGER_SELF_ENTER_GRAVEYARD, card);
     }
 
     public void onSurvive(int minion) {
-        triggerSelf(minion, core.TRIGGER_SELF_SURVIVE);
+        triggerSelf(minion, core.TRIGGER_SELF_SURVIVE, minion);
     }
 
-    public void onFight(int minion) {
-        triggerSelf(minion, core.TRIGGER_SELF_FIGHT);
+    public void onFight(int minion, int target) {
+        triggerSelf(minion, core.TRIGGER_SELF_FIGHT, target);
     }
 
     public void onUpkeep(int owner) {
@@ -77,9 +77,9 @@ public class TriggerService {
         }
     }
 
-    private void triggerSelf(int triggerTarget, int triggerComponent) {
-        if (data.has(triggerTarget, triggerComponent)) {
-            trigger(triggerComponent, triggerTarget, triggerTarget);
+    private void triggerSelf(int self, int triggerComponent, int target) {
+        if (data.has(self, triggerComponent)) {
+            trigger(triggerComponent, self, target);
         }
     }
 

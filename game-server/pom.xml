@@ -45,7 +45,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.etherblood.a.server.Main</mainClass>
+                            <mainClass>com.etherblood.a.game.server.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

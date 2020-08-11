@@ -293,7 +293,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canCast(int player, int castable, Integer target, boolean throwOnFail) {
-        if (target != null && data.has(target, core.HEXPROOF) && !data.hasValue(target, core.TEAM, data.get(castable, core.TEAM))) {
+        if (target != null && effectiveStats.isHexProof(target) && !data.hasValue(target, core.TEAM, data.get(castable, core.TEAM))) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, target #" + target + " is hexproof.");
             }
@@ -353,7 +353,7 @@ public class MoveAvailabilityService {
     }
 
     public boolean canUseAbility(int player, int source, Integer target, boolean throwOnFail) {
-        if (target != null && data.has(target, core.HEXPROOF) && !data.hasValue(target, core.TEAM, data.get(source, core.TEAM))) {
+        if (target != null && effectiveStats.isHexProof(target) && !data.hasValue(target, core.TEAM, data.get(source, core.TEAM))) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to use ability, target #" + target + " is hexproof.");
             }

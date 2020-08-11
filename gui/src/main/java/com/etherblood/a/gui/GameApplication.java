@@ -215,7 +215,7 @@ public class GameApplication extends SimpleApplication {
             }
 
             MyDeckBuilderAppstate deckBuilderAppstate = stateManager.getState(MyDeckBuilderAppstate.class);
-            if (deckBuilderAppstate != null) {
+            if (deckBuilderAppstate != null && deckBuilderAppstate.getResult() != null) {
                 LibraryIO.store("library.json", deckBuilderAppstate.getResult());
                 stateManager.detach(deckBuilderAppstate);
             }

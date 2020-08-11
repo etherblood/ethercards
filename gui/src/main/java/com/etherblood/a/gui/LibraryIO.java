@@ -27,6 +27,7 @@ public class LibraryIO {
     }
 
     public static void store(String name, RawLibraryTemplate library) {
+        assert library != null;
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(name))) {
             GSON.toJson(library, writer);
             writer.flush();

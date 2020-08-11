@@ -103,6 +103,19 @@ public class EffectiveStatsService {
         }
         return applyAuras(minion, core.HASTE_AURA, 0) > 0;
     }
+    
+    public boolean isHexProof(int entity) {
+        int hexProof = data.getOptional(entity, core.HEXPROOF).orElse(0);
+        OptionalInt templateId = data.getOptional(entity, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.HEXPROOF);
+            if (modifier != null) {
+                hexProof = modifier.modify(data, templates, entity, entity, hexProof);
+            }
+        }
+        return hexProof > 0;
+    }
 
     public boolean preventCombatDamage(int entity) {
         return applyAuras(entity, core.PREVENT_COMBAT_DAMAGE_AURA, 0) > 0;

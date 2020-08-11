@@ -207,7 +207,7 @@ public class CardModelUpdater {
         if (data.has(entityId, core.CANNOT_BE_BLOCKED)) {
             keywords.add("Cannot_be_blocked");
         }
-        if (data.has(entityId, core.HEXPROOF)) {
+        if (stats.isHexProof(entityId)) {
             keywords.add("Hexproof");
         }
         if (data.has(entityId, core.RAGE)) {

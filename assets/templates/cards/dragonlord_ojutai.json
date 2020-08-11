@@ -1,0 +1,75 @@
+{
+  "alias": "dragonlord_ojutai",
+  "display": {
+    "name": "Dragonlord Ojutai",
+    "imagePath": "dragonlord_ojutai.jpg",
+    "colors": [
+      "WHITE",
+      "BLUE"
+    ],
+    "description": "Dragonlord Ojutai has hexproof as long as it's untapped.\nWhenever Dragonlord Ojutai fights a hero, draw a card."
+  },
+  "tribes": [
+    "DRAGON"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 5,
+      "HEALTH": 4,
+      "FLYING": true
+    },
+    "statModifiers": {
+      "HEXPROOF": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "tired",
+          "isTired": false
+        },
+        "value": 1
+      }
+    },
+    "passive": {
+      "TRIGGER_SELF_FIGHT": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "hero",
+            "isHero": true
+          },
+          "effects": [
+            {
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "buff",
+                  "components": {
+                    "DRAW_CARDS_REQUEST": 1
+                  }
+                }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ALL",
+                "filters": [
+                  "OWNER"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

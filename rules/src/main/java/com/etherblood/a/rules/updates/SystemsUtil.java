@@ -89,8 +89,8 @@ public class SystemsUtil {
         }
 
         TriggerService triggerService = new TriggerService(data, templates, random, events);
-        triggerService.onFight(attacker);
-        triggerService.onFight(blocker);
+        triggerService.onFight(attacker, blocker);
+        triggerService.onFight(blocker, attacker);
     }
 
     public static void damage(EntityData data, int target, int damage) {
