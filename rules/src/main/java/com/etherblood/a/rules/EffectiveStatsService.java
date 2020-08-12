@@ -84,6 +84,20 @@ public class EffectiveStatsService {
         return flying > 0;
     }
 
+    public boolean hasLifelink(int minion) {
+        int lifelink = data.getOptional(minion, core.LIFELINK).orElse(0);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.LIFELINK);
+            if (modifier != null) {
+                lifelink = modifier.modify(data, templates, minion, minion, lifelink);
+            }
+        }
+        lifelink = applyAuras(minion, core.LIFELINK_AURA, lifelink);
+        return lifelink > 0;
+    }
+
     public int venom(int minion) {
         int venom = data.getOptional(minion, core.VENOM).orElse(0);
         venom = applyAuras(minion, core.VENOM_AURA, venom);

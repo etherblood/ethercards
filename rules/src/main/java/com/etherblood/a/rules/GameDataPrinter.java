@@ -57,7 +57,11 @@ public class GameDataPrinter {
         }
         if (move instanceof UseAbility) {
             UseAbility useAbility = (UseAbility) move;
-            return "UseAbility " + toMinionString(useAbility.source) + " -> " + toMinionString(useAbility.target);
+            if (useAbility.target != null) {
+                return "UseAbility " + toMinionString(useAbility.source) + " -> " + toMinionString(useAbility.target);
+            } else {
+                return "UseAbility " + toMinionString(useAbility.source);
+            }
         }
         if (move instanceof Start) {
             return "Start";

@@ -153,7 +153,7 @@ public class CardModelUpdater {
         if (data.has(entityId, core.TRAMPLE)) {
             keywords.add("Trample");
         }
-        if (data.has(entityId, core.LIFELINK)) {
+        if (stats.hasLifelink(entityId)) {
             keywords.add("Lifelink");
         }
         if (stats.hasVigilance(entityId)) {

@@ -7,7 +7,7 @@
       "BLUE",
       "RED"
     ],
-    "description": "Whenever you draw a card, Niv-Mizzet, the Firemind deals 1 damage to a random enemy minion or hero.",
+    "description": "Whenever you draw a card, Niv-Mizzet, the Firemind deals 1 damage to a random enemy minion or hero.\nTap: Draw a card.",
     "flavourText": "As brilliant as a cut diamond, and with just as cruel an edge."
   },
   "tribes": [

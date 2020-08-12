@@ -70,11 +70,11 @@ public class SystemsUtil {
             damage(data, attacker, blockerDamage);
         }
 
-        if (data.has(attacker, core.LIFELINK)) {
+        if (stats.hasLifelink(attacker)) {
             int attackerOwner = data.get(attacker, core.OWNER);
             increase(data, heroOf(data, attackerOwner), core.HEALTH, attackerDamage);
         }
-        if (data.has(blocker, core.LIFELINK)) {
+        if (stats.hasLifelink(blocker)) {
             int blockerOwner = data.get(blocker, core.OWNER);
             increase(data, heroOf(data, blockerOwner), core.HEALTH, blockerDamage);
         }

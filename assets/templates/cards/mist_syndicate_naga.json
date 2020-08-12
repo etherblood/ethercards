@@ -1,19 +1,19 @@
 {
-  "alias": "mistblade_shinobi",
+  "alias": "mist_syndicate_naga",
   "display": {
-    "name": "Mistblade Shinobi",
-    "imagePath": "mistblade_shinobi.jpg",
+    "name": "Mist-Syndicate Naga",
+    "imagePath": "mist_syndicate_naga.jpg",
     "colors": [
       "BLUE"
     ],
-    "description": "Whenever Mistblade Shinobi fights a hero, return target creature that opponent controls to its owner's hand."
+    "description": "Whenever Mist-Syndicate Naga fights a hero, summon a Mist-Syndicate Naga."
   },
   "tribes": [
     "NINJA"
   ],
   "hand": {
     "cast": {
-      "manaCost": 2,
+      "manaCost": 4,
       "effects": [
         {
           "type": "selfSummon"
@@ -21,7 +21,7 @@
       ]
     },
     "components": {
-      "NINJUTSU": 1
+      "NINJUTSU": 3
     },
     "activated": {
       "selfTap": false,
@@ -42,7 +42,7 @@
   },
   "battle": {
     "components": {
-      "ATTACK": 1,
+      "ATTACK": 3,
       "HEALTH": 1
     },
     "passive": {
@@ -55,22 +55,8 @@
           },
           "effects": [
             {
-              "type": "targeted",
-              "effects": [
-                {
-                  "type": "buff",
-                  "components": {
-                    "RECALL_REQUEST": true
-                  }
-                }
-              ],
-              "targets": {
-                "type": "simple",
-                "select": "ANY",
-                "filters": [
-                  "OPPONENT_MINION"
-                ]
-              }
+              "type": "summon",
+              "minionId": "mist_syndicate_naga"
             }
           ]
         }

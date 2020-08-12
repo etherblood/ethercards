@@ -100,6 +100,7 @@ public class CoreComponents implements ComponentsModule {
     public final int ATTACK_AURA;
     public final int HEALTH_AURA;
     public final int VENOM_AURA;
+    public final int LIFELINK_AURA;
     public final int PREVENT_COMBAT_DAMAGE_AURA;
 
     public CoreComponents(ToIntFunction<String> register) {
@@ -199,6 +200,7 @@ public class CoreComponents implements ComponentsModule {
         ATTACK_AURA = register.applyAsInt("ATTACK_AURA");
         HEALTH_AURA = register.applyAsInt("HEALTH_AURA");
         VENOM_AURA = register.applyAsInt("VENOM_AURA");
+        LIFELINK_AURA = register.applyAsInt("LIFELINK_AURA");
         PREVENT_COMBAT_DAMAGE_AURA = register.applyAsInt("PREVENT_COMBAT_DAMAGE_AURA");
     }
 }

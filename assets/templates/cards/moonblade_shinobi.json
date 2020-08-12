@@ -1,19 +1,19 @@
 {
-  "alias": "mistblade_shinobi",
+  "alias": "moonblade_shinobi",
   "display": {
-    "name": "Mistblade Shinobi",
-    "imagePath": "mistblade_shinobi.jpg",
+    "name": "Moonblade Shinobi",
+    "imagePath": "moonblade_shinobi.jpg",
     "colors": [
       "BLUE"
     ],
-    "description": "Whenever Mistblade Shinobi fights a hero, return target creature that opponent controls to its owner's hand."
+    "description": "Whenever Moonblade Shinobi fights a hero, create a 1/1 blue Illusion creature token with flying."
   },
   "tribes": [
     "NINJA"
   ],
   "hand": {
     "cast": {
-      "manaCost": 2,
+      "manaCost": 4,
       "effects": [
         {
           "type": "selfSummon"
@@ -21,7 +21,7 @@
       ]
     },
     "components": {
-      "NINJUTSU": 1
+      "NINJUTSU": 3
     },
     "activated": {
       "selfTap": false,
@@ -42,8 +42,8 @@
   },
   "battle": {
     "components": {
-      "ATTACK": 1,
-      "HEALTH": 1
+      "ATTACK": 3,
+      "HEALTH": 2
     },
     "passive": {
       "TRIGGER_SELF_FIGHT": [
@@ -55,22 +55,8 @@
           },
           "effects": [
             {
-              "type": "targeted",
-              "effects": [
-                {
-                  "type": "buff",
-                  "components": {
-                    "RECALL_REQUEST": true
-                  }
-                }
-              ],
-              "targets": {
-                "type": "simple",
-                "select": "ANY",
-                "filters": [
-                  "OPPONENT_MINION"
-                ]
-              }
+              "type": "summon",
+              "minionId": "illusion_token"
             }
           ]
         }

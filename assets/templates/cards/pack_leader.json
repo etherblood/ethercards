@@ -6,8 +6,8 @@
     "colors": [
       "WHITE"
     ],
-    "flavourText": "He will be your loyal champion, and his pack your protectors. All he asks for is a full belly, a spot by the fire, and all the love in your heart.",
-    "description": "Other Dogs you control get +1/+1. While Pack Leader attacks, prevent all combat damage that would be dealt to Dogs you control."
+    "description": "Other Dogs you control get +1/+1. While Pack Leader attacks, prevent all combat damage that would be dealt to Dogs you control.",
+    "flavourText": "He will be your loyal champion, and his pack your protectors. All he asks for is a full belly, a spot by the fire, and all the love in your heart."
   },
   "tribes": [
     "DOG"

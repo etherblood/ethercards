@@ -1,0 +1,69 @@
+{
+  "alias": "throatseeker",
+  "display": {
+    "name": "Throatseeker",
+    "imagePath": "throatseeker.jpg",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "Unblocked attacking Ninjas you control have lifelink.",
+    "flavourText": "\"I just felt a drip. It must be about to rain.\"\n—Stoneway Market vendor, last words"
+  },
+  "tribes": [
+    "NINJA"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 3,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 2,
+      "LIFELINK_AURA": 1
+    },
+    "statModifiers": {
+      "LIFELINK_AURA": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "isAttacking",
+              "isAttacking": true
+            },
+            {
+              "type": "isBlocked",
+              "isBlocked": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "minion",
+              "isMinion": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "NINJA"
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        },
+        "value": 1
+      }
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

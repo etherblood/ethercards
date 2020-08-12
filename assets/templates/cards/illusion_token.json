@@ -1,0 +1,32 @@
+{
+  "alias": "illusion_token",
+  "display": {
+    "name": "Illusion",
+    "imagePath": "illusion_token.jpg",
+    "colors": [
+      "BLUE"
+    ]
+  },
+  "tribes": [
+    "TOKEN"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1,
+      "FLYING": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}
