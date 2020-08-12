@@ -19,7 +19,7 @@ public class DragonlordKolaghanTest extends AbstractGameTest {
         moves.apply(new Cast(player(0), handOrnithopter, null));
 
         int actualHealth = data.get(hero(0), core.HEALTH);
-        CardTemplate template = game.getTemplates().getCard(getCardId("dragonlord_kolaghan"));
+        CardTemplate template = game.getTemplates().getCard(getAliasId("dragonlord_kolaghan"));
         int expectedDamage = 10;
         Assertions.assertEquals(previousHealth - expectedDamage, actualHealth);
     }

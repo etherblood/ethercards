@@ -615,7 +615,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
-                requestMove(new UseAbility(player, entity, null));
+                requestMove(new UseAbility(player, entity));
             }
         };
     }

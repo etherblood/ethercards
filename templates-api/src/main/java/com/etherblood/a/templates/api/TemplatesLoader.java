@@ -2,6 +2,7 @@ package com.etherblood.a.templates.api;
 
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.templates.CardTemplate;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -42,6 +43,10 @@ public class TemplatesLoader {
 
     public int registerCardAlias(String alias) {
         return parser.registerCardAlias(alias);
+    }
+    
+    public int getAliasId(String alias) {
+        return parser.resolveCardAlias(alias);
     }
 
     private JsonObject load(String alias) {

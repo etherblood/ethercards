@@ -16,7 +16,7 @@ public class DruidOfTheClawTest extends AbstractGameTest {
 
         moves.apply(new Cast(player(0), druid));
 
-        CardTemplate catTemplate = templates.getCard(getCardId("druid_of_the_claw_cat"));
+        CardTemplate catTemplate = templates.getCard(getAliasId("druid_of_the_claw_cat"));
         Assertions.assertEquals(catTemplate.getId(), data.get(druid, core.CARD_TEMPLATE));
         Assertions.assertEquals(catTemplate.getBattle().getComponents().get(core.ATTACK), data.get(druid, core.ATTACK));
         Assertions.assertEquals(catTemplate.getBattle().getComponents().get(core.HEALTH), data.get(druid, core.HEALTH));
@@ -32,7 +32,7 @@ public class DruidOfTheClawTest extends AbstractGameTest {
         moves.apply(new EndAttackPhase(player(0)));
         moves.apply(new Cast(player(1), druid));
 
-        CardTemplate bearTemplate = templates.getCard(getCardId("druid_of_the_claw_bear"));
+        CardTemplate bearTemplate = templates.getCard(getAliasId("druid_of_the_claw_bear"));
         Assertions.assertEquals(bearTemplate.getId(), data.get(druid, core.CARD_TEMPLATE));
         Assertions.assertEquals(bearTemplate.getBattle().getComponents().get(core.ATTACK), data.get(druid, core.ATTACK));
         Assertions.assertEquals(bearTemplate.getBattle().getComponents().get(core.HEALTH), data.get(druid, core.HEALTH));

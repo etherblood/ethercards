@@ -7,6 +7,10 @@ public class UseAbility implements Move {
     public final int player, source;
     public final Integer target;
 
+    public UseAbility(int player, int source) {
+        this(player, source, null);
+    }
+
     public UseAbility(int player, int source, Integer target) {
         this.player = player;
         this.source = source;

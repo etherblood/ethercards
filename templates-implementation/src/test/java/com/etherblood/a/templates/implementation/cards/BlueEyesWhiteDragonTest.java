@@ -25,7 +25,7 @@ public class BlueEyesWhiteDragonTest extends AbstractGameTest {
         int ultimateDragon = minions.get(minions.size() - 1);
 
         Assertions.assertEquals(3, minions.size());
-        Assertions.assertEquals(getCardId("blue_eyes_ultimate_dragon"), data.get(ultimateDragon, core.CARD_TEMPLATE));
+        Assertions.assertEquals(getAliasId("blue_eyes_ultimate_dragon"), data.get(ultimateDragon, core.CARD_TEMPLATE));
         Assertions.assertEquals(player(0), data.get(ultimateDragon, core.OWNER));
         Assertions.assertTrue( data.has(ultimateDragon, core.SUMMONING_SICKNESS));
     }

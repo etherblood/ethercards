@@ -150,7 +150,7 @@ public abstract class AbstractGameTest {
     }
 
     public int createCard(int owner, String cardTemplate, int zone) {
-        return createCard(owner, getCardId(cardTemplate), zone);
+        return createCard(owner, getAliasId(cardTemplate), zone);
     }
 
     public int createCard(int owner, int cardTemplate, int zone) {
@@ -170,14 +170,14 @@ public abstract class AbstractGameTest {
     }
 
     public int createMinion(int owner, String minionTemplate) {
-        return createMinion(owner, getCardId(minionTemplate));
+        return createMinion(owner, getAliasId(minionTemplate));
     }
 
     public int createMinion(int owner, int minionTemplate) {
         return SystemsUtil.createMinion(data, templates, random, events, minionTemplate, owner);
     }
 
-    public int getCardId(String alias) {
-        return loader.registerCardAlias(alias);
+    public int getAliasId(String alias) {
+        return loader.getAliasId(alias);
     }
 }

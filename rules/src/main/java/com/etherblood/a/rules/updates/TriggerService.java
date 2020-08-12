@@ -36,9 +36,9 @@ public class TriggerService {
         triggerOthers(minion, core.TRIGGER_OTHER_SUMMON);
     }
 
-    public void onCast(int minion) {
-        triggerSelf(minion, core.TRIGGER_SELF_CAST, minion);
-        triggerOthers(minion, core.TRIGGER_OTHER_CAST);
+    public void onCast(int source, int target) {
+        triggerSelf(source, core.TRIGGER_SELF_CAST, target);
+        triggerOthers(source, core.TRIGGER_OTHER_CAST);
     }
 
     public void onDeath(int minion) {

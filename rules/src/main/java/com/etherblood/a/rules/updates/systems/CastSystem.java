@@ -2,6 +2,7 @@ package com.etherblood.a.rules.updates.systems;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.a.entities.collections.IntMap;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
@@ -29,10 +30,15 @@ public class CastSystem {
     }
 
     public void run() {
-        IntList casts = data.list(core.CAST_TARGET);
-        for (int castSource : casts) {
+        IntList list = data.list(core.CAST_TARGET);
+        if (list.isEmpty()) {
+            return;
+        }
+        IntMap casts = new IntMap();
+        for (int castSource : list) {
             int cardTemplateId = data.get(castSource, core.CARD_TEMPLATE);
             int target = data.get(castSource, core.CAST_TARGET);
+            casts.set(castSource, target);
             CardTemplate template = templates.getCard(cardTemplateId);
             if (target == ~0) {
                 assert template.getHand().getCast().getTarget().isValidTarget(data, templates, castSource, null);
@@ -52,11 +58,10 @@ public class CastSystem {
             for (Effect effect : template.getHand().getCast().getEffects()) {
                 effect.apply(data, templates, random, events, castSource, target);
             }
-
-        }
-        for (int castSource : casts) {
-            triggerService.onCast(castSource);
         }
         data.clear(core.CAST_TARGET);
+        for (int castSource : casts) {
+            triggerService.onCast(castSource, casts.get(castSource));
+        }
     }
 }

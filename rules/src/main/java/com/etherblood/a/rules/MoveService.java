@@ -182,7 +182,7 @@ public class MoveService {
         if (targets.isEmpty()) {
             if (!targeting.requiresTarget()) {
                 if (moveAvailability.canUseAbility(player, entity, null, false)) {
-                    result.add(new UseAbility(player, entity, null));
+                    result.add(new UseAbility(player, entity));
                 }
             }
         } else {

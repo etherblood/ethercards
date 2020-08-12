@@ -13,7 +13,7 @@ public class NivMizzetTheFiremindTest extends AbstractGameTest {
         int otherCard = createCard(player(0), "niv_mizzet_the_firemind", core.IN_LIBRARY_ZONE);
         int previousHealth = data.get(hero(1), core.HEALTH);
 
-        moves.apply(new UseAbility(player(0), niv, null));
+        moves.apply(new UseAbility(player(0), niv));
 
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth - 1, actualHealth);

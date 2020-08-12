@@ -1,0 +1,53 @@
+{
+  "alias": "voyaging_satyr",
+  "display": {
+    "name": "Voyaging Satyr",
+    "imagePath": "voyaging_satyr.png",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Tap: Gain 1 Mana.",
+    "flavourText": "\"None can own the land's bounty. The gods made this world for all to share its riches. And I'm not just saying that because you caught me stealing your fruit.\""
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 2
+    },
+    "activated": {
+      "selfTap": true,
+      "effects": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

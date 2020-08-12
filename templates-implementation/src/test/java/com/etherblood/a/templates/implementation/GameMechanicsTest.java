@@ -11,8 +11,8 @@ public class GameMechanicsTest extends AbstractGameTest {
 
     @Test
     public void blocking_protects_attackTarget() {
-        int attacker = createMinion(player(0), "satyr");
-        int blocker = createMinion(player(1), "satyr");
+        int attacker = createMinion(player(0), "voyaging_satyr");
+        int blocker = createMinion(player(1), "voyaging_satyr");
 
         int previousHealth = data.get(hero(1), core.HEALTH);
 

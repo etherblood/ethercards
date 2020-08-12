@@ -15,7 +15,7 @@ public class PolymorphTest extends AbstractGameTest {
 
         moves.apply(new Cast(player(0), polymorph, dragon));
 
-        Assertions.assertEquals(getCardId("sheep"), data.get(dragon, core.CARD_TEMPLATE));
+        Assertions.assertEquals(getAliasId("sheep"), data.get(dragon, core.CARD_TEMPLATE));
         Assertions.assertFalse(data.has(dragon, core.FLYING));
     }
 }

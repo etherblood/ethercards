@@ -27,7 +27,7 @@ public class DittoTest extends AbstractGameTest {
         int ultimateDragon = minions.get(minions.size() - 1);
 
         Assertions.assertEquals(3, minions.size());
-        Assertions.assertEquals(getCardId("blue_eyes_ultimate_dragon"), data.get(ultimateDragon, core.CARD_TEMPLATE));
+        Assertions.assertEquals(getAliasId("blue_eyes_ultimate_dragon"), data.get(ultimateDragon, core.CARD_TEMPLATE));
         Assertions.assertEquals(player(0), data.get(ultimateDragon, core.OWNER));
         Assertions.assertTrue(data.has(ultimateDragon, core.SUMMONING_SICKNESS));
     }
@@ -55,12 +55,12 @@ public class DittoTest extends AbstractGameTest {
 
         moves.apply(new Cast(player(0), ditto, dragon));
 
-        Assertions.assertEquals(getCardId("blue_eyes_white_dragon"), data.get(ditto, core.CARD_TEMPLATE));
+        Assertions.assertEquals(getAliasId("blue_eyes_white_dragon"), data.get(ditto, core.CARD_TEMPLATE));
 
         data.set(ditto, core.DEATH_REQUEST, DeathOptions.NORMAL);
         moves.apply(new Update());
 
-        Assertions.assertEquals(getCardId("ditto"), data.get(ditto, core.CARD_TEMPLATE));
+        Assertions.assertEquals(getAliasId("ditto"), data.get(ditto, core.CARD_TEMPLATE));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class DittoTest extends AbstractGameTest {
 
         moves.apply(new Cast(player(0), ditto, forgottenAncient));
 
-        Assertions.assertEquals(getCardId("forgotten_ancient"), data.get(ditto, core.CARD_TEMPLATE));
+        Assertions.assertEquals(getAliasId("forgotten_ancient"), data.get(ditto, core.CARD_TEMPLATE));
         Assertions.assertEquals(0, effectiveStats.attack(ditto));
 
         int ornithopter = createCard(player(0), "ornithopter", core.IN_HAND_ZONE);
@@ -87,7 +87,7 @@ public class DittoTest extends AbstractGameTest {
 
         moves.apply(new Cast(player(0), ditto));
 
-        Assertions.assertEquals(getCardId("ditto"), data.get(ditto, core.CARD_TEMPLATE));
+        Assertions.assertEquals(getAliasId("ditto"), data.get(ditto, core.CARD_TEMPLATE));
         Assertions.assertTrue(data.has(ditto, core.IN_BATTLE_ZONE));
     }
 }
