@@ -1,8 +1,8 @@
 {
-  "alias": "frontland_felidar",
+  "alias": "frondland_felidar",
   "display": {
-    "name": "Frontland Felidar",
-    "imagePath": "frontland_felidar.jpeg",
+    "name": "Frondland Felidar",
+    "imagePath": "frondland_felidar.jpeg",
     "colors": [
       "GREEN",
       "WHITE"

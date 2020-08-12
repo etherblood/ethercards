@@ -195,10 +195,10 @@ public class CardModelUpdater {
         if (data.has(entityId, core.DRAWS_ON_BLOCK)) {
             keywords.add("Draws_on_Block_" + data.get(entityId, core.DRAWS_ON_BLOCK));
         }
-        if (data.has(entityId, core.CANNOT_ATTACK)) {
+        if (stats.cannotAttack(entityId)) {
             keywords.add("Cannot_attack");
         }
-        if (data.has(entityId, core.CANNOT_BLOCK)) {
+        if (stats.cannotBlock(entityId)) {
             keywords.add("Cannot_block");
         }
         if (data.has(entityId, core.CANNOT_BE_ATTACKED)) {

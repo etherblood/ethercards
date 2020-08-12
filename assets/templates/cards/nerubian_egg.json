@@ -6,7 +6,7 @@
     "colors": [
       "BLACK"
     ],
-    "description": "Summon a 3/3 Nerubian with Reach when this dies."
+    "description": "Summon a 4/4 Nerubian with Reach when this dies. Can neither attack nor block while at 0 attack."
   },
   "hand": {
     "cast": {
@@ -21,8 +21,7 @@
   "battle": {
     "components": {
       "ATTACK": 0,
-      "HEALTH": 2,
-      "CANNOT_ATTACK": true
+      "HEALTH": 2
     },
     "passive": {
       "TRIGGER_SELF_DEATH": [
@@ -31,6 +30,32 @@
           "minionId": "nerubian"
         }
       ]
+    },
+    "statModifiers": {
+      "CANNOT_ATTACK": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "testSource",
+          "predicate": {
+            "type": "attackIs",
+            "relation": "LESS_OR_EQUAL",
+            "value": 0
+          }
+        },
+        "value": 1
+      },
+      "CANNOT_BLOCK": {
+        "type": "predicateActivated",
+        "predicate": {
+          "type": "testSource",
+          "predicate": {
+            "type": "attackIs",
+            "relation": "LESS_OR_EQUAL",
+            "value": 0
+          }
+        },
+        "value": 1
+      }
     }
   },
   "graveyard": {},

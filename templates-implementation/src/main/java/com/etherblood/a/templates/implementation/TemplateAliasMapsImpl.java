@@ -59,6 +59,7 @@ import com.etherblood.a.templates.implementation.effects.NinjutsuEffect;
 import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.SelfResurrectEffect;
 import com.etherblood.a.templates.implementation.effects.SelfSummonFromLibraryEffect;
+import com.etherblood.a.templates.implementation.predicates.AttackIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.CanNinjutsuPredicate;
 import com.etherblood.a.templates.implementation.predicates.MinionCountIsPredicate;
 import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
@@ -144,6 +145,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("anyOf", AnyOfPredicate.class);
         targetClasses.put("allOf", AllOfPredicate.class);
         targetClasses.put("flying", FlyingPredicate.class);
+        targetClasses.put("attackIs", AttackIsPredicate.class);
         targetClasses.put("healthIs", HealthIsPredicate.class);
         targetClasses.put("manaCostIs", ManaCostIsPredicate.class);
         targetClasses.put("handCardCountIs", HandCardCountIsPredicate.class);

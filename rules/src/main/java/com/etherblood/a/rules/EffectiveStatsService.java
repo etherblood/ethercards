@@ -104,6 +104,32 @@ public class EffectiveStatsService {
         return venom;
     }
 
+    public boolean cannotAttack(int minion) {
+        int cannotAttack = data.getOptional(minion, core.CANNOT_ATTACK).orElse(0);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.CANNOT_ATTACK);
+            if (modifier != null) {
+                cannotAttack = modifier.modify(data, templates, minion, minion, cannotAttack);
+            }
+        }
+        return cannotAttack > 0;
+    }
+
+    public boolean cannotBlock(int minion) {
+        int cannotBlock = data.getOptional(minion, core.CANNOT_BLOCK).orElse(0);
+        OptionalInt templateId = data.getOptional(minion, core.CARD_TEMPLATE);
+        if (templateId.isPresent()) {
+            CardTemplate template = templates.getCard(templateId.getAsInt());
+            StatModifier modifier = template.getBattle().getStatModifiers().get(core.CANNOT_BLOCK);
+            if (modifier != null) {
+                cannotBlock = modifier.modify(data, templates, minion, minion, cannotBlock);
+            }
+        }
+        return cannotBlock > 0;
+    }
+
     public boolean isFastToAttack(int minion) {
         if (data.has(minion, core.FAST_TO_ATTACK)) {
             return true;

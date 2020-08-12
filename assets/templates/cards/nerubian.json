@@ -9,7 +9,7 @@
   },
   "hand": {
     "cast": {
-      "manaCost": 3,
+      "manaCost": 4,
       "effects": [
         {
           "type": "selfSummon"
@@ -19,8 +19,8 @@
   },
   "battle": {
     "components": {
-      "ATTACK": 3,
-      "HEALTH": 3,
+      "ATTACK": 4,
+      "HEALTH": 4,
       "REACH": true
     }
   },

@@ -142,7 +142,7 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(attacker, core.CANNOT_ATTACK)) {
+        if (effectiveStats.cannotAttack(attacker)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " can not attack.");
             }
@@ -235,7 +235,7 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(blocker, core.CANNOT_BLOCK)) {
+        if (effectiveStats.cannotBlock(blocker)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to block, blocker #" + blocker + " can not block.");
             }
