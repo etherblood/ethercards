@@ -15,6 +15,6 @@ public class CanNinjutsuPredicate implements TargetPredicate {
         return data.hasValue(target, core.OWNER, owner)
                 && data.has(target, core.ATTACK_TARGET)
                 && !data.has(source, core.NINJUTSU_TARGET)
-                && data.list(core.NINJUTSU_TARGET).stream().noneMatch(x -> x == target);
+                && data.list(core.NINJUTSU_TARGET).stream().noneMatch(x -> data.get(x, core.NINJUTSU_TARGET) == target);
     }
 }

@@ -12,6 +12,7 @@ import com.destrostudios.cardgui.BoardSettings;
 import com.destrostudios.cardgui.Card;
 import com.destrostudios.cardgui.CardZone;
 import com.destrostudios.cardgui.Interactivity;
+import com.destrostudios.cardgui.InteractivitySource;
 import com.destrostudios.cardgui.TargetSnapMode;
 import com.destrostudios.cardgui.TransformedBoardObject;
 import com.destrostudios.cardgui.boardobjects.TargetArrow;
@@ -92,6 +93,20 @@ import org.slf4j.LoggerFactory;
 public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(GameAppstate.class);
+
+    private static final ColorRGBA CAST_GLOW_COLOR = ColorRGBA.Yellow;
+    private static final ColorRGBA MULLIGAN_GLOW_COLOR = ColorRGBA.Red;
+    private static final ColorRGBA ATTACK_GLOW_COLOR = ColorRGBA.Red;
+    private static final ColorRGBA BLOCK_GLOW_COLOR = ColorRGBA.Blue;
+    private static final ColorRGBA ABILITY_GLOW_COLOR = new ColorRGBA(0.2f, 0f, 0.4f, 1);
+    private static final ColorRGBA COMBINED_GLOW_COLOR = ColorRGBA.White;
+
+    private static final ColorRGBA BLOCK_ARROW_COLOR = new ColorRGBA(0.25f, 0.25f, 1, 0.75f);
+    private static final ColorRGBA BLOCKED_ARROW_COLOR = new ColorRGBA(0.5f, 0, 0, 0.25f);
+    private static final ColorRGBA ATTACK_ARROW_COLOR = new ColorRGBA(1, 0.25f, 0.25f, 0.75f);
+    private static final ColorRGBA NINJUTSU_ARROW_COLOR = new ColorRGBA(0.5f, 0f, 1, 0.75f);
+    private static final ColorRGBA BLOCKED_NINJUTSU_ARROW_COLOR = new ColorRGBA(0.25f, 0f, 0.5f, 0.25f);
+
     private static final Vector2f CARD_SPACE = new Vector2f(1, 1.3f);
     private final Consumer<Move> moveRequester;
     private final GameReplayService gameReplayService;
@@ -128,6 +143,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         this.rootNode = rootNode;
         this.assetsPath = assetsPath;
         this.battleFullArt = battleFullArt;
+
+        //skip initial animations
+        events.getQueue().clear();
     }
 
     @Override
@@ -141,11 +159,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     public void update(float tpf) {
         removeFinishedAnimationObjects();
         gameReplayService.updateInstance(game);
+        updateBoard();
         Object event;
         while ((event = events.getQueue().poll()) != null) {
             playAnimation(event);
         }
-        updateBoard();
         updateCamera();
     }
 
@@ -236,10 +254,12 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private void shootBoardObject(int source, int target, TransformedBoardObject transformedBoardObject) {
+        Card<CardModel> sourceObject = visualCards.get(source);
+        Card<CardModel> targetObject = visualCards.get(target);
         transformedBoardObject.resetTransformations();
-        transformedBoardObject.position().setCurrentValue(visualCards.get(source).position().getCurrentValue());
+        transformedBoardObject.position().setCurrentValue(sourceObject.position().getCurrentValue());
         board.register(transformedBoardObject);
-        TargetedArcAnimation animation = new TargetedArcAnimation(transformedBoardObject, visualCards.get(target), 1, 0.6f);
+        TargetedArcAnimation animation = new TargetedArcAnimation(transformedBoardObject, targetObject, 1, 0.6f);
         board.playAnimation(animation);
         particleMapBoardObjects.put(animation, transformedBoardObject);
     }
@@ -420,7 +440,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             blocked.add(target);
             ColoredConnectionArrow arrow = arrows.get(blocker);
             if (arrow == null) {
-                ColorRGBA color = new ColorRGBA(0.25f, 0.25f, 1, 0.75f);
+                ColorRGBA color = BLOCK_ARROW_COLOR;
                 arrow = new ColoredConnectionArrow(visualCards.get(blocker), visualCards.get(target), color);
                 arrows.put(blocker, arrow);
                 board.register(arrow);
@@ -431,9 +451,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             ColoredConnectionArrow arrow = arrows.get(attacker);
             ColorRGBA color;
             if (blocked.contains(attacker)) {
-                color = new ColorRGBA(0.5f, 0, 0, 0.25f);
+                color = BLOCKED_ARROW_COLOR;
             } else {
-                color = new ColorRGBA(1, 0.25f, 0.25f, 0.75f);
+                color = ATTACK_ARROW_COLOR;
             }
             if (arrow == null) {
                 arrow = new ColoredConnectionArrow(visualCards.get(attacker), visualCards.get(target), color);
@@ -443,12 +463,17 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 arrow.getModel().setColor(color);
             }
         }
-        
+
         for (int ninja : data.list(core.NINJUTSU_TARGET)) {
             int target = data.get(ninja, core.NINJUTSU_TARGET);
             ColoredConnectionArrow arrow = arrows.get(ninja);
             if (arrow == null && data.hasValue(ninja, core.TEAM, team)) {
-                ColorRGBA color = new ColorRGBA(0.2f, 0f, 0.4f, 0.75f);
+                ColorRGBA color;
+                if (blocked.contains(target)) {
+                    color = BLOCKED_NINJUTSU_ARROW_COLOR;
+                } else {
+                    color = NINJUTSU_ARROW_COLOR;
+                }
                 arrow = new ColoredConnectionArrow(visualCards.get(ninja), visualCards.get(target), color);
                 arrows.put(ninja, arrow);
                 board.register(arrow);
@@ -476,24 +501,37 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             new CardModelUpdater().updateFromData(minionModel, game.getTemplates(), data);
             if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
                     .anyMatch(cast -> cast.source == cardEntity)) {
-                card.setInteractivity(castInteractivity(userControlledPlayer, cardEntity));
-                minionModel.setGlow(ColorRGBA.Yellow);
+                card.setInteractivity(InteractivitySource.MOUSE_LEFT, castInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(CAST_GLOW_COLOR);
             } else if (moves.stream().filter(DeclareMulligan.class::isInstance).map(DeclareMulligan.class::cast)
                     .anyMatch(mulligan -> mulligan.card == cardEntity)) {
-                card.setInteractivity(mulliganInteractivity(userControlledPlayer, cardEntity));
-                minionModel.setGlow(ColorRGBA.Red);
+                card.setInteractivity(InteractivitySource.MOUSE_LEFT, mulliganInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(MULLIGAN_GLOW_COLOR);
             } else if (moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
                     .anyMatch(attack -> attack.source == cardEntity)) {
-                card.setInteractivity(attackInteractivity(userControlledPlayer, cardEntity));
-                minionModel.setGlow(ColorRGBA.Red);
+                card.setInteractivity(InteractivitySource.MOUSE_LEFT, attackInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(ATTACK_GLOW_COLOR);
             } else if (moves.stream().filter(DeclareBlock.class::isInstance).map(DeclareBlock.class::cast)
                     .anyMatch(block -> block.source == cardEntity)) {
-                card.setInteractivity(blockInteractivity(userControlledPlayer, cardEntity));
-                minionModel.setGlow(ColorRGBA.Blue);
+                card.setInteractivity(InteractivitySource.MOUSE_LEFT, blockInteractivity(userControlledPlayer, cardEntity));
+                minionModel.setGlow(BLOCK_GLOW_COLOR);
             } else {
-                card.clearInteractivity();
+                card.clearInteractivity(InteractivitySource.MOUSE_LEFT);
                 minionModel.setGlow(null);
             }
+
+            if (moves.stream().filter(UseAbility.class::isInstance).map(UseAbility.class::cast)
+                    .anyMatch(ability -> ability.source == cardEntity)) {
+                card.setInteractivity(InteractivitySource.MOUSE_RIGHT, activatedAbilityInteractivity(userControlledPlayer, cardEntity));
+                if (minionModel.getGlow() != null) {
+                    minionModel.setGlow(COMBINED_GLOW_COLOR);
+                } else {
+                    minionModel.setGlow(ABILITY_GLOW_COLOR);
+                }
+            } else {
+                card.clearInteractivity(InteractivitySource.MOUSE_RIGHT);
+            }
+
             boolean isFaceUp;
             if (data.has(cardEntity, core.IN_LIBRARY_ZONE)) {
                 isFaceUp = false;

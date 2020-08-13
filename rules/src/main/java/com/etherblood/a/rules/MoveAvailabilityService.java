@@ -276,6 +276,12 @@ public class MoveAvailabilityService {
             }
             return false;
         }
+        if (data.has(castable, core.NINJUTSU_TARGET)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to cast, castable #" + castable + " used ninjutsu already.");
+            }
+            return false;
+        }
         if (!data.has(player, core.ACTIVE_PLAYER_PHASE)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to cast, player #" + player + " is not the active player.");
@@ -323,9 +329,21 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(player, core.SUMMONING_SICKNESS)) {
+        if (data.has(source, core.SUMMONING_SICKNESS)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to use ability, source #" + source + " has summoning sickness.");
+            }
+            return false;
+        }
+        if (data.has(source, core.ATTACK_TARGET)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, source #" + source + " is attacking.");
+            }
+            return false;
+        }
+        if (data.has(source, core.BLOCK_TARGET)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to use ability, source #" + source + " is blocking.");
             }
             return false;
         }
