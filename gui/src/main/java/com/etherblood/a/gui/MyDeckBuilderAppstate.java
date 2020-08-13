@@ -18,6 +18,8 @@ import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardModelUpdater;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.a.rules.templates.Tribe;
+import com.etherblood.a.templates.api.CardColor;
 import com.etherblood.a.templates.api.DisplayCardTemplate;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.jme3.app.state.AbstractAppState;
@@ -32,11 +34,13 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.simsilica.lemur.Button;
+import com.simsilica.lemur.TextField;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
@@ -44,6 +48,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private RawLibraryTemplate result = null;
     private final RawLibraryTemplate presetLibrary;
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
+    private final Node guiNode;
+    private final Button selectButton;
+    private final TextField searchField;
+    private long searchVersion;
     private final ActionListener saveLibraryListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
@@ -68,8 +76,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             }
         }
     };
-    private final Node guiNode;
-    private final Button selectButton;
 
     public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, Node guiNode, RawLibraryTemplate presetLibrary, Components components) {
         this.presetLibrary = presetLibrary;
@@ -162,6 +168,12 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         selectButton.setFontSize(50);
         selectButton.addClickCommands(x -> completeResult());
         selectButton.setLocalTranslation(100, 100, 0);
+
+        searchField = new TextField("search");
+        searchField.setFontSize(40);
+        searchField.setLocalTranslation(50, 700, 0);
+        searchField.setPreferredWidth(200);
+        searchVersion = searchField.getDocumentModel().getVersion();
     }
 
     private int getManaCost(CardModel card) {
@@ -174,6 +186,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
     @Override
     public void stateAttached(AppStateManager stateManager) {
+        guiNode.attachChild(searchField);
         guiNode.attachChild(selectButton);
         stateManager.attach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
@@ -192,6 +205,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.removeListener(previousPage);
 
         guiNode.detachChild(selectButton);
+        guiNode.detachChild(searchField);
     }
 
     private void completeResult() {
@@ -206,6 +220,64 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
     public RawLibraryTemplate getResult() {
         return result;
+    }
+
+    @Override
+    public void update(float tpf) {
+        if (searchField.getDocumentModel().getVersion() != searchVersion) {
+            deckBuilderAppState.setCollectionCardFilter(card -> {
+                String search = searchField.getText().toLowerCase();
+                if (search.isEmpty()) {
+                    return true;
+                }
+                DisplayCardTemplate template = card.getTemplate();
+                if (template.getName().toLowerCase().contains(search)) {
+                    return true;
+                }
+                if (template.getDescription() != null && template.getDescription().toLowerCase().contains(search)) {
+                    return true;
+                }
+                if (template.getFlavourText() != null && template.getFlavourText().toLowerCase().contains(search)) {
+                    return true;
+                }
+                for (String keyword : card.getKeywords()) {
+                    if (keyword.toLowerCase().contains(search)) {
+                        return true;
+                    }
+                }
+                for (CardColor color : template.getColors()) {
+                    if (color.name().toLowerCase().contains(search)) {
+                        return true;
+                    }
+                }
+                for (Tribe tribe : template.getTribes()) {
+                    if (tribe.name().toLowerCase().contains(search)) {
+                        return true;
+                    }
+                }
+                if (isInteger(search, 10)) {
+                    Integer searchInt = Integer.parseInt(search);
+                    if (searchInt.equals(template.getHand().getCast().getManaCost())) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            searchVersion = searchField.getDocumentModel().getVersion();
+        }
+    }
+
+    // https://stackoverflow.com/a/5439547
+    private static boolean isInteger(String s, int radix) {
+        try (Scanner sc = new Scanner(s.trim())) {
+            if (!sc.hasNextInt(radix)) {
+                return false;
+            }
+            // we know it starts with a valid int, now make sure
+            // there's nothing left!
+            sc.nextInt(radix);
+            return !sc.hasNext();
+        }
     }
 
 }
