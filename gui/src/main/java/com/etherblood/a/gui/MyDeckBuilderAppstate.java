@@ -40,7 +40,7 @@ import java.util.Map;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
 
-    private static final int CARD_COPIES_LIMIT = 1000;
+    private static final int LIBRARY_SIZE_LIMIT = 100;
     private RawLibraryTemplate result = null;
     private final RawLibraryTemplate presetLibrary;
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
@@ -122,8 +122,18 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
         BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new MyCardVisualizer(cardPainterJME, false);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
+        Map<CardModel, Integer> maxCounts = new HashMap<>();
+        for (CardModel card : allCardModels) {
+            if (card.getTemplate().getAlias().equals("blue_eyes_white_dragon")) {
+                maxCounts.put(card, 3);
+            } else {
+                maxCounts.put(card, 2);
+            }
+        }
         DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
                 .allCardModels(allCardModels)
+                .deckCardsMaximumUnique(maxCounts)
+                .deckCardsMaximumTotal(LIBRARY_SIZE_LIMIT)
                 .collectionZone(collectionZone)
                 .deckZone(deckZone)
                 .collectionZoneVisualizer(collectionZoneVisualizer)
@@ -189,7 +199,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         resultLibrary.hero = presetLibrary.hero;
         resultLibrary.cards = new HashMap<>();
         for (Map.Entry<CardModel, Integer> entry : deckBuilderAppState.getDeck().entrySet()) {
-            resultLibrary.cards.put(entry.getKey().getTemplate().getAlias(), Math.min(entry.getValue(), CARD_COPIES_LIMIT));
+            resultLibrary.cards.put(entry.getKey().getTemplate().getAlias(), entry.getValue());
         }
         result = resultLibrary;
     }
