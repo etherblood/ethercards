@@ -1,0 +1,54 @@
+{
+  "alias": "birds_of_paradise",
+  "display": {
+    "name": "Birds of Paradise",
+    "imagePath": "birds_of_paradise.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Tap: Gain 1 Mana.",
+    "flavourText": "A single vivid feather fetches a royal price—but who, having seen these magnificent creations of Nature, would settle for a feather?"
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 1,
+      "FLYING": true
+    },
+    "activated": {
+      "selfTap": true,
+      "effects": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

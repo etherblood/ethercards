@@ -6,7 +6,7 @@
     "colors": [
       "RED"
     ],
-    "description": "Whenever another nontoken Dragon enters the battlefield under your control, create a 5/5 red Dragon creature token with flying."
+    "description": "Whenever another nontoken Dragon enters the battlefield under your control, create a 5/5 red Dragon creature token with flying.\nPay 2 Mana: Dragons you control gain temporary +1/+0."
   },
   "tribes": [
     "DRAGON"
@@ -32,6 +32,40 @@
         {
           "type": "lathlissToken",
           "tokenId": "dragon_token"
+        }
+      ]
+    },
+    "activated": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "TEMPORARY_ATTACK": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "component",
+            "component": "IN_BATTLE_ZONE",
+            "predicate": {
+              "type": "allOf",
+              "predicates": [
+                {
+                  "type": "hasSourceOwner",
+                  "hasSourceOwner": true
+                },
+                {
+                  "type": "hasTribe",
+                  "tribe": "DRAGON"
+                }
+              ]
+            },
+            "select": "ALL"
+          }
         }
       ]
     }

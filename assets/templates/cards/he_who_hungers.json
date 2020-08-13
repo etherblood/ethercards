@@ -6,7 +6,7 @@
     "colors": [
       "BLACK"
     ],
-    "description": "Your opponent discards a card when this dies."
+    "description": "Your opponent discards a card when this dies.\nPay 1 Mana, sacrifice a Spirit, your opponent discards a random card."
   },
   "tribes": [
     "SPIRIT"
@@ -45,7 +45,58 @@
           ],
           "targets": {
             "type": "simple",
-            "select": "ALL",
+            "select": "ANY",
+            "filters": [
+              "OPPONENT"
+            ]
+          }
+        }
+      ]
+    },
+    "activated": {
+      "manaCost": 1,
+      "target": {
+        "type": "component",
+        "component": "IN_BATTLE_ZONE",
+        "requiresTarget": true,
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "hasTribe",
+              "tribe": "SPIRIT"
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        }
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": 2
+          }
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "PLAYER_DISCARD_CARDS": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
             "filters": [
               "OPPONENT"
             ]

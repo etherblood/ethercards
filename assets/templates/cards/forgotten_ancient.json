@@ -6,7 +6,7 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Whenever a player casts a spell, you may put a +1/+1 counter on Forgotten Ancient.",
+    "description": "Whenever a player casts a spell, you may put a +1/+1 counter on Forgotten Ancient. Activated: Move +1/+1 from Forgotten Ancient onto targeted minion.",
     "flavourText": "Its blood is life. Its body is growth."
   },
   "hand": {
@@ -31,6 +31,76 @@
           "effects": [
             {
               "type": "buff",
+              "components": {
+                "ATTACK": 1,
+                "HEALTH": 1
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "SOURCE"
+            ]
+          }
+        }
+      ]
+    },
+    "activated": {
+      "target": {
+        "type": "component",
+        "component": "IN_BATTLE_ZONE",
+        "requiresTarget": true,
+        "predicate": {
+          "type": "allOf",
+          "predicates": [
+            {
+              "type": "testSource",
+              "predicate": {
+                "type": "allOf",
+                "predicates": [
+                  {
+                    "type": "attackIs",
+                    "relation": "GREATER_THAN",
+                    "value": 0
+                  },
+                  {
+                    "type": "healthIs",
+                    "relation": "GREATER_THAN",
+                    "value": 0
+                  }
+                ]
+              }
+            },
+            {
+              "type": "isSource",
+              "isSource": false
+            },
+            {
+              "type": "hasSourceOwner",
+              "hasSourceOwner": true
+            },
+            {
+              "type": "hero",
+              "isHero": false
+            }
+          ]
+        }
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 1,
+            "HEALTH": 1
+          }
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "debuff",
               "components": {
                 "ATTACK": 1,
                 "HEALTH": 1
