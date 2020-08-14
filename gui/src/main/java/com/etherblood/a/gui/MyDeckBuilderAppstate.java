@@ -40,9 +40,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MyDeckBuilderAppstate extends AbstractAppState {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MyDeckBuilderAppstate.class);
 
     private static final int LIBRARY_SIZE_LIMIT = 100;
     private RawLibraryTemplate result = null;
@@ -158,8 +163,12 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
         HashMap<CardModel, Integer> deck = new HashMap<>();
         for (Map.Entry<String, Integer> entry : presetLibrary.cards.entrySet()) {
-            CardModel model = allCardModels.stream().filter(x -> x.getTemplate().getAlias().equals(entry.getKey())).findAny().get();
-            deck.put(model, entry.getValue());
+            Optional<CardModel> optionalCard = allCardModels.stream().filter(x -> x.getTemplate().getAlias().equals(entry.getKey())).findAny();
+            if (optionalCard.isPresent()) {
+                deck.put(optionalCard.get(), entry.getValue());
+            } else {
+                LOG.warn("Card with alias {} not found, skipped.", entry.getKey());
+            }
         }
         deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
         deckBuilderAppState.setDeck(deck);
