@@ -23,8 +23,7 @@ public class Main {
         botLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile(assetsPath + "templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
 
         MctsBotSettings<Move, MoveBotGame> candidateSettings = new MctsBotSettings<>();
-        candidateSettings.strength = 1000;
-//        candidateSettings.evaluation = new SimpleTeamEvaluation<Move, MoveBotGame>()::evaluate;
+        candidateSettings.strength = 100;
 
         MctsBotSettings<Move, MoveBotGame> currentSettings = new MctsBotSettings<>();
         currentSettings.strength = 100;

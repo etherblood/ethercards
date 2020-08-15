@@ -33,8 +33,13 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.simsilica.lemur.Axis;
 import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Container;
+import com.simsilica.lemur.FillMode;
+import com.simsilica.lemur.Label;
 import com.simsilica.lemur.TextField;
+import com.simsilica.lemur.component.BoxLayout;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -55,6 +60,11 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
     private final Node guiNode;
     private final Button selectButton;
+    private final Container tableHeader;
+    private final Button nextPageButton;
+    private final Button previousPageButton;
+    private final Label currentPageLabel;
+    private final Label searchLabel;
     private final TextField searchField;
     private long searchVersion;
     private final ActionListener saveLibraryListener = new ActionListener() {
@@ -68,16 +78,16 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private final ActionListener nextPage = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
-            if (isPressed && deckBuilderAppState.getCollectionPage() + 1 < deckBuilderAppState.getCollectionPagesCount()) {
-                deckBuilderAppState.goToNextColletionPage();
+            if (isPressed) {
+                nextPage();
             }
         }
     };
     private final ActionListener previousPage = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
-            if (isPressed && deckBuilderAppState.getCollectionPage() > 0) {
-                deckBuilderAppState.goToPreviousCollectionPage();
+            if (isPressed) {
+                previousPage();
             }
         }
     };
@@ -94,7 +104,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
         List<CardModel> allCardModels = new LinkedList<>();
         for (DisplayCardTemplate card : cards) {
-            CardModel cardModel = new CardModel(-1);
+            CardModel cardModel = new CardModel(~0);
             new CardModelUpdater().updateFromTemplate(cardModel, card, core);
             allCardModels.add(cardModel);
         }
@@ -178,11 +188,25 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         selectButton.addClickCommands(x -> completeResult());
         selectButton.setLocalTranslation(100, 100, 0);
 
-        searchField = new TextField("search");
-        searchField.setFontSize(40);
-        searchField.setLocalTranslation(50, 700, 0);
+        searchLabel = new Label("search:");
+        searchField = new TextField("");
         searchField.setPreferredWidth(200);
         searchVersion = searchField.getDocumentModel().getVersion();
+
+        previousPageButton = new Button("<");
+        previousPageButton.addClickCommands(x -> previousPage());
+        nextPageButton = new Button(">");
+        nextPageButton.addClickCommands(x -> nextPage());
+        currentPageLabel = new Label("1");
+
+        tableHeader = new Container(new BoxLayout(Axis.X, FillMode.Proportional));
+        tableHeader.addChild(searchLabel);
+        tableHeader.addChild(searchField);
+        tableHeader.addChild(previousPageButton);
+        tableHeader.addChild(currentPageLabel);
+        tableHeader.addChild(nextPageButton);
+
+        tableHeader.setLocalTranslation(50, 700, 0);
     }
 
     private int getManaCost(CardModel card) {
@@ -195,14 +219,16 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
     @Override
     public void stateAttached(AppStateManager stateManager) {
-        guiNode.attachChild(searchField);
+        guiNode.attachChild(tableHeader);
         guiNode.attachChild(selectButton);
         stateManager.attach(deckBuilderAppState);
         InputManager inputManager = stateManager.getApplication().getInputManager();
         inputManager.addListener(saveLibraryListener, "space");
         inputManager.addListener(nextPage, "right");
         inputManager.addListener(previousPage, "left");
-        stateManager.getState(CameraAppState.class).moveTo(new Vector3f(-0.25036395f, 15.04817f, 1), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
+        CameraAppState cameraAppstate = stateManager.getState(CameraAppState.class);
+        cameraAppstate.moveTo(new Vector3f(-0.25036395f, 15.04817f, 1), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
+        tableHeader.setLocalTranslation(300, cameraAppstate.getCamera().getHeight() - 20, 0);
     }
 
     @Override
@@ -214,7 +240,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.removeListener(previousPage);
 
         guiNode.detachChild(selectButton);
-        guiNode.detachChild(searchField);
+        guiNode.detachChild(tableHeader);
     }
 
     private void completeResult() {
@@ -233,6 +259,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
     @Override
     public void update(float tpf) {
+        currentPageLabel.setText((deckBuilderAppState.getCollectionPage() + 1) + " / " + deckBuilderAppState.getCollectionPagesCount());
         if (searchField.getDocumentModel().getVersion() != searchVersion) {
             deckBuilderAppState.setCollectionCardFilter(card -> {
                 String search = searchField.getText().toLowerCase();
@@ -286,6 +313,18 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             // there's nothing left!
             sc.nextInt(radix);
             return !sc.hasNext();
+        }
+    }
+
+    private void nextPage() {
+        if (deckBuilderAppState.getCollectionPage() + 1 < deckBuilderAppState.getCollectionPagesCount()) {
+            deckBuilderAppState.goToNextColletionPage();
+        }
+    }
+
+    private void previousPage() {
+        if (deckBuilderAppState.getCollectionPage() > 0) {
+            deckBuilderAppState.goToPreviousCollectionPage();
         }
     }
 

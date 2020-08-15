@@ -16,4 +16,5 @@ public class MctsBotSettings<Move, Game extends BotGame<Move, Game>> {
     public float firstPlayUrgency = 10;
     public Random random = new Random();
     public Function<Game, float[]> evaluation = new RolloutToEvaluation<>(new Random(), 10, new SimpleTeamEvaluation<Move, Game>()::evaluate)::evaluate;
+    public TerminationType termination = TerminationType.NODE_COUNT;
 }

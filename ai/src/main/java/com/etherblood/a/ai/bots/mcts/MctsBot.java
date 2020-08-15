@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public class MctsBot implements Bot {
 
     private static final Logger LOG = LoggerFactory.getLogger(MctsBot.class);
 
+    private static final int MILLI_TO_NANO = 1_000_000;
     private final boolean verbose;
 
     private final MctsBotSettings<Move, MoveBotGame> settings;
@@ -46,20 +48,33 @@ public class MctsBot implements Bot {
                 rootNodeHistoryPointer++;
             }
         }
+        if (rootNode == null) {
+            rootNode = createNode();
+        }
 
         List<Move> moves = new ArrayList<>(sourceGame.generateMoves(playerIndex));
         if (moves.size() > 1) {
-            if (rootNode == null) {
-                rootNode = createNode();
-            }
             MctsRaveScores raveScores = initRaveScores();
 
             List<MctsBotWorker> workers = new ArrayList<>();
             for (int i = 0; i < settings.maxThreads; i++) {
                 workers.add(new MctsBotWorker(sourceGame, simulationGameSupply.get(), settings, playerIndex, rootNode, raveScores));
             }
-            workers.parallelStream().forEach(x -> x.run());
-            assert rootNode.visits() >= settings.strength;
+            BooleanSupplier isActive;
+            int strength = settings.strength;
+            switch (settings.termination) {
+                case NODE_COUNT:
+                    isActive = () -> rootNode.visits() < strength;
+                    break;
+                case MILLIS_ELAPSED:
+                    long startNanos = System.nanoTime();
+                    long endNanos = MILLI_TO_NANO * strength + startNanos;
+                    isActive = () -> System.nanoTime() < endNanos;
+                    break;
+                default:
+                    throw new AssertionError(settings.termination.name());
+            }
+            workers.parallelStream().forEach(x -> x.run(isActive));
 
             MctsNode node = rootNode;
             moves.sort(Comparator.comparingDouble(move -> -visits(node, move)));
@@ -82,7 +97,13 @@ public class MctsBot implements Bot {
                 LOG.info("Expected win-rate: {}%", Math.round(100 * rootNode.score(playerIndex) / rootNode.visits()));
             }
         }
-        return moves.get(0);
+        Move selected = moves.get(0);
+        float score = visits(rootNode, selected);
+        int identicalMovesCount = 1;
+        while (identicalMovesCount < moves.size() && visits(rootNode, moves.get(identicalMovesCount)) == score) {
+            identicalMovesCount++;
+        }
+        return moves.get(settings.random.nextInt(identicalMovesCount));
     }
 
     private float visits(MctsNode node, Move move) {

@@ -8,12 +8,12 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Callable;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class MctsBotWorker implements Runnable, Callable<Void> {
+class MctsBotWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(MctsBotWorker.class);
 
@@ -22,7 +22,6 @@ class MctsBotWorker implements Runnable, Callable<Void> {
     private final float firstPlayUrgency;
     private final Function<MoveBotGame, float[]> evaluation;
     private final Random random;
-    private final int strength;
     private final float raveMultiplier;
     private final MoveBotGame sourceGame, simulationGame;
     private final int playerCount;
@@ -34,7 +33,6 @@ class MctsBotWorker implements Runnable, Callable<Void> {
         this.sourceGame = sourceGame;
         this.simulationGame = simulationGame;
         this.random = settings.random;
-        this.strength = settings.strength;
         this.uctConstant = settings.uctConstant;
         this.firstPlayUrgency = settings.firstPlayUrgency;
         this.evaluation = settings.evaluation;
@@ -45,17 +43,10 @@ class MctsBotWorker implements Runnable, Callable<Void> {
         this.raveScores = raveScores;
     }
 
-    @Override
-    public Void call() throws Exception {
-        run();
-        return null;
-    }
-
-    @Override
-    public void run() {
+    public void run(BooleanSupplier isActive) {
         LOG.debug("worker started.");
         int iterations = 0;
-        while (rootNode.visits() < strength) {
+        while (isActive.getAsBoolean()) {
             simulationGame.copyStateFrom(sourceGame);
             // randomize opponents hand cards
             // TODO: use a priori knowledge for better approximation of real hand cards
