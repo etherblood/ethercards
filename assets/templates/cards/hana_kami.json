@@ -1,0 +1,83 @@
+{
+  "alias": "hana_kami",
+  "display": {
+    "name": "Hana Kami",
+    "imagePath": "hana_kami.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "Pay 2 Mana, Sacrifice Hana Kami: Return random Arcane card from your graveyard to your hand.",
+    "flavourText": "It grew in lands lit by pride and watered by tears."
+  },
+  "tribes": [
+    "SPIRIT"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1
+    },
+    "activated": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DEATH_REQUEST": 2
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "SOURCE"
+            ]
+          }
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "moveToZone",
+              "zone": "IN_HAND_ZONE"
+            }
+          ],
+          "targets": {
+            "type": "component",
+            "component": "IN_GRAVEYARD_ZONE",
+            "select": "ANY",
+            "predicate": {
+              "type": "allOf",
+              "predicates": [
+                {
+                  "type": "hasSourceOwner",
+                  "hasSourceOwner": true
+                },
+                {
+                  "type": "hasTribe",
+                  "tribe": "ARCANE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

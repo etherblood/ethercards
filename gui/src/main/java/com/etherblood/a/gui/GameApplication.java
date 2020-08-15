@@ -63,7 +63,7 @@ public class GameApplication extends SimpleApplication {
 
     private void requestGame() {
         client.requestGame(selectedLibrary, selectedOpponents.strength, selectedOpponents.teamHumanCounts, selectedOpponents.teamSize);
-        stateManager.getState(HudTextAppstate.class).setText("Waiting for opponent...");
+        stateManager.getState(HudTextAppstate.class).setText("Waiting for players...");
 
     }
 
