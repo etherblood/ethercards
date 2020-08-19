@@ -6,7 +6,7 @@
     "colors": [
       "RED"
     ],
-    "description": "Cut each heroes health in half."
+    "description": "Tap: Cut each heroes health in half."
   },
   "hand": {
     "cast": {
@@ -14,7 +14,18 @@
       "effects": [
         {
           "type": "selfSummon"
-        },
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 4,
+      "HEALTH": 3
+    },
+    "activated": {
+      "selfTap": true,
+      "effects": [
         {
           "type": "targeted",
           "effects": [
@@ -34,12 +45,6 @@
           }
         }
       ]
-    }
-  },
-  "battle": {
-    "components": {
-      "ATTACK": 4,
-      "HEALTH": 3
     }
   },
   "graveyard": {},

@@ -16,6 +16,7 @@ public class CardModel extends BoardObjectModel {
     private Integer attack, health;
     private boolean damaged, foil;
     private boolean faceUp = true;
+    private boolean mulligan = false;
     private ColorRGBA glow;
     private List<String> keywords = new ArrayList<>();
     private boolean inBattleZone;
@@ -32,6 +33,14 @@ public class CardModel extends BoardObjectModel {
 
     public boolean isFaceUp() {
         return faceUp;
+    }
+
+    public boolean isMulligan() {
+        return mulligan;
+    }
+
+    public void setMulligan(boolean mulliganed) {
+        updateIfNotEquals(this.mulligan, mulliganed, () -> this.mulligan = mulliganed);
     }
 
     public void setFaceUp(boolean faceUp) {

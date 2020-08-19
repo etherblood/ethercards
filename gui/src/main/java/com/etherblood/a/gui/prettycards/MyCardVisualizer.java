@@ -104,7 +104,11 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         Texture textureDetails = faceDown ? textureEmpty : minified ? textureEmpty : TEXTURE_CACHE.computeIfAbsent("details_" + alias, key -> {
             return createDetailsTexture(cardModel);
         });
-
+        
+        Texture textureMulligan = cardModel.isMulligan() && !faceDown ? TEXTURE_CACHE.computeIfAbsent("mulligan", key -> {
+            return createMulliganTexture();
+        }): textureEmpty;
+        
         Material material = visualization.getMaterial_Front();
         material.setTexture("DiffuseMap1", textureBackground);
         material.setTexture("DiffuseMap2", textureArtwork);
@@ -114,6 +118,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         material.setInt("DiffuseMapTilesY2", rows);
         material.setTexture("DiffuseMap3", textureDetails);
         material.setTexture("DiffuseMap4", textureBattleStats);
+        material.setTexture("DiffuseMap5", textureMulligan);
         material.setTexture("FoilMap", textureFoilMap);
 
         if (cardModel.getGlow() != null) {
@@ -129,6 +134,12 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         BufferedImage bufferedImageBackground = getCardBackgroundImage(colors, minified);
         imageBackground.paintSameSizeImage(new PaintableImage(bufferedImageBackground));
         return SimpleModelledCard.flipAndCreateTexture(imageBackground);
+    }
+
+    private Texture2D createMulliganTexture() {
+        System.out.println("otto");
+        BufferedImage bufferedImage = cardImages.readImage("images/mulligan.png");
+        return SimpleModelledCard.flipAndCreateTexture(new PaintableImage(bufferedImage));
     }
 
     private Texture2D createArtworkTexture(int artworkTiles, CardModel cardModel, int artworkWidth, int artworkHeight, int artworkX, int artworkY, int cols, int rows) {

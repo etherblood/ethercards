@@ -19,6 +19,7 @@ import com.destrostudios.cardgui.boardobjects.TargetArrow;
 import com.destrostudios.cardgui.events.MoveCardEvent;
 import com.destrostudios.cardgui.interactivities.AimToTargetInteractivity;
 import com.destrostudios.cardgui.interactivities.ClickInteractivity;
+import com.destrostudios.cardgui.interactivities.DragToPlayInteractivity;
 import com.destrostudios.cardgui.samples.animations.CameraShakeAnimation;
 import com.destrostudios.cardgui.samples.animations.EffekseerAnimation;
 import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
@@ -538,6 +539,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 isFaceUp = true;
             }
             minionModel.setFaceUp(isFaceUp);
+            minionModel.setMulligan(data.has(cardEntity, core.MULLIGAN));
 
             board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index++)));
         }
@@ -610,7 +612,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 }
             };
         }
-        return new ClickInteractivity() {
+        return new DragToPlayInteractivity() {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
