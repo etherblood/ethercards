@@ -2,19 +2,21 @@
   "alias": "omfg_dogs",
   "display": {
     "name": "Omfg dogs",
-    "imagePath": "omfgdogs.gif",
+    "imagePath": "omfg_dogs.png",
+    "frames": 48,
+    "loopMillis": 1920,
     "colors": [
       "WHITE"
     ],
-    "description": "Summon three 1/1 dogs."
+    "description": "Summon eleven 1/1 dogs."
   },
   "hand": {
     "cast": {
-      "manaCost": 3,
+      "manaCost": 10,
       "effects": [
         {
           "type": "multiTrigger",
-          "amount": 3,
+          "amount": 11,
           "effects": [
             {
               "type": "summon",

@@ -84,6 +84,8 @@ public class TemplatesParser {
                     rawCard.display.flavourText,
                     rawCard.display.description,
                     rawCard.display.imagePath,
+                    rawCard.display.frames,
+                    rawCard.display.loopMillis,
                     rawCard.display.colors,
                     rawCard.tribes,
                     rawCard.hand.toZoneState(),

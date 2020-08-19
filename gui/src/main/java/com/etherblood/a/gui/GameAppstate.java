@@ -18,7 +18,7 @@ import com.destrostudios.cardgui.TransformedBoardObject;
 import com.destrostudios.cardgui.boardobjects.TargetArrow;
 import com.destrostudios.cardgui.events.MoveCardEvent;
 import com.destrostudios.cardgui.interactivities.AimToTargetInteractivity;
-import com.destrostudios.cardgui.interactivities.DragToPlayInteractivity;
+import com.destrostudios.cardgui.interactivities.ClickInteractivity;
 import com.destrostudios.cardgui.samples.animations.CameraShakeAnimation;
 import com.destrostudios.cardgui.samples.animations.EffekseerAnimation;
 import com.destrostudios.cardgui.samples.animations.TargetedArcAnimation;
@@ -37,8 +37,6 @@ import com.etherblood.a.gui.particles.ColorModel;
 import com.etherblood.a.gui.particles.ColoredSphere;
 import com.etherblood.a.gui.particles.ColoredSphereVisualizer;
 import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.CardPainterAWT;
-import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardModelUpdater;
@@ -121,7 +119,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final CardImages cardImages;
     private final Node rootNode;
     private final String assetsPath;
-    private final boolean battleFullArt;
     private boolean gameCompleted = false;
 
     private CameraAppState cameraAppstate;
@@ -133,7 +130,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private final Map<Animation, BoardObject> particleMapBoardObjects = new HashMap<>();
 
-    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, CardImages cardImages, Node rootNode, String assetsPath, boolean battleFullArt, int playerIndex) {
+    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, CardImages cardImages, Node rootNode, String assetsPath, int playerIndex) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
         events = new QueueEventListener();
@@ -142,7 +139,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         this.cardImages = cardImages;
         this.rootNode = rootNode;
         this.assetsPath = assetsPath;
-        this.battleFullArt = battleFullArt;
 
         //skip initial animations
         events.getQueue().clear();
@@ -614,7 +610,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 }
             };
         }
-        return new DragToPlayInteractivity() {
+        return new ClickInteractivity() {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
@@ -649,7 +645,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 }
             };
         }
-        return new DragToPlayInteractivity() {
+        return new ClickInteractivity() {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
@@ -659,7 +655,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private Interactivity mulliganInteractivity(int player, int card) {
-        return new DragToPlayInteractivity() {
+        return new ClickInteractivity() {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
@@ -699,8 +695,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         board.registerVisualizer_Class(ColoredSphere.class, new ColoredSphereVisualizer());
         board.registerVisualizer_Class(StaticSpatial.class, new StaticSpatialVisualizer());
-        CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
-        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardPainterJME, battleFullArt));
+        board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardImages));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
                 .color(new ColorRGBA(1, 1, 1, 0.8f))
                 .width(0.5f)

@@ -11,8 +11,6 @@ import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.CardPainterAWT;
-import com.etherblood.a.gui.prettycards.CardPainterJME;
 import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardModelUpdater;
@@ -140,8 +138,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 return new Vector2f(4, 10);
             }
         };
-        CardPainterJME cardPainterJME = new CardPainterJME(new CardPainterAWT(cardImages));
-        BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new MyCardVisualizer(cardPainterJME, false);
+        BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new MyCardVisualizer(cardImages);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
         Map<CardModel, Integer> maxCounts = new HashMap<>();
         for (CardModel card : allCardModels) {

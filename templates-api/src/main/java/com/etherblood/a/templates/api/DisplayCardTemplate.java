@@ -11,15 +11,18 @@ import java.util.Set;
 public class DisplayCardTemplate extends CardTemplate {
 
     private final String alias, name, flavourText, description, imagePath;
+    private final int frames, loopMillis;
     private final List<CardColor> colors;
 
-    public DisplayCardTemplate(int templateId, boolean isMinion, String alias, String name, String flavourText, String description, String imagePath, List<CardColor> colors, Set<Tribe> tribes, ZoneState hand, ZoneState battle, ZoneState graveyard, ZoneState library) {
+    public DisplayCardTemplate(int templateId, boolean isMinion, String alias, String name, String flavourText, String description, String imagePath, int frames, int loopMillis, List<CardColor> colors, Set<Tribe> tribes, ZoneState hand, ZoneState battle, ZoneState graveyard, ZoneState library) {
         super(templateId, isMinion, tribes, hand, battle, graveyard, library);
         this.alias = alias;
         this.name = name;
         this.flavourText = flavourText;
         this.description = description;
         this.imagePath = imagePath;
+        this.frames = frames;
+        this.loopMillis = loopMillis;
         this.colors = Collections.unmodifiableList(new ArrayList<>(colors));
     }
 
@@ -41,6 +44,14 @@ public class DisplayCardTemplate extends CardTemplate {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public int getFrames() {
+        return frames;
+    }
+
+    public int getLoopMillis() {
+        return loopMillis;
     }
 
     public List<CardColor> getColors() {

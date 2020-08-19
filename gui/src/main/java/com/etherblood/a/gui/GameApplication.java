@@ -46,7 +46,6 @@ public class GameApplication extends SimpleApplication {
     private final String version;
     private final String assetsPath;
     private final String hostUrl;
-    private final boolean battleFullArt;
     private CardImages cardImages;
     private GameClient client;
 
@@ -57,7 +56,6 @@ public class GameApplication extends SimpleApplication {
         this.authentication = authentication;
         this.assetsPath = properties.getProperty("assets");
         this.hostUrl = properties.getProperty("hostUrl");
-        this.battleFullArt = Boolean.parseBoolean(properties.getProperty("battleFullArt"));
         this.version = version;
     }
 
@@ -131,7 +129,7 @@ public class GameApplication extends SimpleApplication {
         stateManager.attach(new HudTextAppstate(guiNode, guiFont));
         stateManager.attach(new ForestBoardAppstate(rootNode));
 
-        cardImages = new CardImages(assetManager);
+        cardImages = new CardImages(assetsPath);
 
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         inputManager.addMapping("toggleMenu", new KeyTrigger(KeyInput.KEY_ESCAPE));
@@ -205,7 +203,7 @@ public class GameApplication extends SimpleApplication {
         } else {
             stateManager.getState(HudTextAppstate.class).setText("");
             GameReplayView gameReplayService = client.getGame();
-            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService.gameReplay, cardImages, rootNode, assetsPath, battleFullArt, gameReplayService.playerIndex));
+            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService.gameReplay, cardImages, rootNode, assetsPath, gameReplayService.playerIndex));
             selectedLibrary = null;
             selectedOpponents = null;
 

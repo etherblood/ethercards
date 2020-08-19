@@ -1,11 +1,11 @@
 package com.etherblood.a.gui.prettycards;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.asset.TextureKey;
-import com.jme3.texture.Texture;
-import java.awt.Image;
-import java.util.HashMap;
-import jme3tools.converters.ImageToAwt;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -13,30 +13,31 @@ import jme3tools.converters.ImageToAwt;
  */
 public class CardImages {
 
-    private final AssetManager assets;
-    private static final HashMap<String, Image> IMAGE_CACHE = new HashMap<>();
+    private final String assetsPath;
 
-    public CardImages(AssetManager assets) {
-        this.assets = assets;
+    public CardImages(String assetsPath) {
+        this.assetsPath = assetsPath;
     }
 
-    public Image getCachedImage(String resourcePath) {
-        return getCachedImage(resourcePath, -1, -1);
-    }
-
-    public Image getCachedImage(String filePath, int width, int height) {
-        String key = (filePath + "_" + width + "_" + height);
-        Image image = IMAGE_CACHE.get(key);
-        if (image == null) {
-            Texture texture = assets.loadTexture(new TextureKey(filePath, false));
-            image = ImageToAwt.convert(texture.getImage(), false, true, 0);
-            if ((width != -1) && (height != -1)) {
-                int scaleMode = (filePath.endsWith(".gif") ? Image.SCALE_FAST : Image.SCALE_SMOOTH);
-                image = image.getScaledInstance(width, height, scaleMode);
-            }
-            IMAGE_CACHE.put(key, image);
+    public BufferedImage readAndScaleImage(String filePath, int width, int height) {
+        BufferedImage image = readImage(filePath);
+        if ((width != -1) && (height != -1)) {
+            BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D graphics = resizedImage.createGraphics();
+            graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            graphics.drawImage(image, 0, 0, width, height, 0, 0, image.getWidth(), image.getHeight(), null);
+            graphics.dispose();
+            return resizedImage;
         }
         return image;
+    }
+
+    public BufferedImage readImage(String filePath) {
+        try {
+            return ImageIO.read(new File(assetsPath + filePath));
+        } catch (IOException ex) {
+            throw new RuntimeException(filePath, ex);
+        }
     }
 
     public String getCardImageFilePath(CardModel cardModel) {

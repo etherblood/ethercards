@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class MyDeckBuilderDeckCardVisualizer extends SimpleDeckBuilderDeckCardVisualizer<CardModel> {
@@ -25,34 +24,13 @@ public class MyDeckBuilderDeckCardVisualizer extends SimpleDeckBuilderDeckCardVi
     protected PaintableImage paintActualCard(CardModel cardModel) {
         PaintableImage image = new PaintableImage(400, 57);
         image.setBackground(Color.BLACK);
+        int frames = cardModel.getTemplate().getFrames();
         String imagePath = images.getCardImageFilePath(cardModel);
-        Image img = images.getCachedImage(imagePath, (image.getWidth() - amountPixelWidth), image.getHeight());
-        image.paintImage(toBufferedImage(img), amountPixelWidth, 0);
+        BufferedImage img = images.readImage(imagePath);
+        PaintableImage artwork = new PaintableImage(img);
+        image.paintImage(artwork, 0, 0, (artwork.getWidth() / frames), artwork.getHeight(), amountPixelWidth, 0, (image.getWidth() - amountPixelWidth), image.getHeight());
         paintText(image, amountPixelWidth + 20, (image.getHeight() / 2), false, true, cardModel.getTemplate().getName());
         return image;
-    }
-
-    /**
-     * Converts a given Image into a BufferedImage
-     *
-     * @param img The Image to be converted
-     * @return The converted BufferedImage
-     */
-    public static BufferedImage toBufferedImage(Image img) {
-        if (img instanceof BufferedImage) {
-            return (BufferedImage) img;
-        }
-
-        // Create a buffered image with transparency
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-        // Draw the image on to the buffered image
-        Graphics2D bGr = bimage.createGraphics();
-        bGr.drawImage(img, 0, 0, null);
-        bGr.dispose();
-
-        // Return the buffered image
-        return bimage;
     }
 
     @Override

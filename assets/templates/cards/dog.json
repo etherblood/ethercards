@@ -2,7 +2,9 @@
   "alias": "dog",
   "display": {
     "name": "Dog",
-    "imagePath": "omfgdogs.gif",
+    "imagePath": "omfg_dogs.png",
+    "frames": 48,
+    "loopMillis": 1920,
     "colors": [
       "WHITE"
     ]

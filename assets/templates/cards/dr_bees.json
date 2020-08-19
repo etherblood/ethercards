@@ -2,7 +2,9 @@
   "alias": "dr_bees",
   "display": {
     "name": "Dr. Bees",
-    "imagePath": "dr_bees.gif",
+    "imagePath": "dr_bees.png",
+    "frames": 29,
+    "loopMillis": 1450,
     "colors": [
       "GREEN"
     ],
