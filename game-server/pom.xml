@@ -8,14 +8,6 @@
     </parent>
     <artifactId>game-server</artifactId>
     <packaging>jar</packaging>
-    
-    <repositories>
-        <!-- repository for MinLog -> slf4j -->
-        <repository>
-            <id>premise</id>
-            <url>https://premise.artifactoryonline.com/premise/public</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
@@ -86,13 +78,6 @@
             <groupId>com.etherblood.a</groupId>
             <artifactId>ai</artifactId>
             <version>0.1.0</version>
-        </dependency>
-        
-        <!-- dependency for MinLog -> slf4j -->
-        <dependency>
-            <groupId>com.esotericsoftware.minlog</groupId>
-            <artifactId>minlog</artifactId>
-            <version>1.2-slf4j-jdanbrown-0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
