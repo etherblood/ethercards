@@ -35,7 +35,7 @@ public class JwtParser {
 
     public static JwtParser withPublicKeyFile(String path) {
         Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) readPublicKey(path), null);
-        return new JwtParser(JWT.require(algorithm).build(), null);
+        return new JwtParser(JWT.require(algorithm).acceptLeeway(1).build(), null);
     }
 
     public static JwtParser withVerifyUrl(String url) {
