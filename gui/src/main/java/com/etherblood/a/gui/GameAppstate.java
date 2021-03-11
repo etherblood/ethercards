@@ -38,9 +38,9 @@ import com.etherblood.a.gui.particles.ColorModel;
 import com.etherblood.a.gui.particles.ColoredSphere;
 import com.etherblood.a.gui.particles.ColoredSphereVisualizer;
 import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardModelUpdater;
+import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.soprettyboard.BoardTemplate;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.network.api.GameReplayService;
@@ -48,9 +48,9 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.EntityUtil;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.Cast;
 import com.etherblood.a.rules.moves.DeclareAttack;
+import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.DeclareMulligan;
 import com.etherblood.a.rules.moves.EndAttackPhase;
 import com.etherblood.a.rules.moves.EndBlockPhase;
@@ -130,6 +130,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final Node endPhaseButtonNode = new Node();
 
     private final Map<Animation, BoardObject> particleMapBoardObjects = new HashMap<>();
+    private final IntList pendingMulligan = new IntList();
 
     public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, CardImages cardImages, Node rootNode, String assetsPath, int playerIndex) {
         this.moveRequester = moveRequester;
@@ -539,7 +540,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 isFaceUp = true;
             }
             minionModel.setFaceUp(isFaceUp);
-            minionModel.setMulligan(data.has(cardEntity, core.MULLIGAN));
+            minionModel.setMulligan(data.has(cardEntity, core.MULLIGAN) || pendingMulligan.contains(cardEntity));
 
             board.triggerEvent(new MoveCardEvent(card, cardZone, interval.mult(index++)));
         }
@@ -661,7 +662,12 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
             @Override
             public void trigger(BoardObject boardObject, BoardObject target) {
-                requestMove(new DeclareMulligan(player, card));
+                int index = pendingMulligan.indexOf(card);
+                if (index == -1) {
+                    pendingMulligan.add(card);
+                } else {
+                    pendingMulligan.swapRemoveAt(index);
+                }
             }
         };
     }
@@ -759,6 +765,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                         requestMove(new EndAttackPhase(userControlledPlayer));
                         break;
                     case PlayerPhase.MULLIGAN:
+                        for (int card : pendingMulligan) {
+                            requestMove(new DeclareMulligan(userControlledPlayer, card));
+                        }
+                        pendingMulligan.clear();
                         requestMove(new EndMulliganPhase(userControlledPlayer));
                         break;
                 }
