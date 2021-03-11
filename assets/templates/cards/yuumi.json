@@ -6,7 +6,7 @@
     "colors": [
       "WHITE"
     ],
-    "description": "Yuumi gains hexproof and can not be attacked after surviving damage.",
+    "description": "Tap: Target allied minion gains +1/+1, Yuumi gains hexproof and can not be damaged until next turn.",
     "flavourText": "We've got the zoomies!."
   },
   "hand": {
@@ -23,6 +23,44 @@
     "components": {
       "ATTACK": 3,
       "HEALTH": 4
+    },
+    "activated": {
+      "selfTap": true,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION"
+        ]
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "TEMPORARY_ATTACK": 1,
+            "TEMPORARY_HEALTH": 1
+          }
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "TEMPORARY_HEXPROOF": true,
+                "TEMPORARY_PREVENT_COMBAT_DAMAGE": true
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "SOURCE"
+            ]
+          }
+        }
+      ]
     },
     "passive": {
       "TRIGGER_SELF_SURVIVE": [

@@ -143,9 +143,10 @@ public class EffectiveStatsService {
         }
         return applyAuras(minion, core.HASTE_AURA, 0) > 0;
     }
-    
+
     public boolean isHexProof(int entity) {
         int hexProof = data.getOptional(entity, core.HEXPROOF).orElse(0);
+        hexProof += data.getOptional(entity, core.TEMPORARY_HEXPROOF).orElse(0);
         OptionalInt templateId = data.getOptional(entity, core.CARD_TEMPLATE);
         if (templateId.isPresent()) {
             CardTemplate template = templates.getCard(templateId.getAsInt());
@@ -158,6 +159,9 @@ public class EffectiveStatsService {
     }
 
     public boolean preventCombatDamage(int entity) {
+        if (data.has(entity, core.TEMPORARY_PREVENT_COMBAT_DAMAGE)) {
+            return true;
+        }
         return applyAuras(entity, core.PREVENT_COMBAT_DAMAGE_AURA, 0) > 0;
     }
 

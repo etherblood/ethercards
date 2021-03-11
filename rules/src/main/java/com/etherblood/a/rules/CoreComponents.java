@@ -46,6 +46,7 @@ public class CoreComponents implements ComponentsModule {
     public final int CANNOT_BE_BLOCKED;
     public final int CANNOT_BE_MULLIGANED;
     public final int HEXPROOF;
+    public final int TEMPORARY_HEXPROOF;
     public final int MANA;
     public final int DELAYED_MANA;
     public final int MANA_POOL;
@@ -76,6 +77,7 @@ public class CoreComponents implements ComponentsModule {
     public final int BUSHIDO;
     public final int INDESTRUCTIBLE;
     public final int REGENERATION;
+    public final int TEMPORARY_PREVENT_COMBAT_DAMAGE;
 
     public final int TRIGGER_SELF_CAST;
     public final int TRIGGER_OTHER_CAST;
@@ -95,7 +97,7 @@ public class CoreComponents implements ComponentsModule {
     public final int NINJUTSU_ORDER;
     public final int NINJUTSU;
     public final int BLOCKED;
-    
+
     public final int HASTE_AURA;
     public final int ATTACK_AURA;
     public final int HEALTH_AURA;
@@ -140,6 +142,7 @@ public class CoreComponents implements ComponentsModule {
         CANNOT_BE_BLOCKED = register.applyAsInt("CANNOT_BE_BLOCKED");
         CANNOT_BE_MULLIGANED = register.applyAsInt("CANNOT_BE_MULLIGANED");
         HEXPROOF = register.applyAsInt("HEXPROOF");
+        TEMPORARY_HEXPROOF = register.applyAsInt("TEMPORARY_HEXPROOF");
         MANA = register.applyAsInt("MANA");
         DELAYED_MANA = register.applyAsInt("DELAYED_MANA");
         MANA_POOL = register.applyAsInt("MANA_POOL");
@@ -175,6 +178,7 @@ public class CoreComponents implements ComponentsModule {
         BUSHIDO = register.applyAsInt("BUSHIDO");
         INDESTRUCTIBLE = register.applyAsInt("INDESTRUCTIBLE");
         REGENERATION = register.applyAsInt("REGENERATION");
+        TEMPORARY_PREVENT_COMBAT_DAMAGE = register.applyAsInt("TEMPORARY_PREVENT_COMBAT_DAMAGE");
 
         TRIGGER_SELF_CAST = register.applyAsInt("TRIGGER_SELF_CAST");
         TRIGGER_OTHER_CAST = register.applyAsInt("TRIGGER_OTHER_CAST");
@@ -195,7 +199,7 @@ public class CoreComponents implements ComponentsModule {
         NINJUTSU_ORDER = register.applyAsInt("NINJUTSU_ORDER");
         NINJUTSU = register.applyAsInt("NINJUTSU");
         BLOCKED = register.applyAsInt("BLOCKED");
-        
+
         HASTE_AURA = register.applyAsInt("HASTE_AURA");
         ATTACK_AURA = register.applyAsInt("ATTACK_AURA");
         HEALTH_AURA = register.applyAsInt("HEALTH_AURA");

@@ -322,6 +322,8 @@ public class PhaseSystem {
     private void clearTemporaryStats() {
         data.clear(core.TEMPORARY_ATTACK);
         data.clear(core.TEMPORARY_HEALTH);
+        data.clear(core.TEMPORARY_HEXPROOF);
+        data.clear(core.TEMPORARY_PREVENT_COMBAT_DAMAGE);
         data.clear(core.BLOCKED);
     }
 }

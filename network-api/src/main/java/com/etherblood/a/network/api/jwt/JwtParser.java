@@ -25,6 +25,7 @@ import org.bouncycastle.openssl.PEMReader;
 
 public class JwtParser {
 
+    private static final int LEEWAY = 10;
     private final JWTVerifier verifier;
     private final URL verifyUrl;
 
@@ -35,7 +36,7 @@ public class JwtParser {
 
     public static JwtParser withPublicKeyFile(String path) {
         Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) readPublicKey(path), null);
-        return new JwtParser(JWT.require(algorithm).acceptLeeway(1).build(), null);
+        return new JwtParser(JWT.require(algorithm).acceptLeeway(LEEWAY).build(), null);
     }
 
     public static JwtParser withVerifyUrl(String url) {
@@ -64,7 +65,7 @@ public class JwtParser {
             con.setRequestProperty("authToken", jwt);
             con.setConnectTimeout(5000);
             con.setReadTimeout(5000);
-            try ( InputStream in = new BufferedInputStream(con.getInputStream())) {
+            try (InputStream in = new BufferedInputStream(con.getInputStream())) {
                 return new Gson().fromJson(new JsonReader(new InputStreamReader(in, StandardCharsets.UTF_8)), JwtAuthentication.class);
             }
         } catch (IOException ex) {
