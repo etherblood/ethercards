@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
+        Thread.sleep(10_000);// time for profiler to attach
         String assetsPath = "../assets/";
         BattleSetup setup = new BattleSetup(assetsPath + "templates/", new SecureRandom());
         RawLibraryTemplate botLibrary = new RawLibraryTemplate();
@@ -30,10 +31,10 @@ public class Main {
 
         int batchCount = 100;
         int batchSize = 10;
-        
+
         long nanosA = 0;
         long nanosB = 0;
-        
+
         int wins = 0;
         int draws = 0;
         int losses = 0;
@@ -56,7 +57,7 @@ public class Main {
                     }
                     Move move = bot.findMove(index);
                     game.getMoves().apply(move);
-                    if(bot == candidate) {
+                    if (bot == candidate) {
                         nanosA += System.nanoTime() - nanos;
                     } else {
                         nanosB += System.nanoTime() - nanos;
@@ -73,7 +74,7 @@ public class Main {
             }
             System.out.println();
             System.out.println("Used time: " + (nanosA / 1_000_000_000) + "s vs " + (nanosB / 1_000_000_000) + "s");
-            System.out.println(wins +" wins, " + draws + " draws, " + losses + " losses (" + (wins + losses + draws) + " / " + (batchCount * batchSize) + " games)");
+            System.out.println(wins + " wins, " + draws + " draws, " + losses + " losses (" + (wins + losses + draws) + " / " + (batchCount * batchSize) + " games)");
             likelihoodOfSuperiority(wins, draws, losses);
         }
 

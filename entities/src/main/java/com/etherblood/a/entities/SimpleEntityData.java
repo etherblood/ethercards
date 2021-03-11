@@ -11,7 +11,6 @@ import java.util.stream.LongStream;
 import java.util.stream.StreamSupport;
 
 /**
- *
  * @author Philipp
  */
 public class SimpleEntityData implements EntityData {
@@ -134,5 +133,18 @@ public class SimpleEntityData implements EntityData {
     @Override
     public Components getComponents() {
         return components;
+    }
+
+    public void copyFrom(SimpleEntityData other) {
+        if (this == other) {
+            return;
+        }
+        if (components != other.components) {
+            throw new IllegalArgumentException();
+        }
+        for (int component = 0; component < map.length; component++) {
+            map[component].copyFrom(other.map[component]);
+        }
+        nextId = other.nextId;
     }
 }

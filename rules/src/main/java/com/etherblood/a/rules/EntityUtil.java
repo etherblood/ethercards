@@ -13,19 +13,7 @@ import java.util.stream.Collectors;
 public class EntityUtil {
 
     public static void copy(EntityData source, EntityData destination) {
-        if (source == destination) {
-            return;
-        }
-        if (destination.getComponents() != source.getComponents()) {
-            throw new IllegalArgumentException();
-        }
-        for (int component = 0; component < source.getComponents().size(); component++) {
-            destination.clear(component);
-            for (int entity : source.list(component)) {
-                destination.set(entity, component, source.get(entity, component));
-            }
-        }
-        ((SimpleEntityData) destination).setNextId(((SimpleEntityData) source).getNextId());
+        ((SimpleEntityData) destination).copyFrom(((SimpleEntityData) source));
     }
 
     public static Map<Integer, Map<String, Integer>> toMap(EntityData data) {

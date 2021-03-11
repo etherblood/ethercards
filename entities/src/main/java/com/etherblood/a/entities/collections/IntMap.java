@@ -7,7 +7,6 @@ import java.util.PrimitiveIterator;
 import java.util.function.IntConsumer;
 
 /**
- *
  * @author Philipp
  */
 public class IntMap implements Iterable<Integer> {
@@ -366,6 +365,24 @@ public class IntMap implements Iterable<Integer> {
                 return remaining != 0;
             }
         };
+    }
+
+    public void copyFrom(IntMap other) {
+        if (data.length < other.data.length) {
+            resize(other.data.length);
+        }
+        if (data.length == other.data.length) {
+            System.arraycopy(other.data, 0, data, 0, data.length);
+            hasFreeKey = other.hasFreeKey;
+            freeValue = other.freeValue;
+            count = other.count;
+        } else {
+            clear();
+            IntKeyValueIterator iterator = other.keyValueIterator();
+            while (iterator.next()) {
+                set(iterator.key(), iterator.value());
+            }
+        }
     }
 
 }
