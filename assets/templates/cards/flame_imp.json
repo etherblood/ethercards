@@ -1,0 +1,48 @@
+{
+  "alias": "flame_imp",
+  "display": {
+    "name": "Flame Imp",
+    "imagePath": "flame_imp.jpg",
+    "colors": [
+      "RED"
+    ],
+    "description": "Deal 3 damage to your hero.",
+    "flavourText": "Imps like being on fire. They just do."
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 3
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OWN_HERO"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 3,
+      "HEALTH": 2
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

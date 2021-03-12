@@ -104,11 +104,11 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         Texture textureDetails = faceDown ? textureEmpty : minified ? textureEmpty : TEXTURE_CACHE.computeIfAbsent("details_" + alias, key -> {
             return createDetailsTexture(cardModel);
         });
-        
+
         Texture textureMulligan = cardModel.isMulligan() && !faceDown ? TEXTURE_CACHE.computeIfAbsent("mulligan", key -> {
             return createMulliganTexture();
-        }): textureEmpty;
-        
+        }) : textureEmpty;
+
         Material material = visualization.getMaterial_Front();
         material.setTexture("DiffuseMap1", textureBackground);
         material.setTexture("DiffuseMap2", textureArtwork);
