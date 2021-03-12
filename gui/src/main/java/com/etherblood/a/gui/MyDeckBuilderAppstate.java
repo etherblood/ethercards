@@ -11,9 +11,9 @@ import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.prettycards.CardModel;
 import com.etherblood.a.gui.prettycards.CardModelUpdater;
+import com.etherblood.a.gui.prettycards.MyCardVisualizer;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.templates.Tribe;
@@ -180,7 +180,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
         deckBuilderAppState.setDeck(deck);
 
-        selectButton = new Button("Select");
+        selectButton = new Button("Save");
         selectButton.setFontSize(50);
         selectButton.addClickCommands(x -> completeResult());
         selectButton.setLocalTranslation(100, 100, 0);

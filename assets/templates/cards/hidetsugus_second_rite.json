@@ -1,0 +1,53 @@
+{
+  "alias": "hidetsugus_second_rite",
+  "display": {
+    "name": "Hidetsugu's Second Rite",
+    "imagePath": "hidetsugus_second_rite.png",
+    "colors": [
+      "RED"
+    ],
+    "description": "If target hero has exactly 15 life, Hidetsugu's Second Rite deals 15 damage to that hero.",
+    "flavourText": "Hidetsugu never relinquished a grudge. He let it burn within him, gathering ever greater intensity until the final moment of vengeance."
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 6,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_HERO",
+          "OPPONENT_HERO"
+        ]
+      },
+      "effects": [
+        {
+          "type": "predicateActivated",
+          "predicate": {
+            "type": "healthIs",
+            "relation": "EQUAL",
+            "value": 15
+          },
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "DAMAGE_REQUEST": 15
+              }
+            },
+            {
+              "type": "particle",
+              "alias": "fireball"
+            }
+          ]
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
+}

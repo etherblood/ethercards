@@ -6,7 +6,8 @@
     "colors": [
       "RED"
     ],
-    "description": "Tap: Cut each heroes health in half."
+    "description": "Tap: Cut each heroes health in half.",
+    "flavourText": "Hidetsugu held over a dozen oni in blood oath. At his touch, rocks scorched. At his word, cities burned."
   },
   "hand": {
     "cast": {
