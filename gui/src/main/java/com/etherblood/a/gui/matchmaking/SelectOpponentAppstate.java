@@ -4,12 +4,14 @@ import com.etherblood.a.gui.HudTextAppstate;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.DefaultRangedValueModel;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.Slider;
+import org.lwjgl.opengl.Display;
 
 public class SelectOpponentAppstate extends AbstractAppState {
 
@@ -31,7 +33,6 @@ public class SelectOpponentAppstate extends AbstractAppState {
         toggleTeamSizeButton = new Button("");
         toggleTeamSizeButton.addClickCommands(x -> toggleTeamSize());
         container.addChild(toggleTeamSizeButton);
-        container.setLocalTranslation(500, 600, 0);
         container.addChild(new Label("Humans per team:"));
         int teamCount = 2;
         humanCountSliders = new Slider[teamCount];
@@ -99,4 +100,9 @@ public class SelectOpponentAppstate extends AbstractAppState {
         stateManager.getState(HudTextAppstate.class).setText("");
     }
 
+    @Override
+    public void update(float tpf) {
+        Vector3f size = container.getSize();
+        container.setLocalTranslation(100, (Display.getHeight() + size.y) / 2, 0);
+    }
 }

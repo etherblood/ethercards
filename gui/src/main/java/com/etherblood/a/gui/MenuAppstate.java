@@ -3,10 +3,13 @@ package com.etherblood.a.gui;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.system.AppSettings;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Container;
 import java.io.IOException;
+import org.lwjgl.opengl.Display;
 
 public class MenuAppstate extends AbstractAppState {
 
@@ -33,15 +36,23 @@ public class MenuAppstate extends AbstractAppState {
 
         fullscreenButton = new Button("");
         fullscreenButton.addClickCommands(x -> {
-            settings.setFullscreen(!settings.isFullscreen());
+            boolean fullscreen = !settings.isFullscreen();
+            settings.setFullscreen(fullscreen);
             save();
+
+            AppSettings appSettings = application.getContext().getSettings();
+            appSettings.setFullscreen(fullscreen);
+            appSettings.setWidth(fullscreen ? -1 : settings.getScreenWidth());
+            appSettings.setHeight(fullscreen ? -1 : settings.getScreenHeight());
+            appSettings.setResizable(true);
+            application.restart();
+            appSettings.setResizable(true);
         });
 
         exitButton = new Button("Exit");
         exitButton.addClickCommands(x -> application.stop());
 
         container = new Container();
-        container.setLocalTranslation(500, 600, 10);
     }
 
     @Override
@@ -64,11 +75,10 @@ public class MenuAppstate extends AbstractAppState {
         }
         container.addChild(fullscreenButton);
         container.addChild(exitButton);
-        String fullscreenText = settings.isFullscreen() ? "Fullscreen" : "Windowed";
-        if (application.getContext().getSettings().isFullscreen() != settings.isFullscreen()) {
-            fullscreenText += " (restart required)";
-        }
-        fullscreenButton.setText(fullscreenText);
+        fullscreenButton.setText(settings.isFullscreen() ? "Fullscreen" : "Windowed");
+
+        Vector3f size = container.getSize();
+        container.setLocalTranslation((Display.getWidth() - size.x) / 2, (Display.getHeight() + size.y) / 2, 10);
     }
 
     private void save() {

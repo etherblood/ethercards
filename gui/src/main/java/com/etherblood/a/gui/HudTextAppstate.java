@@ -5,8 +5,8 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
-import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import org.lwjgl.opengl.Display;
 
 public class HudTextAppstate extends AbstractAppState {
 
@@ -31,9 +31,12 @@ public class HudTextAppstate extends AbstractAppState {
 
     @Override
     public void stateAttached(AppStateManager stateManager) {
-        Camera camera = stateManager.getApplication().getCamera();
-        hudText.setLocalTranslation(0, camera.getHeight(), 0);
         guiNode.attachChild(hudText);
     }
 
+    @Override
+    public void update(float tpf) {
+        hudText.setLocalTranslation(0, Display.getHeight(), 0);
+        super.update(tpf);
+    }
 }

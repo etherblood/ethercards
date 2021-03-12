@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,8 +203,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         tableHeader.addChild(previousPageButton);
         tableHeader.addChild(currentPageLabel);
         tableHeader.addChild(nextPageButton);
-
-        tableHeader.setLocalTranslation(50, 700, 0);
     }
 
     private int getManaCost(CardModel card) {
@@ -225,7 +224,6 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         inputManager.addListener(previousPage, "left");
         CameraAppState cameraAppstate = stateManager.getState(CameraAppState.class);
         cameraAppstate.moveTo(new Vector3f(-0.25036395f, 15.04817f, 1), new Quaternion(2.0723649E-8f, 0.71482813f, -0.6993001f, 1.8577744E-7f));
-        tableHeader.setLocalTranslation(300, cameraAppstate.getCamera().getHeight() - 20, 0);
     }
 
     @Override
@@ -298,6 +296,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             });
             searchVersion = searchField.getDocumentModel().getVersion();
         }
+        tableHeader.setLocalTranslation(300, Display.getHeight() - 20, 0);
     }
 
     // https://stackoverflow.com/a/5439547
