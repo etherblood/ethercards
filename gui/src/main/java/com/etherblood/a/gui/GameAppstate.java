@@ -392,6 +392,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 default:
                     throw new AssertionError();
             }
+            if (phase != PlayerPhase.MULLIGAN) {
+                pendingMulligan.clear();
+            }
         } else if (game.isGameOver()) {
             endPhaseButton.setCullHint(Spatial.CullHint.Dynamic);
             endPhaseButton.getMaterial().setTexture("ColorMap", assetManager.loadTexture("textures/buttons/end_game.png"));
@@ -768,7 +771,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                         for (int card : pendingMulligan) {
                             requestMove(new DeclareMulligan(userControlledPlayer, card));
                         }
-                        pendingMulligan.clear();
                         requestMove(new EndMulliganPhase(userControlledPlayer));
                         break;
                 }
