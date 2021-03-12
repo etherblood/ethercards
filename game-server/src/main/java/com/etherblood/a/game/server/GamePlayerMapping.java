@@ -1,6 +1,6 @@
 package com.etherblood.a.game.server;
 
-import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
+import com.destrostudios.authtoken.JwtAuthenticationUser;
 import java.util.UUID;
 
 public class GamePlayerMapping {

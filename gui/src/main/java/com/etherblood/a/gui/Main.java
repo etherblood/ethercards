@@ -1,7 +1,7 @@
 package com.etherblood.a.gui;
 
-import com.etherblood.a.network.api.jwt.JwtAuthentication;
-import com.etherblood.a.network.api.jwt.JwtParser;
+import com.destrostudios.authtoken.JwtAuthentication;
+import com.destrostudios.authtoken.NoValidateJwtService;
 import com.jme3.system.AppSettings;
 import com.jme3.system.ErrorDialog;
 import java.io.IOException;
@@ -36,24 +36,13 @@ public class Main {
         try (Reader reader = Files.newBufferedReader(Paths.get("config.properties"), StandardCharsets.UTF_8)) {
             properties.load(reader);
         }
-        String jwtPubKeyPath = properties.getProperty("jwtPubKeyPath");
-        String jwtUrl = properties.getProperty("jwtUrl");
         String version;
         try (Scanner in = new Scanner(Files.newBufferedReader(Paths.get("version.txt"), StandardCharsets.UTF_8))) {
             version = in.nextLine();
         }
 
-        JwtParser jwtParser;
-        if (jwtPubKeyPath != null) {
-            jwtParser = JwtParser.withPublicKeyFile(jwtPubKeyPath);
-        } else if (jwtUrl != null) {
-            jwtParser = JwtParser.withVerifyUrl(jwtUrl);
-        } else {
-            throw new IllegalStateException("Jwt verification not initialized.");
-        }
-
         String jwt = args[0];
-        JwtAuthentication authentication = jwtParser.verify(jwt);
+        JwtAuthentication authentication = new NoValidateJwtService().decode(jwt);
         System.out.println("Logged in as " + authentication.user.login);
 
         UserSettings userSettings = UserSettings.instance();

@@ -1,5 +1,6 @@
 package com.etherblood.a.game.server;
 
+import com.destrostudios.authtoken.JwtAuthenticationUser;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.etherblood.a.ai.MoveBotGame;
@@ -10,32 +11,30 @@ import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
+import com.etherblood.a.game.events.api.NoopGameEventListener;
+import com.etherblood.a.game.server.matchmaking.BotRequest;
+import com.etherblood.a.game.server.matchmaking.MatchmakeRequest;
+import com.etherblood.a.game.server.matchmaking.MatchmakeResult;
+import com.etherblood.a.game.server.matchmaking.Matchmaker;
 import com.etherblood.a.network.api.GameReplay;
 import com.etherblood.a.network.api.GameReplayService;
-import com.etherblood.a.templates.api.setup.RawGameSetup;
-import com.etherblood.a.templates.api.setup.RawPlayerSetup;
+import com.etherblood.a.network.api.messages.IdentifyRequest;
+import com.etherblood.a.network.api.messages.match.ConnectedToMatchUpdate;
 import com.etherblood.a.network.api.messages.match.MatchRequest;
+import com.etherblood.a.network.api.messages.match.MoveRequest;
+import com.etherblood.a.network.api.messages.match.MoveUpdate;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameDataPrinter;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
-import com.etherblood.a.game.events.api.NoopGameEventListener;
-import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
-import com.etherblood.a.network.api.messages.IdentifyRequest;
-import com.etherblood.a.network.api.messages.match.ConnectedToMatchUpdate;
-import com.etherblood.a.network.api.messages.match.MoveRequest;
-import com.etherblood.a.network.api.messages.match.MoveUpdate;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Update;
-import com.etherblood.a.game.server.matchmaking.BotRequest;
-import com.etherblood.a.game.server.matchmaking.MatchmakeRequest;
-import com.etherblood.a.game.server.matchmaking.MatchmakeResult;
-import com.etherblood.a.game.server.matchmaking.Matchmaker;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.google.gson.JsonElement;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,7 +47,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

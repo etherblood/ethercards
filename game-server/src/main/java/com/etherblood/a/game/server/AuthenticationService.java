@@ -1,9 +1,9 @@
 package com.etherblood.a.game.server;
 
+import com.destrostudios.authtoken.JwtAuthentication;
+import com.destrostudios.authtoken.JwtAuthenticationUser;
+import com.destrostudios.authtoken.JwtService;
 import com.esotericsoftware.kryonet.Connection;
-import com.etherblood.a.network.api.jwt.JwtAuthentication;
-import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
-import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.messages.IdentifyRequest;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,13 +14,13 @@ public class AuthenticationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationService.class);
 
-    private final JwtParser jwtParser;
+    private final JwtService jwtService;
     private final String version;
     private final Map<Integer, JwtAuthentication> connectionIdToAuthentication = new ConcurrentHashMap<>();
     private final ThreadLocal<JwtAuthentication> activeAuthentication = new ThreadLocal<>();
 
-    public AuthenticationService(JwtParser jwtParser, String version) {
-        this.jwtParser = jwtParser;
+    public AuthenticationService(JwtService jwtService, String version) {
+        this.jwtService = jwtService;
         this.version = version;
     }
 
@@ -28,7 +28,7 @@ public class AuthenticationService {
         if (!version.equals(identify.version)) {
             throw new IllegalArgumentException("Tried to identify with version " + identify.version + " when expected version is " + version + ".");
         }
-        JwtAuthentication authentication = jwtParser.verify(identify.jwt);
+        JwtAuthentication authentication = jwtService.decode(identify.jwt);
         LOG.info("Connection {} identified as {} (id={})", connection.getID(), authentication.user.login, authentication.user.id);
         connectionIdToAuthentication.put(connection.getID(), authentication);
     }

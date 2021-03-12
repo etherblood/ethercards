@@ -30,14 +30,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>3.10.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>1.46</version>
+            <groupId>com.github.destrostudios</groupId>
+            <artifactId>auth-token</artifactId>
         </dependency>
     </dependencies>
 </project>

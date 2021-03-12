@@ -1,14 +1,14 @@
 package com.etherblood.a.game.server;
 
+import com.destrostudios.authtoken.JwtService;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.etherblood.a.game.server.matchmaking.Matchmaker;
 import com.etherblood.a.network.api.NetworkUtil;
-import com.etherblood.a.network.api.jwt.JwtParser;
 import com.etherblood.a.network.api.messages.IdentifyRequest;
 import com.etherblood.a.network.api.messages.match.MatchRequest;
 import com.etherblood.a.network.api.messages.match.MoveRequest;
-import com.etherblood.a.game.server.matchmaking.Matchmaker;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.io.IOException;
@@ -25,12 +25,12 @@ public class GameServer {
 
     private final Server server;
 
-    public GameServer(JwtParser jwtParser, Function<String, JsonElement> assetLoader, RawLibraryTemplate botLibrary, String version) {
+    public GameServer(JwtService jwtService, Function<String, JsonElement> assetLoader, RawLibraryTemplate botLibrary, String version) {
         server = new Server(1024 * 1024, 1024 * 1024);
         NetworkUtil.init(server.getKryo());
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
         Matchmaker matchmaker = new Matchmaker(-1, BOT_NAME, botLibrary);
-        AuthenticationService authenticationService = new AuthenticationService(jwtParser, version);
+        AuthenticationService authenticationService = new AuthenticationService(jwtService, version);
         GameService gameService = new GameService(server, authenticationService, assetLoader, matchmaker, scheduledThreadPoolExecutor);
         server.addListener(new Listener() {
 

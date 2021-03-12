@@ -1,6 +1,6 @@
 package com.etherblood.a.game.server.matchmaking;
 
-import com.etherblood.a.network.api.jwt.JwtAuthenticationUser;
+import com.destrostudios.authtoken.JwtAuthenticationUser;
 import com.etherblood.a.network.api.messages.match.MatchRequest;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import java.util.stream.IntStream;
