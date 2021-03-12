@@ -1,11 +1,11 @@
 package com.etherblood.a.gui;
 
-import com.etherblood.a.gui.matchmaking.SelectOpponentAppstate;
 import com.etherblood.a.client.GameClient;
 import com.etherblood.a.client.GameReplayView;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.gui.matchmaking.MatchOpponents;
+import com.etherblood.a.gui.matchmaking.SelectOpponentAppstate;
 import com.etherblood.a.gui.prettycards.CardImages;
 import com.etherblood.a.gui.soprettyboard.CameraAppState;
 import com.etherblood.a.gui.soprettyboard.ForestBoardAppstate;
@@ -14,9 +14,9 @@ import com.etherblood.a.network.api.jwt.JwtAuthentication;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.templates.api.DisplayCardTemplate;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

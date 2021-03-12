@@ -1,7 +1,5 @@
 package com.etherblood.a.gui;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -23,14 +21,10 @@ public class UserSettings {
     private final Properties properties;
 
     private UserSettings() {
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int w = gd.getDisplayMode().getWidth();
-        int h = gd.getDisplayMode().getHeight();
-
         Properties defaults = new Properties();
-        defaults.setProperty(IS_FULLSCREEN, Boolean.toString(true));
-        defaults.setProperty(SCREEN_WIDTH, Integer.toString(w));
-        defaults.setProperty(SCREEN_HEIGHT, Integer.toString(h));
+        defaults.setProperty(IS_FULLSCREEN, Boolean.toString(false));
+        defaults.setProperty(SCREEN_WIDTH, Integer.toString(1600));
+        defaults.setProperty(SCREEN_HEIGHT, Integer.toString(900));
         properties = new Properties(defaults);
     }
 

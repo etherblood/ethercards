@@ -16,6 +16,7 @@ public class MenuAppstate extends AbstractAppState {
     private final Container container;
     private final Button continueButton;
     private final Button surrenderButton;
+    private final Button fullscreenButton;
     private final Button exitButton;
 
     public MenuAppstate(Node guiNode) {
@@ -28,6 +29,12 @@ public class MenuAppstate extends AbstractAppState {
         surrenderButton.addClickCommands(x -> {
             application.getStateManager().getState(GameAppstate.class).surrender();
             application.getStateManager().detach(this);
+        });
+
+        fullscreenButton = new Button("");
+        fullscreenButton.addClickCommands(x -> {
+            settings.setFullscreen(!settings.isFullscreen());
+            save();
         });
 
         exitButton = new Button("Exit");
@@ -55,7 +62,13 @@ public class MenuAppstate extends AbstractAppState {
         if (application.getStateManager().getState(GameAppstate.class) != null) {
             container.addChild(surrenderButton);
         }
+        container.addChild(fullscreenButton);
         container.addChild(exitButton);
+        String fullscreenText = settings.isFullscreen() ? "Fullscreen" : "Windowed";
+        if (application.getContext().getSettings().isFullscreen() != settings.isFullscreen()) {
+            fullscreenText += " (restart required)";
+        }
+        fullscreenButton.setText(fullscreenText);
     }
 
     private void save() {

@@ -6,7 +6,7 @@
     "colors": [
       "WHITE"
     ],
-    "description": "Tap: Target allied minion gains +1/+1, Yuumi gains hexproof and can not be damaged until next turn.",
+    "description": "Tap: Target allied minion gains +1/+1 and Yuumi gains hexproof and can not be damaged until next turn.",
     "flavourText": "We've got the zoomies!."
   },
   "hand": {
