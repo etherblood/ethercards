@@ -6,13 +6,12 @@ import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -25,8 +24,10 @@ public class Main {
         }
         String assetsPath = props.getProperty("assets");
         String version;
-        try (Scanner in = new Scanner(Files.newBufferedReader(Paths.get("version.txt"), StandardCharsets.UTF_8))) {
-            version = in.nextLine();
+        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("git.properties")) {
+            Properties gitProperties = new Properties();
+            gitProperties.load(inputStream);
+            version = gitProperties.getProperty("git.commit.id.full");
         }
 
         RawLibraryTemplate botLibrary = new RawLibraryTemplate();

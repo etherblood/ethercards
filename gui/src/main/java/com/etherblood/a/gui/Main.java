@@ -5,6 +5,7 @@ import com.destrostudios.authtoken.NoValidateJwtService;
 import com.jme3.system.AppSettings;
 import com.jme3.system.ErrorDialog;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -12,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.Scanner;
 
 public class Main {
 
@@ -37,8 +37,10 @@ public class Main {
             properties.load(reader);
         }
         String version;
-        try (Scanner in = new Scanner(Files.newBufferedReader(Paths.get("version.txt"), StandardCharsets.UTF_8))) {
-            version = in.nextLine();
+        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("git.properties")) {
+            Properties gitProperties = new Properties();
+            gitProperties.load(inputStream);
+            version = gitProperties.getProperty("git.commit.id.full");
         }
 
         String jwt = args[0];
