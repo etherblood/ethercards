@@ -11,7 +11,8 @@ chgrp -R etherblood-tools ${CLIENT}
 curl https://destrostudios.com:8080/apps/5/updateFiles
 echo updated client files
 
-cd ${SERVER} bash stop.sh
+cd ${SERVER}
+bash stop.sh
 echo stopped server
 cp ${GIT}game-server/target/game-server-*[!s].jar ${SERVER}a-cards.jar
 rsync -rc --delete ${GIT}game-server/target/libs ${SERVER}
