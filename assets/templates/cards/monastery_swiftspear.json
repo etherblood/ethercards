@@ -22,8 +22,7 @@
   "battle": {
     "components": {
       "ATTACK": 1,
-      "HEALTH": 2,
-      "FAST_TO_ATTACK": true
+      "HEALTH": 2
     },
     "passive": {
       "TRIGGER_OTHER_CAST": [

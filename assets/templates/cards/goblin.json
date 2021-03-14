@@ -21,7 +21,8 @@
     "components": {
       "ATTACK": 2,
       "HEALTH": 1,
-      "FAST_TO_ATTACK": true
+      "FAST_TO_ATTACK": true,
+      "RAGE": true
     }
   },
   "graveyard": {},

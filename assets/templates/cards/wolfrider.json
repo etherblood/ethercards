@@ -9,7 +9,7 @@
   },
   "hand": {
     "cast": {
-      "manaCost": 2,
+      "manaCost": 3,
       "effects": [
         {
           "type": "selfSummon"

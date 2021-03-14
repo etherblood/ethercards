@@ -6,7 +6,7 @@
     "colors": [
       "RED"
     ],
-    "description": "Deal 3 damage to your hero.",
+    "description": "Your hero gains 3 Poisoned.",
     "flavourText": "Imps like being on fire. They just do."
   },
   "hand": {
@@ -22,7 +22,7 @@
             {
               "type": "buff",
               "components": {
-                "DAMAGE_REQUEST": 3
+                "POISONED": 3
               }
             }
           ],
