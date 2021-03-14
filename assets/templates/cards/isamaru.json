@@ -24,7 +24,8 @@
   "battle": {
     "components": {
       "ATTACK": 2,
-      "HEALTH": 2
+      "HEALTH": 2,
+      "CANNOT_ATTACK": true
     }
   },
   "graveyard": {},
