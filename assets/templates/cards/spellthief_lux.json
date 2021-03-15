@@ -1,0 +1,28 @@
+{
+  "alias": "spellthief_lux",
+  "display": {
+    "name": "Lux",
+    "imagePath": "spellthief_lux.jpg",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "hand": {
+    "cast": {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 30,
+      "CANNOT_ATTACK": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

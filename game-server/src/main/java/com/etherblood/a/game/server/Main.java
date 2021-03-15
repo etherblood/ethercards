@@ -31,7 +31,7 @@ public class Main {
         }
 
         RawLibraryTemplate botLibrary = new RawLibraryTemplate();
-        botLibrary.hero = "elderwood_ahri";
+        botLibrary.hero = "blitzcrank";
         botLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile(assetsPath + "templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
         new GameServer(new KeyJwtService(), x -> TemplatesLoader.loadFile(assetsPath + "templates/cards/" + x + ".json"), botLibrary, version).start();
     }

@@ -86,24 +86,8 @@ public class GameApplication extends SimpleApplication {
             presetLibrary = new RawLibraryTemplate();
             presetLibrary.hero = "elderwood_ahri";
             presetLibrary.cards = new HashMap<>();
-        } else {
-            presetLibrary.hero = migrateAlias("elderwood_ahri");
-            presetLibrary.cards = presetLibrary.cards.entrySet().stream().collect(Collectors.toMap(x -> migrateAlias(x.getKey()), x -> x.getValue()));
         }
         stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components));
-    }
-
-    private static String migrateAlias(String alias) {
-        if (alias.endsWith(".json")) {
-            alias = alias.substring(0, alias.length() - ".json".length());
-        }
-        if (alias.startsWith("minions/")) {
-            alias = alias.substring("minions/".length());
-        }
-        if (alias.startsWith("cards/")) {
-            alias = alias.substring("cards/".length());
-        }
-        return alias;
     }
 
     @Override
