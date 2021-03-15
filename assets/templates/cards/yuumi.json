@@ -22,7 +22,7 @@
   "battle": {
     "components": {
       "ATTACK": 3,
-      "HEALTH": 4
+      "HEALTH": 2
     },
     "activated": {
       "selfTap": true,
