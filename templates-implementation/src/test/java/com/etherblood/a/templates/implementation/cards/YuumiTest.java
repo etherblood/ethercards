@@ -1,7 +1,6 @@
 package com.etherblood.a.templates.implementation.cards;
 
-import com.etherblood.a.rules.moves.Cast;
-import com.etherblood.a.rules.moves.EndAttackPhase;
+import com.etherblood.a.rules.moves.UseAbility;
 import com.etherblood.a.templates.implementation.AbstractGameTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,21 +8,23 @@ import org.junit.jupiter.api.Test;
 public class YuumiTest extends AbstractGameTest {
 
     @Test
-    public void yuumi_untargetable() {
-        data.set(player(0), core.MANA, Integer.MAX_VALUE);
-        data.set(player(1), core.MANA, Integer.MAX_VALUE);
+    public void yuumi_temporary_buffs() {
         int yuumi = createMinion(player(0), "yuumi");
-        int shock_0 = createCard(player(0), "shock", core.IN_HAND_ZONE);
-        int shock_1 = createCard(player(1), "shock", core.IN_HAND_ZONE);
+        int other = createMinion(player(0), "ornithopter");
 
-        moves.apply(new Cast(player(0), shock_0, yuumi));
+        moves.apply(new UseAbility(player(0), yuumi, other));
 
-        Assertions.assertTrue(data.has(yuumi, core.HEXPROOF));
-        Assertions.assertTrue(data.has(yuumi, core.CANNOT_BE_ATTACKED));
+        Assertions.assertTrue(data.has(yuumi, core.TEMPORARY_HEXPROOF));
+        Assertions.assertTrue(data.has(yuumi, core.TEMPORARY_PREVENT_COMBAT_DAMAGE));
 
-        moves.apply(new EndAttackPhase(player(0)));
-        Cast cast = new Cast(player(1), shock_1, yuumi);
-        Assertions.assertFalse(moves.generate(true, player(1)).stream().anyMatch(cast::equals));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> moves.apply(cast));
+        Assertions.assertTrue(data.has(other, core.TEMPORARY_HEALTH));
+        Assertions.assertTrue(data.has(other, core.TEMPORARY_ATTACK));
+    }
+
+    @Test
+    public void no_self_target() {
+        int yuumi = createMinion(player(0), "yuumi");
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> moves.apply(new UseAbility(player(0), yuumi, yuumi)));
     }
 }
