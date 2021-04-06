@@ -1,0 +1,45 @@
+{
+  "alias": "colossification",
+  "display": {
+    "name": "Colossification",
+    "imagePath": "colossification.jpg",
+    "colors": [
+      "GREEN"
+    ],
+    "description": "When Colossification enters the battlefield, tap enchanted creature.\nEnchanted creature gets +20/+20.",
+    "flavourText": "\"Turns out the case of the flattened outpost and the case of the missing kitten <i>were</i> related.\"\n—Endris, Drannith magistrate"
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 7,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION",
+          "OPPONENT_MINION"
+        ]
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "ATTACK": 20,
+            "HEALTH": 20,
+            "TIRED": true
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "colossification"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
+}
