@@ -23,7 +23,6 @@ import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.TargetSelection;
 import com.etherblood.a.rules.templates.ZoneState;
 import com.etherblood.a.rules.updates.TriggerService;
-import com.etherblood.a.rules.updates.systems.GameLoopService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,15 +42,16 @@ public class MoveService {
     private final CoreComponents core;
     private final GameEventListener eventListener;
     private final MoveAvailabilityService moveAvailability;
+    private final Runnable updateResolver;
 
     private final boolean backupsEnabled;
     private final boolean validateMoves;
 
-    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, GameEventListener eventListener) {
-        this(data, templates, random, Collections.emptyList(), true, true, eventListener);
+    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, GameEventListener eventListener, Runnable updateResolver) {
+        this(data, templates, random, Collections.emptyList(), true, true, eventListener, updateResolver);
     }
 
-    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves, GameEventListener eventListener) {
+    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves, GameEventListener eventListener, Runnable updateResolver) {
         this.data = data;
         this.templates = templates;
         this.random = random;
@@ -65,6 +65,7 @@ public class MoveService {
             this.history = null;
         }
         this.moveAvailability = new MoveAvailabilityService(data, templates);
+        this.updateResolver = updateResolver;
     }
 
     public List<MoveReplay> getHistory() {
@@ -376,7 +377,7 @@ public class MoveService {
     }
 
     private void update() {
-        new GameLoopService(data, templates, random, eventListener).run();
+        updateResolver.run();
         assert validateStateLegal();
     }
 

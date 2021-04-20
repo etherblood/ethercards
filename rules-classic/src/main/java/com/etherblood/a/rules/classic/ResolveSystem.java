@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.updates.systems;
+package com.etherblood.a.rules.classic;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -18,7 +18,7 @@ import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
 import java.util.function.IntUnaryOperator;
 
-public class ResolveSystem {
+public class ResolveSystem implements Runnable {
 
     private final EntityData data;
     private final CoreComponents core;
@@ -27,6 +27,7 @@ public class ResolveSystem {
     private final GameEventListener events;
     private final TriggerService triggerService;
     private final ZoneService zoneService;
+    private EffectiveStatsService statsService;
 
     public ResolveSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
@@ -36,8 +37,10 @@ public class ResolveSystem {
         this.events = events;
         this.triggerService = new TriggerService(data, templates, random, events);
         this.zoneService = new ZoneService(data, templates, random, events);
+        this.statsService = new EffectiveStatsService(data, templates);
     }
 
+    @Override
     public void run() {
         StateDrivenUpdatesService state = new StateDrivenUpdatesService(data, templates, random, new EffectiveStatsService(data, templates));
         do {

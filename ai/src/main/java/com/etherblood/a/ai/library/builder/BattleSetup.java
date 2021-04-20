@@ -1,4 +1,4 @@
-package com.etherblood.a.library.builder.ai;
+package com.etherblood.a.ai.library.builder;
 
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
@@ -8,8 +8,10 @@ import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveService;
+import com.etherblood.a.rules.classic.GameLoopService;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
@@ -40,7 +42,7 @@ public class BattleSetup {
         TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile(templatesPath + "cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, new TemplateAliasMapsImpl()));
 
         int indexA = random.nextInt(2);
-        
+
         List<RawPlayerSetup> players = new ArrayList<>();
         RawPlayerSetup playerA = new RawPlayerSetup();
         playerA.library = a;
@@ -64,7 +66,9 @@ public class BattleSetup {
         GameSettings settings = settingsBuilder.build();
 
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(data, settings.templates, HistoryRandom.producer(random::nextInt), new NoopGameEventListener());
+        NoopGameEventListener eventListener = new NoopGameEventListener();
+        HistoryRandom producer = HistoryRandom.producer(random::nextInt);
+        MoveService moves = new MoveService(data, settings.templates, producer, eventListener, new GameLoopService(data, settings.templates, producer, eventListener));
         Game game = new Game(settings, data, moves);
         gameSetup.toGameSetup(loader::registerCardAlias).setup(data, game.getTemplates());
         moves.apply(new Start());
@@ -73,7 +77,10 @@ public class BattleSetup {
 
     public Game simulationGame(Game game) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(data, game.getSettings().templates, HistoryRandom.producer(random::nextInt), null, false, false, new NoopGameEventListener());
+        NoopGameEventListener eventListener = new NoopGameEventListener();
+        GameTemplates templates = game.getSettings().templates;
+        HistoryRandom producer = HistoryRandom.producer(random::nextInt);
+        MoveService moves = new MoveService(data, templates, producer, null, false, false, eventListener, new GameLoopService(data, templates, producer, eventListener));
         return new Game(game.getSettings(), data, moves);
     }
 }

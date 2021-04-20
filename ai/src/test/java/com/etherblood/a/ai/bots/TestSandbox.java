@@ -1,26 +1,28 @@
 package com.etherblood.a.ai.bots;
 
 import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
 import com.etherblood.a.ai.bots.evaluation.SimpleTeamEvaluation;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
+import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
+import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveService;
-import com.etherblood.a.game.events.api.NoopGameEventListener;
+import com.etherblood.a.rules.classic.GameLoopService;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
 import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.a.templates.api.setup.RawPlayerSetup;
 import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
 import com.google.gson.Gson;
@@ -82,7 +84,10 @@ public class TestSandbox {
 
     private Game simulationGame(Game game, Random random) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(data, game.getSettings().templates, HistoryRandom.producer(random::nextInt), null, false, false, new NoopGameEventListener());
+        NoopGameEventListener eventListener = new NoopGameEventListener();
+        HistoryRandom producer = HistoryRandom.producer(random::nextInt);
+        GameTemplates templates = game.getSettings().templates;
+        MoveService moves = new MoveService(data, templates, producer, null, false, false, eventListener, new GameLoopService(data, templates, producer, eventListener));
         return new Game(game.getSettings(), data, moves);
     }
 
@@ -120,7 +125,9 @@ public class TestSandbox {
         GameSettings settings = settingsBuilder.build();
 
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(data, settings.templates, HistoryRandom.producer(random::nextInt), new NoopGameEventListener());
+        HistoryRandom producer = HistoryRandom.producer(random::nextInt);
+        NoopGameEventListener eventListener = new NoopGameEventListener();
+        MoveService moves = new MoveService(data, settings.templates, producer, eventListener, new GameLoopService(data, settings.templates, producer, eventListener));
         Game game = new Game(settings, data, moves);
         gameSetup.toGameSetup(loader::registerCardAlias).setup(data, game.getTemplates());
         moves.apply(new Start());

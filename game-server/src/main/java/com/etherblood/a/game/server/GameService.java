@@ -25,9 +25,11 @@ import com.etherblood.a.network.api.messages.match.MoveRequest;
 import com.etherblood.a.network.api.messages.match.MoveUpdate;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameDataPrinter;
+import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.HistoryRandom;
 import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
+import com.etherblood.a.rules.classic.GameLoopService;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Update;
@@ -274,7 +276,10 @@ public class GameService {
 
     private Game simulationGame(Game game) {
         EntityData data = new SimpleEntityData(game.getSettings().components);
-        MoveService moves = new MoveService(data, game.getSettings().templates, HistoryRandom.producer(), null, false, false, new NoopGameEventListener());
+        NoopGameEventListener eventListener = new NoopGameEventListener();
+        HistoryRandom random = HistoryRandom.producer();
+        GameTemplates templates = game.getSettings().templates;
+        MoveService moves = new MoveService(data, templates, random, null, false, false, eventListener, new GameLoopService(data, templates, random, eventListener));
         return new Game(game.getSettings(), data, moves);
     }
 }

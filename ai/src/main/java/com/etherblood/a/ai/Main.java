@@ -3,7 +3,7 @@ package com.etherblood.a.ai;
 import com.etherblood.a.ai.bots.Bot;
 import com.etherblood.a.ai.bots.mcts.MctsBot;
 import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
-import com.etherblood.a.library.builder.ai.BattleSetup;
+import com.etherblood.a.ai.library.builder.BattleSetup;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.templates.api.TemplatesLoader;

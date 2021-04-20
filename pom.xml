@@ -17,6 +17,7 @@
         <module>templates-api</module>
         <module>templates-implementation</module>
         <module>game-server</module>
+        <module>rules-classic</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

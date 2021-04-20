@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.updates.systems;
+package com.etherblood.a.rules.classic;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;

@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.updates.systems;
+package com.etherblood.a.rules.classic;
 
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
@@ -21,11 +21,11 @@ public class PhaseSystem {
     private final GameTemplates templates;
     private final IntUnaryOperator random;
     private final GameEventListener events;
-    private final ResolveSystem resolveSystem;
+    private final Runnable resolveSystem;
     private final TriggerService triggerService;
     private final ZoneService zoneService;
 
-    public PhaseSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, ResolveSystem resolveSystem) {
+    public PhaseSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, Runnable resolveSystem) {
         this.data = data;
         this.core = data.getComponents().getModule(CoreComponents.class);
         this.templates = templates;
@@ -116,11 +116,6 @@ public class PhaseSystem {
                 data.remove(attacker, core.ATTACK_TARGET);
             }
             SystemsUtil.increase(data, blocker, core.TIRED, 1);
-
-            data.getOptional(blocker, core.DRAWS_ON_BLOCK).ifPresent(draws -> {
-                int owner = data.get(blocker, core.OWNER);
-                SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
-            });
         }
         resolveSystem.run();
     }

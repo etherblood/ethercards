@@ -98,7 +98,7 @@ public class SystemsUtil {
             return;
         }
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        increase(data, target, core.DAMAGE_REQUEST, damage);
+        increase(data, target, core.DAMAGE_ACTION, damage);
     }
 
     public static int createCard(EntityData data, int templateId, int owner) {

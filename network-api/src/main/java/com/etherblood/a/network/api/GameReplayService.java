@@ -1,28 +1,29 @@
 package com.etherblood.a.network.api;
 
-import com.etherblood.a.rules.HistoryRandom;
-import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.entities.Components;
 import com.etherblood.a.entities.ComponentsBuilder;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.SimpleEntityData;
-import com.etherblood.a.templates.api.setup.RawGameSetup;
-import com.etherblood.a.templates.api.setup.RawPlayerSetup;
+import com.etherblood.a.game.events.api.GameEventListener;
+import com.etherblood.a.game.events.api.NoopGameEventListener;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.Game;
 import com.etherblood.a.rules.GameSettings;
 import com.etherblood.a.rules.GameSettingsBuilder;
+import com.etherblood.a.rules.HistoryRandom;
+import com.etherblood.a.rules.MoveReplay;
 import com.etherblood.a.rules.MoveService;
-import com.etherblood.a.game.events.api.NoopGameEventListener;
+import com.etherblood.a.rules.classic.GameLoopService;
 import com.etherblood.a.rules.moves.Move;
 import com.etherblood.a.templates.api.TemplatesLoader;
 import com.etherblood.a.templates.api.TemplatesParser;
+import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.a.templates.api.setup.RawPlayerSetup;
+import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
 import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.templates.implementation.TemplateAliasMapsImpl;
 
 public class GameReplayService {
 
@@ -67,7 +68,8 @@ public class GameReplayService {
         builder.templates = loader.buildGameTemplates();
         GameSettings settings = builder.build();
         EntityData data = new SimpleEntityData(settings.components);
-        MoveService moves = new MoveService(data, settings.templates, HistoryRandom.producer(), Collections.emptyList(), true, true, listener);
+        HistoryRandom random = HistoryRandom.producer();
+        MoveService moves = new MoveService(data, settings.templates, random, Collections.emptyList(), true, true, listener, new GameLoopService(data, settings.templates, random, listener));
         Game game = new Game(settings, data, moves);
         gameData.toGameSetup(loader::registerCardAlias).setup(data, game.getTemplates());
         updateInstance(game);
