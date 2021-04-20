@@ -14,11 +14,6 @@ public class QueueEventListener implements GameEventListener {
         events.add(event);
     }
 
-    @Override
-    public void nextIteration() {
-        // do nothing yet...
-    }
-
     public Queue<Object> getQueue() {
         return events;
     }

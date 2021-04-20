@@ -7,10 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-/**
- *
- * @author Carl
- */
 public class CardImages {
 
     private final String assetsPath;

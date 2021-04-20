@@ -10,9 +10,6 @@ import java.util.Spliterators;
 import java.util.stream.LongStream;
 import java.util.stream.StreamSupport;
 
-/**
- * @author Philipp
- */
 public class SimpleEntityData implements EntityData {
 
     private int nextId = 1;

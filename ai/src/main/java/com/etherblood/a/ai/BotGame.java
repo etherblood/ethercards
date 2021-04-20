@@ -4,10 +4,6 @@ import com.etherblood.a.entities.EntityData;
 import java.util.List;
 import java.util.Random;
 
-/**
- *
- * @author Philipp
- */
 public interface BotGame<T, V extends BotGame<T, V>> {
 
     void applyMove(T move);

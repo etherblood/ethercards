@@ -8,10 +8,6 @@ import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- *
- * @author Philipp
- */
 public class IntList implements Iterable<Integer> {
 
     private static final int DEFAULT_CAPACITY = 8;

@@ -6,9 +6,6 @@ import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
 import java.util.function.IntConsumer;
 
-/**
- * @author Philipp
- */
 public class IntMap implements Iterable<Integer> {
 
     private static final long VALUE_MASK = 0xffffffff00000000L;

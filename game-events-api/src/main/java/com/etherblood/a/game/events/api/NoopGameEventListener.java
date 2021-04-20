@@ -7,9 +7,4 @@ public class NoopGameEventListener implements GameEventListener {
         //do nothing
     }
 
-    @Override
-    public void nextIteration() {
-        //do nothing
-    }
-
 }

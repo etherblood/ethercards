@@ -10,10 +10,6 @@ import com.etherblood.a.rules.updates.ZoneService;
 import java.util.Arrays;
 import java.util.Random;
 
-/**
- *
- * @author Philipp
- */
 public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implements BotGame<T, V> {
 
     protected final Game game;

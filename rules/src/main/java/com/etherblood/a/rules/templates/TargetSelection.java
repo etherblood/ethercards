@@ -5,10 +5,6 @@ import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.rules.GameTemplates;
 import java.util.function.IntUnaryOperator;
 
-/**
- *
- * @author Philipp
- */
 public interface TargetSelection {
 
     //TODO: move this field into template, it is only used for casts

@@ -6,24 +6,21 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
 
-/**
- *
- * @author Carl
- */
-public class MyBaseAppState extends AbstractAppState{
+public class MyBaseAppState extends AbstractAppState {
 
-    public MyBaseAppState(){
+    public MyBaseAppState() {
 
     }
+
     protected GameApplication mainApplication;
 
     @Override
-    public void initialize(AppStateManager stateManager, Application application){
+    public void initialize(AppStateManager stateManager, Application application) {
         super.initialize(stateManager, application);
         mainApplication = (GameApplication) application;
     }
 
-    protected <T extends AppState> T getAppState(Class<T> appStateClass){
+    protected <T extends AppState> T getAppState(Class<T> appStateClass) {
         return mainApplication.getStateManager().getState(appStateClass);
     }
 }

@@ -3,10 +3,6 @@ package com.etherblood.a.entities;
 import com.etherblood.a.entities.collections.IntList;
 import java.util.OptionalInt;
 
-/**
- *
- * @author Philipp
- */
 public interface EntityData {
 
     int createEntity();
@@ -30,10 +26,10 @@ public interface EntityData {
     IntList list(int component);
 
     IntList listOrdered(int component, int orderComponent);
-    
+
     IntList listInValueOrder(int component);
-    
+
     Components getComponents();
-    
+
     void clear(int component);
 }

@@ -2,10 +2,6 @@ package com.etherblood.a.gui;
 
 import com.destrostudios.cardgui.CardZone;
 
-/**
- *
- * @author Carl
- */
 public class PlayerZones {
 
     private final CardZone deckZone;
