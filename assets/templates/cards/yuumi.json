@@ -61,29 +61,6 @@
           }
         }
       ]
-    },
-    "passive": {
-      "TRIGGER_SELF_SURVIVE": [
-        {
-          "type": "targeted",
-          "effects": [
-            {
-              "type": "buff",
-              "components": {
-                "CANNOT_BE_ATTACKED": true,
-                "HEXPROOF": true
-              }
-            }
-          ],
-          "targets": {
-            "type": "simple",
-            "select": "ALL",
-            "filters": [
-              "SOURCE"
-            ]
-          }
-        }
-      ]
     }
   },
   "graveyard": {},

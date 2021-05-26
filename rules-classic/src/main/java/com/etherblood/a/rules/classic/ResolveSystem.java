@@ -44,23 +44,21 @@ public class ResolveSystem implements Runnable {
     public void run() {
         StateDrivenUpdatesService state = new StateDrivenUpdatesService(data, templates, random, new EffectiveStatsService(data, templates));
         do {
-            do {
-                discard();
-                draw();
-                damage();
-                death();
-                recall();
-                playerResults();
+            discard();
+            draw();
+            damage();
+            death();
+            recall();
+            playerResults();
 
-                stateUpdates(state);
-            } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
-                    || data.list(core.DEATH_REQUEST).nonEmpty()
-                    || data.list(core.RECALL_REQUEST).nonEmpty()
-                    || data.list(core.DRAW_CARDS_REQUEST).nonEmpty()
-                    || data.list(core.PLAYER_DISCARD_CARDS).nonEmpty()
-                    || data.list(core.DISCARD).nonEmpty()
-                    || data.list(core.PLAYER_RESULT_REQUEST).nonEmpty());
-        } while (survive());
+            stateUpdates(state);
+        } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
+                || data.list(core.DEATH_REQUEST).nonEmpty()
+                || data.list(core.RECALL_REQUEST).nonEmpty()
+                || data.list(core.DRAW_CARDS_REQUEST).nonEmpty()
+                || data.list(core.PLAYER_DISCARD_CARDS).nonEmpty()
+                || data.list(core.DISCARD).nonEmpty()
+                || data.list(core.PLAYER_RESULT_REQUEST).nonEmpty());
     }
 
     private void stateUpdates(StateDrivenUpdatesService state) {
@@ -136,9 +134,6 @@ public class ResolveSystem implements Runnable {
         for (int entity : damaged) {
             int damage = data.get(entity, core.DAMAGE_ACTION);
 
-            if (data.has(entity, core.TRIGGER_SELF_SURVIVE)) {
-                data.set(entity, core.DAMAGE_SURVIVAL_REQUEST, damage);
-            }
             events.fire(new DamageEvent(entity, damage));
         }
         for (int entity : damaged) {
@@ -156,8 +151,10 @@ public class ResolveSystem implements Runnable {
                 }
             }
 
-            int health = data.getOptional(entity, core.HEALTH).orElse(0);
-            data.set(entity, core.HEALTH, health - damage);
+            if (damage > 0) {
+                int health = data.getOptional(entity, core.HEALTH).orElse(0);
+                data.set(entity, core.HEALTH, health - damage);
+            }
         }
         data.clear(core.DAMAGE_ACTION);
     }
@@ -307,22 +304,5 @@ public class ResolveSystem implements Runnable {
         if (allLost) {
             setTeamResult(team, PlayerResult.LOSS);
         }
-    }
-
-    private boolean survive() {
-        boolean result = false;
-        for (int entity : data.list(core.DAMAGE_SURVIVAL_REQUEST)) {
-            int survival = data.get(entity, core.DAMAGE_SURVIVAL_REQUEST);
-            if (data.has(entity, core.IN_BATTLE_ZONE)) {
-                data.set(entity, core.DAMAGE_SURVIVAL_ACTION, survival);
-                result = true;
-            }
-        }
-        data.clear(core.DAMAGE_SURVIVAL_REQUEST);
-        for (int entity : data.list(core.DAMAGE_SURVIVAL_ACTION)) {
-            triggerService.onSurvive(entity);
-        }
-        data.clear(core.DAMAGE_SURVIVAL_ACTION);
-        return result;
     }
 }

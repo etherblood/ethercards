@@ -44,8 +44,9 @@ public class RawZoneStateDeserializer implements JsonDeserializer<RawZoneState> 
         result.passive = new LinkedHashMap<>();
         if (obj.has("passive")) {
             for (Map.Entry<String, JsonElement> entry : obj.getAsJsonObject("passive").entrySet()) {
-                result.passive.put(componentAliases.applyAsInt(entry.getKey()), jdc.deserialize(entry.getValue(), new TypeToken<List<Effect>>() {
-                }.getType()));
+                Type deserialType = new TypeToken<List<Effect>>() {
+                }.getType();
+                result.passive.put(componentAliases.applyAsInt(entry.getKey()), jdc.deserialize(entry.getValue(), deserialType));
             }
         }
         return result;

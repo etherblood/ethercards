@@ -53,10 +53,6 @@ public class TriggerService {
         triggerSelf(card, core.TRIGGER_SELF_ENTER_GRAVEYARD, card);
     }
 
-    public void onSurvive(int minion) {
-        triggerSelf(minion, core.TRIGGER_SELF_SURVIVE, minion);
-    }
-
     public void onFight(int minion, int target) {
         triggerSelf(minion, core.TRIGGER_SELF_FIGHT, target);
     }
