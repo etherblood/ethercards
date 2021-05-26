@@ -22,6 +22,7 @@ import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.TargetSelection;
 import com.etherblood.a.rules.templates.ZoneState;
+import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.ZoneService;
 import java.util.ArrayList;
@@ -371,7 +372,7 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canSurrender(player, true);
         }
-        data.set(player, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
+        SystemsUtil.setPlayerResult(data, player, PlayerResult.LOSS);
         update();
     }
 

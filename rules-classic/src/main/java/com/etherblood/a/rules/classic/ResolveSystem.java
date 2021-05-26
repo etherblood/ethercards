@@ -11,9 +11,9 @@ import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.ZoneService;
-import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
 public class ResolveSystem implements Runnable {
@@ -42,12 +42,10 @@ public class ResolveSystem implements Runnable {
         do {
             damage();
             death();
-            playerResults();
 
             stateUpdates(state);
         } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
-                || data.list(core.DEATH_REQUEST).nonEmpty()
-                || data.list(core.PLAYER_RESULT_REQUEST).nonEmpty());
+                || data.list(core.DEATH_REQUEST).nonEmpty());
     }
 
     private void stateUpdates(StateDrivenUpdatesService state) {
@@ -126,7 +124,7 @@ public class ResolveSystem implements Runnable {
         for (int entity : deaths) {
             if (data.has(entity, core.HERO)) {
                 int owner = data.get(entity, core.OWNER);
-                data.set(owner, core.PLAYER_RESULT_REQUEST, PlayerResult.LOSS);
+                SystemsUtil.setPlayerResult(data, owner, PlayerResult.LOSS);
             }
 
             triggerService.onDeath(entity);
@@ -157,81 +155,6 @@ public class ResolveSystem implements Runnable {
             if (data.hasValue(other, core.BLOCK_TARGET, entity)) {
                 data.remove(other, core.BLOCK_TARGET);
             }
-        }
-    }
-
-    private void playerResults() {
-        IntList playerResultRequests = data.list(core.PLAYER_RESULT_REQUEST);
-        for (int player : playerResultRequests) {
-            int result = data.get(player, core.PLAYER_RESULT_REQUEST);
-            data.set(player, core.PLAYER_RESULT, result);
-
-        }
-        data.clear(core.PLAYER_RESULT_REQUEST);
-        if (playerResultRequests.nonEmpty()) {
-            IntList teams = data.list(core.TEAM_INDEX);
-            for (int team : teams) {
-                updateTeamResult(team);
-            }
-            int total = teams.size();
-            int losses = 0;
-            int wins = 0;
-            for (int team : teams) {
-                if (data.hasValue(team, core.TEAM_RESULT, PlayerResult.LOSS)) {
-                    losses++;
-                }
-                if (data.hasValue(team, core.TEAM_RESULT, PlayerResult.WIN)) {
-                    wins++;
-                }
-            }
-            if (wins != 0) {
-                for (int team : teams) {
-                    if (!data.has(team, core.TEAM_RESULT)) {
-                        setTeamResult(team, PlayerResult.LOSS);
-                        break;
-                    }
-                }
-            } else if (losses + 1 == total) {
-                for (int team : teams) {
-                    if (!data.has(team, core.TEAM_RESULT)) {
-                        setTeamResult(team, PlayerResult.WIN);
-                        break;
-                    }
-                }
-            }
-
-            for (int player : data.list(core.PLAYER_RESULT)) {
-                data.remove(player, core.ACTIVE_PLAYER_PHASE);
-            }
-        }
-    }
-
-    private void setTeamResult(int team, int result) {
-        data.set(team, core.TEAM_RESULT, result);
-        for (int player : data.list(core.PLAYER_INDEX)) {
-            if (data.hasValue(player, core.TEAM, team)) {
-                data.set(player, core.PLAYER_RESULT, result);
-            }
-        }
-    }
-
-    private void updateTeamResult(int team) {
-        boolean allLost = true;
-        for (int player : data.list(core.PLAYER_INDEX)) {
-            if (data.hasValue(player, core.TEAM, team)) {
-                OptionalInt playerResult = data.getOptional(player, core.PLAYER_RESULT);
-                if (playerResult.isPresent()) {
-                    if (playerResult.getAsInt() == PlayerResult.WIN) {
-                        setTeamResult(team, PlayerResult.WIN);
-                        return;
-                    }
-                } else {
-                    allLost = false;
-                }
-            }
-        }
-        if (allLost) {
-            setTeamResult(team, PlayerResult.LOSS);
         }
     }
 }

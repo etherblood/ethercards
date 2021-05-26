@@ -20,6 +20,7 @@ import com.etherblood.a.templates.implementation.effects.FractionalDamageEffect;
 import com.etherblood.a.templates.implementation.effects.FusionEffect;
 import com.etherblood.a.templates.implementation.effects.KolaghanDamageEffect;
 import com.etherblood.a.templates.implementation.effects.LathlissTokenEffect;
+import com.etherblood.a.templates.implementation.effects.LossEffect;
 import com.etherblood.a.templates.implementation.effects.MoveToZoneEffect;
 import com.etherblood.a.templates.implementation.effects.MultiTriggerEffects;
 import com.etherblood.a.templates.implementation.effects.NinjutsuEffect;
@@ -41,6 +42,7 @@ import com.etherblood.a.templates.implementation.effects.TargetActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.TargetedEffects;
 import com.etherblood.a.templates.implementation.effects.TransformTemplateEffect;
 import com.etherblood.a.templates.implementation.effects.TribeActivatedEffects;
+import com.etherblood.a.templates.implementation.effects.WinEffect;
 import com.etherblood.a.templates.implementation.predicates.AllOfPredicate;
 import com.etherblood.a.templates.implementation.predicates.AnyOfPredicate;
 import com.etherblood.a.templates.implementation.predicates.AttackIsPredicate;
@@ -118,6 +120,8 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("discard", DiscardEffect.class);
         effectClasses.put("playerDiscard", PlayerDiscardEffect.class);
         effectClasses.put("draw", DrawEffect.class);
+        effectClasses.put("win", WinEffect.class);
+        effectClasses.put("loss", LossEffect.class);
         return effectClasses;
     }
 

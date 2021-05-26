@@ -19,7 +19,6 @@ public class CoreComponents implements ComponentsModule {
     public final int DAMAGE_ACTION;
     public final int DEATH_REQUEST;
     public final int DEATH_ACTION;
-    public final int PLAYER_RESULT_REQUEST;
     public final int PLAYER_RESULT;
     public final int TEAM_RESULT;
     public final int HEALTH;
@@ -109,7 +108,6 @@ public class CoreComponents implements ComponentsModule {
         DAMAGE_ACTION = register.applyAsInt("DAMAGE_ACTION");
         DEATH_REQUEST = register.applyAsInt("DEATH_REQUEST");
         DEATH_ACTION = register.applyAsInt("DEATH_ACTION");
-        PLAYER_RESULT_REQUEST = register.applyAsInt("PLAYER_RESULT_REQUEST");
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");
         TEAM_RESULT = register.applyAsInt("TEAM_RESULT");
         HEALTH = register.applyAsInt("HEALTH");

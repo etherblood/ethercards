@@ -7,6 +7,8 @@ import com.etherblood.a.game.events.api.events.BattleEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.PlayerResult;
+import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
 public class SystemsUtil {
@@ -187,4 +189,74 @@ public class SystemsUtil {
         data.set(player, core.FATIGUE, fatigue);
     }
 
+    public static void setPlayerResult(EntityData data, int player, int result) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        data.set(player, core.PLAYER_RESULT, result);
+
+        IntList teams = data.list(core.TEAM_INDEX);
+        for (int team : teams) {
+            updateTeamResult(data, team);
+        }
+        int total = teams.size();
+        int losses = 0;
+        int wins = 0;
+        for (int team : teams) {
+            if (data.hasValue(team, core.TEAM_RESULT, PlayerResult.LOSS)) {
+                losses++;
+            }
+            if (data.hasValue(team, core.TEAM_RESULT, PlayerResult.WIN)) {
+                wins++;
+            }
+        }
+        if (wins != 0) {
+            for (int team : teams) {
+                if (!data.has(team, core.TEAM_RESULT)) {
+                    setTeamResult(data, team, PlayerResult.LOSS);
+                    break;
+                }
+            }
+        } else if (losses + 1 == total) {
+            for (int team : teams) {
+                if (!data.has(team, core.TEAM_RESULT)) {
+                    setTeamResult(data, team, PlayerResult.WIN);
+                    break;
+                }
+            }
+        }
+
+        for (int entity : data.list(core.PLAYER_RESULT)) {
+            data.remove(entity, core.ACTIVE_PLAYER_PHASE);
+        }
+    }
+
+    private static void updateTeamResult(EntityData data, int team) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        boolean allLost = true;
+        for (int player : data.list(core.PLAYER_INDEX)) {
+            if (data.hasValue(player, core.TEAM, team)) {
+                OptionalInt playerResult = data.getOptional(player, core.PLAYER_RESULT);
+                if (playerResult.isPresent()) {
+                    if (playerResult.getAsInt() == PlayerResult.WIN) {
+                        setTeamResult(data, team, PlayerResult.WIN);
+                        return;
+                    }
+                } else {
+                    allLost = false;
+                }
+            }
+        }
+        if (allLost) {
+            setTeamResult(data, team, PlayerResult.LOSS);
+        }
+    }
+
+    private static void setTeamResult(EntityData data, int team, int result) {
+        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        data.set(team, core.TEAM_RESULT, result);
+        for (int player : data.list(core.PLAYER_INDEX)) {
+            if (data.hasValue(player, core.TEAM, team)) {
+                data.set(player, core.PLAYER_RESULT, result);
+            }
+        }
+    }
 }

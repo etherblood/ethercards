@@ -43,10 +43,7 @@
                   "type": "targeted",
                   "effects": [
                     {
-                      "type": "buff",
-                      "components": {
-                        "PLAYER_RESULT_REQUEST": 1
-                      }
+                      "type": "win"
                     }
                   ],
                   "targets": {

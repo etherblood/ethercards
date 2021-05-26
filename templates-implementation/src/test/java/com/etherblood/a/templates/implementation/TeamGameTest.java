@@ -7,6 +7,7 @@ import com.etherblood.a.rules.moves.EndBlockPhase;
 import com.etherblood.a.rules.moves.EndMulliganPhase;
 import com.etherblood.a.rules.moves.Start;
 import com.etherblood.a.rules.moves.Update;
+import com.etherblood.a.rules.updates.SystemsUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -84,9 +85,9 @@ public class TeamGameTest extends AbstractGameTest {
 
     @Test
     public void cascadeWin() {
-        data.set(player(3), core.PLAYER_RESULT_REQUEST, PlayerResult.WIN);
+        SystemsUtil.setPlayerResult(data, player(3), PlayerResult.WIN);
         moves.apply(new Update());
-        
+
         Assertions.assertEquals(PlayerResult.LOSS, data.get(player(0), core.PLAYER_RESULT));
         Assertions.assertEquals(PlayerResult.LOSS, data.get(player(1), core.PLAYER_RESULT));
         Assertions.assertEquals(PlayerResult.WIN, data.get(player(2), core.PLAYER_RESULT));
