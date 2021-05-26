@@ -89,6 +89,9 @@ public class GameApplication extends SimpleApplication {
         } else {
             // migrate old libraries
             presetLibrary.cards.remove("grim_patron");
+            presetLibrary.cards.remove("mistblade_shinobi");
+            presetLibrary.cards.remove("blessing_of_wisdom");
+            presetLibrary.cards.remove("goblin_guide");
         }
         stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components));
     }
