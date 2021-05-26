@@ -86,6 +86,9 @@ public class GameApplication extends SimpleApplication {
             presetLibrary = new RawLibraryTemplate();
             presetLibrary.hero = "elderwood_ahri";
             presetLibrary.cards = new HashMap<>();
+        } else {
+            // migrate old libraries
+            presetLibrary.cards.remove("grim_patron");
         }
         stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components));
     }
