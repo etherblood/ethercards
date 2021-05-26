@@ -46,10 +46,7 @@
           "type": "targeted",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "DISCARD": true
-              }
+              "type": "discard"
             }
           ],
           "targets": {

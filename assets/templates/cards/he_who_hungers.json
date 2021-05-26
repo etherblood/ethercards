@@ -37,10 +37,8 @@
           "type": "targeted",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "PLAYER_DISCARD_CARDS": 1
-              }
+              "type": "playerDiscard",
+              "value": 1
             }
           ],
           "targets": {
@@ -88,10 +86,8 @@
           "type": "targeted",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "PLAYER_DISCARD_CARDS": 1
-              }
+              "type": "playerDiscard",
+              "value": 1
             }
           ],
           "targets": {

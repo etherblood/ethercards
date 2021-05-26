@@ -11,6 +11,7 @@ import com.etherblood.a.templates.implementation.effects.BuffEffect;
 import com.etherblood.a.templates.implementation.effects.CardDestructionEffect;
 import com.etherblood.a.templates.implementation.effects.CreateCardEffect;
 import com.etherblood.a.templates.implementation.effects.DebuffEffect;
+import com.etherblood.a.templates.implementation.effects.DiscardEffect;
 import com.etherblood.a.templates.implementation.effects.DittoEffect;
 import com.etherblood.a.templates.implementation.effects.DrawCardTemplateEffect;
 import com.etherblood.a.templates.implementation.effects.ExileEffect;
@@ -22,6 +23,7 @@ import com.etherblood.a.templates.implementation.effects.MoveToZoneEffect;
 import com.etherblood.a.templates.implementation.effects.MultiTriggerEffects;
 import com.etherblood.a.templates.implementation.effects.NinjutsuEffect;
 import com.etherblood.a.templates.implementation.effects.ParticleEventEffect;
+import com.etherblood.a.templates.implementation.effects.PlayerDiscardEffect;
 import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
 import com.etherblood.a.templates.implementation.effects.RecallEffect;
 import com.etherblood.a.templates.implementation.effects.ResurrectRandomEffect;
@@ -112,6 +114,8 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("moveToZone", MoveToZoneEffect.class);
         effectClasses.put("ninjutsu", NinjutsuEffect.class);
         effectClasses.put("recall", RecallEffect.class);
+        effectClasses.put("discard", DiscardEffect.class);
+        effectClasses.put("playerDiscard", PlayerDiscardEffect.class);
         return effectClasses;
     }
 

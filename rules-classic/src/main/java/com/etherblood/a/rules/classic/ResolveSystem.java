@@ -15,7 +15,6 @@ import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.ZoneService;
 import java.util.OptionalInt;
-import java.util.PrimitiveIterator;
 import java.util.function.IntUnaryOperator;
 
 public class ResolveSystem implements Runnable {
@@ -44,7 +43,6 @@ public class ResolveSystem implements Runnable {
     public void run() {
         StateDrivenUpdatesService state = new StateDrivenUpdatesService(data, templates, random, new EffectiveStatsService(data, templates));
         do {
-            discard();
             draw();
             damage();
             death();
@@ -54,8 +52,6 @@ public class ResolveSystem implements Runnable {
         } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
                 || data.list(core.DEATH_REQUEST).nonEmpty()
                 || data.list(core.DRAW_CARDS_REQUEST).nonEmpty()
-                || data.list(core.PLAYER_DISCARD_CARDS).nonEmpty()
-                || data.list(core.DISCARD).nonEmpty()
                 || data.list(core.PLAYER_RESULT_REQUEST).nonEmpty());
     }
 
@@ -65,33 +61,6 @@ public class ResolveSystem implements Runnable {
         state.removeInvalidAttacks();
         state.removeInvalidBlocks();
         state.attackWithRagers();
-    }
-
-    private void discard() {
-        for (int player : data.list(core.PLAYER_DISCARD_CARDS)) {
-            int cards = data.get(player, core.PLAYER_DISCARD_CARDS);
-            IntList handCards = data.list(core.IN_HAND_ZONE);
-            PrimitiveIterator.OfInt iterator = handCards.iterator();
-            while (iterator.hasNext()) {
-                int card = iterator.nextInt();
-                if (!data.hasValue(card, core.OWNER, player)) {
-                    iterator.remove();
-                }
-            }
-            for (int i = 0; i < cards && handCards.nonEmpty(); i++) {
-                int index = random.applyAsInt(handCards.size());
-                int card = handCards.swapRemoveAt(index);
-                data.set(card, core.DISCARD, 1);
-            }
-        }
-        data.clear(core.PLAYER_DISCARD_CARDS);
-        for (int card : data.list(core.DISCARD)) {
-            if (data.has(card, core.IN_HAND_ZONE)) {
-                zoneService.removeFromHand(card);
-                zoneService.addToGraveyard(card);
-            }
-        }
-        data.clear(core.DISCARD);
     }
 
     private void draw() {
