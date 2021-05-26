@@ -48,13 +48,11 @@ public class ResolveSystem implements Runnable {
             draw();
             damage();
             death();
-            recall();
             playerResults();
 
             stateUpdates(state);
         } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
                 || data.list(core.DEATH_REQUEST).nonEmpty()
-                || data.list(core.RECALL_REQUEST).nonEmpty()
                 || data.list(core.DRAW_CARDS_REQUEST).nonEmpty()
                 || data.list(core.PLAYER_DISCARD_CARDS).nonEmpty()
                 || data.list(core.DISCARD).nonEmpty()
@@ -201,16 +199,6 @@ public class ResolveSystem implements Runnable {
             }
         }
         data.clear(core.DEATH_ACTION);
-    }
-
-    private void recall() {
-        for (int entity : data.list(core.RECALL_REQUEST)) {
-            if (data.has(entity, core.IN_BATTLE_ZONE)) {
-                zoneService.removeFromBattle(entity);
-                zoneService.addToHand(entity);
-            }
-        }
-        data.clear(core.RECALL_REQUEST);
     }
 
     private void regenerate(int entity) {

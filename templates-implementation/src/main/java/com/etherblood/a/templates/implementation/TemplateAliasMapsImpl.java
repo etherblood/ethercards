@@ -1,10 +1,11 @@
 package com.etherblood.a.templates.implementation;
 
-import com.etherblood.a.templates.api.TemplateClassAliasMap;
-import com.etherblood.a.templates.implementation.effects.TargetedEffects;
 import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.TargetSelection;
+import com.etherblood.a.templates.api.TargetPredicate;
+import com.etherblood.a.templates.api.TemplateClassAliasMap;
+import com.etherblood.a.templates.api.Untargeted;
 import com.etherblood.a.templates.implementation.effects.BindControlEffect;
 import com.etherblood.a.templates.implementation.effects.BuffEffect;
 import com.etherblood.a.templates.implementation.effects.CardDestructionEffect;
@@ -12,67 +13,67 @@ import com.etherblood.a.templates.implementation.effects.CreateCardEffect;
 import com.etherblood.a.templates.implementation.effects.DebuffEffect;
 import com.etherblood.a.templates.implementation.effects.DittoEffect;
 import com.etherblood.a.templates.implementation.effects.DrawCardTemplateEffect;
+import com.etherblood.a.templates.implementation.effects.ExileEffect;
 import com.etherblood.a.templates.implementation.effects.FractionalDamageEffect;
 import com.etherblood.a.templates.implementation.effects.FusionEffect;
 import com.etherblood.a.templates.implementation.effects.KolaghanDamageEffect;
 import com.etherblood.a.templates.implementation.effects.LathlissTokenEffect;
+import com.etherblood.a.templates.implementation.effects.MoveToZoneEffect;
 import com.etherblood.a.templates.implementation.effects.MultiTriggerEffects;
+import com.etherblood.a.templates.implementation.effects.NinjutsuEffect;
 import com.etherblood.a.templates.implementation.effects.ParticleEventEffect;
+import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
+import com.etherblood.a.templates.implementation.effects.RecallEffect;
 import com.etherblood.a.templates.implementation.effects.ResurrectRandomEffect;
 import com.etherblood.a.templates.implementation.effects.SelfDiscardEffect;
+import com.etherblood.a.templates.implementation.effects.SelfResurrectEffect;
 import com.etherblood.a.templates.implementation.effects.SelfSummonEffect;
+import com.etherblood.a.templates.implementation.effects.SelfSummonFromLibraryEffect;
 import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
+import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffects;
 import com.etherblood.a.templates.implementation.effects.SpiritCountSoulshiftEffect;
 import com.etherblood.a.templates.implementation.effects.SummonEffect;
 import com.etherblood.a.templates.implementation.effects.TakeControlEffect;
+import com.etherblood.a.templates.implementation.effects.TargetActivatedEffects;
+import com.etherblood.a.templates.implementation.effects.TargetedEffects;
+import com.etherblood.a.templates.implementation.effects.TransformTemplateEffect;
 import com.etherblood.a.templates.implementation.effects.TribeActivatedEffects;
+import com.etherblood.a.templates.implementation.predicates.AllOfPredicate;
+import com.etherblood.a.templates.implementation.predicates.AnyOfPredicate;
+import com.etherblood.a.templates.implementation.predicates.AttackIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.BoolPredicate;
+import com.etherblood.a.templates.implementation.predicates.CanNinjutsuPredicate;
+import com.etherblood.a.templates.implementation.predicates.FlyingPredicate;
+import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.HasSourceOwnerPredicate;
+import com.etherblood.a.templates.implementation.predicates.HasSourceTeamPredicate;
+import com.etherblood.a.templates.implementation.predicates.HasTribePredicate;
+import com.etherblood.a.templates.implementation.predicates.HealthIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.HeroPredicate;
+import com.etherblood.a.templates.implementation.predicates.IsAttackingPredicate;
+import com.etherblood.a.templates.implementation.predicates.IsBlockedPredicate;
+import com.etherblood.a.templates.implementation.predicates.IsSourcePredicate;
+import com.etherblood.a.templates.implementation.predicates.ManaCostIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.MinionCountIsPredicate;
+import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
+import com.etherblood.a.templates.implementation.predicates.NoneOfPredicate;
+import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
+import com.etherblood.a.templates.implementation.predicates.TestSourcePredicate;
+import com.etherblood.a.templates.implementation.predicates.TiredPredicate;
+import com.etherblood.a.templates.implementation.predicates.ZonePredicate;
+import com.etherblood.a.templates.implementation.statmodifiers.AddComponentPredicateCountModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddFractionalModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOnOpponentThresholdModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOnOwnTurnModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnHandCardCountModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnManaPoolModifier;
 import com.etherblood.a.templates.implementation.statmodifiers.AddOwnSpiritCountModifier;
-import com.etherblood.a.templates.implementation.targets.SimpleTarget;
-import com.etherblood.a.templates.api.Untargeted;
-import com.etherblood.a.templates.implementation.effects.SourceOwnerPhaseEffects;
-import com.etherblood.a.templates.implementation.effects.TargetActivatedEffects;
-import com.etherblood.a.templates.implementation.effects.TransformTemplateEffect;
-import com.etherblood.a.templates.implementation.predicates.AllOfPredicate;
-import com.etherblood.a.templates.implementation.predicates.AnyOfPredicate;
-import com.etherblood.a.templates.implementation.predicates.BoolPredicate;
-import com.etherblood.a.templates.implementation.predicates.FlyingPredicate;
-import com.etherblood.a.templates.implementation.predicates.HasSourceOwnerPredicate;
-import com.etherblood.a.templates.implementation.predicates.HasSourceTeamPredicate;
-import com.etherblood.a.templates.implementation.predicates.HealthIsPredicate;
-import com.etherblood.a.templates.implementation.predicates.HeroPredicate;
-import com.etherblood.a.templates.implementation.predicates.ManaCostIsPredicate;
-import com.etherblood.a.templates.implementation.predicates.NoneOfPredicate;
-import com.etherblood.a.templates.implementation.predicates.IsSourcePredicate;
+import com.etherblood.a.templates.implementation.statmodifiers.PredicateActivatedModifier;
 import com.etherblood.a.templates.implementation.targets.ComponentTarget;
+import com.etherblood.a.templates.implementation.targets.SimpleTarget;
 import com.etherblood.a.templates.implementation.targets.SourceTarget;
 import java.util.HashMap;
 import java.util.Map;
-import com.etherblood.a.templates.api.TargetPredicate;
-import com.etherblood.a.templates.implementation.effects.ExileEffect;
-import com.etherblood.a.templates.implementation.effects.MoveToZoneEffect;
-import com.etherblood.a.templates.implementation.effects.NinjutsuEffect;
-import com.etherblood.a.templates.implementation.effects.PredicateActivatedEffects;
-import com.etherblood.a.templates.implementation.effects.SelfResurrectEffect;
-import com.etherblood.a.templates.implementation.effects.SelfSummonFromLibraryEffect;
-import com.etherblood.a.templates.implementation.predicates.AttackIsPredicate;
-import com.etherblood.a.templates.implementation.predicates.CanNinjutsuPredicate;
-import com.etherblood.a.templates.implementation.predicates.MinionCountIsPredicate;
-import com.etherblood.a.templates.implementation.predicates.HandCardCountIsPredicate;
-import com.etherblood.a.templates.implementation.predicates.HasTribePredicate;
-import com.etherblood.a.templates.implementation.predicates.IsAttackingPredicate;
-import com.etherblood.a.templates.implementation.predicates.IsBlockedPredicate;
-import com.etherblood.a.templates.implementation.predicates.MinionPredicate;
-import com.etherblood.a.templates.implementation.predicates.SourceOwnerPredicate;
-import com.etherblood.a.templates.implementation.predicates.TestSourcePredicate;
-import com.etherblood.a.templates.implementation.predicates.TiredPredicate;
-import com.etherblood.a.templates.implementation.predicates.ZonePredicate;
-import com.etherblood.a.templates.implementation.statmodifiers.AddComponentPredicateCountModifier;
-import com.etherblood.a.templates.implementation.statmodifiers.PredicateActivatedModifier;
 
 public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
 
@@ -110,6 +111,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("exile", ExileEffect.class);
         effectClasses.put("moveToZone", MoveToZoneEffect.class);
         effectClasses.put("ninjutsu", NinjutsuEffect.class);
+        effectClasses.put("recall", RecallEffect.class);
         return effectClasses;
     }
 
@@ -136,7 +138,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         targetClasses.put("source", SourceTarget.class);
         return targetClasses;
     }
-    
+
     @Override
     public Map<String, Class<? extends TargetPredicate>> getTargetPredicates() {
         Map<String, Class<? extends TargetPredicate>> targetClasses = new HashMap<>();
