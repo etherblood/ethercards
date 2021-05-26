@@ -169,11 +169,6 @@ public class PhaseSystem {
             if (data.hasValue(attackTarget, core.TEAM, team)) {
                 if (data.has(attackTarget, core.IN_BATTLE_ZONE)) {
                     SystemsUtil.fight(data, templates, random, attacker, attackTarget, events);
-
-                    data.getOptional(attackTarget, core.DRAWS_ON_ATTACKED).ifPresent(draws -> {
-                        int owner = data.get(attackTarget, core.OWNER);
-                        SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
-                    });
                 }
                 attackers.add(attacker);
             }
@@ -201,14 +196,6 @@ public class PhaseSystem {
             }
 
             data.set(target, core.TIRED, 1);
-            data.getOptional(attacker, core.DRAWS_ON_ATTACK).ifPresent(draws -> {
-                int owner = data.get(attacker, core.OWNER);
-                SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
-            });
-            data.getOptional(attacker, core.GIVE_DRAWS_ON_ATTACK).ifPresent(draws -> {
-                int targetOwner = data.get(target, core.OWNER);
-                SystemsUtil.increase(data, targetOwner, core.DRAW_CARDS_REQUEST, draws);
-            });
         }
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             if (data.hasValue(minion, core.TEAM, team)) {
@@ -293,7 +280,7 @@ public class PhaseSystem {
             });
             data.getOptional(minion, core.DRAWS_PER_TURN).ifPresent(draws -> {
                 int owner = data.get(minion, core.OWNER);
-                SystemsUtil.increase(data, owner, core.DRAW_CARDS_REQUEST, draws);
+                SystemsUtil.drawCards(data, templates, random, events, owner, draws);
             });
         }
         IntList activePlayers = data.list(core.ACTIVE_PLAYER_PHASE);

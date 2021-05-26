@@ -32,10 +32,8 @@
           "type": "targeted",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "DRAW_CARDS_REQUEST": 1
-              }
+              "type": "draw",
+              "amount": 1
             }
           ],
           "targets": {

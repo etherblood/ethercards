@@ -69,15 +69,6 @@ public class CardModelUpdater {
         if (components.hasKey(core.DRAWS_PER_TURN)) {
             keywords.add("Draws_per_Turn_" + components.get(core.DRAWS_PER_TURN));
         }
-        if (components.hasKey(core.DRAWS_ON_ATTACK)) {
-            keywords.add("Draws_on_Attack_" + components.get(core.DRAWS_ON_ATTACK));
-        }
-        if (components.hasKey(core.GIVE_DRAWS_ON_ATTACK)) {
-            keywords.add("Opponent_Draws_on_Attack_" + components.get(core.GIVE_DRAWS_ON_ATTACK));
-        }
-        if (components.hasKey(core.DRAWS_ON_BLOCK)) {
-            keywords.add("Draws_on_Block_" + components.get(core.DRAWS_ON_BLOCK));
-        }
         if (components.hasKey(core.CANNOT_ATTACK)) {
             keywords.add("Cannot_attack");
         }
@@ -185,15 +176,6 @@ public class CardModelUpdater {
         }
         if (data.has(entityId, core.DRAWS_PER_TURN)) {
             keywords.add("Draws_per_Turn_" + data.get(entityId, core.DRAWS_PER_TURN));
-        }
-        if (data.has(entityId, core.DRAWS_ON_ATTACK)) {
-            keywords.add("Draws_on_Attack_" + data.get(entityId, core.DRAWS_ON_ATTACK));
-        }
-        if (data.has(entityId, core.GIVE_DRAWS_ON_ATTACK)) {
-            keywords.add("Opponent_Draws_on_Attack_" + data.get(entityId, core.GIVE_DRAWS_ON_ATTACK));
-        }
-        if (data.has(entityId, core.DRAWS_ON_BLOCK)) {
-            keywords.add("Draws_on_Block_" + data.get(entityId, core.DRAWS_ON_BLOCK));
         }
         if (stats.cannotAttack(entityId)) {
             keywords.add("Cannot_attack");

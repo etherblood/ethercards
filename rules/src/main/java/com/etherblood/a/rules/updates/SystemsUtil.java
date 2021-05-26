@@ -159,10 +159,12 @@ public class SystemsUtil {
             }
         }
 
+        TriggerService triggerService = new TriggerService(data, templates, random, events);
         if (amount >= myLibraryCards.size()) {
             for (int card : myLibraryCards) {
                 zoneService.removeFromLibrary(card);
                 zoneService.addToHand(card);
+                triggerService.onDraw(player);
             }
             amount -= myLibraryCards.size();
             myLibraryCards.clear();
@@ -171,6 +173,7 @@ public class SystemsUtil {
                 int card = myLibraryCards.swapRemoveAt(random.applyAsInt(myLibraryCards.size()));
                 zoneService.removeFromLibrary(card);
                 zoneService.addToHand(card);
+                triggerService.onDraw(player);
                 amount--;
             }
         }

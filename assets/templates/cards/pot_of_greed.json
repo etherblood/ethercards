@@ -20,10 +20,8 @@
           "type": "targeted",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "DRAW_CARDS_REQUEST": 2
-              }
+              "type": "draw",
+              "amount": 2
             }
           ],
           "targets": {

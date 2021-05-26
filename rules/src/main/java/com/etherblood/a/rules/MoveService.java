@@ -23,8 +23,10 @@ import com.etherblood.a.rules.templates.StatModifier;
 import com.etherblood.a.rules.templates.TargetSelection;
 import com.etherblood.a.rules.templates.ZoneState;
 import com.etherblood.a.rules.updates.TriggerService;
+import com.etherblood.a.rules.updates.ZoneService;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
@@ -247,8 +249,26 @@ public class MoveService {
             moveAvailability.canStart(true);
         }
 
+        Map<Integer, IntList> playerLibraries = new HashMap<>();
+        for (int card : data.list(core.IN_LIBRARY_ZONE)) {
+            int owner = data.get(card, core.OWNER);
+            playerLibraries.computeIfAbsent(owner, x -> new IntList()).add(card);
+        }
+        for (int player : data.list(core.INITIAL_DRAWS)) {
+            IntList playerLibrary = playerLibraries.computeIfAbsent(player, x -> new IntList());
+            int draws = data.get(player, core.INITIAL_DRAWS);
+            for (int i = 0; i < draws && !playerLibrary.isEmpty(); i++) {
+                int card = playerLibrary.swapRemoveAt(random.applyAsInt(playerLibrary.size()));
+                data.remove(card, core.IN_LIBRARY_ZONE);
+                data.set(card, core.IN_HAND_ZONE, 1);
+            }
+        }
+        data.clear(core.INITIAL_DRAWS);
+
+        ZoneService zoneService = new ZoneService(data, templates, random, eventListener);
         TriggerService triggerService = new TriggerService(data, templates, random, eventListener);
         for (int card : data.list(core.CARD_TEMPLATE)) {
+            zoneService.initComponents(card);
             triggerService.initEffects(card);
         }
 

@@ -45,12 +45,12 @@ public class GameSetup {
             }
 
             if (data.hasValue(team, core.TEAM_INDEX, 0)) {
-                if(startingPlayersHandCardCount != 0) {
-                    data.set(player, core.DRAW_CARDS_REQUEST, startingPlayersHandCardCount);
+                if (startingPlayersHandCardCount != 0) {
+                    data.set(player, core.INITIAL_DRAWS, startingPlayersHandCardCount);
                 }
             } else {
-                if(otherPlayersHandCardCount != 0) {
-                    data.set(player, core.DRAW_CARDS_REQUEST, otherPlayersHandCardCount);
+                if (otherPlayersHandCardCount != 0) {
+                    data.set(player, core.INITIAL_DRAWS, otherPlayersHandCardCount);
                 }
                 if (theCoinId != null) {
                     int coin = SystemsUtil.createCard(data, theCoinId, player);

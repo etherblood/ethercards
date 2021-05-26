@@ -11,7 +11,6 @@ import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
 import com.etherblood.a.rules.PlayerResult;
 import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.updates.SystemsUtil;
 import com.etherblood.a.rules.updates.TriggerService;
 import com.etherblood.a.rules.updates.ZoneService;
 import java.util.OptionalInt;
@@ -26,7 +25,6 @@ public class ResolveSystem implements Runnable {
     private final GameEventListener events;
     private final TriggerService triggerService;
     private final ZoneService zoneService;
-    private EffectiveStatsService statsService;
 
     public ResolveSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
@@ -36,14 +34,12 @@ public class ResolveSystem implements Runnable {
         this.events = events;
         this.triggerService = new TriggerService(data, templates, random, events);
         this.zoneService = new ZoneService(data, templates, random, events);
-        this.statsService = new EffectiveStatsService(data, templates);
     }
 
     @Override
     public void run() {
         StateDrivenUpdatesService state = new StateDrivenUpdatesService(data, templates, random, new EffectiveStatsService(data, templates));
         do {
-            draw();
             damage();
             death();
             playerResults();
@@ -51,7 +47,6 @@ public class ResolveSystem implements Runnable {
             stateUpdates(state);
         } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
                 || data.list(core.DEATH_REQUEST).nonEmpty()
-                || data.list(core.DRAW_CARDS_REQUEST).nonEmpty()
                 || data.list(core.PLAYER_RESULT_REQUEST).nonEmpty());
     }
 
@@ -61,29 +56,6 @@ public class ResolveSystem implements Runnable {
         state.removeInvalidAttacks();
         state.removeInvalidBlocks();
         state.attackWithRagers();
-    }
-
-    private void draw() {
-        for (int player : data.list(core.DRAW_CARDS_REQUEST)) {
-            assert data.has(player, core.PLAYER_INDEX);
-            int cards = data.get(player, core.DRAW_CARDS_REQUEST);
-            if (cards > 0) {
-                data.set(player, core.DRAW_CARDS_ACTION, cards);
-            }
-        }
-        data.clear(core.DRAW_CARDS_REQUEST);
-        for (int player : data.list(core.DRAW_CARDS_ACTION)) {
-            int cards = data.get(player, core.DRAW_CARDS_ACTION);
-
-            for (int i = 0; i < cards; i++) {
-                triggerService.onDraw(player);
-            }
-        }
-        for (int player : data.list(core.DRAW_CARDS_ACTION)) {
-            int cards = data.get(player, core.DRAW_CARDS_ACTION);
-            SystemsUtil.drawCards(data, templates, random, events, player, cards);
-        }
-        data.clear(core.DRAW_CARDS_ACTION);
     }
 
     private void damage() {

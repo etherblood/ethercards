@@ -14,6 +14,7 @@ import com.etherblood.a.templates.implementation.effects.DebuffEffect;
 import com.etherblood.a.templates.implementation.effects.DiscardEffect;
 import com.etherblood.a.templates.implementation.effects.DittoEffect;
 import com.etherblood.a.templates.implementation.effects.DrawCardTemplateEffect;
+import com.etherblood.a.templates.implementation.effects.DrawEffect;
 import com.etherblood.a.templates.implementation.effects.ExileEffect;
 import com.etherblood.a.templates.implementation.effects.FractionalDamageEffect;
 import com.etherblood.a.templates.implementation.effects.FusionEffect;
@@ -116,6 +117,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("recall", RecallEffect.class);
         effectClasses.put("discard", DiscardEffect.class);
         effectClasses.put("playerDiscard", PlayerDiscardEffect.class);
+        effectClasses.put("draw", DrawEffect.class);
         return effectClasses;
     }
 
