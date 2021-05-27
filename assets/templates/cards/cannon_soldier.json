@@ -43,10 +43,8 @@
           "type": "targeted",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 3
-              }
+              "type": "damage",
+              "value": 3
             },
             {
               "type": "particle",

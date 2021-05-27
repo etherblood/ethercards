@@ -23,10 +23,8 @@
       },
       "effects": [
         {
-          "type": "buff",
-          "components": {
-            "DAMAGE_REQUEST": 6
-          }
+          "type": "damage",
+          "value": 6
         },
         {
           "type": "particle",

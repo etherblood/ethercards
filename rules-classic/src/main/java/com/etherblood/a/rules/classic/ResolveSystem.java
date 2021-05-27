@@ -3,7 +3,6 @@ package com.etherblood.a.rules.classic;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.game.events.api.events.DamageEvent;
 import com.etherblood.a.game.events.api.events.DeathEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.DeathOptions;
@@ -40,12 +39,10 @@ public class ResolveSystem implements Runnable {
     public void run() {
         StateDrivenUpdatesService state = new StateDrivenUpdatesService(data, templates, random, new EffectiveStatsService(data, templates));
         do {
-            damage();
             death();
 
             stateUpdates(state);
-        } while (data.list(core.DAMAGE_REQUEST).nonEmpty()
-                || data.list(core.DEATH_REQUEST).nonEmpty());
+        } while (data.list(core.DEATH_REQUEST).nonEmpty());
     }
 
     private void stateUpdates(StateDrivenUpdatesService state) {
@@ -54,46 +51,6 @@ public class ResolveSystem implements Runnable {
         state.removeInvalidAttacks();
         state.removeInvalidBlocks();
         state.attackWithRagers();
-    }
-
-    private void damage() {
-        for (int entity : data.list(core.DAMAGE_REQUEST)) {
-            if (data.has(entity, core.IN_BATTLE_ZONE)) {
-                int damage = data.get(entity, core.DAMAGE_REQUEST);
-                if (damage > 0) {
-                    data.set(entity, core.DAMAGE_ACTION, damage);
-                }
-            }
-        }
-        data.clear(core.DAMAGE_REQUEST);
-
-        IntList damaged = data.list(core.DAMAGE_ACTION);
-        for (int entity : damaged) {
-            int damage = data.get(entity, core.DAMAGE_ACTION);
-
-            events.fire(new DamageEvent(entity, damage));
-        }
-        for (int entity : damaged) {
-            int damage = data.get(entity, core.DAMAGE_ACTION);
-            assert data.has(entity, core.IN_BATTLE_ZONE);
-
-            if (data.has(entity, core.TEMPORARY_HEALTH)) {
-                int temporaryHealth = data.get(entity, core.TEMPORARY_HEALTH);
-                if (damage > temporaryHealth) {
-                    damage -= temporaryHealth;
-                    data.remove(entity, core.TEMPORARY_HEALTH);
-                } else {
-                    data.set(entity, core.TEMPORARY_HEALTH, temporaryHealth - damage);
-                    damage = 0;
-                }
-            }
-
-            if (damage > 0) {
-                int health = data.getOptional(entity, core.HEALTH).orElse(0);
-                data.set(entity, core.HEALTH, health - damage);
-            }
-        }
-        data.clear(core.DAMAGE_ACTION);
     }
 
     private void death() {

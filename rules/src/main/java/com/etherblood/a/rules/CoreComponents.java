@@ -15,8 +15,6 @@ public class CoreComponents implements ComponentsModule {
     public final int BLOCK_TARGET;
     public final int CAST_TARGET;
     public final int USE_ABILITY_TARGET;
-    public final int DAMAGE_REQUEST;
-    public final int DAMAGE_ACTION;
     public final int DEATH_REQUEST;
     public final int DEATH_ACTION;
     public final int PLAYER_RESULT;
@@ -104,8 +102,6 @@ public class CoreComponents implements ComponentsModule {
         BLOCK_TARGET = register.applyAsInt("BLOCK_TARGET");
         CAST_TARGET = register.applyAsInt("CAST_TARGET");
         USE_ABILITY_TARGET = register.applyAsInt("USE_ABILITY_TARGET");
-        DAMAGE_REQUEST = register.applyAsInt("DAMAGE_REQUEST");
-        DAMAGE_ACTION = register.applyAsInt("DAMAGE_ACTION");
         DEATH_REQUEST = register.applyAsInt("DEATH_REQUEST");
         DEATH_ACTION = register.applyAsInt("DEATH_ACTION");
         PLAYER_RESULT = register.applyAsInt("PLAYER_RESULT");

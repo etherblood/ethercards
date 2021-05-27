@@ -16,10 +16,8 @@
           "type": "targeted",
           "effects": [
             {
-              "type": "buff",
-              "components": {
-                "DAMAGE_REQUEST": 4
-              }
+              "type": "damage",
+              "value": 4
             }
           ],
           "targets": {

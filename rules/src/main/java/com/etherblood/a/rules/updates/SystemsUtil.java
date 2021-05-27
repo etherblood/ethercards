@@ -4,6 +4,7 @@ import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.entities.collections.IntList;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.BattleEvent;
+import com.etherblood.a.game.events.api.events.DamageEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.EffectiveStatsService;
 import com.etherblood.a.rules.GameTemplates;
@@ -66,10 +67,10 @@ public class SystemsUtil {
         int blockerDamage = stats.attack(blocker);
 
         if (!stats.preventCombatDamage(blocker)) {
-            damage(data, blocker, attackerDamage);
+            damage(data, events, blocker, attackerDamage);
         }
         if (!stats.preventCombatDamage(attacker)) {
-            damage(data, attacker, blockerDamage);
+            damage(data, events, attacker, blockerDamage);
         }
 
         if (stats.hasLifelink(attacker)) {
@@ -95,12 +96,30 @@ public class SystemsUtil {
         triggerService.onFight(blocker, attacker);
     }
 
-    public static void damage(EntityData data, int target, int damage) {
+    public static void damage(EntityData data, GameEventListener events, int target, int damage) {
         if (damage <= 0) {
             return;
         }
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        increase(data, target, core.DAMAGE_ACTION, damage);
+
+        events.fire(new DamageEvent(target, damage));
+        assert data.has(target, core.IN_BATTLE_ZONE);
+
+        if (data.has(target, core.TEMPORARY_HEALTH)) {
+            int temporaryHealth = data.get(target, core.TEMPORARY_HEALTH);
+            if (damage > temporaryHealth) {
+                damage -= temporaryHealth;
+                data.remove(target, core.TEMPORARY_HEALTH);
+            } else {
+                data.set(target, core.TEMPORARY_HEALTH, temporaryHealth - damage);
+                damage = 0;
+            }
+        }
+
+        if (damage > 0) {
+            int health = data.getOptional(target, core.HEALTH).orElse(0);
+            data.set(target, core.HEALTH, health - damage);
+        }
     }
 
     public static int createCard(EntityData data, int templateId, int owner) {
@@ -185,7 +204,7 @@ public class SystemsUtil {
         for (int i = 0; i < amount; i++) {
             fatigueDamage += ++fatigue;
         }
-        SystemsUtil.damage(data, heroOf(data, player), fatigueDamage);
+        SystemsUtil.damage(data, events, heroOf(data, player), fatigueDamage);
         data.set(player, core.FATIGUE, fatigue);
     }
 

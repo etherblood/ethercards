@@ -275,7 +275,7 @@ public class PhaseSystem {
                 SystemsUtil.increase(data, minion, core.MANA_POOL_AURA, growth);
             });
             data.getOptional(minion, core.POISONED).ifPresent(poison -> {
-                SystemsUtil.damage(data, minion, poison);
+                SystemsUtil.damage(data, events, minion, poison);
                 SystemsUtil.decreaseAndRemoveLtZero(data, minion, core.POISONED, 1);
             });
             data.getOptional(minion, core.DRAWS_PER_TURN).ifPresent(draws -> {

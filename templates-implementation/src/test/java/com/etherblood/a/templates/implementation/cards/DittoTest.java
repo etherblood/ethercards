@@ -33,21 +33,6 @@ public class DittoTest extends AbstractGameTest {
     }
 
     @Test
-    public void cloneDamage() {
-        data.set(player(0), core.MANA, Integer.MAX_VALUE);
-        int dragon = createMinion(player(0), "blue_eyes_white_dragon");
-
-        data.set(dragon, core.DAMAGE_REQUEST, 3);
-        moves.apply(new Update());
-
-        int ditto = createCard(player(0), "ditto", core.IN_HAND_ZONE);
-
-        moves.apply(new Cast(player(0), ditto, dragon));
-
-        Assertions.assertEquals(effectiveStats.health(dragon), effectiveStats.health(ditto));
-    }
-
-    @Test
     public void leaving_battle_reverts_clone() {
         data.set(player(0), core.MANA, Integer.MAX_VALUE);
         int dragon = createMinion(player(0), "blue_eyes_white_dragon");

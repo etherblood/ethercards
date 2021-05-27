@@ -1,11 +1,11 @@
 package com.etherblood.a.templates.implementation.effects;
 
-import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.entities.EntityData;
 import com.etherblood.a.game.events.api.GameEventListener;
 import com.etherblood.a.game.events.api.events.ParticleEvent;
 import com.etherblood.a.rules.CoreComponents;
 import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.a.rules.templates.Effect;
 import com.etherblood.a.rules.updates.SystemsUtil;
 import java.util.function.IntUnaryOperator;
 
@@ -30,7 +30,7 @@ public class KolaghanDamageEffect implements Effect {
         for (int dead : data.list(core.IN_GRAVEYARD_ZONE)) {
             if (data.hasValue(dead, core.CARD_TEMPLATE, targetTemplate) && data.hasValue(dead, core.OWNER, targetOwner)) {
                 int targetHero = SystemsUtil.heroOf(data, targetOwner);
-                data.set(targetHero, core.DAMAGE_REQUEST, damage);
+                SystemsUtil.damage(data, events, targetHero, damage);
                 events.fire(new ParticleEvent("kolaghanDamage", source, targetHero));
                 break;
             }

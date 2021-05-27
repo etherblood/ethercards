@@ -10,6 +10,7 @@ import com.etherblood.a.templates.implementation.effects.BindControlEffect;
 import com.etherblood.a.templates.implementation.effects.BuffEffect;
 import com.etherblood.a.templates.implementation.effects.CardDestructionEffect;
 import com.etherblood.a.templates.implementation.effects.CreateCardEffect;
+import com.etherblood.a.templates.implementation.effects.DamageEffect;
 import com.etherblood.a.templates.implementation.effects.DebuffEffect;
 import com.etherblood.a.templates.implementation.effects.DiscardEffect;
 import com.etherblood.a.templates.implementation.effects.DittoEffect;
@@ -122,6 +123,7 @@ public class TemplateAliasMapsImpl implements TemplateClassAliasMap {
         effectClasses.put("draw", DrawEffect.class);
         effectClasses.put("win", WinEffect.class);
         effectClasses.put("loss", LossEffect.class);
+        effectClasses.put("damage", DamageEffect.class);
         return effectClasses;
     }
 
