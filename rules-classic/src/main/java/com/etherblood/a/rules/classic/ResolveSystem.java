@@ -55,6 +55,10 @@ public class ResolveSystem implements Runnable {
 
     private void death() {
         IntList deathRequests = data.listOrdered(core.DEATH_REQUEST, core.IN_BATTLE_ZONE);
+        if (deathRequests.isEmpty()) {
+            return;
+        }
+        IntList deaths = new IntList();
         for (int entity : deathRequests) {
             int deathOptions = data.get(entity, core.DEATH_REQUEST);
             if (data.has(entity, core.IN_BATTLE_ZONE)) {
@@ -73,11 +77,10 @@ public class ResolveSystem implements Runnable {
                         }
                     }
                 }
-                data.set(entity, core.DEATH_ACTION, deathOptions);
+                deaths.add(entity);
             }
         }
         data.clear(core.DEATH_REQUEST);
-        IntList deaths = data.list(core.DEATH_ACTION);
         for (int entity : deaths) {
             if (data.has(entity, core.HERO)) {
                 int owner = data.get(entity, core.OWNER);
@@ -94,7 +97,6 @@ public class ResolveSystem implements Runnable {
                 zoneService.addToGraveyard(entity);
             }
         }
-        data.clear(core.DEATH_ACTION);
     }
 
     private void regenerate(int entity) {
