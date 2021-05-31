@@ -8,24 +8,21 @@
     "colors": [
       "WHITE"
     ],
-    "description": "Summon 100 1/1 dogs."
+    "description": "Summon eleven 1/1 dogs. Stays in your hand after casting."
   },
   "hand": {
     "cast": {
-      "manaCost": 15,
+      "manaCost": 10,
       "effects": [
         {
           "type": "multiTrigger",
-          "amount": 100,
+          "amount": 11,
           "effects": [
             {
               "type": "summon",
               "minionId": "dog"
             }
           ]
-        },
-        {
-          "type": "selfDiscard"
         }
       ]
     }
