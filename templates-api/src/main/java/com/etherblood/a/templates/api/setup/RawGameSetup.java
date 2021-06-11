@@ -13,8 +13,8 @@ public class RawGameSetup {
     public int teamCount = 2;
     public RawPlayerSetup[] players;
     public String theCoinAlias;
-    public int startingPlayersHandCardCount = 3;
-    public int otherPlayersHandCardCount = 4;
+    public int startingPlayersHandCardCount = 4;
+    public int otherPlayersHandCardCount = 5;
 
     public RawGameSetup(RawGameSetup other) {
         this.teamCount = other.teamCount;
