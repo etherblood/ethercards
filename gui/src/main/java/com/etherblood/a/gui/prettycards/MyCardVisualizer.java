@@ -137,7 +137,6 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
     }
 
     private Texture2D createMulliganTexture() {
-        System.out.println("otto");
         BufferedImage bufferedImage = cardImages.readImage("images/mulligan.png");
         return SimpleModelledCard.flipAndCreateTexture(new PaintableImage(bufferedImage));
     }
