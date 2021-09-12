@@ -1,9 +1,10 @@
 package com.etherblood.a.templates.implementation;
 
-import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.DeclareAttack;
+import com.etherblood.a.rules.moves.DeclareBlock;
 import com.etherblood.a.rules.moves.EndAttackPhase;
 import com.etherblood.a.rules.moves.EndBlockPhase;
+import com.etherblood.a.rules.moves.Update;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,5 +27,19 @@ public class GameMechanicsTest extends AbstractGameTest {
 
         int actualHealth = data.get(hero(1), core.HEALTH);
         Assertions.assertEquals(previousHealth, actualHealth);
+    }
+
+    @Test
+    public void tapping_declared_attacker_cancels_attack() {
+        int attacker = createMinion(player(0), "ornithopter");
+
+        game.getMoves().apply(new DeclareAttack(player(0), attacker, hero(1)));
+
+        Assertions.assertTrue(data.has(attacker, core.ATTACK_TARGET), "attacker must be attacking");
+
+        data.set(attacker, core.TIRED, 1);
+        game.getMoves().apply(new Update());
+
+        Assertions.assertFalse(data.has(attacker, core.ATTACK_TARGET), "attack must be cancelled");
     }
 }

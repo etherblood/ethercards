@@ -120,12 +120,6 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(attacker, core.TIRED)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is tired.");
-            }
-            return false;
-        }
         if (!data.hasValue(attacker, core.OWNER, player)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, player #" + player + " does not own attacker #" + attacker + ".");
@@ -151,6 +145,12 @@ public class MoveAvailabilityService {
         if (data.has(attacker, core.SUMMONING_SICKNESS) && !effectiveStats.isFastToAttack(attacker)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " has summoning sickness.");
+            }
+            return false;
+        }
+        if (data.has(attacker, core.TIRED) && data.hasValue(data.get(attacker, core.OWNER), core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK)) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack, attacker #" + attacker + " is tired.");
             }
             return false;
         }

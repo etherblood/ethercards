@@ -128,14 +128,10 @@ public class GameApplication extends SimpleApplication {
         inputManager.addMapping("right", new KeyTrigger(KeyInput.KEY_RIGHT));
         inputManager.addMapping("left", new KeyTrigger(KeyInput.KEY_LEFT));
 
-        inputManager.addListener(new ActionListener() {
-            @Override
-            public void onAction(String name, boolean isPressed, float tpf) {
-                if (isPressed) {
-                    toggleMenu();
-                }
+        inputManager.addListener((ActionListener) (name, isPressed, tpf) -> {
+            if (isPressed) {
+                toggleMenu();
             }
-
         }, "toggleMenu");
         startDeckbuilder();
 
