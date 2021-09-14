@@ -30,7 +30,7 @@ public class GameMechanicsTest extends AbstractGameTest {
     }
 
     @Test
-    public void tapping_declared_attacker_cancels_attack() {
+    public void tapping_cancels_attack() {
         int attacker = createMinion(player(0), "ornithopter");
 
         game.getMoves().apply(new DeclareAttack(player(0), attacker, hero(1)));
