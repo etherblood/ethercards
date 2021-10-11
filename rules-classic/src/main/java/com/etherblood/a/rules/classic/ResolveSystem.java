@@ -105,15 +105,11 @@ public class ResolveSystem implements Runnable {
         data.set(entity, core.TIRED, 1);
         data.remove(entity, core.ATTACK_TARGET);
         data.remove(entity, core.BLOCK_TARGET);
-        for (int other : data.list(core.ATTACK_TARGET)) {
-            if (data.hasValue(other, core.ATTACK_TARGET, entity)) {
-                data.remove(other, core.ATTACK_TARGET);
-            }
+        for (int other : data.findByValue(core.ATTACK_TARGET, entity)) {
+            data.remove(other, core.ATTACK_TARGET);
         }
-        for (int other : data.list(core.BLOCK_TARGET)) {
-            if (data.hasValue(other, core.BLOCK_TARGET, entity)) {
-                data.remove(other, core.BLOCK_TARGET);
-            }
+        for (int other : data.findByValue(core.BLOCK_TARGET, entity)) {
+            data.remove(other, core.BLOCK_TARGET);
         }
     }
 }

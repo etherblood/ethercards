@@ -32,4 +32,14 @@ public interface EntityData {
     Components getComponents();
 
     void clear(int component);
+
+    default IntList findByValue(int component, int value) {
+        IntList result = new IntList();
+        for (int entity : list(component)) {
+            if (hasValue(entity, component, value)) {
+                result.add(entity);
+            }
+        }
+        return result;
+    }
 }

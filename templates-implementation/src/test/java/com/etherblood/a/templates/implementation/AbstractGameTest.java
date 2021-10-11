@@ -138,7 +138,7 @@ public abstract class AbstractGameTest {
     }
 
     public int team(int index) {
-        return data.list(core.TEAM_INDEX).stream().filter(x -> data.hasValue(x, core.TEAM_INDEX, index)).findAny().getAsInt();
+        return data.findByValue(core.TEAM_INDEX, index).get(0);
     }
 
     public int player(int index) {
