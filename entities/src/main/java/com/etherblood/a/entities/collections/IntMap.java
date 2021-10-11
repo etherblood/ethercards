@@ -34,17 +34,6 @@ public class IntMap implements Iterable<Integer> {
         updateFillLimit(capacity);
     }
 
-    void foreach(IntIntConsumer consumer) {
-        if (hasFreeKey) {
-            consumer.accept(FREE_KEY, freeValue);
-        }
-        for (long keyValue : data) {
-            if (keyValue != FREE_KEYVALUE) {
-                consumer.accept(key(keyValue), value(keyValue));
-            }
-        }
-    }
-
     public void foreachKey(IntConsumer consumer) {
         if (hasFreeKey) {
             consumer.accept(FREE_KEY);
