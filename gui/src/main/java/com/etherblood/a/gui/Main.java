@@ -38,9 +38,13 @@ public class Main {
         }
         String version;
         try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("git.properties")) {
-            Properties gitProperties = new Properties();
-            gitProperties.load(inputStream);
-            version = gitProperties.getProperty("git.commit.id.full");
+            if (inputStream != null) {
+                Properties gitProperties = new Properties();
+                gitProperties.load(inputStream);
+                version = gitProperties.getProperty("git.commit.id.full");
+            } else {
+                version = "developer";
+            }
         }
 
         String jwt = args[0];

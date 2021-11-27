@@ -15,4 +15,24 @@ public class RawLibraryTemplate {
 
     public RawLibraryTemplate() {
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof RawLibraryTemplate)) {
+            return false;
+        }
+
+        RawLibraryTemplate that = (RawLibraryTemplate) o;
+        return hero.equals(that.hero) && cards.equals(that.cards);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hero.hashCode();
+        result = 31 * result + cards.hashCode();
+        return result;
+    }
 }

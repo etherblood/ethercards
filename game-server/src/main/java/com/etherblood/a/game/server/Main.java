@@ -25,9 +25,13 @@ public class Main {
         String assetsPath = props.getProperty("assets");
         String version;
         try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("git.properties")) {
-            Properties gitProperties = new Properties();
-            gitProperties.load(inputStream);
-            version = gitProperties.getProperty("git.commit.id.full");
+            if (inputStream != null) {
+                Properties gitProperties = new Properties();
+                gitProperties.load(inputStream);
+                version = gitProperties.getProperty("git.commit.id.full");
+            } else {
+                version = "developer";
+            }
         }
 
         RawLibraryTemplate botLibrary = new RawLibraryTemplate();

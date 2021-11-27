@@ -1,0 +1,32 @@
+{
+  "alias": "bad_dog",
+  "display": {
+    "name": "Dog",
+    "imagePath": "dog_token.jpg",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "tribes": [
+    "DOG",
+    "TOKEN"
+  ],
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 1,
+      "HEALTH": 1
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

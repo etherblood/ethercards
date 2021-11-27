@@ -1,0 +1,28 @@
+{
+  "alias": "nerfed_ahri",
+  "display": {
+    "name": "Ahri",
+    "imagePath": "elderwood_ahri.jpg",
+    "colors": [
+      "GREEN"
+    ]
+  },
+  "hand": {
+    "cast": {
+      "effects": [
+        {
+          "type": "selfSummon"
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 0,
+      "HEALTH": 10,
+      "CANNOT_ATTACK": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}
