@@ -1,6 +1,6 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.rules.moves.Move;
+import com.etherblood.ethercards.rules.moves.Move;
 
 public class MoveReplay {
 

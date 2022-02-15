@@ -1,14 +1,14 @@
-package com.etherblood.a.rules.updates;
+package com.etherblood.ethercards.rules.updates;
 
-import com.etherblood.a.entities.ComponentMeta;
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.ZoneState;
+import com.etherblood.ethercards.entities.ComponentMeta;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.game.events.api.GameEventListener;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
+import com.etherblood.ethercards.rules.templates.ZoneState;
 import java.util.function.IntUnaryOperator;
 
 public class ZoneService {

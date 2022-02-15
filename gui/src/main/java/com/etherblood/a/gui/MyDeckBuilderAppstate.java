@@ -1,4 +1,4 @@
-package com.etherblood.a.gui;
+package com.etherblood.ethercards.gui;
 
 import com.destrostudios.cardgui.BoardObjectVisualizer;
 import com.destrostudios.cardgui.BoardSettings;
@@ -9,17 +9,17 @@ import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderDeckCardMo
 import com.destrostudios.cardgui.samples.tools.deckbuilder.DeckBuilderSettings;
 import com.destrostudios.cardgui.samples.visualization.DebugZoneVisualizer;
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
-import com.etherblood.a.entities.Components;
-import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.CardModel;
-import com.etherblood.a.gui.prettycards.CardModelUpdater;
-import com.etherblood.a.gui.prettycards.MyCardVisualizer;
-import com.etherblood.a.gui.soprettyboard.CameraAppState;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.templates.Tribe;
-import com.etherblood.a.templates.api.CardColor;
-import com.etherblood.a.templates.api.DisplayCardTemplate;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.entities.Components;
+import com.etherblood.ethercards.gui.prettycards.CardImages;
+import com.etherblood.ethercards.gui.prettycards.CardModel;
+import com.etherblood.ethercards.gui.prettycards.CardModelUpdater;
+import com.etherblood.ethercards.gui.prettycards.MyCardVisualizer;
+import com.etherblood.ethercards.gui.soprettyboard.CameraAppState;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.templates.Tribe;
+import com.etherblood.ethercards.templates.api.CardColor;
+import com.etherblood.ethercards.templates.api.DisplayCardTemplate;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;

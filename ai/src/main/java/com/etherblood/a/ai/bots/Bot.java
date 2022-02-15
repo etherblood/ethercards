@@ -1,6 +1,6 @@
-package com.etherblood.a.ai.bots;
+package com.etherblood.ethercards.ai.bots;
 
-import com.etherblood.a.rules.moves.Move;
+import com.etherblood.ethercards.rules.moves.Move;
 
 public interface Bot {
 

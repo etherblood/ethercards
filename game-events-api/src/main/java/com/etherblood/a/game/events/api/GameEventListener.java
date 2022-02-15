@@ -1,4 +1,4 @@
-package com.etherblood.a.game.events.api;
+package com.etherblood.ethercards.game.events.api;
 
 public interface GameEventListener {
 

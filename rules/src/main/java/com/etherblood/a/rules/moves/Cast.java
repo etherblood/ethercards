@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.moves;
+package com.etherblood.ethercards.rules.moves;
 
 import java.util.Objects;
 

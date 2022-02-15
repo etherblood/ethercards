@@ -1,9 +1,9 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.ethercards.templates.api;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.TargetSelection;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.TargetSelection;
 
 public class Untargeted implements TargetSelection {
 

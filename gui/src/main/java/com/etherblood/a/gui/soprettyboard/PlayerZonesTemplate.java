@@ -1,7 +1,7 @@
-package com.etherblood.a.gui.soprettyboard;
+package com.etherblood.ethercards.gui.soprettyboard;
 
 import com.destrostudios.cardgui.zones.SimpleIntervalZone;
-import com.etherblood.a.gui.PlayerZones;
+import com.etherblood.ethercards.gui.PlayerZones;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;

@@ -1,10 +1,10 @@
-package com.etherblood.a.templates.implementation.statmodifiers;
+package com.etherblood.ethercards.templates.implementation.statmodifiers;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.StatModifier;
-import com.etherblood.a.templates.api.TargetPredicate;
-import com.etherblood.a.templates.api.deserializers.filedtypes.ComponentId;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.StatModifier;
+import com.etherblood.ethercards.templates.api.TargetPredicate;
+import com.etherblood.ethercards.templates.api.deserializers.filedtypes.ComponentId;
 
 public class AddComponentPredicateCountModifier implements StatModifier {
 

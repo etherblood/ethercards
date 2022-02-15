@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.templates;
+package com.etherblood.ethercards.rules.templates;
 
 public enum Tribe {
     ARCANE,

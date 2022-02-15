@@ -1,8 +1,8 @@
-package com.etherblood.a.ai.bots.mcts;
+package com.etherblood.ethercards.ai.bots.mcts;
 
-import com.etherblood.a.ai.BotGame;
-import com.etherblood.a.ai.bots.evaluation.RolloutToEvaluation;
-import com.etherblood.a.ai.bots.evaluation.SimpleTeamEvaluation;
+import com.etherblood.ethercards.ai.BotGame;
+import com.etherblood.ethercards.ai.bots.evaluation.RolloutToEvaluation;
+import com.etherblood.ethercards.ai.bots.evaluation.SimpleTeamEvaluation;
 import java.util.Random;
 import java.util.function.Function;
 

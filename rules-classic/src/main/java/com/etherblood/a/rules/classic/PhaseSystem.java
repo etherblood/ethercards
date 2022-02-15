@@ -1,16 +1,16 @@
-package com.etherblood.a.rules.classic;
+package com.etherblood.ethercards.rules.classic;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.EffectiveStatsService;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.updates.SystemsUtil;
-import com.etherblood.a.rules.updates.TriggerService;
-import com.etherblood.a.rules.updates.ZoneService;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.game.events.api.GameEventListener;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.EffectiveStatsService;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.PlayerPhase;
+import com.etherblood.ethercards.rules.updates.SystemsUtil;
+import com.etherblood.ethercards.rules.updates.TriggerService;
+import com.etherblood.ethercards.rules.updates.ZoneService;
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 

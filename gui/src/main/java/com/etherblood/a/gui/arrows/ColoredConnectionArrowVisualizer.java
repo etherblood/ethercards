@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.arrows;
+package com.etherblood.ethercards.gui.arrows;
 
 import com.destrostudios.cardgui.JMonkeyUtil;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowMesh;
@@ -12,6 +12,7 @@ import com.jme3.scene.Geometry;
 public class ColoredConnectionArrowVisualizer extends SimpleAttachmentVisualizer<ColoredConnectionArrow, Geometry> {
 
     private final SimpleTargetArrowSettings settings;
+
     public ColoredConnectionArrowVisualizer(SimpleTargetArrowSettings settings) {
         this.settings = settings;
     }

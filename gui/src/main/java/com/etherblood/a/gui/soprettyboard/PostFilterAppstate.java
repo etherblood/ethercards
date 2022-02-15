@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.soprettyboard;
+package com.etherblood.ethercards.gui.soprettyboard;
 
 import java.util.LinkedList;
 import com.jme3.app.Application;

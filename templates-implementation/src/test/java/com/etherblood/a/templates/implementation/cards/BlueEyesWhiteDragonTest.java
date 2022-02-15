@@ -1,8 +1,8 @@
-package com.etherblood.a.templates.implementation.cards;
+package com.etherblood.ethercards.templates.implementation.cards;
 
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.rules.moves.Cast;
-import com.etherblood.a.templates.implementation.AbstractGameTest;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.rules.moves.Cast;
+import com.etherblood.ethercards.templates.implementation.AbstractGameTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +27,6 @@ public class BlueEyesWhiteDragonTest extends AbstractGameTest {
         Assertions.assertEquals(3, minions.size());
         Assertions.assertEquals(getAliasId("blue_eyes_ultimate_dragon"), data.get(ultimateDragon, core.CARD_TEMPLATE));
         Assertions.assertEquals(player(0), data.get(ultimateDragon, core.OWNER));
-        Assertions.assertTrue( data.has(ultimateDragon, core.SUMMONING_SICKNESS));
+        Assertions.assertTrue(data.has(ultimateDragon, core.SUMMONING_SICKNESS));
     }
 }

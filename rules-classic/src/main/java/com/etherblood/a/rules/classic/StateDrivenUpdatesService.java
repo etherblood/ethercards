@@ -1,12 +1,12 @@
-package com.etherblood.a.rules.classic;
+package com.etherblood.ethercards.rules.classic;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.DeathOptions;
-import com.etherblood.a.rules.EffectiveStatsService;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.MoveAvailabilityService;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.DeathOptions;
+import com.etherblood.ethercards.rules.EffectiveStatsService;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.MoveAvailabilityService;
 import java.util.function.IntUnaryOperator;
 
 public class StateDrivenUpdatesService {

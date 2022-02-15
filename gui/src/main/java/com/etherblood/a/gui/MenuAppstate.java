@@ -1,4 +1,4 @@
-package com.etherblood.a.gui;
+package com.etherblood.ethercards.gui;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;

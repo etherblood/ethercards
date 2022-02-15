@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.etherblood.a</groupId>
-        <artifactId>a</artifactId>
+        <groupId>com.etherblood.ethercards</groupId>
+        <artifactId>ethercards</artifactId>
         <version>0.1.0</version>
     </parent>
     <artifactId>templates-implementation</artifactId>
@@ -24,12 +24,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.etherblood.a</groupId>
+            <groupId>com.etherblood.ethercards</groupId>
             <artifactId>rules-classic</artifactId>
             <version>0.1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.etherblood.a</groupId>
+            <groupId>com.etherblood.ethercards</groupId>
             <artifactId>templates-api</artifactId>
             <version>0.1.0</version>
         </dependency>

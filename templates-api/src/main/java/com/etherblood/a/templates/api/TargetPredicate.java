@@ -1,7 +1,7 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.ethercards.templates.api;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.rules.GameTemplates;
 
 public interface TargetPredicate {
 

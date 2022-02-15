@@ -1,17 +1,17 @@
-package com.etherblood.a.client;
+package com.etherblood.ethercards.client;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.etherblood.a.network.api.GameReplayService;
-import com.etherblood.a.network.api.NetworkUtil;
-import com.etherblood.a.network.api.messages.IdentifyRequest;
-import com.etherblood.a.network.api.messages.match.MatchRequest;
-import com.etherblood.a.network.api.messages.match.ConnectedToMatchUpdate;
-import com.etherblood.a.network.api.messages.match.MoveRequest;
-import com.etherblood.a.network.api.messages.match.MoveUpdate;
-import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.network.api.GameReplayService;
+import com.etherblood.ethercards.network.api.NetworkUtil;
+import com.etherblood.ethercards.network.api.messages.IdentifyRequest;
+import com.etherblood.ethercards.network.api.messages.match.ConnectedToMatchUpdate;
+import com.etherblood.ethercards.network.api.messages.match.MatchRequest;
+import com.etherblood.ethercards.network.api.messages.match.MoveRequest;
+import com.etherblood.ethercards.network.api.messages.match.MoveUpdate;
+import com.etherblood.ethercards.rules.moves.Move;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.JsonElement;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;

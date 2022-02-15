@@ -1,7 +1,7 @@
-package com.etherblood.a.rules.templates;
+package com.etherblood.ethercards.rules.templates;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.CoreComponents;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.rules.CoreComponents;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;

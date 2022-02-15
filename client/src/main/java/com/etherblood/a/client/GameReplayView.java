@@ -1,6 +1,6 @@
-package com.etherblood.a.client;
+package com.etherblood.ethercards.client;
 
-import com.etherblood.a.network.api.GameReplayService;
+import com.etherblood.ethercards.network.api.GameReplayService;
 
 public class GameReplayView {
 

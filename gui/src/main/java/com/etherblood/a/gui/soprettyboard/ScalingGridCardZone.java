@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.soprettyboard;
+package com.etherblood.ethercards.gui.soprettyboard;
 
 import com.destrostudios.cardgui.CardZone;
 import com.jme3.math.Quaternion;

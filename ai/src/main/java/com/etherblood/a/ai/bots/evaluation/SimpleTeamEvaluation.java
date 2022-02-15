@@ -1,10 +1,10 @@
-package com.etherblood.a.ai.bots.evaluation;
+package com.etherblood.ethercards.ai.bots.evaluation;
 
-import com.etherblood.a.ai.BotGame;
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.PlayerResult;
+import com.etherblood.ethercards.ai.BotGame;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.PlayerResult;
 
 public class SimpleTeamEvaluation<Move, Game extends BotGame<Move, Game>> {
 

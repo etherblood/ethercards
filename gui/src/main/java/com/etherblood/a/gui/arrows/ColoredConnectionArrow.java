@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.arrows;
+package com.etherblood.ethercards.gui.arrows;
 
 import com.destrostudios.cardgui.BoardObject;
 import com.destrostudios.cardgui.TransformedBoardObject;

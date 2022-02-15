@@ -1,10 +1,10 @@
-package com.etherblood.a.game.server;
+package com.etherblood.ethercards.game.server;
 
 import com.destrostudios.authtoken.JwtAuthentication;
 import com.destrostudios.authtoken.JwtAuthenticationUser;
 import com.destrostudios.authtoken.JwtService;
 import com.esotericsoftware.kryonet.Connection;
-import com.etherblood.a.network.api.messages.IdentifyRequest;
+import com.etherblood.ethercards.network.api.messages.IdentifyRequest;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;

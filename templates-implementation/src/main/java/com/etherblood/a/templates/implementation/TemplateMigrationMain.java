@@ -1,4 +1,4 @@
-package com.etherblood.a.templates.implementation;
+package com.etherblood.ethercards.templates.implementation;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

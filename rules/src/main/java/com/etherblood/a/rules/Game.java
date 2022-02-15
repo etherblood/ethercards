@@ -1,9 +1,9 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.entities.Components;
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.game.events.api.GameEventListener;
+import com.etherblood.ethercards.entities.Components;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.game.events.api.GameEventListener;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

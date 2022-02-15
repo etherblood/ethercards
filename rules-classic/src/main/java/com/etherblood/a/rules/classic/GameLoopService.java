@@ -1,11 +1,11 @@
-package com.etherblood.a.rules.classic;
+package com.etherblood.ethercards.rules.classic;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.updates.systems.CastSystem;
-import com.etherblood.a.rules.updates.systems.UseAbilitySystem;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.game.events.api.GameEventListener;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.updates.systems.CastSystem;
+import com.etherblood.ethercards.rules.updates.systems.UseAbilitySystem;
 import java.util.function.IntUnaryOperator;
 
 public class GameLoopService implements Runnable {

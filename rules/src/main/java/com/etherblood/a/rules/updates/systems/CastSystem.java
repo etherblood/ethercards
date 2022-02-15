@@ -1,14 +1,14 @@
-package com.etherblood.a.rules.updates.systems;
+package com.etherblood.ethercards.rules.updates.systems;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.updates.TriggerService;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.game.events.api.GameEventListener;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
+import com.etherblood.ethercards.rules.templates.Effect;
+import com.etherblood.ethercards.rules.updates.TriggerService;
 import java.util.function.IntUnaryOperator;
 
 public class CastSystem {

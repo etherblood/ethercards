@@ -1,6 +1,6 @@
-package com.etherblood.a.gui;
+package com.etherblood.ethercards.gui;
 
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;

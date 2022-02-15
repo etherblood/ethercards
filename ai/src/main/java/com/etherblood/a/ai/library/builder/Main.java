@@ -1,12 +1,12 @@
-package com.etherblood.a.ai.library.builder;
+package com.etherblood.ethercards.ai.library.builder;
 
-import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.bots.Bot;
-import com.etherblood.a.ai.bots.mcts.MctsBot;
-import com.etherblood.a.ai.bots.mcts.MctsBotSettings;
-import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.ai.MoveBotGame;
+import com.etherblood.ethercards.ai.bots.Bot;
+import com.etherblood.ethercards.ai.bots.mcts.MctsBot;
+import com.etherblood.ethercards.ai.bots.mcts.MctsBotSettings;
+import com.etherblood.ethercards.rules.Game;
+import com.etherblood.ethercards.rules.moves.Move;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.GsonBuilder;
 import java.security.SecureRandom;
 import java.util.ArrayList;

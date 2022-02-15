@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.prettycards;
+package com.etherblood.ethercards.gui.prettycards;
 
 import com.destrostudios.cardgui.samples.visualization.CustomAttachmentVisualization;
 import com.destrostudios.cardgui.samples.visualization.GlowBox;

@@ -1,4 +1,4 @@
-package com.etherblood.a.gui;
+package com.etherblood.ethercards.gui;
 
 import com.destrostudios.cardgui.CardZone;
 

@@ -1,10 +1,10 @@
-package com.etherblood.a.templates.implementation.cards;
+package com.etherblood.ethercards.templates.implementation.cards;
 
-import com.etherblood.a.rules.moves.DeclareAttack;
-import com.etherblood.a.rules.moves.DeclareBlock;
-import com.etherblood.a.rules.moves.EndAttackPhase;
-import com.etherblood.a.rules.moves.EndBlockPhase;
-import com.etherblood.a.templates.implementation.AbstractGameTest;
+import com.etherblood.ethercards.rules.moves.DeclareAttack;
+import com.etherblood.ethercards.rules.moves.DeclareBlock;
+import com.etherblood.ethercards.rules.moves.EndAttackPhase;
+import com.etherblood.ethercards.rules.moves.EndBlockPhase;
+import com.etherblood.ethercards.templates.implementation.AbstractGameTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

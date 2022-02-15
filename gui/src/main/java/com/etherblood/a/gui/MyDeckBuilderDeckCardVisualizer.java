@@ -1,9 +1,9 @@
-package com.etherblood.a.gui;
+package com.etherblood.ethercards.gui;
 
 import com.destrostudios.cardgui.samples.tools.deckbuilder.SimpleDeckBuilderDeckCardVisualizer;
 import com.destrostudios.cardgui.samples.visualization.PaintableImage;
-import com.etherblood.a.gui.prettycards.CardImages;
-import com.etherblood.a.gui.prettycards.CardModel;
+import com.etherblood.ethercards.gui.prettycards.CardImages;
+import com.etherblood.ethercards.gui.prettycards.CardModel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

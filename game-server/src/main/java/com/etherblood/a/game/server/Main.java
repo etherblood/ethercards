@@ -1,9 +1,9 @@
-package com.etherblood.a.game.server;
+package com.etherblood.ethercards.game.server;
 
 import com.destrostudios.authtoken.KeyJwtService;
 import com.esotericsoftware.minlog.Log;
-import com.etherblood.a.templates.api.TemplatesLoader;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.templates.api.TemplatesLoader;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;

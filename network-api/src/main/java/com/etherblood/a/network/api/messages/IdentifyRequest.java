@@ -1,4 +1,4 @@
-package com.etherblood.a.network.api.messages;
+package com.etherblood.ethercards.network.api.messages;
 
 public class IdentifyRequest {
 

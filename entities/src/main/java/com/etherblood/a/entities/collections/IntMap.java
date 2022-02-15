@@ -1,4 +1,4 @@
-package com.etherblood.a.entities.collections;
+package com.etherblood.ethercards.entities.collections;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

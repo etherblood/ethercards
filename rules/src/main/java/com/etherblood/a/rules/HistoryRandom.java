@@ -1,6 +1,6 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.ethercards.entities.collections.IntList;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.function.IntUnaryOperator;

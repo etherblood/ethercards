@@ -1,6 +1,6 @@
-package com.etherblood.a.gui;
+package com.etherblood.ethercards.gui;
 
-import com.etherblood.a.game.events.api.GameEventListener;
+import com.etherblood.ethercards.game.events.api.GameEventListener;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Queue;

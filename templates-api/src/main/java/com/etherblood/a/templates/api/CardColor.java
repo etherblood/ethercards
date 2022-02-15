@@ -1,4 +1,4 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.ethercards.templates.api;
 
 public enum CardColor {
     NEUTRAL,

@@ -1,16 +1,16 @@
-package com.etherblood.a.templates.implementation.effects;
+package com.etherblood.ethercards.templates.implementation.effects;
 
-import com.etherblood.a.entities.ComponentMeta;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.game.events.api.GameEventListener;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.ZoneState;
-import com.etherblood.a.rules.updates.TriggerService;
-import com.etherblood.a.templates.api.deserializers.filedtypes.CardId;
+import com.etherblood.ethercards.entities.ComponentMeta;
+import com.etherblood.ethercards.rules.templates.Effect;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.game.events.api.GameEventListener;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
+import com.etherblood.ethercards.rules.templates.ZoneState;
+import com.etherblood.ethercards.rules.updates.TriggerService;
+import com.etherblood.ethercards.templates.api.deserializers.filedtypes.CardId;
 import java.util.function.IntUnaryOperator;
 
 public class TransformTemplateEffect implements Effect {

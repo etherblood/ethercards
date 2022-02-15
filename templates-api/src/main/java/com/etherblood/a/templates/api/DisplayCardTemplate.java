@@ -1,8 +1,8 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.ethercards.templates.api;
 
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.rules.templates.Tribe;
-import com.etherblood.a.rules.templates.ZoneState;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
+import com.etherblood.ethercards.rules.templates.Tribe;
+import com.etherblood.ethercards.rules.templates.ZoneState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

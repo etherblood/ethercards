@@ -1,7 +1,7 @@
-package com.etherblood.a.game.server;
+package com.etherblood.ethercards.game.server;
 
-import com.etherblood.a.ai.MoveBotGame;
-import com.etherblood.a.ai.bots.Bot;
+import com.etherblood.ethercards.ai.MoveBotGame;
+import com.etherblood.ethercards.ai.bots.Bot;
 import java.util.UUID;
 
 public class GameBotMapping {

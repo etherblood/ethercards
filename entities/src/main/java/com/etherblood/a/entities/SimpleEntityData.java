@@ -1,7 +1,7 @@
-package com.etherblood.a.entities;
+package com.etherblood.ethercards.entities;
 
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.entities.collections.IntMap;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.collections.IntMap;
 import java.util.Arrays;
 import java.util.OptionalInt;
 import java.util.PrimitiveIterator;

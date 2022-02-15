@@ -1,12 +1,12 @@
-package com.etherblood.a.rules.templates;
+package com.etherblood.ethercards.rules.templates;
 
-import com.etherblood.a.entities.collections.IntMap;
+import com.etherblood.ethercards.entities.collections.IntMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class ZoneState {
-    
+
     private final IntMap components;
     private final Map<Integer, StatModifier> statModifiers;
     private final ActivatedAbility cast;

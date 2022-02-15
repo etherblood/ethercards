@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.prettycards;
+package com.etherblood.ethercards.gui.prettycards;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;

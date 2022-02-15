@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.soprettyboard;
+package com.etherblood.ethercards.gui.soprettyboard;
 
 import com.destrostudios.cardgui.transformations.ConstantButTargetedTransformation;
 import com.destrostudios.cardgui.transformations.DynamicTransformation;
@@ -6,7 +6,7 @@ import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformat
 import com.destrostudios.cardgui.transformations.LinearTargetVectorTransformation3F;
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedRotationTransformationSpeed;
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedVectorTransformationSpeed3f;
-import com.etherblood.a.gui.GameApplication;
+import com.etherblood.ethercards.gui.GameApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.FlyByCamera;
 import com.jme3.math.Quaternion;

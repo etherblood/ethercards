@@ -1,8 +1,7 @@
-package com.etherblood.a.templates.api.setup;
+package com.etherblood.ethercards.templates.api.setup;
 
-import com.etherblood.a.rules.setup.GameSetup;
-import com.etherblood.a.rules.setup.PlayerSetup;
-
+import com.etherblood.ethercards.rules.setup.GameSetup;
+import com.etherblood.ethercards.rules.setup.PlayerSetup;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;

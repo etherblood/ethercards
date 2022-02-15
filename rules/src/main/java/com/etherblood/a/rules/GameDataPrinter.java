@@ -1,19 +1,19 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.moves.Cast;
-import com.etherblood.a.rules.moves.DeclareAttack;
-import com.etherblood.a.rules.moves.DeclareBlock;
-import com.etherblood.a.rules.moves.DeclareMulligan;
-import com.etherblood.a.rules.moves.EndAttackPhase;
-import com.etherblood.a.rules.moves.EndBlockPhase;
-import com.etherblood.a.rules.moves.EndMulliganPhase;
-import com.etherblood.a.rules.moves.Move;
-import com.etherblood.a.rules.moves.Start;
-import com.etherblood.a.rules.moves.Surrender;
-import com.etherblood.a.rules.moves.Update;
-import com.etherblood.a.rules.moves.UseAbility;
-import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.rules.moves.Cast;
+import com.etherblood.ethercards.rules.moves.DeclareAttack;
+import com.etherblood.ethercards.rules.moves.DeclareBlock;
+import com.etherblood.ethercards.rules.moves.DeclareMulligan;
+import com.etherblood.ethercards.rules.moves.EndAttackPhase;
+import com.etherblood.ethercards.rules.moves.EndBlockPhase;
+import com.etherblood.ethercards.rules.moves.EndMulliganPhase;
+import com.etherblood.ethercards.rules.moves.Move;
+import com.etherblood.ethercards.rules.moves.Start;
+import com.etherblood.ethercards.rules.moves.Surrender;
+import com.etherblood.ethercards.rules.moves.Update;
+import com.etherblood.ethercards.rules.moves.UseAbility;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
 
 public class GameDataPrinter {
 

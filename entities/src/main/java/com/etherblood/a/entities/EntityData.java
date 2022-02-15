@@ -1,6 +1,6 @@
-package com.etherblood.a.entities;
+package com.etherblood.ethercards.entities;
 
-import com.etherblood.a.entities.collections.IntList;
+import com.etherblood.ethercards.entities.collections.IntList;
 import java.util.OptionalInt;
 
 public interface EntityData {

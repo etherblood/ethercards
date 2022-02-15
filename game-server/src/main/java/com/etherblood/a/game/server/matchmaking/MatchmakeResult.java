@@ -1,7 +1,7 @@
-package com.etherblood.a.game.server.matchmaking;
+package com.etherblood.ethercards.game.server.matchmaking;
 
-import com.etherblood.a.game.server.GamePlayerMapping;
-import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.ethercards.game.server.GamePlayerMapping;
+import com.etherblood.ethercards.templates.api.setup.RawGameSetup;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;

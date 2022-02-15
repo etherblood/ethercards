@@ -1,6 +1,6 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.entities.ComponentsModule;
+import com.etherblood.ethercards.entities.ComponentsModule;
 import java.util.function.ToIntFunction;
 
 public class CoreComponents implements ComponentsModule {

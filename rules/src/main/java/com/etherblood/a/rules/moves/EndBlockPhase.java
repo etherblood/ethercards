@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.moves;
+package com.etherblood.ethercards.rules.moves;
 
 public class EndBlockPhase implements Move {
 

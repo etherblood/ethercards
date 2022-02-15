@@ -1,6 +1,6 @@
-package com.etherblood.a.ai;
+package com.etherblood.ethercards.ai;
 
-import com.etherblood.a.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityData;
 import java.util.List;
 import java.util.Random;
 

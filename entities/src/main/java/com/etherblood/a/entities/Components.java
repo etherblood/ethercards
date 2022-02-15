@@ -1,4 +1,4 @@
-package com.etherblood.a.entities;
+package com.etherblood.ethercards.entities;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
 public class DeathOptions {
 

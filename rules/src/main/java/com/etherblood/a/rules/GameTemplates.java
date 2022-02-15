@@ -1,6 +1,6 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
 import java.util.Map;
 
 public class GameTemplates {

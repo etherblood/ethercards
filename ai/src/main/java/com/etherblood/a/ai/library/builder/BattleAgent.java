@@ -1,6 +1,6 @@
-package com.etherblood.a.ai.library.builder;
+package com.etherblood.ethercards.ai.library.builder;
 
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 
 public class BattleAgent {
     public final RawLibraryTemplate library;

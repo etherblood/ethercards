@@ -1,9 +1,9 @@
-package com.etherblood.a.templates.implementation.predicates;
+package com.etherblood.ethercards.templates.implementation.predicates;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.GameTemplates;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.rules.GameTemplates;
 import java.util.stream.Stream;
-import com.etherblood.a.templates.api.TargetPredicate;
+import com.etherblood.ethercards.templates.api.TargetPredicate;
 
 public class AnyOfPredicate implements TargetPredicate {
 

@@ -1,9 +1,9 @@
-package com.etherblood.a.templates.api.model;
+package com.etherblood.ethercards.templates.api.model;
 
-import com.etherblood.a.rules.templates.ActivatedAbility;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.templates.TargetSelection;
-import com.etherblood.a.templates.api.Untargeted;
+import com.etherblood.ethercards.rules.templates.ActivatedAbility;
+import com.etherblood.ethercards.rules.templates.Effect;
+import com.etherblood.ethercards.rules.templates.TargetSelection;
+import com.etherblood.ethercards.templates.api.Untargeted;
 import java.util.List;
 
 public class RawActivatedAbility {

@@ -1,6 +1,6 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.entities.Components;
+import com.etherblood.ethercards.entities.Components;
 
 public class GameSettingsBuilder {
 

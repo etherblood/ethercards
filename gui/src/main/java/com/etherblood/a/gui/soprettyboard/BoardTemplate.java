@@ -1,7 +1,7 @@
-package com.etherblood.a.gui.soprettyboard;
+package com.etherblood.ethercards.gui.soprettyboard;
 
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.gui.PlayerZones;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.gui.PlayerZones;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -20,7 +20,7 @@ public class BoardTemplate {
             throw new IllegalArgumentException();
         }
         int team = teamOf(teamToPlayer, self);
-        
+
         Quaternion rotation = new Quaternion();
 
         IntList teamPlayers = teamToPlayer.get(team);
@@ -39,13 +39,13 @@ public class BoardTemplate {
         Vector2f playerZoneSize = new Vector2f(teamZoneSize.x / teamPlayers.size(), teamZoneSize.y);
         PlayerZonesTemplate playerZonesTemplate = new PlayerZonesTemplate(new Vector4f(0, 0, playerZoneSize.x, playerZoneSize.y), cardSize);
         Vector3f position = new Vector3f(-teamPlayers.size() * playerZoneSize.x / 2, 0, 0);
-        if(self != null) {
+        if (self != null) {
             PlayerZones playerZone = playerZonesTemplate.create(rotation.mult(position), rotation);
             playerZones.put(self, playerZone);
             position.addLocal(playerZoneSize.x, 0, 0);
         }
         for (int player : teamPlayers) {
-            if(Objects.equals(self, player)) {
+            if (Objects.equals(self, player)) {
                 continue;
             }
             PlayerZones playerZone = playerZonesTemplate.create(rotation.mult(position), rotation);

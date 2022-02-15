@@ -1,14 +1,14 @@
-package com.etherblood.a.templates.implementation.targets;
+package com.etherblood.ethercards.templates.implementation.targets;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.targeting.TargetingType;
-import com.etherblood.a.rules.templates.TargetSelection;
-import com.etherblood.a.templates.api.deserializers.filedtypes.ComponentId;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.targeting.TargetingType;
+import com.etherblood.ethercards.rules.templates.TargetSelection;
+import com.etherblood.ethercards.templates.api.TargetPredicate;
+import com.etherblood.ethercards.templates.api.deserializers.filedtypes.ComponentId;
 import java.util.PrimitiveIterator;
 import java.util.function.IntUnaryOperator;
-import com.etherblood.a.templates.api.TargetPredicate;
 
 public class ComponentTarget implements TargetSelection {
 

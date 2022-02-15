@@ -1,8 +1,8 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.entities.ComponentMeta;
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.SimpleEntityData;
+import com.etherblood.ethercards.entities.ComponentMeta;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.SimpleEntityData;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;

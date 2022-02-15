@@ -1,8 +1,8 @@
-package com.etherblood.a.game.server.matchmaking;
+package com.etherblood.ethercards.game.server.matchmaking;
 
 import com.destrostudios.authtoken.JwtAuthenticationUser;
-import com.etherblood.a.network.api.messages.match.MatchRequest;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.network.api.messages.match.MatchRequest;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import java.util.stream.IntStream;
 import org.bouncycastle.util.Arrays;
 

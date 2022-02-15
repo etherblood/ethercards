@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.matchmaking;
+package com.etherblood.ethercards.gui.matchmaking;
 
 public class MatchOpponents {
 

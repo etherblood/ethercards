@@ -1,10 +1,10 @@
-package com.etherblood.a.rules.setup;
+package com.etherblood.ethercards.rules.setup;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.updates.SystemsUtil;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.updates.SystemsUtil;
 
 public class GameSetup {
 

@@ -1,6 +1,6 @@
-package com.etherblood.a.network.api.messages.match;
+package com.etherblood.ethercards.network.api.messages.match;
 
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 
 public class MatchRequest {
 

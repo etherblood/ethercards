@@ -1,4 +1,4 @@
-package com.etherblood.a.ai.bots.mcts;
+package com.etherblood.ethercards.ai.bots.mcts;
 
 class MctsRaveScore {
 

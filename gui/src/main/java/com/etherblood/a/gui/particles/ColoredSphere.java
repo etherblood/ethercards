@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.particles;
+package com.etherblood.ethercards.gui.particles;
 
 import com.destrostudios.cardgui.TransformedBoardObject;
 

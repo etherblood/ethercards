@@ -1,7 +1,7 @@
-package com.etherblood.a.ai.bots;
+package com.etherblood.ethercards.ai.bots;
 
-import com.etherblood.a.ai.BotGame;
-import com.etherblood.a.rules.moves.Move;
+import com.etherblood.ethercards.ai.BotGame;
+import com.etherblood.ethercards.rules.moves.Move;
 import java.util.List;
 import java.util.Random;
 

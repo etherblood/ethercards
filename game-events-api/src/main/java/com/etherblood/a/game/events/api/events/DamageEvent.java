@@ -1,4 +1,4 @@
-package com.etherblood.a.game.events.api.events;
+package com.etherblood.ethercards.game.events.api.events;
 
 public class DamageEvent {
 

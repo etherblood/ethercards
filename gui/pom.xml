@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.etherblood.a</groupId>
-        <artifactId>a</artifactId>
+        <groupId>com.etherblood.ethercards</groupId>
+        <artifactId>ethercards</artifactId>
         <version>0.1.0</version>
     </parent>
     <artifactId>gui</artifactId>
@@ -50,7 +50,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.etherblood.a.gui.Main</mainClass>
+                            <mainClass>com.etherblood.ethercards.gui.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -108,7 +108,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.etherblood.a</groupId>
+            <groupId>com.etherblood.ethercards</groupId>
             <artifactId>client</artifactId>
             <version>0.1.0</version>
         </dependency>

@@ -1,9 +1,9 @@
-package com.etherblood.a.ai;
+package com.etherblood.ethercards.ai;
 
-import com.etherblood.a.rules.EntityUtil;
-import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.GameDataPrinter;
-import com.etherblood.a.rules.moves.Move;
+import com.etherblood.ethercards.rules.EntityUtil;
+import com.etherblood.ethercards.rules.Game;
+import com.etherblood.ethercards.rules.GameDataPrinter;
+import com.etherblood.ethercards.rules.moves.Move;
 import java.util.List;
 import java.util.stream.Collectors;
 

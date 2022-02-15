@@ -1,4 +1,4 @@
-package com.etherblood.a.game.server;
+package com.etherblood.ethercards.game.server;
 
 import com.destrostudios.authtoken.JwtAuthenticationUser;
 import java.util.UUID;

@@ -1,10 +1,10 @@
-package com.etherblood.a.game.server.matchmaking;
+package com.etherblood.ethercards.game.server.matchmaking;
 
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.game.server.GamePlayerMapping;
-import com.etherblood.a.templates.api.setup.RawGameSetup;
-import com.etherblood.a.templates.api.setup.RawLibraryTemplate;
-import com.etherblood.a.templates.api.setup.RawPlayerSetup;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.game.server.GamePlayerMapping;
+import com.etherblood.ethercards.templates.api.setup.RawGameSetup;
+import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
+import com.etherblood.ethercards.templates.api.setup.RawPlayerSetup;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;

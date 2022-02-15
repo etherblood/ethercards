@@ -1,10 +1,10 @@
-package com.etherblood.a.ai.bots;
+package com.etherblood.ethercards.ai.bots;
 
-import com.etherblood.a.ai.BotGame;
-import com.etherblood.a.rules.moves.EndAttackPhase;
-import com.etherblood.a.rules.moves.EndBlockPhase;
-import com.etherblood.a.rules.moves.EndMulliganPhase;
-import com.etherblood.a.rules.moves.Move;
+import com.etherblood.ethercards.ai.BotGame;
+import com.etherblood.ethercards.rules.moves.EndAttackPhase;
+import com.etherblood.ethercards.rules.moves.EndBlockPhase;
+import com.etherblood.ethercards.rules.moves.EndMulliganPhase;
+import com.etherblood.ethercards.rules.moves.Move;
 import java.util.List;
 
 public class SkipBot<Game extends BotGame<Move, Game>> implements Bot {

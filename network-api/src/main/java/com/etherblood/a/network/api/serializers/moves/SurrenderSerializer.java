@@ -1,10 +1,10 @@
-package com.etherblood.a.network.api.serializers.moves;
+package com.etherblood.ethercards.network.api.serializers.moves;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.etherblood.a.rules.moves.Surrender;
+import com.etherblood.ethercards.rules.moves.Surrender;
 
 public class SurrenderSerializer extends Serializer<Surrender> {
 

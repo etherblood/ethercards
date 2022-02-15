@@ -1,4 +1,4 @@
-package com.etherblood.a.rules.templates;
+package com.etherblood.ethercards.rules.templates;
 
 import java.util.ArrayList;
 import java.util.Collections;

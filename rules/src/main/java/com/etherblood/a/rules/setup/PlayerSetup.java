@@ -1,6 +1,6 @@
-package com.etherblood.a.rules.setup;
+package com.etherblood.ethercards.rules.setup;
 
-import com.etherblood.a.entities.collections.IntMap;
+import com.etherblood.ethercards.entities.collections.IntMap;
 
 public class PlayerSetup {
 

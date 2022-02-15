@@ -1,8 +1,8 @@
-package com.etherblood.a.templates.implementation.cards;
+package com.etherblood.ethercards.templates.implementation.cards;
 
-import com.etherblood.a.rules.moves.Cast;
-import com.etherblood.a.rules.templates.CardTemplate;
-import com.etherblood.a.templates.implementation.AbstractGameTest;
+import com.etherblood.ethercards.rules.moves.Cast;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
+import com.etherblood.ethercards.templates.implementation.AbstractGameTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

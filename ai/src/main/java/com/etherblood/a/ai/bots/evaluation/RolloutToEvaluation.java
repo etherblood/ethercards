@@ -1,6 +1,6 @@
-package com.etherblood.a.ai.bots.evaluation;
+package com.etherblood.ethercards.ai.bots.evaluation;
 
-import com.etherblood.a.ai.BotGame;
+import com.etherblood.ethercards.ai.BotGame;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;

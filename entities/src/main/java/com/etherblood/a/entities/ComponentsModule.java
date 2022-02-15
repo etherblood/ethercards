@@ -1,4 +1,4 @@
-package com.etherblood.a.entities;
+package com.etherblood.ethercards.entities;
 
 public interface ComponentsModule {
 

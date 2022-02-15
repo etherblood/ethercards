@@ -1,6 +1,6 @@
-package com.etherblood.a.templates.api.model;
+package com.etherblood.ethercards.templates.api.model;
 
-import com.etherblood.a.templates.api.CardColor;
+import com.etherblood.ethercards.templates.api.CardColor;
 import java.util.List;
 
 public class RawCardDisplay {

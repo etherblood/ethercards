@@ -1,9 +1,9 @@
-package com.etherblood.a.templates.api.model;
+package com.etherblood.ethercards.templates.api.model;
 
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.templates.StatModifier;
-import com.etherblood.a.rules.templates.ZoneState;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.rules.templates.Effect;
+import com.etherblood.ethercards.rules.templates.StatModifier;
+import com.etherblood.ethercards.rules.templates.ZoneState;
 import java.util.List;
 import java.util.Map;
 

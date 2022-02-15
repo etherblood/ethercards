@@ -1,6 +1,6 @@
-package com.etherblood.a.network.api.messages.match;
+package com.etherblood.ethercards.network.api.messages.match;
 
-import com.etherblood.a.rules.MoveReplay;
+import com.etherblood.ethercards.rules.MoveReplay;
 
 public class MoveUpdate {
 

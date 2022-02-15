@@ -1,9 +1,9 @@
-package com.etherblood.a.templates.implementation.cards;
+package com.etherblood.ethercards.templates.implementation.cards;
 
-import com.etherblood.a.rules.moves.DeclareAttack;
-import com.etherblood.a.rules.moves.EndAttackPhase;
-import com.etherblood.a.rules.moves.EndBlockPhase;
-import com.etherblood.a.templates.implementation.AbstractGameTest;
+import com.etherblood.ethercards.rules.moves.DeclareAttack;
+import com.etherblood.ethercards.rules.moves.EndAttackPhase;
+import com.etherblood.ethercards.rules.moves.EndBlockPhase;
+import com.etherblood.ethercards.templates.implementation.AbstractGameTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +13,9 @@ public class KiyomaroFirstToStandTest extends AbstractGameTest {
     public void kiyomaro_vigilance() {
         createHandCard(player(0));
         int kiyomaro = createMinion(player(0), "kiyomaro_first_to_stand");
-        
+
         Assertions.assertFalse(effectiveStats.hasVigilance(kiyomaro));
-        
+
         int vigilanceThreshold = 4;
         for (int i = 1; i < vigilanceThreshold; i++) {
             createHandCard(player(0));
@@ -27,26 +27,26 @@ public class KiyomaroFirstToStandTest extends AbstractGameTest {
     public void kiyomaro_heal_after_battle() {
         createHandCard(player(0));
         int kiyomaro = createMinion(player(0), "kiyomaro_first_to_stand");
-        
+
         int previousHealth = effectiveStats.health(hero(0));
-        
+
         moves.apply(new DeclareAttack(player(0), kiyomaro, hero(1)));
         moves.apply(new EndAttackPhase(player(0)));
-        
+
         Assertions.assertEquals(previousHealth, effectiveStats.health(hero(0)));
-        
+
         int healEffectThreshold = 7;
         for (int i = 1; i < healEffectThreshold; i++) {
             createHandCard(player(0));
         }
-        
+
         moves.apply(new EndBlockPhase(player(1)));
         moves.apply(new EndAttackPhase(player(1)));
         moves.apply(new EndBlockPhase(player(0)));
-        
+
         moves.apply(new DeclareAttack(player(0), kiyomaro, hero(1)));
         moves.apply(new EndAttackPhase(player(0)));
-        
+
         Assertions.assertEquals(previousHealth + healEffectThreshold, effectiveStats.health(hero(0)));
     }
 

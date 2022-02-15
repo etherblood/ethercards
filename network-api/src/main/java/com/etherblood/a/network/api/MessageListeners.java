@@ -1,4 +1,4 @@
-package com.etherblood.a.network.api;
+package com.etherblood.ethercards.network.api;
 
 import com.esotericsoftware.kryonet.Connection;
 import java.util.ArrayList;

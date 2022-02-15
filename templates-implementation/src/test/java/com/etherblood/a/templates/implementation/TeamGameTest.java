@@ -1,13 +1,13 @@
-package com.etherblood.a.templates.implementation;
+package com.etherblood.ethercards.templates.implementation;
 
-import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.PlayerResult;
-import com.etherblood.a.rules.moves.EndAttackPhase;
-import com.etherblood.a.rules.moves.EndBlockPhase;
-import com.etherblood.a.rules.moves.EndMulliganPhase;
-import com.etherblood.a.rules.moves.Start;
-import com.etherblood.a.rules.moves.Update;
-import com.etherblood.a.rules.updates.SystemsUtil;
+import com.etherblood.ethercards.rules.PlayerPhase;
+import com.etherblood.ethercards.rules.PlayerResult;
+import com.etherblood.ethercards.rules.moves.EndAttackPhase;
+import com.etherblood.ethercards.rules.moves.EndBlockPhase;
+import com.etherblood.ethercards.rules.moves.EndMulliganPhase;
+import com.etherblood.ethercards.rules.moves.Start;
+import com.etherblood.ethercards.rules.moves.Update;
+import com.etherblood.ethercards.rules.updates.SystemsUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

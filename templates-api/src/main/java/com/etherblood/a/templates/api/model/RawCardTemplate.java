@@ -1,6 +1,6 @@
-package com.etherblood.a.templates.api.model;
+package com.etherblood.ethercards.templates.api.model;
 
-import com.etherblood.a.rules.templates.Tribe;
+import com.etherblood.ethercards.rules.templates.Tribe;
 import java.util.EnumSet;
 import java.util.Set;
 

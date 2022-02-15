@@ -1,4 +1,4 @@
-package com.etherblood.a.network.api.serializers;
+package com.etherblood.ethercards.network.api.serializers;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;

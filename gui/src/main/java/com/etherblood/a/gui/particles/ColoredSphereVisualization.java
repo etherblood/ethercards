@@ -1,4 +1,4 @@
-package com.etherblood.a.gui.particles;
+package com.etherblood.ethercards.gui.particles;
 
 import com.destrostudios.cardgui.samples.visualization.CustomAttachmentVisualization;
 import com.jme3.scene.Geometry;

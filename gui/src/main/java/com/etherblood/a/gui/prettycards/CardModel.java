@@ -1,8 +1,8 @@
-package com.etherblood.a.gui.prettycards;
+package com.etherblood.ethercards.gui.prettycards;
 
 import com.destrostudios.cardgui.BoardObjectModel;
 import com.destrostudios.cardgui.annotations.IsBoardObjectInspected;
-import com.etherblood.a.templates.api.DisplayCardTemplate;
+import com.etherblood.ethercards.templates.api.DisplayCardTemplate;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.Collections;

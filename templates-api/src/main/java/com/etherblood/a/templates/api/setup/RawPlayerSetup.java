@@ -1,7 +1,7 @@
-package com.etherblood.a.templates.api.setup;
+package com.etherblood.ethercards.templates.api.setup;
 
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.setup.PlayerSetup;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.rules.setup.PlayerSetup;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 

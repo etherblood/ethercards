@@ -1,7 +1,7 @@
-package com.etherblood.a.network.api;
+package com.etherblood.ethercards.network.api;
 
-import com.etherblood.a.rules.MoveReplay;
-import com.etherblood.a.templates.api.setup.RawGameSetup;
+import com.etherblood.ethercards.rules.MoveReplay;
+import com.etherblood.ethercards.templates.api.setup.RawGameSetup;
 
 import java.util.ArrayList;
 import java.util.List;

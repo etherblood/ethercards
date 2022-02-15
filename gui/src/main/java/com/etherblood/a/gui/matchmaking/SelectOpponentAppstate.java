@@ -1,6 +1,6 @@
-package com.etherblood.a.gui.matchmaking;
+package com.etherblood.ethercards.gui.matchmaking;
 
-import com.etherblood.a.gui.HudTextAppstate;
+import com.etherblood.ethercards.gui.HudTextAppstate;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;

@@ -1,6 +1,6 @@
-package com.etherblood.a.gui.soprettyboard;
+package com.etherblood.ethercards.gui.soprettyboard;
 
-import com.etherblood.a.gui.GameApplication;
+import com.etherblood.ethercards.gui.GameApplication;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppState;

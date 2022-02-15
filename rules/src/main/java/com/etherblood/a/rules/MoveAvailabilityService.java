@@ -1,8 +1,8 @@
-package com.etherblood.a.rules;
+package com.etherblood.ethercards.rules;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.rules.templates.ActivatedAbility;
-import com.etherblood.a.rules.templates.CardTemplate;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.rules.templates.ActivatedAbility;
+import com.etherblood.ethercards.rules.templates.CardTemplate;
 
 public class MoveAvailabilityService {
 

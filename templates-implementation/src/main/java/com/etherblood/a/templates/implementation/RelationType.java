@@ -1,4 +1,4 @@
-package com.etherblood.a.templates.implementation;
+package com.etherblood.ethercards.templates.implementation;
 
 public enum RelationType {
     EQUAL,

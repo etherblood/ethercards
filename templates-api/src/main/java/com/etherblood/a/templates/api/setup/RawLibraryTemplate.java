@@ -1,4 +1,4 @@
-package com.etherblood.a.templates.api.setup;
+package com.etherblood.ethercards.templates.api.setup;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

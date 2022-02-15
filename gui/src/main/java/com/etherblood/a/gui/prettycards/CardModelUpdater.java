@@ -1,13 +1,13 @@
-package com.etherblood.a.gui.prettycards;
+package com.etherblood.ethercards.gui.prettycards;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.EffectiveStatsService;
-import com.etherblood.a.rules.GameTemplates;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.templates.api.DisplayCardTemplate;
-import com.etherblood.a.templates.implementation.effects.SoulshiftEffect;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.EffectiveStatsService;
+import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.Effect;
+import com.etherblood.ethercards.templates.api.DisplayCardTemplate;
+import com.etherblood.ethercards.templates.implementation.effects.SoulshiftEffect;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

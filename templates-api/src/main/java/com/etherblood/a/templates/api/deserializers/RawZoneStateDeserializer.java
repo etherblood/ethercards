@@ -1,10 +1,10 @@
-package com.etherblood.a.templates.api.deserializers;
+package com.etherblood.ethercards.templates.api.deserializers;
 
-import com.etherblood.a.entities.collections.IntMap;
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.templates.StatModifier;
-import com.etherblood.a.templates.api.model.RawActivatedAbility;
-import com.etherblood.a.templates.api.model.RawZoneState;
+import com.etherblood.ethercards.entities.collections.IntMap;
+import com.etherblood.ethercards.rules.templates.Effect;
+import com.etherblood.ethercards.rules.templates.StatModifier;
+import com.etherblood.ethercards.templates.api.model.RawActivatedAbility;
+import com.etherblood.ethercards.templates.api.model.RawZoneState;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;

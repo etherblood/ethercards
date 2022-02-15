@@ -1,11 +1,11 @@
-package com.etherblood.a.gui.prettycards;
+package com.etherblood.ethercards.gui.prettycards;
 
 import com.destrostudios.cardgui.Card;
 import com.destrostudios.cardgui.samples.visualization.PaintableImage;
 import com.destrostudios.cardgui.samples.visualization.cards.modelled.SimpleModelledCard;
-import com.etherblood.a.rules.templates.Tribe;
-import com.etherblood.a.templates.api.CardColor;
-import com.etherblood.a.templates.api.DisplayCardTemplate;
+import com.etherblood.ethercards.rules.templates.Tribe;
+import com.etherblood.ethercards.templates.api.CardColor;
+import com.etherblood.ethercards.templates.api.DisplayCardTemplate;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.texture.Texture;

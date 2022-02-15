@@ -1,12 +1,12 @@
-package com.etherblood.a.ai;
+package com.etherblood.ethercards.ai;
 
-import com.etherblood.a.entities.EntityData;
-import com.etherblood.a.entities.collections.IntList;
-import com.etherblood.a.rules.CoreComponents;
-import com.etherblood.a.rules.Game;
-import com.etherblood.a.rules.PlayerPhase;
-import com.etherblood.a.rules.PlayerResult;
-import com.etherblood.a.rules.updates.ZoneService;
+import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.Game;
+import com.etherblood.ethercards.rules.PlayerPhase;
+import com.etherblood.ethercards.rules.PlayerResult;
+import com.etherblood.ethercards.rules.updates.ZoneService;
 import java.util.Arrays;
 import java.util.Random;
 

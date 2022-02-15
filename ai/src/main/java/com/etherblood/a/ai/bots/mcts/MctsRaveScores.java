@@ -1,6 +1,6 @@
-package com.etherblood.a.ai.bots.mcts;
+package com.etherblood.ethercards.ai.bots.mcts;
 
-import com.etherblood.a.rules.moves.Move;
+import com.etherblood.ethercards.rules.moves.Move;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

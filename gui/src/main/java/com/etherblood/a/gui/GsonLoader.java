@@ -1,4 +1,4 @@
-package com.etherblood.a.gui;
+package com.etherblood.ethercards.gui;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -11,10 +11,10 @@ import java.nio.charset.StandardCharsets;
 public class GsonLoader implements AssetLoader {
 
     private final Gson gson = new Gson();
-    
+
     @Override
     public JsonElement load(AssetInfo assetInfo) throws IOException {
-        try(InputStreamReader reader = new InputStreamReader(assetInfo.openStream(), StandardCharsets.UTF_8)) {
+        try (InputStreamReader reader = new InputStreamReader(assetInfo.openStream(), StandardCharsets.UTF_8)) {
             return gson.fromJson(reader, JsonElement.class);
         }
     }

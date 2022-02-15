@@ -1,8 +1,8 @@
-package com.etherblood.a.templates.api;
+package com.etherblood.ethercards.templates.api;
 
-import com.etherblood.a.rules.templates.Effect;
-import com.etherblood.a.rules.templates.StatModifier;
-import com.etherblood.a.rules.templates.TargetSelection;
+import com.etherblood.ethercards.rules.templates.Effect;
+import com.etherblood.ethercards.rules.templates.StatModifier;
+import com.etherblood.ethercards.rules.templates.TargetSelection;
 import java.util.Map;
 
 
