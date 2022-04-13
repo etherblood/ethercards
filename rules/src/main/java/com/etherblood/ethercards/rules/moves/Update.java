@@ -1,21 +1,6 @@
 package com.etherblood.ethercards.rules.moves;
 
-public class Update implements Move {
-
-    @Override
-    public int hashCode() {
-        return 13;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Update;
-    }
-
-    @Override
-    public String toString() {
-        return "Update{" + '}';
-    }
+public record Update() implements Move {
 
     @Override
     public Integer getPlayer() {

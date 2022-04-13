@@ -3,6 +3,7 @@ package com.etherblood.ethercards.ai;
 import com.etherblood.ethercards.rules.EntityUtil;
 import com.etherblood.ethercards.rules.Game;
 import com.etherblood.ethercards.rules.GameDataPrinter;
+import com.etherblood.ethercards.rules.MoveReplay;
 import com.etherblood.ethercards.rules.moves.Move;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class MoveBotGame extends BotGameAdapter<Move, MoveBotGame> {
 
     @Override
     public List<Move> getMoveHistory() {
-        return game.getMoves().getHistory().stream().map(x -> x.move).collect(Collectors.toList());
+        return game.getMoves().getHistory().stream().map(MoveReplay::move).collect(Collectors.toList());
     }
 
 }

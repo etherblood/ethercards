@@ -31,6 +31,10 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.destrostudios.game-tools</groupId>
+            <artifactId>network-shared</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.destrostudios</groupId>
             <artifactId>auth-token</artifactId>
         </dependency>

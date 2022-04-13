@@ -501,19 +501,19 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             CardModel minionModel = card.getModel();
             new CardModelUpdater().updateFromData(minionModel, game.getTemplates(), data);
             if (moves.stream().filter(Cast.class::isInstance).map(Cast.class::cast)
-                    .anyMatch(cast -> cast.source == cardEntity)) {
+                    .anyMatch(cast -> cast.source() == cardEntity)) {
                 card.setInteractivity(InteractivitySource.MOUSE_LEFT, castInteractivity(userControlledPlayer, cardEntity));
                 minionModel.setGlow(CAST_GLOW_COLOR);
             } else if (moves.stream().filter(DeclareMulligan.class::isInstance).map(DeclareMulligan.class::cast)
-                    .anyMatch(mulligan -> mulligan.card == cardEntity)) {
+                    .anyMatch(mulligan -> mulligan.card() == cardEntity)) {
                 card.setInteractivity(InteractivitySource.MOUSE_LEFT, mulliganInteractivity(userControlledPlayer, cardEntity));
                 minionModel.setGlow(MULLIGAN_GLOW_COLOR);
             } else if (moves.stream().filter(DeclareAttack.class::isInstance).map(DeclareAttack.class::cast)
-                    .anyMatch(attack -> attack.source == cardEntity)) {
+                    .anyMatch(attack -> attack.source() == cardEntity)) {
                 card.setInteractivity(InteractivitySource.MOUSE_LEFT, attackInteractivity(userControlledPlayer, cardEntity));
                 minionModel.setGlow(ATTACK_GLOW_COLOR);
             } else if (moves.stream().filter(DeclareBlock.class::isInstance).map(DeclareBlock.class::cast)
-                    .anyMatch(block -> block.source == cardEntity)) {
+                    .anyMatch(block -> block.source() == cardEntity)) {
                 card.setInteractivity(InteractivitySource.MOUSE_LEFT, blockInteractivity(userControlledPlayer, cardEntity));
                 minionModel.setGlow(BLOCK_GLOW_COLOR);
             } else {
@@ -522,7 +522,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             }
 
             if (moves.stream().filter(UseAbility.class::isInstance).map(UseAbility.class::cast)
-                    .anyMatch(ability -> ability.source == cardEntity)) {
+                    .anyMatch(ability -> ability.source() == cardEntity)) {
                 card.setInteractivity(InteractivitySource.MOUSE_RIGHT, activatedAbilityInteractivity(userControlledPlayer, cardEntity));
                 if (minionModel.getGlow() != null) {
                     minionModel.setGlow(COMBINED_GLOW_COLOR);

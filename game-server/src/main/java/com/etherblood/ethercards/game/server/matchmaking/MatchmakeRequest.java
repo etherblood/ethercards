@@ -38,7 +38,7 @@ public class MatchmakeRequest {
     }
 
     public static MatchmakeRequest of(MatchRequest request, int connectionId, JwtAuthenticationUser user) {
-        return new MatchmakeRequest(user, connectionId, request.library, request.strength, Arrays.clone(request.teamHumanCounts), request.teamSize);
+        return new MatchmakeRequest(user, connectionId, request.library(), request.strength(), Arrays.clone(request.teamHumanCounts()), request.teamSize());
     }
 
 }

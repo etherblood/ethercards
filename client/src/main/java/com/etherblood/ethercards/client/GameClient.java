@@ -31,15 +31,14 @@ public class GameClient {
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof ConnectedToMatchUpdate) {
-                    ConnectedToMatchUpdate connectedToMatch = (ConnectedToMatchUpdate) object;
-                    boolean success = game.compareAndSet(null, new GameReplayView(new GameReplayService(connectedToMatch.replay, assetLoader), connectedToMatch.playerIndex));
+                if (object instanceof ConnectedToMatchUpdate connectedToMatch) {
+                    boolean success = game.compareAndSet(null, new GameReplayView(new GameReplayService(connectedToMatch.replay(), assetLoader), connectedToMatch.playerIndex()));
                     if (!success) {
                         throw new IllegalStateException();
                     }
                     gameRequested = false;
                 } else if (object instanceof MoveUpdate) {
-                    game.get().gameReplay.apply(((MoveUpdate) object).move);
+                    game.get().gameReplay.apply(((MoveUpdate) object).move());
                 }
             }
 

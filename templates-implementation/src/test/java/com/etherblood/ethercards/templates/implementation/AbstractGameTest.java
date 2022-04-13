@@ -18,12 +18,13 @@ import com.etherblood.ethercards.rules.moves.Update;
 import com.etherblood.ethercards.rules.setup.GameSetup;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
 import com.etherblood.ethercards.rules.updates.ZoneService;
+import com.etherblood.ethercards.templates.api.RecordTypeAdapterFactory;
 import com.etherblood.ethercards.templates.api.TemplatesLoader;
 import com.etherblood.ethercards.templates.api.TemplatesParser;
 import com.etherblood.ethercards.templates.api.setup.RawGameSetup;
 import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.ethercards.templates.api.setup.RawPlayerSetup;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,16 +60,14 @@ public abstract class AbstractGameTest {
         componentsBuilder.registerModule(CoreComponents::new);
         settingsBuilder.components = componentsBuilder.build();
         loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, new TemplateAliasMapsImpl()));
-        String[] cardPool = new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class);
+        String[] cardPool = new GsonBuilder().registerTypeAdapterFactory(new RecordTypeAdapterFactory()).create().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class);
         for (String card : cardPool) {
             loader.registerCardAlias(card);
         }
         loader.registerCardAlias(DEFAULT_HERO);
         templates = loader.buildGameTemplates();
 
-        rawLibrary = new RawLibraryTemplate();
-        rawLibrary.hero = DEFAULT_HERO;
-        rawLibrary.cards = Collections.emptyMap();
+        rawLibrary = new RawLibraryTemplate(DEFAULT_HERO, Collections.emptyMap());
         settingsBuilder.templates = templates;
         settings = settingsBuilder.build();
         core = settings.components.getModule(CoreComponents.class);
@@ -77,19 +76,17 @@ public abstract class AbstractGameTest {
         for (int teamIndex = 0; teamIndex < teamSizes.length; teamIndex++) {
             int teamSize = teamSizes[teamIndex];
             for (int playerTeamIndex = 0; playerTeamIndex < teamSize; playerTeamIndex++) {
-                RawPlayerSetup player = new RawPlayerSetup();
-                player.library = rawLibrary;
-                player.teamIndex = teamIndex;
+                RawPlayerSetup player = new RawPlayerSetup(0, null, teamIndex, rawLibrary);
                 players.add(player);
             }
         }
 
-        RawGameSetup gameSetup = new RawGameSetup();
-        gameSetup.players = players.toArray(new RawPlayerSetup[players.size()]);
-        gameSetup.teamCount = teamSizes.length;
-        gameSetup.theCoinAlias = null;
-        gameSetup.startingPlayersHandCardCount = 0;
-        gameSetup.otherPlayersHandCardCount = 0;
+        RawGameSetup gameSetup = new RawGameSetup(
+                teamSizes.length,
+                players.toArray(RawPlayerSetup[]::new),
+                null,
+                0,
+                0);
         setup = gameSetup.toGameSetup(loader::registerCardAlias);
     }
 

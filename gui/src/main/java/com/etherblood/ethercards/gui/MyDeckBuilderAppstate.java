@@ -170,7 +170,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 .build();
 
         HashMap<CardModel, Integer> deck = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : presetLibrary.cards.entrySet()) {
+        for (Map.Entry<String, Integer> entry : presetLibrary.cards().entrySet()) {
             Optional<CardModel> optionalCard = allCardModels.stream().filter(x -> x.getTemplate().getAlias().equals(entry.getKey())).findAny();
             if (optionalCard.isPresent()) {
                 deck.put(optionalCard.get(), entry.getValue());
@@ -239,11 +239,11 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     }
 
     private void completeResult() {
-        RawLibraryTemplate resultLibrary = new RawLibraryTemplate();
-        resultLibrary.hero = presetLibrary.hero;
-        resultLibrary.cards = new HashMap<>();
+        RawLibraryTemplate resultLibrary = new RawLibraryTemplate(
+                presetLibrary.hero(),
+                new HashMap<>());
         for (Map.Entry<CardModel, Integer> entry : deckBuilderAppState.getDeck().entrySet()) {
-            resultLibrary.cards.put(entry.getKey().getTemplate().getAlias(), entry.getValue());
+            resultLibrary.cards().put(entry.getKey().getTemplate().getAlias(), entry.getValue());
         }
         result = resultLibrary;
     }

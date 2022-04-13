@@ -25,10 +25,10 @@ public class AuthenticationService {
     }
 
     public void onIdentify(Connection connection, IdentifyRequest identify) {
-        if (!version.equals(identify.version)) {
-            throw new IllegalArgumentException("Tried to identify with version " + identify.version + " when expected version is " + version + ".");
+        if (!version.equals(identify.version())) {
+            throw new IllegalArgumentException("Tried to identify with version " + identify.version() + " when expected version is " + version + ".");
         }
-        JwtAuthentication authentication = jwtService.decode(identify.jwt);
+        JwtAuthentication authentication = jwtService.decode(identify.jwt());
         LOG.info("Connection {} identified as {} (id={})", connection.getID(), authentication.user.login, authentication.user.id);
         connectionIdToAuthentication.put(connection.getID(), authentication);
     }

@@ -6,9 +6,10 @@ import com.etherblood.ethercards.ai.bots.mcts.MctsBotSettings;
 import com.etherblood.ethercards.ai.library.builder.BattleSetup;
 import com.etherblood.ethercards.rules.Game;
 import com.etherblood.ethercards.rules.moves.Move;
+import com.etherblood.ethercards.templates.api.RecordTypeAdapterFactory;
 import com.etherblood.ethercards.templates.api.TemplatesLoader;
 import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -19,9 +20,9 @@ public class Main {
         Thread.sleep(10_000);// time for profiler to attach
         String assetsPath = "../assets/";
         BattleSetup setup = new BattleSetup(assetsPath + "templates/", new SecureRandom());
-        RawLibraryTemplate botLibrary = new RawLibraryTemplate();
-        botLibrary.hero = "elderwood_ahri";
-        botLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile(assetsPath + "templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
+        RawLibraryTemplate botLibrary = new RawLibraryTemplate(
+                "elderwood_ahri",
+                Arrays.stream(new GsonBuilder().registerTypeAdapterFactory(new RecordTypeAdapterFactory()).create().fromJson(TemplatesLoader.loadFile(assetsPath + "templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1)));
 
         MctsBotSettings<Move, MoveBotGame> candidateSettings = new MctsBotSettings<>();
         candidateSettings.strength = 100;
@@ -75,20 +76,19 @@ public class Main {
             System.out.println();
             System.out.println("Used time: " + (nanosA / 1_000_000_000) + "s vs " + (nanosB / 1_000_000_000) + "s");
             System.out.println(wins + " wins, " + draws + " draws, " + losses + " losses (" + (wins + losses + draws) + " / " + (batchCount * batchSize) + " games)");
-            likelihoodOfSuperiority(wins, draws, losses);
+            printLikelihoodOfSuperiority(wins, draws, losses);
         }
 
     }
 
     // https://www.chessprogramming.org/Match_Statistics#Likelihood_of_Superiority
-    private static double likelihoodOfSuperiority(int wins, int draws, int losses) {
+    private static void printLikelihoodOfSuperiority(int wins, int draws, int losses) {
         double games = wins + losses + draws;
         double winning_fraction = (wins + 0.5 * draws) / games;
         double elo_difference = -Math.log(1.0 / winning_fraction - 1.0) * 400.0 / Math.log(10);
         System.out.println("elo difference: " + elo_difference);
         double los = .5 + .5 * erf((wins - losses) / Math.sqrt(2.0 * (wins + losses)));
         System.out.println("los: " + los);
-        return los;
     }
 
     // https://introcs.cs.princeton.edu/java/21function/ErrorFunction.java.html

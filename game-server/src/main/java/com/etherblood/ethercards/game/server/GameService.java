@@ -105,7 +105,7 @@ public class GameService {
     }
 
     public synchronized void onMoveRequest(Connection connection, MoveRequest moveRequest) {
-        Move move = moveRequest.move;
+        Move move = moveRequest.move();
         if (move instanceof Update) {
             return;
         }
@@ -192,9 +192,8 @@ public class GameService {
     private synchronized void matchmake() {
         MatchmakeResult result;
         while ((result = matchmaker.matchmake()) != null) {
-            RawGameSetup setup = result.setup;
-            setup.theCoinAlias = "the_coin";
-            applyPlayerEasterEggs(setup.players);
+            RawGameSetup setup = new RawGameSetup(result.setup.teamCount(), result.setup.players(), "the_coin");
+            applyPlayerEasterEggs(setup.players());
             UUID gameId = result.gameId;
             GameReplayService game = new GameReplayService(setup, assetLoader);
             game.apply(new Start());
@@ -207,9 +206,9 @@ public class GameService {
                 MoveBotGame moveBotGame = new MoveBotGame(gameInstance);
                 Bot botInstance;
                 if (botRequest.strength < 0) {
-                    botInstance = new SkipBot(moveBotGame);
+                    botInstance = new SkipBot<>(moveBotGame);
                 } else if (botRequest.strength == 0) {
-                    botInstance = new RandomMover(moveBotGame, new Random());
+                    botInstance = new RandomMover<>(moveBotGame, new Random());
                 } else {
                     MctsBotSettings<Move, MoveBotGame> settings = new MctsBotSettings<>();
                     settings.maxThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
@@ -230,28 +229,28 @@ public class GameService {
 
     private void applyPlayerEasterEggs(RawPlayerSetup[] players) {
         for (RawPlayerSetup player : players) {
-            if (player.name.equalsIgnoreCase("yalee")) {
-                replaceCards(player.library, "raigeki", "fabi_raigeki");
+            if (player.name().equalsIgnoreCase("yalee")) {
+                replaceCards(player.library(), "raigeki", "fabi_raigeki");
             }
-            if (player.name.equalsIgnoreCase("pago")) {
-                replaceCards(player.library, "pago", "pago_rago");
+            if (player.name().equalsIgnoreCase("pago")) {
+                replaceCards(player.library(), "pago", "pago_rago");
             }
 
-            if (player.name.equalsIgnoreCase("destroflyer")) {
+            if (player.name().equalsIgnoreCase("destroflyer")) {
                 for (RawPlayerSetup opponent : players) {
-                    if (player == opponent || opponent.name.equals(GameServer.BOT_NAME)) {
+                    if (player == opponent || opponent.name().equals(GameServer.BOT_NAME)) {
                         continue;
                     }
-                    replaceCards(opponent.library, "the_coin", "the_other_coin");
+                    replaceCards(opponent.library(), "the_coin", "the_other_coin");
                 }
             }
         }
     }
 
     private void replaceCards(RawLibraryTemplate library, String toRemove, String replacement) {
-        if (library.cards.containsKey(toRemove)) {
-            int previous = library.cards.getOrDefault(replacement, 0);
-            library.cards.put(replacement, previous + library.cards.remove(toRemove));
+        if (library.cards().containsKey(toRemove)) {
+            int previous = library.cards().getOrDefault(replacement, 0);
+            library.cards().put(replacement, previous + library.cards().remove(toRemove));
         }
     }
 

@@ -2,8 +2,9 @@ package com.etherblood.ethercards.rules;
 
 import com.etherblood.ethercards.rules.moves.Move;
 
-public class MoveReplay {
+public record MoveReplay(
+        Move move,
+        int[] randomResults
+) {
 
-    public int[] randomResults;
-    public Move move;
 }

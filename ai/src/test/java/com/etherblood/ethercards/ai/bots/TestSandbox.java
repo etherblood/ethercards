@@ -19,13 +19,14 @@ import com.etherblood.ethercards.rules.MoveService;
 import com.etherblood.ethercards.rules.classic.GameLoopService;
 import com.etherblood.ethercards.rules.moves.Move;
 import com.etherblood.ethercards.rules.moves.Start;
+import com.etherblood.ethercards.templates.api.RecordTypeAdapterFactory;
 import com.etherblood.ethercards.templates.api.TemplatesLoader;
 import com.etherblood.ethercards.templates.api.TemplatesParser;
 import com.etherblood.ethercards.templates.api.setup.RawGameSetup;
 import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.ethercards.templates.api.setup.RawPlayerSetup;
 import com.etherblood.ethercards.templates.implementation.TemplateAliasMapsImpl;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -98,28 +99,30 @@ public class TestSandbox {
         settingsBuilder.components = componentsBuilder.build();
         TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile("../assets/templates/cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, new TemplateAliasMapsImpl()));
 
-        RawLibraryTemplate rawLibrary = new RawLibraryTemplate();
-        rawLibrary.hero = "elderwood_ahri";
-        rawLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
+        RawLibraryTemplate rawLibrary = new RawLibraryTemplate(
+                "elderwood_ahri",
+                Arrays.stream(new GsonBuilder().registerTypeAdapterFactory(new RecordTypeAdapterFactory()).create().fromJson(TemplatesLoader.loadFile("../assets/templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1)));
 
         List<RawPlayerSetup> players = new ArrayList<>();
         int teamCount = 2;
         for (int team = 0; team < teamCount; team++) {
             for (int i = 0; i < teamSize; i++) {
-                RawPlayerSetup player = new RawPlayerSetup();
-                player.library = rawLibrary;
-                player.teamIndex = team;
+                RawPlayerSetup player = new RawPlayerSetup(
+                        0,
+                        null,
+                        team,
+                        rawLibrary);
                 players.add(player);
             }
         }
 
-        RawGameSetup gameSetup = new RawGameSetup();
-        gameSetup.players = players.toArray(new RawPlayerSetup[players.size()]);
-        gameSetup.teamCount = teamCount;
-        gameSetup.theCoinAlias = "the_coin";
+        RawGameSetup gameSetup = new RawGameSetup(
+                teamCount,
+                players.toArray(RawPlayerSetup[]::new),
+                "the_coin");
 
         loader.parseLibrary(rawLibrary);
-        loader.registerCardAlias(gameSetup.theCoinAlias);
+        loader.registerCardAlias(gameSetup.theCoinAlias());
 
         settingsBuilder.templates = loader.buildGameTemplates();
         GameSettings settings = settingsBuilder.build();

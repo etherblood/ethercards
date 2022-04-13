@@ -35,32 +35,27 @@ public class GameDataPrinter {
         if (move instanceof EndMulliganPhase) {
             return "End MulliganPhase";
         }
-        if (move instanceof DeclareMulligan) {
-            DeclareMulligan mulligan = (DeclareMulligan) move;
-            return "DeclareMulligan " + toCardString(mulligan.card);
+        if (move instanceof DeclareMulligan mulligan) {
+            return "DeclareMulligan " + toCardString(mulligan.card());
         }
-        if (move instanceof Cast) {
-            Cast cast = (Cast) move;
-            if (cast.target != null) {
-                return "Cast " + toCardString(cast.source) + " -> " + toMinionString(cast.target);
+        if (move instanceof Cast cast) {
+            if (cast.target() != null) {
+                return "Cast " + toCardString(cast.source()) + " -> " + toMinionString(cast.target());
             } else {
-                return "Cast " + toCardString(cast.source);
+                return "Cast " + toCardString(cast.source());
             }
         }
-        if (move instanceof DeclareBlock) {
-            DeclareBlock block = (DeclareBlock) move;
-            return "DeclareBlock " + toMinionString(block.source) + " -> " + toMinionString(block.target);
+        if (move instanceof DeclareBlock block) {
+            return "DeclareBlock " + toMinionString(block.source()) + " -> " + toMinionString(block.target());
         }
-        if (move instanceof DeclareAttack) {
-            DeclareAttack attack = (DeclareAttack) move;
-            return "DeclareAttack " + toMinionString(attack.source) + " -> " + toMinionString(attack.target);
+        if (move instanceof DeclareAttack attack) {
+            return "DeclareAttack " + toMinionString(attack.source()) + " -> " + toMinionString(attack.target());
         }
-        if (move instanceof UseAbility) {
-            UseAbility useAbility = (UseAbility) move;
-            if (useAbility.target != null) {
-                return "UseAbility " + toMinionString(useAbility.source) + " -> " + toMinionString(useAbility.target);
+        if (move instanceof UseAbility useAbility) {
+            if (useAbility.target() != null) {
+                return "UseAbility " + toMinionString(useAbility.source()) + " -> " + toMinionString(useAbility.target());
             } else {
-                return "UseAbility " + toMinionString(useAbility.source);
+                return "UseAbility " + toMinionString(useAbility.source());
             }
         }
         if (move instanceof Start) {

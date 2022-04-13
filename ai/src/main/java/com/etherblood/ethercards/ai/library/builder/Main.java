@@ -12,7 +12,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -38,15 +37,10 @@ public class Main {
                 "voyaging_satyr",
                 "wolfrider"
         );
-        ToIntFunction<String> cardLimit = id -> {
-            switch (id) {
-                case "bad_dog":
-                    return 100;
-                case "blue_eyes_white_dragon":
-                    return 3;
-                default:
-                    return 2;
-            }
+        ToIntFunction<String> cardLimit = id -> switch (id) {
+            case "bad_dog" -> 100;
+            case "blue_eyes_white_dragon" -> 3;
+            default -> 2;
         };
 
         Random random = new Random(1);
@@ -150,43 +144,39 @@ public class Main {
     }
 
     private static RawLibraryTemplate rollLibrary(List<String> cardPool, ToIntFunction<String> cardLimit, String hero, Random random) {
-        RawLibraryTemplate template = new RawLibraryTemplate();
-        template.hero = hero;
-        template.cards = cardPool.stream()
-                .collect(Collectors.toMap(card -> card, card -> random.nextInt(cardLimit.applyAsInt(card) + 1)));
-        return template;
+        return new RawLibraryTemplate(
+                hero,
+                cardPool.stream()
+                        .collect(Collectors.toMap(card -> card, card -> random.nextInt(cardLimit.applyAsInt(card) + 1))));
     }
 
     private static RawLibraryTemplate mutateLibrary(RawLibraryTemplate library, List<String> cardPool, ToIntFunction<String> cardLimit, Random random) {
-        RawLibraryTemplate template = new RawLibraryTemplate();
-        template.hero = library.hero;
-        template.cards = new HashMap<>(library.cards);
+        RawLibraryTemplate template = new RawLibraryTemplate(library);
         String card = cardPool.get(random.nextInt(cardPool.size()));
-        int count = library.cards.getOrDefault(card, 0);
+        int count = library.cards().getOrDefault(card, 0);
         int roll = random.nextInt(cardLimit.applyAsInt(card));
         if (count <= roll) {
             count++;
         } else {
             count--;
         }
-        template.cards.put(card, count);
+        template.cards().put(card, count);
         return template;
     }
 
     private static RawLibraryTemplate childLibrary(RawLibraryTemplate a, RawLibraryTemplate b, Random random) {
         Set<String> cards = new HashSet<>();
-        cards.addAll(a.cards.keySet());
-        cards.addAll(b.cards.keySet());
+        cards.addAll(a.cards().keySet());
+        cards.addAll(b.cards().keySet());
 
-        ToIntFunction<String> min = card -> Math.min(a.cards.getOrDefault(card, 0), b.cards.getOrDefault(card, 0));
-        ToIntFunction<String> max = card -> Math.max(a.cards.getOrDefault(card, 0), b.cards.getOrDefault(card, 0));
+        ToIntFunction<String> min = card -> Math.min(a.cards().getOrDefault(card, 0), b.cards().getOrDefault(card, 0));
+        ToIntFunction<String> max = card -> Math.max(a.cards().getOrDefault(card, 0), b.cards().getOrDefault(card, 0));
 
-        RawLibraryTemplate template = new RawLibraryTemplate();
-        template.hero = random.nextBoolean() ? a.hero : b.hero;
-        template.cards = cards.stream()
-                .collect(Collectors.toMap(
-                        card -> card,
-                        card -> min.applyAsInt(card) + random.nextInt(max.applyAsInt(card) - min.applyAsInt(card) + 1)));
-        return template;
+        return new RawLibraryTemplate(
+                random.nextBoolean() ? a.hero() : b.hero(),
+                cards.stream()
+                        .collect(Collectors.toMap(
+                                card -> card,
+                                card -> min.applyAsInt(card) + random.nextInt(max.applyAsInt(card) - min.applyAsInt(card) + 1))));
     }
 }

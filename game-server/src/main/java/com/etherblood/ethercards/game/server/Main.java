@@ -2,9 +2,10 @@ package com.etherblood.ethercards.game.server;
 
 import com.destrostudios.authtoken.KeyJwtService;
 import com.esotericsoftware.minlog.Log;
+import com.etherblood.ethercards.templates.api.RecordTypeAdapterFactory;
 import com.etherblood.ethercards.templates.api.TemplatesLoader;
 import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -34,9 +35,9 @@ public class Main {
             }
         }
 
-        RawLibraryTemplate botLibrary = new RawLibraryTemplate();
-        botLibrary.hero = "blitzcrank";
-        botLibrary.cards = Arrays.stream(new Gson().fromJson(TemplatesLoader.loadFile(assetsPath + "templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1));
+        RawLibraryTemplate botLibrary = new RawLibraryTemplate(
+                "blitzcrank",
+                Arrays.stream(new GsonBuilder().registerTypeAdapterFactory(new RecordTypeAdapterFactory()).create().fromJson(TemplatesLoader.loadFile(assetsPath + "templates/card_pool.json"), String[].class)).collect(Collectors.toMap(x -> x, x -> 1)));
         new GameServer(new KeyJwtService(), x -> TemplatesLoader.loadFile(assetsPath + "templates/cards/" + x + ".json"), botLibrary, version).start();
     }
 }

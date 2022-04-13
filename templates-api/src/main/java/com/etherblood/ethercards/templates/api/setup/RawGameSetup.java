@@ -7,24 +7,29 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
-public class RawGameSetup {
+public record RawGameSetup(
+        int teamCount,
+        RawPlayerSetup[] players,
+        String theCoinAlias,
+        int startingPlayersHandCardCount,
+        int otherPlayersHandCardCount
+) {
+    public RawGameSetup(RawPlayerSetup[] players, String theCoinAlias) {
+        this(2, players, theCoinAlias);
+    }
 
-    public int teamCount = 2;
-    public RawPlayerSetup[] players;
-    public String theCoinAlias;
-    public int startingPlayersHandCardCount = 4;
-    public int otherPlayersHandCardCount = 5;
+    public RawGameSetup(int teamCount, RawPlayerSetup[] players, String theCoinAlias) {
+        this(teamCount, players, theCoinAlias, 4, 5);
+    }
 
     public RawGameSetup(RawGameSetup other) {
-        this.teamCount = other.teamCount;
-        this.players = Arrays.stream(other.players).map(RawPlayerSetup::new).toArray(RawPlayerSetup[]::new);
-        this.theCoinAlias = other.theCoinAlias;
-        this.startingPlayersHandCardCount = other.startingPlayersHandCardCount;
-        this.otherPlayersHandCardCount = other.otherPlayersHandCardCount;
+        this(other.teamCount,
+                Arrays.stream(other.players).map(RawPlayerSetup::new).toArray(RawPlayerSetup[]::new),
+                other.theCoinAlias,
+                other.startingPlayersHandCardCount,
+                other.otherPlayersHandCardCount);
     }
 
-    public RawGameSetup() {
-    }
 
     public GameSetup toGameSetup(ToIntFunction<String> cardAliasResolver) {
         GameSetup setup = new GameSetup();

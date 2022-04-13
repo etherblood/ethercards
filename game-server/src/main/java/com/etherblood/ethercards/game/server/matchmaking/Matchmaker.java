@@ -7,7 +7,6 @@ import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.ethercards.templates.api.setup.RawPlayerSetup;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +61,7 @@ public class Matchmaker {
                 }
             }
             if (!found) {
-                buckets.add(new ArrayList<>(Arrays.asList(current)));
+                buckets.add(new ArrayList<>(List.of(current)));
             }
         }
 
@@ -80,31 +79,26 @@ public class Matchmaker {
             IntList teamHumanCounts = new IntList(first.teamHumanCounts);
             teamHumanCounts.shuffle(random::nextInt);
             int nextRequest = 0;
-            RawGameSetup setup = new RawGameSetup();
-            setup.teamCount = first.teamCount;
-            setup.players = new RawPlayerSetup[first.teamCount * first.teamSize];
-            for (int globalPlayerIndex = 0; globalPlayerIndex < setup.players.length; globalPlayerIndex++) {
+            int setupTeamCount = first.teamCount;
+            RawPlayerSetup[] setupPlayers = new RawPlayerSetup[first.teamCount * first.teamSize];
+            for (int globalPlayerIndex = 0; globalPlayerIndex < setupPlayers.length; globalPlayerIndex++) {
                 int teamIndex = globalPlayerIndex / first.teamSize;
                 int teamPlayerIndex = globalPlayerIndex % first.teamSize;
                 int teamHumanCount = teamHumanCounts.get(teamIndex);
-                RawPlayerSetup playerSetup = new RawPlayerSetup();
+                RawPlayerSetup playerSetup;
                 if (teamPlayerIndex < teamHumanCount) {
                     MatchmakeRequest request = requests.get(nextRequest++);
-                    playerSetup.id = request.user.id;
-                    playerSetup.name = request.user.login;
-                    playerSetup.library = request.library;
+                    playerSetup = new RawPlayerSetup(request.user.id, request.user.login, teamIndex, request.library);
 
                     playerMappings.add(new GamePlayerMapping(gameId, request.user, globalPlayerIndex, request.connectionId));
                 } else {
-                    playerSetup.id = botId;
-                    playerSetup.name = botName;
-                    playerSetup.library = botLibrary;
+                    playerSetup = new RawPlayerSetup(botId, botName, teamIndex, botLibrary);
 
                     botRequests.add(new BotRequest(globalPlayerIndex, first.strength));
                 }
-                playerSetup.teamIndex = teamIndex;
-                setup.players[globalPlayerIndex] = playerSetup;
+                setupPlayers[globalPlayerIndex] = playerSetup;
             }
+            RawGameSetup setup = new RawGameSetup(setupTeamCount, setupPlayers, null);
             return new MatchmakeResult(gameId, setup, playerMappings, botRequests);
         }
 

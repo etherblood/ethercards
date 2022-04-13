@@ -21,9 +21,9 @@
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <version.game-tools>169148796235c281a561545c0a7465cea5f0cce5</version.game-tools>
         <version.auth-token>c7a6c8b4b9d79dac73aec617de4225e17c010405</version.auth-token>
     </properties>
     <repositories>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
+            <version>1.7.36</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -63,6 +63,21 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>2.8.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.destrostudios.game-tools</groupId>
+                <artifactId>network-server</artifactId>
+                <version>${version.game-tools}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.destrostudios.game-tools</groupId>
+                <artifactId>network-shared</artifactId>
+                <version>${version.game-tools}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.destrostudios.game-tools</groupId>
+                <artifactId>network-client</artifactId>
+                <version>${version.game-tools}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.destrostudios</groupId>

@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.OptionalInt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +88,7 @@ public class MoveService {
         List<Move> result = new ArrayList<>();
         data.getOptional(player, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
             switch (phase) {
-                case PlayerPhase.ATTACK: {
+                case PlayerPhase.ATTACK -> {
                     IntList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int attacker : minions) {
                         if (!moveAvailability.canDeclareAttack(player, attacker, false)) {
@@ -102,9 +103,8 @@ public class MoveService {
                     addAllCastMoves(player, result);
                     addAllUseAbilityMoves(player, result);
                     result.add(new EndAttackPhase(player));
-                    break;
                 }
-                case PlayerPhase.BLOCK: {
+                case PlayerPhase.BLOCK -> {
                     IntList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int blocker : minions) {
                         if (!moveAvailability.canDeclareBlock(player, blocker, false)) {
@@ -119,19 +119,16 @@ public class MoveService {
                     addAllCastMoves(player, result);
                     addAllUseAbilityMoves(player, result);
                     result.add(new EndBlockPhase(player));
-                    break;
                 }
-                case PlayerPhase.MULLIGAN: {
+                case PlayerPhase.MULLIGAN -> {
                     for (int card : data.list(core.IN_HAND_ZONE)) {
                         if (moveAvailability.canDeclareMulligan(player, card, false)) {
                             result.add(new DeclareMulligan(player, card));
                         }
                     }
                     result.add(new EndMulliganPhase(player));
-                    break;
                 }
-                default:
-                    throw new AssertionError(phase);
+                default -> throw new AssertionError(phase);
             }
         });
         if (!pruneSurrender) {
@@ -200,33 +197,24 @@ public class MoveService {
 
     public void apply(Move move) {
         Runnable runnable;
-        if (move instanceof DeclareBlock) {
-            DeclareBlock block = (DeclareBlock) move;
-            runnable = () -> declareBlock(block.player, block.source, block.target);
-        } else if (move instanceof Cast) {
-            Cast cast = (Cast) move;
-            runnable = () -> cast(cast.player, cast.source, cast.target);
-        } else if (move instanceof DeclareAttack) {
-            DeclareAttack declareAttack = (DeclareAttack) move;
-            runnable = () -> declareAttack(declareAttack.player, declareAttack.source, declareAttack.target);
-        } else if (move instanceof UseAbility) {
-            UseAbility useAbility = (UseAbility) move;
-            runnable = () -> useAbility(useAbility.player, useAbility.source, useAbility.target);
-        } else if (move instanceof DeclareMulligan) {
-            DeclareMulligan declareMulligan = (DeclareMulligan) move;
-            runnable = () -> declareMulligan(declareMulligan.player, declareMulligan.card);
-        } else if (move instanceof EndAttackPhase) {
-            EndAttackPhase endAttackPhase = (EndAttackPhase) move;
-            runnable = () -> endAttackPhase(endAttackPhase.player);
-        } else if (move instanceof EndBlockPhase) {
-            EndBlockPhase endBlockPhase = (EndBlockPhase) move;
-            runnable = () -> endBlockPhase(endBlockPhase.player);
-        } else if (move instanceof EndMulliganPhase) {
-            EndMulliganPhase endMulliganPhase = (EndMulliganPhase) move;
-            runnable = () -> endMulliganPhase(endMulliganPhase.player);
-        } else if (move instanceof Surrender) {
-            Surrender surrender = (Surrender) move;
-            runnable = () -> surrender(surrender.player);
+        if (move instanceof DeclareBlock block) {
+            runnable = () -> declareBlock(block.player(), block.source(), block.target());
+        } else if (move instanceof Cast cast) {
+            runnable = () -> cast(cast.player(), cast.source(), cast.target());
+        } else if (move instanceof DeclareAttack declareAttack) {
+            runnable = () -> declareAttack(declareAttack.player(), declareAttack.source(), declareAttack.target());
+        } else if (move instanceof UseAbility useAbility) {
+            runnable = () -> useAbility(useAbility.player(), useAbility.source(), useAbility.target());
+        } else if (move instanceof DeclareMulligan declareMulligan) {
+            runnable = () -> declareMulligan(declareMulligan.player(), declareMulligan.card());
+        } else if (move instanceof EndAttackPhase endAttackPhase) {
+            runnable = () -> endAttackPhase(endAttackPhase.player());
+        } else if (move instanceof EndBlockPhase endBlockPhase) {
+            runnable = () -> endBlockPhase(endBlockPhase.player());
+        } else if (move instanceof EndMulliganPhase endMulliganPhase) {
+            runnable = () -> endMulliganPhase(endMulliganPhase.player());
+        } else if (move instanceof Surrender surrender) {
+            runnable = () -> surrender(surrender.player());
         } else if (move instanceof Start) {
             runnable = this::start;
         } else if (move instanceof Update) {
@@ -235,12 +223,10 @@ public class MoveService {
             throw new AssertionError(move);
         }
         int randomSize = random.getHistory().size();
-        runWithBackup(runnable::run);
+        runWithBackup(runnable);
         if (history != null) {
             int[] randomResults = random.getHistory().stream().skip(randomSize).toArray();
-            MoveReplay replay = new MoveReplay();
-            replay.move = move;
-            replay.randomResults = randomResults;
+            MoveReplay replay = new MoveReplay(move, randomResults);
             history.add(replay);
         }
     }
@@ -318,11 +304,7 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canUseAbility(player, source, target, true);
         }
-        if (target != null) {
-            data.set(source, core.USE_ABILITY_TARGET, target);
-        } else {
-            data.set(source, core.USE_ABILITY_TARGET, ~0);
-        }
+        data.set(source, core.USE_ABILITY_TARGET, Objects.requireNonNullElse(target, ~0));
         update();
     }
 
@@ -340,11 +322,7 @@ public class MoveService {
         }
         String cardName = getCardName(castable);
         try {
-            if (target != null) {
-                data.set(castable, core.CAST_TARGET, target);
-            } else {
-                data.set(castable, core.CAST_TARGET, ~0);
-            }
+            data.set(castable, core.CAST_TARGET, Objects.requireNonNullElse(target, ~0));
             update();
         } catch (Throwable t) {
             LOG.error("Error when casting {}.", cardName);

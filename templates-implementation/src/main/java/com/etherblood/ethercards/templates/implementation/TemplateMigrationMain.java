@@ -1,5 +1,6 @@
 package com.etherblood.ethercards.templates.implementation;
 
+import com.etherblood.ethercards.templates.api.RecordTypeAdapterFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -25,7 +26,7 @@ public class TemplateMigrationMain {
     }
 
     private static void runForTemplates(Path folder, Consumer<JsonObject> updater) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(new RecordTypeAdapterFactory()).setPrettyPrinting().disableHtmlEscaping().create();
         Files.list(folder).forEach(path -> {
             try {
                 JsonObject template;

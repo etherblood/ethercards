@@ -1,5 +1,6 @@
 package com.etherblood.ethercards.gui;
 
+import com.etherblood.ethercards.network.api.RecordTypeAdapterFactory;
 import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,7 +13,11 @@ import java.nio.file.Paths;
 
 public class LibraryIO {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapterFactory(new RecordTypeAdapterFactory())
+            .setPrettyPrinting()
+            .disableHtmlEscaping()
+            .create();
 
     public static RawLibraryTemplate load(String name) {
         Path path = Paths.get(name);

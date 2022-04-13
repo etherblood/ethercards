@@ -11,6 +11,7 @@ import com.etherblood.ethercards.gui.prettycards.CardImages;
 import com.etherblood.ethercards.gui.soprettyboard.CameraAppState;
 import com.etherblood.ethercards.gui.soprettyboard.ForestBoardAppstate;
 import com.etherblood.ethercards.gui.soprettyboard.PostFilterAppstate;
+import com.etherblood.ethercards.network.api.RecordTypeAdapterFactory;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.templates.api.DisplayCardTemplate;
@@ -18,7 +19,7 @@ import com.etherblood.ethercards.templates.api.TemplatesLoader;
 import com.etherblood.ethercards.templates.api.TemplatesParser;
 import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.ethercards.templates.implementation.TemplateAliasMapsImpl;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetKey;
@@ -83,15 +84,15 @@ public class GameApplication extends SimpleApplication {
 
         RawLibraryTemplate presetLibrary = LibraryIO.load("library.json");
         if (presetLibrary == null) {
-            presetLibrary = new RawLibraryTemplate();
-            presetLibrary.hero = "elderwood_ahri";
-            presetLibrary.cards = new HashMap<>();
+            presetLibrary = new RawLibraryTemplate(
+                    "elderwood_ahri",
+                    new HashMap<>());
         } else {
             // migrate old libraries
-            presetLibrary.cards.remove("grim_patron");
-            presetLibrary.cards.remove("mistblade_shinobi");
-            presetLibrary.cards.remove("blessing_of_wisdom");
-            presetLibrary.cards.remove("goblin_guide");
+            presetLibrary.cards().remove("grim_patron");
+            presetLibrary.cards().remove("mistblade_shinobi");
+            presetLibrary.cards().remove("blessing_of_wisdom");
+            presetLibrary.cards().remove("goblin_guide");
         }
         stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components));
     }
@@ -215,7 +216,7 @@ public class GameApplication extends SimpleApplication {
     }
 
     private <T> T load(String path, Class<T> type) {
-        return new Gson().fromJson(assetManager.loadAsset(new AssetKey<JsonElement>(path)), type);
+        return new GsonBuilder().registerTypeAdapterFactory(new RecordTypeAdapterFactory()).create().fromJson(assetManager.loadAsset(new AssetKey<JsonElement>(path)), type);
     }
 
     private void toggleMenu() {

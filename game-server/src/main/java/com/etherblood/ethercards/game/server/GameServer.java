@@ -36,16 +36,18 @@ public class GameServer {
 
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof IdentifyRequest) {
-                    authenticationService.onIdentify(connection, (IdentifyRequest) object);
-                }
-                try (AutoCloseable authentication = authenticationService.setContext(connection)) {
-                    if (object instanceof MoveRequest) {
-                        gameService.onMoveRequest(connection, (MoveRequest) object);
-                    } else if (object instanceof MatchRequest) {
-                        gameService.onGameRequest(connection, (MatchRequest) object);
-                    } else if (object instanceof IdentifyRequest) {
-                        gameService.onIdentify(connection, (IdentifyRequest) object);
+                try {
+                    if (object instanceof IdentifyRequest) {
+                        authenticationService.onIdentify(connection, (IdentifyRequest) object);
+                    }
+                    try (AutoCloseable authentication = authenticationService.setContext(connection)) {
+                        if (object instanceof MoveRequest) {
+                            gameService.onMoveRequest(connection, (MoveRequest) object);
+                        } else if (object instanceof MatchRequest) {
+                            gameService.onGameRequest(connection, (MatchRequest) object);
+                        } else if (object instanceof IdentifyRequest) {
+                            gameService.onIdentify(connection, (IdentifyRequest) object);
+                        }
                     }
                 } catch (Throwable t) {
                     LOG.error("Error when handling message {} for connection {}.", object, connection.getID(), t);

@@ -31,10 +31,10 @@ public class TemplatesParser {
 
     private final Map<Integer, DisplayCardTemplate> cards = new HashMap<>();
     private final Map<String, Integer> cardAliases = new HashMap<>();
-    private final Map<String, Integer> componentAliases = new HashMap<>();
     private final Gson aliasGson;
 
     public TemplatesParser(Components components, TemplateClassAliasMap templateClassAliasMap) {
+        Map<String, Integer> componentAliases = new HashMap<>();
         for (ComponentMeta component : components.getMetas()) {
             componentAliases.put(component.name, component.id);
         }
@@ -57,9 +57,9 @@ public class TemplatesParser {
 
     public LibraryTemplate parseLibrary(RawLibraryTemplate raw) {
         LibraryTemplate library = new LibraryTemplate();
-        library.hero = registerIfAbsent(cardAliases, raw.hero);
+        library.hero = registerIfAbsent(cardAliases, raw.hero());
         IntList libraryCards = new IntList();
-        Map<String, Integer> cardsObject = raw.cards;
+        Map<String, Integer> cardsObject = raw.cards();
         for (Map.Entry<String, Integer> entry : cardsObject.entrySet()) {
             int count = entry.getValue();
             int cardId = registerIfAbsent(cardAliases, entry.getKey());

@@ -58,9 +58,9 @@ public class GameReplayService {
 
         TemplatesLoader loader = new TemplatesLoader(assetLoader, new TemplatesParser(components, new TemplateAliasMapsImpl()));
 
-        RawGameSetup gameData = replay.setup;
-        for (RawPlayerSetup player : gameData.players) {
-            loader.parseLibrary(player.library);
+        RawGameSetup gameData = replay.setup();
+        for (RawPlayerSetup player : gameData.players()) {
+            loader.parseLibrary(player.library());
         }
         loader.registerCardAlias(THE_COIN);
         GameSettingsBuilder builder = new GameSettingsBuilder();
@@ -77,12 +77,12 @@ public class GameReplayService {
     }
 
     public synchronized void updateInstance(Game game) {
-        for (int i = game.getMoves().getHistory().size(); i < replay.moves.size(); i++) {
-            MoveReplay moveReplay = replay.moves.get(i);
-            for (int randomResult : moveReplay.randomResults) {
+        for (int i = game.getMoves().getHistory().size(); i < replay.moves().size(); i++) {
+            MoveReplay moveReplay = replay.moves().get(i);
+            for (int randomResult : moveReplay.randomResults()) {
                 game.getMoves().getRandom().getHistory().add(randomResult);
             }
-            game.getMoves().apply(moveReplay.move);
+            game.getMoves().apply(moveReplay.move());
         }
     }
 
@@ -91,13 +91,13 @@ public class GameReplayService {
         MoveService moves = cachedGame.getMoves();
         moves.apply(move);
         MoveReplay moveReplay = moves.getHistory().get(moves.getHistory().size() - 1);
-        assert move == moveReplay.move;
-        replay.moves.add(moveReplay);
+        assert move == moveReplay.move();
+        replay.moves().add(moveReplay);
         return moveReplay;
     }
 
     public synchronized void apply(MoveReplay moveReplay) {
-        replay.moves.add(moveReplay);
+        replay.moves().add(moveReplay);
     }
 
     public synchronized boolean isGameOver() {
@@ -106,9 +106,9 @@ public class GameReplayService {
     }
 
     public synchronized int getPlayerIndex(long playerId) {
-        RawPlayerSetup[] players = replay.setup.players;
+        RawPlayerSetup[] players = replay.setup().players();
         for (int i = 0; i < players.length; i++) {
-            if (players[i].id == playerId) {
+            if (players[i].id() == playerId) {
                 return i;
             }
         }
@@ -139,10 +139,10 @@ public class GameReplayService {
     }
 
     public synchronized String getPlayerName(int playerIndex) {
-        return playerByIndex(playerIndex).name;
+        return playerByIndex(playerIndex).name();
     }
 
     private RawPlayerSetup playerByIndex(int playerIndex) {
-        return replay.setup.players[playerIndex];
+        return replay.setup().players()[playerIndex];
     }
 }

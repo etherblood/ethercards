@@ -5,28 +5,22 @@ import com.etherblood.ethercards.rules.setup.PlayerSetup;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-public class RawPlayerSetup {
-
-    public long id;
-    public int teamIndex;
-    public String name;
-    public RawLibraryTemplate library;
+public record RawPlayerSetup(
+        long id,
+        String name,
+        int teamIndex,
+        RawLibraryTemplate library
+) {
 
     public RawPlayerSetup(RawPlayerSetup other) {
-        this.id = other.id;
-        this.teamIndex = other.teamIndex;
-        this.name = other.name;
-        this.library = new RawLibraryTemplate(other.library);
-    }
-
-    public RawPlayerSetup() {
+        this(other.id, other.name, other.teamIndex, new RawLibraryTemplate(other.library));
     }
 
     PlayerSetup toPlayerSetup(ToIntFunction<String> cardAliasResolver) {
         PlayerSetup setup = new PlayerSetup();
-        setup.heroId = cardAliasResolver.applyAsInt(library.hero);
+        setup.heroId = cardAliasResolver.applyAsInt(library.hero());
         setup.libraryCardCounts = new IntMap();
-        for (Map.Entry<String, Integer> entry : library.cards.entrySet()) {
+        for (Map.Entry<String, Integer> entry : library.cards().entrySet()) {
             setup.libraryCardCounts.set(cardAliasResolver.applyAsInt(entry.getKey()), entry.getValue());
         }
         setup.teamIndex = teamIndex;

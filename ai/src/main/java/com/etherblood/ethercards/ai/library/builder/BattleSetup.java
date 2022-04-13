@@ -19,7 +19,6 @@ import com.etherblood.ethercards.templates.api.setup.RawGameSetup;
 import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.ethercards.templates.api.setup.RawPlayerSetup;
 import com.etherblood.ethercards.templates.implementation.TemplateAliasMapsImpl;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,7 +30,7 @@ public class BattleSetup {
 
     public BattleSetup(String templatesPath, Random random) {
         this.templatesPath = templatesPath;
-        this.random = new SecureRandom();
+        this.random = random;
     }
 
     public Game startGame(RawLibraryTemplate a, RawLibraryTemplate b) {
@@ -44,23 +43,22 @@ public class BattleSetup {
         int indexA = random.nextInt(2);
 
         List<RawPlayerSetup> players = new ArrayList<>();
-        RawPlayerSetup playerA = new RawPlayerSetup();
-        playerA.library = a;
-        playerA.teamIndex = indexA;
+        RawPlayerSetup playerA = new RawPlayerSetup(
+                0, null, indexA, a
+        );
         players.add(playerA);
-        RawPlayerSetup playerB = new RawPlayerSetup();
-        playerB.library = b;
-        playerB.teamIndex = 1 - indexA;
+        RawPlayerSetup playerB = new RawPlayerSetup(
+                1 - indexA, null, indexA, b
+        );
         players.add(playerB);
 
-        RawGameSetup gameSetup = new RawGameSetup();
-        gameSetup.players = players.toArray(new RawPlayerSetup[players.size()]);
-        gameSetup.teamCount = 2;
-        gameSetup.theCoinAlias = "the_coin";
+        RawGameSetup gameSetup = new RawGameSetup(
+                players.toArray(RawPlayerSetup[]::new),
+                "the_coin");
 
         loader.parseLibrary(a);
         loader.parseLibrary(b);
-        loader.registerCardAlias(gameSetup.theCoinAlias);
+        loader.registerCardAlias(gameSetup.theCoinAlias());
 
         settingsBuilder.templates = loader.buildGameTemplates();
         GameSettings settings = settingsBuilder.build();

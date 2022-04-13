@@ -142,17 +142,17 @@
             <!-- TODO: replace with better logger binding -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.30</version>
+            <version>1.7.36</version>
         </dependency>
         <dependency>
             <groupId>com.simsilica</groupId>
             <artifactId>lemur</artifactId>
-            <version>1.14.0</version>
+            <version>1.16.0</version>
         </dependency>
         <dependency>
             <groupId>com.simsilica</groupId>
             <artifactId>lemur-proto</artifactId>
-            <version>1.11.0</version>
+            <version>1.13.0</version>
         </dependency>
 
     </dependencies>
