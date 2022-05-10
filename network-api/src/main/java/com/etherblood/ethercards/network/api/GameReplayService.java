@@ -7,6 +7,7 @@ import com.etherblood.ethercards.entities.SimpleEntityData;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.game.events.api.NoopGameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
+import com.etherblood.ethercards.rules.EffectiveStatsService;
 import com.etherblood.ethercards.rules.Game;
 import com.etherblood.ethercards.rules.GameSettings;
 import com.etherblood.ethercards.rules.GameSettingsBuilder;
@@ -69,7 +70,7 @@ public class GameReplayService {
         GameSettings settings = builder.build();
         EntityData data = new SimpleEntityData(settings.components);
         HistoryRandom random = HistoryRandom.producer();
-        MoveService moves = new MoveService(data, settings.templates, random, Collections.emptyList(), true, true, listener, new GameLoopService(data, settings.templates, random, listener));
+        MoveService moves = new MoveService(data, settings.templates, random, Collections.emptyList(), true, true, listener, new GameLoopService(data, settings.templates, random, listener), new EffectiveStatsService(data, settings.templates));
         Game game = new Game(settings, data, moves);
         gameData.toGameSetup(loader::registerCardAlias).setup(data, game.getTemplates());
         updateInstance(game);

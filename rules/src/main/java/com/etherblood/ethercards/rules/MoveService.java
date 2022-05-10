@@ -47,15 +47,16 @@ public class MoveService {
     private final GameEventListener eventListener;
     private final MoveAvailabilityService moveAvailability;
     private final Runnable updateResolver;
+    private final EffectiveStatsService stats;
 
     private final boolean backupsEnabled;
     private final boolean validateMoves;
 
-    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, GameEventListener eventListener, Runnable updateResolver) {
-        this(data, templates, random, Collections.emptyList(), true, true, eventListener, updateResolver);
+    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, GameEventListener eventListener, Runnable updateResolver, EffectiveStatsService stats) {
+        this(data, templates, random, Collections.emptyList(), true, true, eventListener, updateResolver, stats);
     }
 
-    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves, GameEventListener eventListener, Runnable updateResolver) {
+    public MoveService(EntityData data, GameTemplates templates, HistoryRandom random, List<MoveReplay> history, boolean backupsEnabled, boolean validateMoves, GameEventListener eventListener, Runnable updateResolver, EffectiveStatsService stats) {
         this.data = data;
         this.templates = templates;
         this.random = random;
@@ -63,6 +64,7 @@ public class MoveService {
         this.backupsEnabled = backupsEnabled;
         this.validateMoves = validateMoves;
         this.eventListener = eventListener;
+        this.stats = stats;
         if (history != null) {
             this.history = new ArrayList<>(history);
         } else {
@@ -296,7 +298,8 @@ public class MoveService {
         if (validateMoves) {
             moveAvailability.canDeclareAttack(player, attacker, target, true);
         }
-        data.set(attacker, core.ATTACK_TARGET, target);
+        data.set(attacker, core.TIRED, 1);
+        SystemsUtil.fight(data, templates, random, attacker, target, eventListener);
         update();
     }
 

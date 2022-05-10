@@ -1,12 +1,12 @@
 package com.etherblood.ethercards.templates.implementation.effects;
 
-import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
+import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
@@ -43,7 +43,7 @@ public class ResurrectRandomEffect implements Effect {
         ZoneService zoneService = new ZoneService(data, templates, random, events);
         zoneService.removeFromGraveyard(resurrectMinion);
         zoneService.addToBattle(resurrectMinion, true);
-        data.set(resurrectMinion, core.SUMMONING_SICKNESS, 1);
+        data.set(resurrectMinion, core.FAST_TO_ATTACK, 1);
         new TriggerService(data, templates, random, events).onSummoned(resurrectMinion);
     }
 }

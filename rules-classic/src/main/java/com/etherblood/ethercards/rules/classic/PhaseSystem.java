@@ -48,7 +48,7 @@ public class PhaseSystem {
                     data.remove(team, core.ACTIVE_TEAM_PHASE);
                     Integer nextTeam = SystemsUtil.nextTeam(data, team);
                     if (nextTeam != null) {
-                        startPhase(nextTeam, PlayerPhase.BLOCK);
+                        startPhase(nextTeam, PlayerPhase.ATTACK);
                     }
                     continue;
                 }
@@ -59,7 +59,7 @@ public class PhaseSystem {
                         endAttackPhase(team);
                         Integer nextTeam = SystemsUtil.nextTeam(data, team);
                         if (nextTeam != null) {
-                            startPhase(nextTeam, PlayerPhase.BLOCK);
+                            startPhase(nextTeam, PlayerPhase.ATTACK);
                         }
                         break;
                     }
@@ -142,7 +142,7 @@ public class PhaseSystem {
 
                     data.set(ninja, core.ATTACK_TARGET, attackTarget);
                     data.set(ninja, core.TIRED, 1);
-                    data.set(ninja, core.SUMMONING_SICKNESS, 1);
+                    data.set(ninja, core.FAST_TO_ATTACK, 1);
                 }
             }
             data.remove(ninja, core.NINJUTSU_ORDER);
@@ -229,7 +229,7 @@ public class PhaseSystem {
         if (data.has(team, core.TEAM_RESULT)) {
             Integer nextTeam = SystemsUtil.nextTeam(data, team);
             if (nextTeam != null) {
-                startPhase(nextTeam, PlayerPhase.BLOCK);
+                startPhase(nextTeam, PlayerPhase.ATTACK);
             }
             return;
         }

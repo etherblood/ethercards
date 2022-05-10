@@ -1,10 +1,10 @@
 package com.etherblood.ethercards.templates.implementation.effects;
 
-import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.rules.updates.ZoneService;
 import java.util.function.IntUnaryOperator;
@@ -17,7 +17,7 @@ public class SelfResurrectEffect implements Effect {
         ZoneService zoneService = new ZoneService(data, templates, random, events);
         zoneService.removeFromGraveyard(source);
         zoneService.addToBattle(source, true);
-        data.set(source, core.SUMMONING_SICKNESS, 1);
+        data.set(source, core.FAST_TO_ATTACK, 1);
         new TriggerService(data, templates, random, events).onSummoned(source);
     }
 }

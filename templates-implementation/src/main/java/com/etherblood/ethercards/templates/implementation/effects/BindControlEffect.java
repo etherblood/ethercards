@@ -1,10 +1,10 @@
 package com.etherblood.ethercards.templates.implementation.effects;
 
-import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
+import com.etherblood.ethercards.rules.templates.Effect;
 import java.util.function.IntUnaryOperator;
 
 public class BindControlEffect implements Effect {
@@ -23,6 +23,6 @@ public class BindControlEffect implements Effect {
         int team = data.get(source, core.TEAM);
         data.set(target, core.TEAM, team);
         data.set(target, core.BOUND_TO, source);
-        data.set(target, core.SUMMONING_SICKNESS, 1);
+        data.set(target, core.FAST_TO_ATTACK, 1);
     }
 }

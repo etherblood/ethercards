@@ -1,6 +1,7 @@
 package com.etherblood.ethercards.rules;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.rules.templates.ActivatedAbility;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
 
@@ -92,15 +93,28 @@ public class MoveAvailabilityService {
             }
             return false;
         }
-        if (data.has(target, core.FLYING) && !data.has(attacker, core.FLYING) && !data.has(attacker, core.REACH)) {
-            if (throwOnFail) {
-                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is flying.");
-            }
-            return false;
-        }
+//        if (data.has(target, core.FLYING) && !data.has(attacker, core.FLYING) && !data.has(attacker, core.REACH)) {
+//            if (throwOnFail) {
+//                throw new IllegalArgumentException("Failed to declare attack, target #" + target + " is flying.");
+//            }
+//            return false;
+//        }
         if (data.has(target, core.CANNOT_BE_ATTACKED)) {
             if (throwOnFail) {
                 throw new IllegalArgumentException("Failed to declare attack, target #" + target + " cannot be attacked.");
+            }
+            return false;
+        }
+        int enemyCount = 0;
+        IntList battlers = data.list(core.IN_BATTLE_ZONE);
+        for (Integer battler : battlers) {
+            if (data.hasValue(battler, core.OWNER, data.get(target, core.OWNER))) {
+                enemyCount++;
+            }
+        }
+        if (data.has(target, core.HERO) && enemyCount > 1) {
+            if (throwOnFail) {
+                throw new IllegalArgumentException("Failed to declare attack on hero, target #" + target + " has other minions left.");
             }
             return false;
         }

@@ -95,9 +95,9 @@ public abstract class AbstractGameTest {
         data = new SimpleEntityData(settings.components);
         random = HistoryRandom.producer(new Random(7)::nextInt);
         events = new NoopGameEventListener();
-        moves = new MoveService(data, settings.templates, random, events, new GameLoopService(data, templates, random, events));
-        game = new Game(settings, data, moves);
         effectiveStats = new EffectiveStatsService(data, templates);
+        moves = new MoveService(data, settings.templates, random, events, new GameLoopService(data, templates, random, events), effectiveStats);
+        game = new Game(settings, data, moves);
         zoneService = new ZoneService(data, templates, random, events);
 
         startGame();

@@ -17,7 +17,7 @@ public class SelfSummonFromLibraryEffect implements Effect {
         ZoneService zoneService = new ZoneService(data, templates, random, events);
         zoneService.removeFromLibrary(source);
         zoneService.addToBattle(source, true);
-        data.set(source, core.SUMMONING_SICKNESS, 1);
+        data.set(source, core.FAST_TO_ATTACK, 1);
         new TriggerService(data, templates, random, events).onSummoned(source);
     }
 }

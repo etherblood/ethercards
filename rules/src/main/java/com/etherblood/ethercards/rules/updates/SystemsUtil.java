@@ -145,7 +145,7 @@ public class SystemsUtil {
     public static int summonMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int minionTemplate, int owner) {
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
         int minion = createMinion(data, templates, random, events, minionTemplate, owner);
-        data.set(minion, core.SUMMONING_SICKNESS, 1);
+        data.set(minion, core.FAST_TO_ATTACK, 1);
         TriggerService triggerService = new TriggerService(data, templates, random, events);
         triggerService.onSummoned(minion);
         return minion;

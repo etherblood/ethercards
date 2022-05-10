@@ -16,6 +16,6 @@ public class TakeControlEffect implements Effect {
         data.set(target, core.OWNER, owner);
         int team = data.get(source, core.TEAM);
         data.set(target, core.TEAM, team);
-        data.set(target, core.SUMMONING_SICKNESS, 1);
+        data.set(target, core.FAST_TO_ATTACK, 1);
     }
 }

@@ -34,7 +34,7 @@ public class GameSetup {
             data.set(player, core.TEAM, team);
 
             int heroEntity = SystemsUtil.createHero(data, templates, null, null, playerSetup.heroId, player);
-            data.set(heroEntity, core.SUMMONING_SICKNESS, 1);
+            data.set(heroEntity, core.FAST_TO_ATTACK, 1);
 
             for (int cardId : librarySetup) {
                 int amount = librarySetup.get(cardId);

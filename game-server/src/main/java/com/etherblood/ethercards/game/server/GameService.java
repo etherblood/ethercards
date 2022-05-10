@@ -23,6 +23,7 @@ import com.etherblood.ethercards.network.api.messages.match.ConnectedToMatchUpda
 import com.etherblood.ethercards.network.api.messages.match.MatchRequest;
 import com.etherblood.ethercards.network.api.messages.match.MoveRequest;
 import com.etherblood.ethercards.network.api.messages.match.MoveUpdate;
+import com.etherblood.ethercards.rules.EffectiveStatsService;
 import com.etherblood.ethercards.rules.Game;
 import com.etherblood.ethercards.rules.GameDataPrinter;
 import com.etherblood.ethercards.rules.GameTemplates;
@@ -278,7 +279,7 @@ public class GameService {
         NoopGameEventListener eventListener = new NoopGameEventListener();
         HistoryRandom random = HistoryRandom.producer();
         GameTemplates templates = game.getSettings().templates;
-        MoveService moves = new MoveService(data, templates, random, null, false, false, eventListener, new GameLoopService(data, templates, random, eventListener));
+        MoveService moves = new MoveService(data, templates, random, null, false, false, eventListener, new GameLoopService(data, templates, random, eventListener), new EffectiveStatsService(data, templates));
         return new Game(game.getSettings(), data, moves);
     }
 }
