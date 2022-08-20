@@ -8,11 +8,10 @@ import java.util.function.IntConsumer;
 
 public class IntMap implements Iterable<Integer> {
 
-    private static final long VALUE_MASK = 0xffffffff00000000L;
     private static final int FREE_KEY = 0;
-    private static final long FREE_KEYVALUE = dataKey(FREE_KEY);
 
-    private long[] data;
+    private int[] keys;
+    private int[] values;
     private int mask;
     private int freeValue;
     private int count;
@@ -28,9 +27,9 @@ public class IntMap implements Iterable<Integer> {
         this.fillFactor = fillFactor;
         this.mask = capacity - 1;
         assert mask != 0;
-        assert (mask & VALUE_MASK) == 0;
         assert (mask & capacity) == 0;
-        data = new long[capacity];
+        keys = new int[capacity];
+        values = new int[capacity];
         updateFillLimit(capacity);
     }
 
@@ -38,9 +37,9 @@ public class IntMap implements Iterable<Integer> {
         if (hasFreeKey) {
             consumer.accept(FREE_KEY);
         }
-        for (long keyValue : data) {
-            if (keyValue != FREE_KEYVALUE) {
-                consumer.accept(key(keyValue));
+        for (int key : keys) {
+            if (key != FREE_KEY) {
+                consumer.accept(key);
             }
         }
     }
@@ -51,11 +50,11 @@ public class IntMap implements Iterable<Integer> {
         }
         int index = key & mask;
         while (true) {
-            long keyValue = data[index];
-            if (keyValue == FREE_KEYVALUE) {
+            int keyCandidate = keys[index];
+            if (keyCandidate == FREE_KEY) {
                 return false;
             }
-            if (key(keyValue) == key) {
+            if (keyCandidate == key) {
                 return true;
             }
             index = (index + 1) & mask;
@@ -71,10 +70,9 @@ public class IntMap implements Iterable<Integer> {
         }
         int index = key & mask;
         while (true) {
-            long keyValue = data[index];
-            int keyCandidate = key(keyValue);
+            int keyCandidate = keys[index];
             if (keyCandidate == key) {
-                return value(keyValue);
+                return values[index];
             }
             if (keyCandidate == FREE_KEY) {
                 throw new NoSuchElementException();
@@ -89,46 +87,47 @@ public class IntMap implements Iterable<Integer> {
         }
         int index = key & mask;
         while (true) {
-            long keyValue = data[index];
-            if (keyValue == FREE_KEYVALUE) {
+            int keyCandidate = keys[index];
+            if (keyCandidate == FREE_KEY) {
                 return defaultValue;
             }
-            if (key(keyValue) == key) {
-                return value(keyValue);
+            if (keyCandidate == key) {
+                return values[index];
             }
             index = (index + 1) & mask;
         }
     }
 
     public void set(int key, int value) {
-        assert count < data.length;
+        assert count < keys.length;
         if (key == FREE_KEY) {
             if (!hasFreeKey) {
-                freeValue = value;
                 hasFreeKey = true;
                 count++;
             }
+            freeValue = value;
             return;
         }
         if (count >= fillLimit) {
             resize(2 * capacity());
         }
-        if (uncheckedSet(key, dataValue(value))) {
+        if (uncheckedSet(key, value)) {
             count++;
         }
     }
 
-    private boolean uncheckedSet(int key, long shiftedValue) {
+    private boolean uncheckedSet(int key, int value) {
         assert key != FREE_KEY;
         int index = key & mask;
         while (true) {
-            long keyValue = data[index];
-            if (keyValue == FREE_KEYVALUE) {
-                data[index] = dataKey(key) | shiftedValue;
+            int keyCandidate = keys[index];
+            if (keyCandidate == FREE_KEY) {
+                keys[index] = key;
+                values[index] = value;
                 return true;
             }
-            if (key(keyValue) == key) {
-                data[index] = dataKey(key) | shiftedValue;
+            if (keyCandidate == key) {
+                values[index] = value;
                 return false;
             }
             index = (index + 1) & mask;
@@ -139,16 +138,17 @@ public class IntMap implements Iterable<Integer> {
         assert count < capacity;
         mask = capacity - 1;
         assert (mask & capacity) == 0;
-        long[] oldData = data;
-        data = new long[capacity];
-        Arrays.fill(data, FREE_KEY);
+        int[] oldKeys = keys;
+        int[] oldValues = values;
+        keys = new int[capacity];
+        values = new int[capacity];
         updateFillLimit(capacity);
-        for (long keyValue : oldData) {
-            int key = key(keyValue);
+        for (int i = 0; i < oldKeys.length; i++) {
+            int key = oldKeys[i];
             if (key == FREE_KEY) {
                 continue;
             }
-            uncheckedSet(key, keyValue & VALUE_MASK);
+            uncheckedSet(key, oldValues[i]);
         }
     }
 
@@ -166,11 +166,11 @@ public class IntMap implements Iterable<Integer> {
         }
         int index = key & mask;
         while (true) {
-            long keyValue = data[index];
-            if (keyValue == FREE_KEYVALUE) {
+            int keyCandidate = keys[index];
+            if (keyCandidate == FREE_KEY) {
                 return;
             }
-            if (key(keyValue) == key) {
+            if (keyCandidate == key) {
                 shift(index);
                 count--;
                 return;
@@ -183,15 +183,15 @@ public class IntMap implements Iterable<Integer> {
         int last = pos;
         while (true) {
             pos = (pos + 1) & mask;
-            long keyValue = data[pos];
-            if (keyValue == FREE_KEYVALUE) {
-                data[last] = FREE_KEYVALUE;
+            int keyCandidate = keys[pos];
+            if (keyCandidate == FREE_KEY) {
+                keys[last] = FREE_KEY;
                 return;
             }
-            int key = key(keyValue);
-            int slot = key & mask;
+            int slot = keyCandidate & mask;
             if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos) {
-                data[last] = dataKey(key) | (keyValue & VALUE_MASK);
+                keys[last] = keyCandidate;
+                values[last] = values[pos];
                 last = pos;
             }
         }
@@ -202,29 +202,13 @@ public class IntMap implements Iterable<Integer> {
     }
 
     int capacity() {
-        return data.length;
+        return keys.length;
     }
 
     public void clear() {
         count = 0;
         hasFreeKey = false;
-        Arrays.fill(data, FREE_KEYVALUE);
-    }
-
-    private static int key(long keyValue) {
-        return (int) keyValue;
-    }
-
-    private static int value(long keyValue) {
-        return (int) (keyValue >>> 32);
-    }
-
-    private static long dataValue(int value) {
-        return ((long) value) << 32;
-    }
-
-    private static long dataKey(int key) {
-        return Integer.toUnsignedLong(key);
+        Arrays.fill(keys, FREE_KEY);
     }
 
     @Override
@@ -257,23 +241,23 @@ public class IntMap implements Iterable<Integer> {
 
     IntKeyValueIterator keyValueIterator() {
         return new IntKeyValueIterator() {
-            boolean useFreeKey = hasFreeKey;
+            boolean freeKey = hasFreeKey;
             private int i = -1;
             private int key, value;
 
             @Override
             public boolean next() {
-                if (useFreeKey) {
+                if (freeKey) {
                     key = FREE_KEY;
                     value = freeValue;
-                    useFreeKey = false;
+                    freeKey = false;
                     return true;
                 }
-                while (++i < data.length) {
-                    long keyValue = data[i];
-                    if (keyValue != FREE_KEYVALUE) {
-                        key = IntMap.key(keyValue);
-                        value = IntMap.value(keyValue);
+                while (++i < keys.length) {
+                    int keyValue = keys[i];
+                    if (keyValue != FREE_KEY) {
+                        key = keyValue;
+                        value = values[i];
                         return true;
                     }
                 }
@@ -295,34 +279,27 @@ public class IntMap implements Iterable<Integer> {
     @Override
     public PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
-            private final IntKeyValueIterator keyValueIterator;
-            private Integer nextKey;
-
-            {
-                keyValueIterator = keyValueIterator();
-                updateNext();
-            }
+            private int remaining = count;
+            private int currentIndex = -1;
+            private boolean freeKey = hasFreeKey;
 
             @Override
             public int nextInt() {
-                try {
-                    return nextKey;
-                } finally {
-                    updateNext();
+                remaining--;
+                if (freeKey) {
+                    freeKey = false;
+                    return FREE_KEY;
                 }
+                int result;
+                do {
+                    currentIndex++;
+                } while ((result = keys[currentIndex]) == FREE_KEY);
+                return result;
             }
 
             @Override
             public boolean hasNext() {
-                return nextKey != null;
-            }
-
-            private void updateNext() {
-                if (keyValueIterator.next()) {
-                    nextKey = keyValueIterator.key();
-                } else {
-                    nextKey = null;
-                }
+                return remaining != 0;
             }
         };
     }
@@ -331,19 +308,21 @@ public class IntMap implements Iterable<Integer> {
         return new PrimitiveIterator.OfLong() {
             int remaining = count;
             int index = -1;
+            private boolean freeKey = hasFreeKey;
 
             @Override
             public long nextLong() {
                 assert remaining > 0;
                 remaining--;
-                if (hasFreeKey) {
-                    return dataValue(freeValue) | dataKey(FREE_KEY);
+                if (freeKey) {
+                    freeKey = false;
+                    return ((long) freeValue << 32) | FREE_KEY;
                 }
-                long keyValue;
+                int key;
                 do {
                     index++;
-                } while ((keyValue = data[index]) == FREE_KEYVALUE);
-                return keyValue;
+                } while ((key = keys[index]) == FREE_KEY);
+                return ((long) values[index] << 32) | key;
             }
 
             @Override
@@ -354,11 +333,18 @@ public class IntMap implements Iterable<Integer> {
     }
 
     public void copyFrom(IntMap other) {
-        if (data.length < other.data.length) {
-            resize(other.data.length);
+        if (this == other) {
+            throw new IllegalArgumentException("Cannot clone from itself.");
         }
-        if (data.length == other.data.length) {
-            System.arraycopy(other.data, 0, data, 0, data.length);
+        if (keys.length < other.keys.length && fillFactor == other.fillFactor) {
+            keys = new int[other.keys.length];
+            values = new int[other.keys.length];
+            fillLimit = other.fillLimit;
+            mask = other.mask;
+        }
+        if (keys.length == other.keys.length) {
+            System.arraycopy(other.keys, 0, keys, 0, keys.length);
+            System.arraycopy(other.values, 0, values, 0, values.length);
             hasFreeKey = other.hasFreeKey;
             freeValue = other.freeValue;
             count = other.count;
