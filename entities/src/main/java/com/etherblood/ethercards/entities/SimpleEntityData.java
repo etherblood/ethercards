@@ -4,11 +4,6 @@ import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.entities.collections.IntMap;
 import java.util.Arrays;
 import java.util.OptionalInt;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.stream.LongStream;
-import java.util.stream.StreamSupport;
 
 public class SimpleEntityData implements EntityData {
 
@@ -91,9 +86,7 @@ public class SimpleEntityData implements EntityData {
         IntMap orderMap = component(orderComponent);
         long[] entityOrderValues = new long[componentMap.size()];
         int index = 0;
-        PrimitiveIterator.OfInt iterator = componentMap.iterator();
-        while (iterator.hasNext()) {
-            int entity = iterator.nextInt();
+        for (int entity : componentMap) {
             entityOrderValues[index++] = Integer.toUnsignedLong(entity) | ((long) orderMap.get(entity) << 32);
         }
         Arrays.sort(entityOrderValues);
@@ -101,21 +94,6 @@ public class SimpleEntityData implements EntityData {
         for (long packedKeyValue : entityOrderValues) {
             list.add((int) packedKeyValue);
         }
-        return list;
-    }
-
-    @Override
-    public IntList listInValueOrder(int component) {
-        IntMap componentMap = component(component);
-        if (componentMap.isEmpty()) {
-            return new IntList(0);
-        }
-
-        PrimitiveIterator.OfLong packedKeyValueIterator = componentMap.packedKeyValueIterator();
-        Spliterator.OfLong spliterator = Spliterators.spliterator(packedKeyValueIterator, componentMap.size(), Spliterator.NONNULL);
-        LongStream stream = StreamSupport.longStream(spliterator, false);
-        IntList list = new IntList();
-        stream.sorted().mapToInt(x -> (int) x).forEachOrdered(list::add);
         return list;
     }
 

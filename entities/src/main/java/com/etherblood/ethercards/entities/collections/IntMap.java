@@ -216,16 +216,16 @@ public class IntMap implements Iterable<Integer> {
         StringBuilder builder = new StringBuilder();
         builder.append('{');
         boolean isFirst = true;
-        IntKeyValueIterator iterator = keyValueIterator();
-        while (iterator.next()) {
+        for (int key : this) {
+            int value = get(key);
             if (isFirst) {
                 isFirst = false;
             } else {
                 builder.append(", ");
             }
-            builder.append(iterator.key());
+            builder.append(key);
             builder.append("->");
-            builder.append(iterator.value());
+            builder.append(value);
         }
         builder.append('}');
         return builder.toString();
@@ -237,43 +237,6 @@ public class IntMap implements Iterable<Integer> {
 
     public boolean isEmpty() {
         return size() == 0;
-    }
-
-    IntKeyValueIterator keyValueIterator() {
-        return new IntKeyValueIterator() {
-            boolean freeKey = hasFreeKey;
-            private int i = -1;
-            private int key, value;
-
-            @Override
-            public boolean next() {
-                if (freeKey) {
-                    key = FREE_KEY;
-                    value = freeValue;
-                    freeKey = false;
-                    return true;
-                }
-                while (++i < keys.length) {
-                    int keyValue = keys[i];
-                    if (keyValue != FREE_KEY) {
-                        key = keyValue;
-                        value = values[i];
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public int key() {
-                return key;
-            }
-
-            @Override
-            public int value() {
-                return value;
-            }
-        };
     }
 
     @Override
@@ -304,34 +267,6 @@ public class IntMap implements Iterable<Integer> {
         };
     }
 
-    public PrimitiveIterator.OfLong packedKeyValueIterator() {
-        return new PrimitiveIterator.OfLong() {
-            int remaining = count;
-            int index = -1;
-            private boolean freeKey = hasFreeKey;
-
-            @Override
-            public long nextLong() {
-                assert remaining > 0;
-                remaining--;
-                if (freeKey) {
-                    freeKey = false;
-                    return ((long) freeValue << 32) | FREE_KEY;
-                }
-                int key;
-                do {
-                    index++;
-                } while ((key = keys[index]) == FREE_KEY);
-                return ((long) values[index] << 32) | key;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return remaining != 0;
-            }
-        };
-    }
-
     public void copyFrom(IntMap other) {
         if (this == other) {
             throw new IllegalArgumentException("Cannot clone from itself.");
@@ -350,9 +285,8 @@ public class IntMap implements Iterable<Integer> {
             count = other.count;
         } else {
             clear();
-            IntKeyValueIterator iterator = other.keyValueIterator();
-            while (iterator.next()) {
-                set(iterator.key(), iterator.value());
+            for (int key : other) {
+                set(key, other.get(key));
             }
         }
     }

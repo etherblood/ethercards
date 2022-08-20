@@ -27,7 +27,9 @@ public interface EntityData {
 
     IntList listOrdered(int component, int orderComponent);
 
-    IntList listInValueOrder(int component);
+    default IntList listInValueOrder(int component) {
+        return listOrdered(component, component);
+    }
 
     Components getComponents();
 
