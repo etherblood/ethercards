@@ -28,7 +28,7 @@ public class EffectDeserializer implements JsonDeserializer<Effect> {
 
     @Override
     public Effect deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        JsonObject jsonObject = jsonElement.deepCopy().getAsJsonObject();
         String typeString = jsonObject.getAsJsonPrimitive("type").getAsString();
         Class<? extends Effect> clazz = classes.get(typeString);
         if (clazz == null) {
@@ -53,7 +53,7 @@ public class EffectDeserializer implements JsonDeserializer<Effect> {
                 }
             }
         }
-        return context.deserialize(jsonElement, clazz);
+        return context.deserialize(jsonObject, clazz);
     }
 
 }

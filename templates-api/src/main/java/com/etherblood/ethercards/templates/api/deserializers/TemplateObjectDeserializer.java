@@ -27,7 +27,7 @@ public class TemplateObjectDeserializer<T> implements JsonDeserializer<T> {
 
     @Override
     public T deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        JsonObject jsonObject = jsonElement.deepCopy().getAsJsonObject();
         String typeString = jsonObject.getAsJsonPrimitive("type").getAsString();
         Class<? extends T> clazz = classes.get(typeString);
         if (clazz == null) {
@@ -52,7 +52,7 @@ public class TemplateObjectDeserializer<T> implements JsonDeserializer<T> {
                 }
             }
         }
-        return context.deserialize(jsonElement, clazz);
+        return context.deserialize(jsonObject, clazz);
     }
 
 }
