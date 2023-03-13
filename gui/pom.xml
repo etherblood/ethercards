@@ -108,12 +108,12 @@
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui</artifactId>
-            <version>e47d98b9480042b93d6addd5f4a6aa7ae218a178</version>
+            <version>84e01e8c4d40f4d1ecb0be0d58c341a0e96cb4e8</version>
         </dependency>
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui-samples</artifactId>
-            <version>e47d98b9480042b93d6addd5f4a6aa7ae218a178</version>
+            <version>84e01e8c4d40f4d1ecb0be0d58c341a0e96cb4e8</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.projectlombok</groupId>

@@ -1,7 +1,7 @@
 package com.etherblood.ethercards.gui.prettycards;
 
 import com.destrostudios.cardgui.samples.visualization.CustomAttachmentVisualization;
-import com.destrostudios.cardgui.samples.visualization.GlowBox;
+import com.destrostudios.cardgui.samples.visualization.background.GlowQuad;
 import com.destrostudios.cardgui.samples.visualization.cards.modelled.FoilModelledCard;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -13,13 +13,13 @@ public class CardVisualization extends CustomAttachmentVisualization<Node> {
     public static final String CARDBACK_IMAGE_PATH = "images/cardbacks/magic.png";
     private final Node node;
     private final FoilModelledCard modelledCard;
-    private final GlowBox glowBox;
+    private final GlowQuad glowBox;
 
     public CardVisualization(AssetManager assetManager) {
         node = new Node();
-        modelledCard = new FoilModelledCard(assetManager, "models/card/card.j3o", CARDBACK_IMAGE_PATH, ColorRGBA.Black);
+        modelledCard = new FoilModelledCard(assetManager,  CARDBACK_IMAGE_PATH, ColorRGBA.Black);
         node.attachChild(modelledCard.getNode());
-        glowBox = new GlowBox(assetManager, 0.96f, 1.28f);
+        glowBox = new GlowQuad(assetManager, 0.96f, 1.28f);
     }
 
     public void setGlow(ColorRGBA colorRGBA) {

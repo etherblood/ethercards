@@ -150,7 +150,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             }
         }
         DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
-                .allCardModels(allCardModels)
+                .collectionCards(maxCounts)
                 .deckCardsMaximumUnique(maxCounts)
                 .deckCardsMaximumTotal(LIBRARY_SIZE_LIMIT)
                 .collectionZone(collectionZone)
@@ -314,7 +314,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
 
     private void nextPage() {
         if (deckBuilderAppState.getCollectionPage() + 1 < deckBuilderAppState.getCollectionPagesCount()) {
-            deckBuilderAppState.goToNextColletionPage();
+            deckBuilderAppState.goToNextCollectionPage();
         }
     }
 

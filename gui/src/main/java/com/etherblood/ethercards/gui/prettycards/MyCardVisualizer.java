@@ -70,44 +70,34 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
             imageBackground.setBackground_Alpha(0);
             BufferedImage art = cardImages.readAndScaleImage(CardVisualization.CARDBACK_IMAGE_PATH, textureWidth, textureHeight);
             imageBackground.paintImage(art, 0, 0);
-            return SimpleModelledCard.flipAndCreateTexture(imageBackground);
+            imageBackground.flipY();
+            return new Texture2D(imageBackground.getImage());
         });
 
         Texture textureEmpty = TEXTURE_CACHE.computeIfAbsent("empty", key -> {
             PaintableImage imageBackground = new PaintableImage(textureWidth, textureHeight);
             imageBackground.setBackground_Alpha(0);
-            return SimpleModelledCard.flipAndCreateTexture(imageBackground);
+            imageBackground.flipY();
+            return new Texture2D(imageBackground.getImage());
         });
 
         String backgroundKey = "background_" + minified + "_" + enumCollectionToLong(colors);
-        Texture textureBackground = minified ? textureEmpty : faceDown ? textureCardBack : TEXTURE_CACHE.computeIfAbsent(backgroundKey, key -> {
-            return createBackgroundTexture(colors, minified);
-        });
+        Texture textureBackground = minified ? textureEmpty : faceDown ? textureCardBack : TEXTURE_CACHE.computeIfAbsent(backgroundKey, key -> createBackgroundTexture(colors, minified));
 
         String artworkKey = "artwork_" + minified + "_" + template.getImagePath();
-        Texture textureArtwork = faceDown ? textureEmpty : TEXTURE_CACHE.computeIfAbsent(artworkKey, key -> {
-            return createArtworkTexture(artworkTiles, cardModel, artworkWidth, artworkHeight, artworkX, artworkY, cols, rows);
-        });
+        Texture textureArtwork = faceDown ? textureEmpty : TEXTURE_CACHE.computeIfAbsent(artworkKey, key -> createArtworkTexture(artworkTiles, cardModel, artworkWidth, artworkHeight, artworkX, artworkY, cols, rows));
 
         Integer attack = cardModel.getAttack();
         Integer health = cardModel.getHealth();
         boolean damaged = cardModel.isDamaged();
-        Texture textureBattleStats = faceDown ? textureEmpty : TEXTURE_CACHE.computeIfAbsent("battle_" + attack + "_" + health + "_" + damaged, key -> {
-            return createBattleStatsTexture(attack, health, damaged);
-        });
+        Texture textureBattleStats = faceDown ? textureEmpty : TEXTURE_CACHE.computeIfAbsent("battle_" + attack + "_" + health + "_" + damaged, key -> createBattleStatsTexture(attack, health, damaged));
 
         String foilMapKey = "foilmap_" + minified + "_" + (attack != null) + "_" + (health != null);
-        Texture textureFoilMap = faceDown ? textureEmpty : cardModel.isFoil() ? TEXTURE_CACHE.computeIfAbsent(foilMapKey, key -> {
-            return createFoilTexture(artworkWidth, artworkHeight, artworkX, artworkY, attack, health);
-        }) : textureEmpty;
+        Texture textureFoilMap = faceDown ? textureEmpty : cardModel.isFoil() ? TEXTURE_CACHE.computeIfAbsent(foilMapKey, key -> createFoilTexture(artworkWidth, artworkHeight, artworkX, artworkY, attack, health)) : textureEmpty;
 
-        Texture textureDetails = faceDown ? textureEmpty : minified ? textureEmpty : TEXTURE_CACHE.computeIfAbsent("details_" + alias, key -> {
-            return createDetailsTexture(cardModel);
-        });
+        Texture textureDetails = faceDown ? textureEmpty : minified ? textureEmpty : TEXTURE_CACHE.computeIfAbsent("details_" + alias, key -> createDetailsTexture(cardModel));
 
-        Texture textureMulligan = cardModel.isMulligan() && !faceDown ? TEXTURE_CACHE.computeIfAbsent("mulligan", key -> {
-            return createMulliganTexture();
-        }) : textureEmpty;
+        Texture textureMulligan = cardModel.isMulligan() && !faceDown ? TEXTURE_CACHE.computeIfAbsent("mulligan", key -> createMulliganTexture()) : textureEmpty;
 
         Material material = visualization.getMaterial_Front();
         material.setTexture("DiffuseMap1", textureBackground);
@@ -133,12 +123,13 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         imageBackground.setBackground(Color.BLACK);
         BufferedImage bufferedImageBackground = getCardBackgroundImage(colors, minified);
         imageBackground.paintSameSizeImage(new PaintableImage(bufferedImageBackground));
-        return SimpleModelledCard.flipAndCreateTexture(imageBackground);
+        imageBackground.flipY();
+        return new Texture2D(imageBackground.getImage());
     }
 
     private Texture2D createMulliganTexture() {
         BufferedImage bufferedImage = cardImages.readImage("images/mulligan.png");
-        return SimpleModelledCard.flipAndCreateTexture(new PaintableImage(bufferedImage));
+        return new Texture2D(new PaintableImage(bufferedImage).getImage());
     }
 
     private Texture2D createArtworkTexture(int artworkTiles, CardModel cardModel, int artworkWidth, int artworkHeight, int artworkX, int artworkY, int cols, int rows) {
@@ -164,7 +155,8 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
                         destX, destY, destWidth, destHeight);
             }
         }
-        return SimpleModelledCard.flipAndCreateTexture(imageArtwork);
+        imageArtwork.flipY();
+        return new Texture2D(imageArtwork.getImage());
     }
 
     private int ceilDiv(int x, int y) {
@@ -186,7 +178,8 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         imageGraphics.dispose();
         imageFoilMap.removeByAlphaMask(new PaintableImage(image));
 
-        return SimpleModelledCard.flipAndCreateTexture(imageFoilMap);
+        imageFoilMap.flipY();
+        return new Texture2D(imageFoilMap.getImage());
     }
 
     private Texture2D createDetailsTexture(CardModel cardModel) {
@@ -219,7 +212,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
             front.setFont(FONTKEYWORDS);
             int tmpX = textStartX;
             tmpY = drawStringMultiLine(front, keywordsText, LINEWIDTH, tmpX, textStartX, tmpY, -2);
-            tmpY += 18;
+            tmpY += 24;
         }
         front.setColor(Color.BLACK);
         String description = template.getDescription();
@@ -227,7 +220,7 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
             front.setFont(FONTDESCRIPTION);
             int tmpX = textStartX;
             tmpY = drawStringMultiLine(front, description, LINEWIDTH, tmpX, textStartX, tmpY, -2);
-            tmpY += 18;
+            tmpY += 24;
         }
         String flavourText = template.getFlavourText();
         if (flavourText != null) {
@@ -250,7 +243,9 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
             front.drawString(tribesText, textStartX, 334);
         }
         front.dispose();
-        return SimpleModelledCard.flipAndCreateTexture(new PaintableImage(image));
+        PaintableImage paintable = new PaintableImage(image);
+        paintable.flipY();
+        return new Texture2D(paintable.getImage());
     }
 
     //http://stackoverflow.com/questions/4413132/problems-with-newline-in-graphics2d-drawstring
@@ -291,7 +286,9 @@ public class MyCardVisualizer extends CardVisualizer<CardModel> {
         Graphics2D imageGraphics = image.createGraphics();
         drawStats(imageGraphics, attack, health, damaged);
         imageGraphics.dispose();
-        return SimpleModelledCard.flipAndCreateTexture(new PaintableImage(image));
+        PaintableImage paintable = new PaintableImage(image);
+        paintable.flipY();
+        return new Texture2D(paintable.getImage());
     }
 
     private void drawStats(Graphics2D graphics, Integer attack, Integer health, boolean damaged) {

@@ -29,6 +29,10 @@ import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetAr
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.transformations.relative.HoveringTransformation;
 import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
+import com.destrostudios.cardgui.transformations.LinearTargetVectorTransformation3f;
+import com.destrostudios.cardgui.transformations.relative.ConditionalRelativeTransformation;
+import com.destrostudios.cardgui.transformations.speeds.TimeBasedRotationTransformationSpeed;
+import com.destrostudios.cardgui.transformations.speeds.TimeBasedVectorTransformationSpeed3f;
 import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.events.ParticleEvent;
@@ -312,7 +316,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     public void stateAttached(AppStateManager stateManager) {
         cameraAppstate = stateManager.getState(CameraAppState.class);
         hudAppstate = stateManager.getState(HudTextAppstate.class);
-        board = new Board();
+        board = new Board(BoardSettings.builder()
+                .hoverInspectionDelay(1f)
+                .isInspectable(this::isInspectable)
+                .dragProjectionZ(0.9975f)
+                .build());
         boardAppState = initBoardGui();
         stateManager.attach(boardAppState);
 
@@ -686,9 +694,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             objectEntities.put(card, myCard);
             card.getModel().setFaceUp(false);// hide cards by default until they were updated
 
-            card.position().addRelativeTransformation(new HoveringTransformation(0.1f, 4), () -> data.has(myCard, core.IN_BATTLE_ZONE) && data.has(myCard, core.FLYING));
-            card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0)), () -> data.has(myCard, core.TIRED));
-            card.rotation().addRelativeTransformation(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI)), () -> !inner.getModel().isFaceUp());
+            card.position().addRelativeTransformation(new ConditionalRelativeTransformation<>(new HoveringTransformation(0.1f, 4), new LinearTargetVectorTransformation3f(new Vector3f(), new TimeBasedVectorTransformationSpeed3f(0.1f)), () -> data.has(myCard, core.IN_BATTLE_ZONE) && data.has(myCard, core.FLYING)));
+            card.rotation().addRelativeTransformation(new ConditionalRelativeTransformation<>(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, -FastMath.PI / 6, 0), new TimeBasedRotationTransformationSpeed(0.1f)), new LinearTargetRotationTransformation(Quaternion.IDENTITY, new TimeBasedRotationTransformationSpeed(0.1f)), () -> data.has(myCard, core.TIRED)));
+            card.rotation().addRelativeTransformation(new ConditionalRelativeTransformation<>(new LinearTargetRotationTransformation(new Quaternion().fromAngles(0, 0, -FastMath.PI), new TimeBasedRotationTransformationSpeed(0.1f)), new LinearTargetRotationTransformation(Quaternion.IDENTITY, new TimeBasedRotationTransformationSpeed(0.1f)), () -> !inner.getModel().isFaceUp()));
         }
         return card;
     }
@@ -731,11 +739,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             board.addZone(playerZone.getBoardZone());
             playerZones.put(player, playerZone);
         }
-        return new BoardAppState(board, rootNode, BoardSettings.builder()
-                .hoverInspectionDelay(1f)
-                .isInspectable(this::isInspectable)
-                .dragProjectionZ(0.9975f)
-                .build());
+        return new BoardAppState(board, rootNode);
     }
 
     private boolean isInspectable(TransformedBoardObject<?> transformedBoardObject) {
