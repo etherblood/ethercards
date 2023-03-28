@@ -180,6 +180,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         }
         deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
         deckBuilderAppState.setDeck(deck);
+        deckBuilderAppState.setCollectionCardOrder(cardOrder);
 
         selectButton = new Button("Save");
         selectButton.setFontSize(50);
