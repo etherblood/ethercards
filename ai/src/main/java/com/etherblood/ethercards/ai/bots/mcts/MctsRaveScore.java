@@ -25,6 +25,9 @@ class MctsRaveScore {
         for (float score : scores) {
             sum += score;
         }
+        if (sum == 0) {
+            return 0;
+        }
         return scores[playerIndex] / sum;
     }
 }

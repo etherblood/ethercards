@@ -40,15 +40,16 @@ public class BattleSetup {
         settingsBuilder.components = componentsBuilder.build();
         TemplatesLoader loader = new TemplatesLoader(x -> TemplatesLoader.loadFile(templatesPath + "cards/" + x + ".json"), new TemplatesParser(settingsBuilder.components, new TemplateAliasMapsImpl()));
 
-        int indexA = random.nextInt(2);
+        int teamIndexA = random.nextInt(2);
+        int teamIndexB = 1 - teamIndexA;
 
         List<RawPlayerSetup> players = new ArrayList<>();
         RawPlayerSetup playerA = new RawPlayerSetup(
-                0, null, indexA, a
+                0, null, teamIndexA, a
         );
         players.add(playerA);
         RawPlayerSetup playerB = new RawPlayerSetup(
-                1 - indexA, null, indexA, b
+                1, null, teamIndexB, b
         );
         players.add(playerB);
 

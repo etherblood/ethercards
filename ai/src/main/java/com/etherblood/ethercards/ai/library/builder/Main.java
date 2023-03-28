@@ -16,11 +16,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String... args) throws InterruptedException {
+        String assetsPath = "../assets/";
         String hero = "nerfed_ahri";
         List<String> cardPool = List.of(
                 "blue_eyes_white_dragon",
@@ -53,7 +55,6 @@ public class Main {
             initialGeneration.add(rollLibrary(cardPool, cardLimit, hero, random));
         }
 
-        String assetsPath = "../assets/";
         BattleSetup setup = new BattleSetup(assetsPath + "templates/", new SecureRandom());
         MctsBotSettings<Move, MoveBotGame> botSettings = new MctsBotSettings<>();
         botSettings.strength = 100;
@@ -112,9 +113,11 @@ public class Main {
                 Game game = setup.startGame(a.library, b.library);
 
                 Bot bot = new MctsBot(new MoveBotGame(game), () -> new MoveBotGame(setup.simulationGame(game)), botSettings);
+                int playerA = game.findPlayerByIndex(0);
+                int playerB = game.findPlayerByIndex(1);
                 while (!game.isGameOver()) {
                     int index;
-                    if (game.isPlayerActive(game.findPlayerByIndex(0))) {
+                    if (game.isPlayerActive(playerA)) {
                         index = 0;
                     } else {
                         index = 1;
@@ -123,10 +126,10 @@ public class Main {
                     game.getMoves().apply(move);
                 }
 
-                if (game.hasPlayerWon(game.findPlayerByIndex(0))) {
+                if (game.hasPlayerWon(playerA)) {
                     a.wins++;
                     b.losses++;
-                } else if (game.hasPlayerWon(game.findPlayerByIndex(1))) {
+                } else if (game.hasPlayerWon(playerB)) {
                     a.losses++;
                     b.wins++;
                 } else {
@@ -134,6 +137,7 @@ public class Main {
                     b.draws++;
                 }
             }
+            System.out.println("finished round " + i);
         }
 
         return agents.stream()
@@ -153,14 +157,8 @@ public class Main {
     private static RawLibraryTemplate mutateLibrary(RawLibraryTemplate library, List<String> cardPool, ToIntFunction<String> cardLimit, Random random) {
         RawLibraryTemplate template = new RawLibraryTemplate(library);
         String card = cardPool.get(random.nextInt(cardPool.size()));
-        int count = library.cards().getOrDefault(card, 0);
         int roll = random.nextInt(cardLimit.applyAsInt(card));
-        if (count <= roll) {
-            count++;
-        } else {
-            count--;
-        }
-        template.cards().put(card, count);
+        template.cards().put(card, roll);
         return template;
     }
 
@@ -169,14 +167,10 @@ public class Main {
         cards.addAll(a.cards().keySet());
         cards.addAll(b.cards().keySet());
 
-        ToIntFunction<String> min = card -> Math.min(a.cards().getOrDefault(card, 0), b.cards().getOrDefault(card, 0));
-        ToIntFunction<String> max = card -> Math.max(a.cards().getOrDefault(card, 0), b.cards().getOrDefault(card, 0));
-
         return new RawLibraryTemplate(
                 random.nextBoolean() ? a.hero() : b.hero(),
-                cards.stream()
-                        .collect(Collectors.toMap(
-                                card -> card,
-                                card -> min.applyAsInt(card) + random.nextInt(max.applyAsInt(card) - min.applyAsInt(card) + 1))));
+                cards.stream().collect(Collectors.toMap(
+                        Function.identity(),
+                        card -> random.nextBoolean() ? a.cards().getOrDefault(card, 0) : b.cards().getOrDefault(card, 0))));
     }
 }
