@@ -10,7 +10,7 @@
   },
   "hand": {
     "cast": {
-      "manaCost": 5,
+      "manaCost": 4,
       "target": {
         "type": "simple",
         "requiresTarget": false,
