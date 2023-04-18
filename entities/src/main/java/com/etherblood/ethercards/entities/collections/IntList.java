@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -117,9 +118,20 @@ public class IntList implements Iterable<Integer> {
     }
 
     private void grow() {
-        int[] nextData = new int[Math.max(data.length * 2, DEFAULT_CAPACITY)];
-        System.arraycopy(data, 0, nextData, 0, data.length);
-        data = nextData;
+        grow(Math.max(data.length * 2, DEFAULT_CAPACITY));
+    }
+    private void grow(int targetCapacity) {
+        data = Arrays.copyOf(data, targetCapacity);
+    }
+
+    public void retain(IntPredicate predicate) {
+        int i = 0;
+        for (int j = 0; j < size; j++) {
+            if (predicate.test(data[j])) {
+                data[i++] = data[j];
+            }
+        }
+        size = i;
     }
 
     public int size() {

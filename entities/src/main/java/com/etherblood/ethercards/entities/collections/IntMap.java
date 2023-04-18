@@ -20,7 +20,7 @@ public class IntMap implements Iterable<Integer> {
     private boolean hasFreeKey;
 
     public IntMap() {
-        this(8, 0.75f);
+        this(16, 0.75f);
     }
 
     public IntMap(int capacity, float fillFactor) {
@@ -30,14 +30,15 @@ public class IntMap implements Iterable<Integer> {
         assert (mask & capacity) == 0;
         keys = new int[capacity];
         values = new int[capacity];
-        updateFillLimit(capacity);
+        updateFillLimit();
     }
 
     public void foreachKey(IntConsumer consumer) {
         if (hasFreeKey) {
             consumer.accept(FREE_KEY);
         }
-        for (int key : keys) {
+        for (int i = 0; i <= mask; i++) {
+            int key = keys[i];
             if (key != FREE_KEY) {
                 consumer.accept(key);
             }
@@ -99,7 +100,6 @@ public class IntMap implements Iterable<Integer> {
     }
 
     public void set(int key, int value) {
-        assert count < keys.length;
         if (key == FREE_KEY) {
             if (!hasFreeKey) {
                 hasFreeKey = true;
@@ -136,24 +136,25 @@ public class IntMap implements Iterable<Integer> {
 
     private void resize(int capacity) {
         assert count < capacity;
-        mask = capacity - 1;
-        assert (mask & capacity) == 0;
+        int oldMask = mask;
         int[] oldKeys = keys;
         int[] oldValues = values;
         keys = new int[capacity];
         values = new int[capacity];
-        updateFillLimit(capacity);
-        for (int i = 0; i < oldKeys.length; i++) {
+        mask = capacity - 1;
+        assert (mask & capacity) == 0;
+        for (int i = 0; i <= oldMask; i++) {
             int key = oldKeys[i];
             if (key == FREE_KEY) {
                 continue;
             }
             uncheckedSet(key, oldValues[i]);
         }
+        updateFillLimit();
     }
 
-    private void updateFillLimit(int capacity) {
-        fillLimit = (int) (fillFactor * capacity) - 1;
+    private void updateFillLimit() {
+        fillLimit = (int) (fillFactor * capacity()) - 1;
     }
 
     public void remove(int key) {
@@ -202,7 +203,7 @@ public class IntMap implements Iterable<Integer> {
     }
 
     int capacity() {
-        return keys.length;
+        return mask + 1;
     }
 
     public void clear() {
@@ -269,26 +270,19 @@ public class IntMap implements Iterable<Integer> {
 
     public void copyFrom(IntMap other) {
         if (this == other) {
-            throw new IllegalArgumentException("Cannot clone from itself.");
+            throw new IllegalArgumentException("Cannot copy from itself.");
         }
-        if (keys.length < other.keys.length && fillFactor == other.fillFactor) {
+        if (keys.length < other.capacity()) {
             keys = new int[other.keys.length];
             values = new int[other.keys.length];
-            fillLimit = other.fillLimit;
-            mask = other.mask;
         }
-        if (keys.length == other.keys.length) {
-            System.arraycopy(other.keys, 0, keys, 0, keys.length);
-            System.arraycopy(other.values, 0, values, 0, values.length);
-            hasFreeKey = other.hasFreeKey;
-            freeValue = other.freeValue;
-            count = other.count;
-        } else {
-            clear();
-            for (int key : other) {
-                set(key, other.get(key));
-            }
-        }
+        System.arraycopy(other.keys, 0, keys, 0, other.capacity());
+        System.arraycopy(other.values, 0, values, 0, other.capacity());
+        hasFreeKey = other.hasFreeKey;
+        freeValue = other.freeValue;
+        count = other.count;
+        mask = other.mask;
+        updateFillLimit();
     }
 
 }

@@ -23,7 +23,7 @@ public class DisplayCardTemplate extends CardTemplate {
         this.imagePath = imagePath;
         this.frames = frames;
         this.loopMillis = loopMillis;
-        this.colors = Collections.unmodifiableList(new ArrayList<>(colors));
+        this.colors = List.copyOf(colors);
     }
 
     public String getAlias() {

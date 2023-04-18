@@ -65,12 +65,12 @@ public class SimpleEntityData implements EntityData {
 
     @Override
     public IntList list(int component) {
-        IntMap componentMaps = component(component);
-        if (componentMaps.isEmpty()) {
+        IntMap componentMap = component(component);
+        if (componentMap.isEmpty()) {
             return new IntList(0);
         }
-        IntList list = new IntList();
-        componentMaps.foreachKey(list::add);
+        IntList list = new IntList(componentMap.size());
+        componentMap.foreachKey(list::add);
         if (list.size() > 1) {
             list.sort();
         }
