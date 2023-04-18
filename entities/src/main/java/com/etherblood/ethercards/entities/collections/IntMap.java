@@ -24,10 +24,11 @@ public class IntMap implements Iterable<Integer> {
     }
 
     public IntMap(int capacity, float fillFactor) {
+        if (Integer.bitCount(capacity) != 1) {
+            throw new IllegalArgumentException("Capacity must be a power of 2");
+        }
         this.fillFactor = fillFactor;
         this.mask = capacity - 1;
-        assert mask != 0;
-        assert (mask & capacity) == 0;
         keys = new int[capacity];
         values = new int[capacity];
         updateFillLimit();
