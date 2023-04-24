@@ -28,6 +28,7 @@ import com.destrostudios.cardgui.samples.boardobjects.staticspatial.StaticSpatia
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowSettings;
 import com.destrostudios.cardgui.samples.boardobjects.targetarrow.SimpleTargetArrowVisualizer;
 import com.destrostudios.cardgui.samples.transformations.relative.HoveringTransformation;
+import com.destrostudios.cardgui.transformations.ConstantButTargetedTransformation;
 import com.destrostudios.cardgui.transformations.LinearTargetRotationTransformation;
 import com.destrostudios.cardgui.transformations.LinearTargetVectorTransformation3f;
 import com.destrostudios.cardgui.transformations.relative.ConditionalRelativeTransformation;
@@ -38,9 +39,6 @@ import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.events.ParticleEvent;
 import com.etherblood.ethercards.gui.arrows.ColoredConnectionArrow;
 import com.etherblood.ethercards.gui.arrows.ColoredConnectionArrowVisualizer;
-import com.etherblood.ethercards.gui.particles.ColorModel;
-import com.etherblood.ethercards.gui.particles.ColoredSphere;
-import com.etherblood.ethercards.gui.particles.ColoredSphereVisualizer;
 import com.etherblood.ethercards.gui.prettycards.CardImages;
 import com.etherblood.ethercards.gui.prettycards.CardModel;
 import com.etherblood.ethercards.gui.prettycards.CardModelUpdater;
@@ -82,6 +80,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
+import com.jme3.scene.shape.Sphere;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -90,6 +89,7 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -236,9 +236,12 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private void shootColorSphere(int source, int target, ColorRGBA color) {
-        ColoredSphere sphere = new ColoredSphere(new ColorModel());
-        sphere.getModel().setColor(color);
-        shootBoardObject(source, target, sphere);
+        Geometry sphere = new Geometry();
+        Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setColor("Color", color);
+        sphere.setMaterial(material);
+        sphere.setMesh(new Sphere(8, 16, 0.25f));
+        shootSpatial(source, target, sphere);
     }
 
     private void shootParticleEffect(int source, int target, String particleEffectName, float scale, float speed) {
@@ -258,8 +261,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private void shootBoardObject(int source, int target, TransformedBoardObject transformedBoardObject) {
         Card<CardModel> sourceObject = visualCards.get(source);
         Card<CardModel> targetObject = visualCards.get(target);
-        transformedBoardObject.resetTransformations();
-        transformedBoardObject.position().setCurrentValue(sourceObject.position().getCurrentValue());
+        transformedBoardObject.position().setTransformation(new ConstantButTargetedTransformation<>(sourceObject.position().getCurrentValue()));
         board.register(transformedBoardObject);
         TargetedArcAnimation animation = new TargetedArcAnimation(transformedBoardObject, targetObject, 1, 0.6f);
         board.playAnimation(animation);
@@ -712,7 +714,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private BoardAppState initBoardGui() {
         EntityData data = game.getData();
         CoreComponents core = data.getComponents().getModule(CoreComponents.class);
-        board.registerVisualizer_Class(ColoredSphere.class, new ColoredSphereVisualizer());
         board.registerVisualizer_Class(StaticSpatial.class, new StaticSpatialVisualizer());
         board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardImages));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()

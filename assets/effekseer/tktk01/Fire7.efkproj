@@ -217,7 +217,7 @@
                   </Node>
                 </Children>
                 <RendererCommonValues>
-                  <ColorTexture>../Effekseer161219/サンプルのパーツ/Particle_Hard.png</ColorTexture>
+                  <ColorTexture>Texture/Particle_Hard.png</ColorTexture>
                   <AlphaBlend>2</AlphaBlend>
                 </RendererCommonValues>
                 <GenerationLocationValues>
