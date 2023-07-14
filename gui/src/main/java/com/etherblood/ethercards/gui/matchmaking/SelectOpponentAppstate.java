@@ -3,15 +3,14 @@ package com.etherblood.ethercards.gui.matchmaking;
 import com.etherblood.ethercards.gui.HudTextAppstate;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.system.AppSettings;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.DefaultRangedValueModel;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.Slider;
-import org.lwjgl.opengl.Display;
 
 public class SelectOpponentAppstate extends AbstractAppState {
 
@@ -19,6 +18,7 @@ public class SelectOpponentAppstate extends AbstractAppState {
     private final int strength = 10_000;
 
     private final Node guiNode;
+    private final AppSettings appSettings;
     private final Container container;
     private final Button toggleTeamSizeButton;
     private final Button confirmButton;
@@ -26,8 +26,9 @@ public class SelectOpponentAppstate extends AbstractAppState {
 
     private boolean finalized = false;
 
-    public SelectOpponentAppstate(Node guiNode, AssetManager assetManager) {
+    public SelectOpponentAppstate(Node guiNode, AppSettings appSettings) {
         this.guiNode = guiNode;
+        this.appSettings = appSettings;
 
         container = new Container();
         toggleTeamSizeButton = new Button("");
@@ -103,6 +104,6 @@ public class SelectOpponentAppstate extends AbstractAppState {
     @Override
     public void update(float tpf) {
         Vector3f size = container.getSize();
-        container.setLocalTranslation(100, (Display.getHeight() + size.y) / 2, 0);
+        container.setLocalTranslation(100, (appSettings.getHeight() + size.y) / 2, 0);
     }
 }

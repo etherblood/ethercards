@@ -1,9 +1,6 @@
 package com.etherblood.ethercards.gui;
 
-import com.destroflyer.jme3.effekseer.model.ParticleEffect;
-import com.destroflyer.jme3.effekseer.model.ParticleEffectSettings;
-import com.destroflyer.jme3.effekseer.reader.EffekseerReader;
-import com.destroflyer.jme3.effekseer.renderer.EffekseerControl;
+import com.destroflyer.jme3.effekseer.nativ.EffekseerControl;
 import com.destrostudios.cardgui.Animation;
 import com.destrostudios.cardgui.Board;
 import com.destrostudios.cardgui.BoardAppState;
@@ -123,7 +120,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final int userControlledPlayer;
     private final CardImages cardImages;
     private final Node rootNode;
-    private final String assetsPath;
     private boolean gameCompleted = false;
 
     private CameraAppState cameraAppstate;
@@ -136,7 +132,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     private final Map<Animation, BoardObject> particleMapBoardObjects = new HashMap<>();
     private final IntList pendingMulligan = new IntList();
 
-    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, CardImages cardImages, Node rootNode, String assetsPath, int playerIndex) {
+    public GameAppstate(Consumer<Move> moveRequester, GameReplayService gameReplayService, CardImages cardImages, Node rootNode, int playerIndex) {
         this.moveRequester = moveRequester;
         this.gameReplayService = gameReplayService;
         events = new QueueEventListener();
@@ -144,7 +140,6 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         this.userControlledPlayer = game.findPlayerByIndex(playerIndex);
         this.cardImages = cardImages;
         this.rootNode = rootNode;
-        this.assetsPath = assetsPath;
 
         //skip initial animations
         events.getQueue().clear();
@@ -245,9 +240,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
     }
 
     private void shootParticleEffect(int source, int target, String particleEffectName, float scale, float speed) {
-        ParticleEffect particleEffect = new EffekseerReader().read(assetsPath, getParticleEffectPath(particleEffectName));
         Node node = createParticleEffectNode(scale);
-        node.addControl(new EffekseerControl(particleEffect, getParticleEffectSettings(speed), assetManager));
+        node.addControl(createParticleEffect(particleEffectName, speed));
         shootSpatial(source, target, node);
     }
 
@@ -284,13 +278,8 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         StaticSpatial staticSpatial = new StaticSpatial();
         staticSpatial.getModel().setSpatial(node);
         board.register(staticSpatial);
-        EffekseerAnimation animation = new EffekseerAnimation(
-                node,
-                assetsPath,
-                getParticleEffectPath(particleEffectName),
-                getParticleEffectSettings(speed),
-                assetManager
-        );
+        EffekseerControl control = createParticleEffect(particleEffectName, speed);
+        EffekseerAnimation animation = new EffekseerAnimation(node, control);
         board.playAnimation(animation);
         particleMapBoardObjects.put(animation, staticSpatial);
         return staticSpatial;
@@ -303,15 +292,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         return node;
     }
 
-    private ParticleEffectSettings getParticleEffectSettings(float speed) {
-        return ParticleEffectSettings.builder()
-                .loop(false)
-                .frameLength((1f / 24) / speed)
-                .build();
-    }
-
-    private String getParticleEffectPath(String particleEffectName) {
-        return assetsPath + "effekseer/" + particleEffectName + ".efkproj";
+    private EffekseerControl createParticleEffect(String particleEffectName, float speed) {
+        EffekseerControl control = new EffekseerControl(assetManager, "effekseer/" + particleEffectName + ".efkefc");
+        control.setSpeed(speed);
+        return control;
     }
 
     @Override

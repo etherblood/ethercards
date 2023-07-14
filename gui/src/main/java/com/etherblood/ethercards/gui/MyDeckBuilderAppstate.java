@@ -31,6 +31,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.system.AppSettings;
 import com.simsilica.lemur.Axis;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Container;
@@ -45,7 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
-import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +58,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
     private final RawLibraryTemplate presetLibrary;
     private final DeckBuilderAppState<CardModel> deckBuilderAppState;
     private final Node guiNode;
+    private final AppSettings áppSettings;
     private final Button selectButton;
     private final Container tableHeader;
     private final Button nextPageButton;
@@ -91,9 +92,10 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         }
     };
 
-    public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, Node guiNode, RawLibraryTemplate presetLibrary, Components components) {
+    public MyDeckBuilderAppstate(List<DisplayCardTemplate> cards, CardImages cardImages, Node rootNode, Node guiNode, AppSettings áppSettings, RawLibraryTemplate presetLibrary, Components components) {
         this.presetLibrary = presetLibrary;
         this.guiNode = guiNode;
+        this.áppSettings = áppSettings;
 
         Comparator<CardModel> cardOrder = Comparator.comparingInt(this::getManaCost);
         cardOrder = cardOrder.thenComparing(x -> x.getTemplate().getName());
@@ -141,17 +143,16 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
         };
         BoardObjectVisualizer<Card<CardModel>> collectionCardVisualizer = new MyCardVisualizer(cardImages);
         BoardObjectVisualizer<Card<DeckBuilderDeckCardModel<CardModel>>> deckCardVisualizer = new MyDeckBuilderDeckCardVisualizer(cardImages);
-        Map<CardModel, Integer> maxCounts = new HashMap<>();
+        Map<CardModel, Integer> collectionCards = new HashMap<>();
         for (CardModel card : allCardModels) {
             if (card.getTemplate().getAlias().equals("blue_eyes_white_dragon")) {
-                maxCounts.put(card, 3);
+                collectionCards.put(card, 3);
             } else {
-                maxCounts.put(card, 2);
+                collectionCards.put(card, 2);
             }
         }
-        DeckBuilderSettings<CardModel> settings = DeckBuilderSettings.<CardModel>builder()
-                .collectionCards(maxCounts)
-                .deckCardsMaximumUnique(maxCounts)
+        DeckBuilderSettings<CardModel> deckBuilderSettings = DeckBuilderSettings.<CardModel>builder()
+                .collectionCards(collectionCards)
                 .deckCardsMaximumTotal(LIBRARY_SIZE_LIMIT)
                 .collectionZone(collectionZone)
                 .deckZone(deckZone)
@@ -178,7 +179,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
                 LOG.warn("Card with alias {} not found, skipped.", entry.getKey());
             }
         }
-        deckBuilderAppState = new DeckBuilderAppState<>(rootNode, settings);
+        deckBuilderAppState = new DeckBuilderAppState<>(rootNode, deckBuilderSettings);
         deckBuilderAppState.setDeck(deck);
         deckBuilderAppState.setCollectionCardOrder(cardOrder);
 
@@ -297,7 +298,7 @@ public class MyDeckBuilderAppstate extends AbstractAppState {
             });
             searchVersion = searchField.getDocumentModel().getVersion();
         }
-        tableHeader.setLocalTranslation(300, Display.getHeight() - 20, 0);
+        tableHeader.setLocalTranslation(300, áppSettings.getHeight() - 20, 0);
     }
 
     // https://stackoverflow.com/a/5439547

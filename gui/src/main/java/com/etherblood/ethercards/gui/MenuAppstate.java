@@ -9,7 +9,6 @@ import com.jme3.system.AppSettings;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Container;
 import java.io.IOException;
-import org.lwjgl.opengl.Display;
 
 public class MenuAppstate extends AbstractAppState {
 
@@ -77,8 +76,9 @@ public class MenuAppstate extends AbstractAppState {
         container.addChild(exitButton);
         fullscreenButton.setText(settings.isFullscreen() ? "Fullscreen" : "Windowed");
 
+        AppSettings appSettings = application.getContext().getSettings();
         Vector3f size = container.getSize();
-        container.setLocalTranslation((Display.getWidth() - size.x) / 2, (Display.getHeight() + size.y) / 2, 10);
+        container.setLocalTranslation((appSettings.getWidth() - size.x) / 2, (appSettings.getHeight() + size.y) / 2, 10);
     }
 
     private void save() {
