@@ -10,8 +10,8 @@
     <artifactId>gui</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <jm3.group>org.jmonkeyengine</jm3.group>
-        <jm3.version>3.2.4-stable</jm3.version>
+        <version.card-gui>d8b46a1f06a2c689b2e18479a97d1fb2198c9663</version.card-gui>
+        <version.jme3>3.6.0-stable</version.jme3>
     </properties>
 
     <build>
@@ -108,12 +108,12 @@
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui</artifactId>
-            <version>84e01e8c4d40f4d1ecb0be0d58c341a0e96cb4e8</version>
+            <version>${version.card-gui}</version>
         </dependency>
         <dependency>
             <groupId>com.github.destrostudios.card-gui</groupId>
             <artifactId>card-gui-samples</artifactId>
-            <version>84e01e8c4d40f4d1ecb0be0d58c341a0e96cb4e8</version>
+            <version>${version.card-gui}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.projectlombok</groupId>
@@ -122,14 +122,19 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>${jm3.group}</groupId>
+            <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-terrain</artifactId>
-            <version>${jm3.version}</version>
+            <version>${version.jme3}</version>
         </dependency>
         <dependency>
-            <groupId>${jm3.group}</groupId>
+            <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-effects</artifactId>
-            <version>${jm3.version}</version>
+            <version>${version.jme3}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-awt-dialogs</artifactId>
+            <version>${version.jme3}</version>
         </dependency>
         <dependency>
             <!-- TODO: replace with better logger binding -->

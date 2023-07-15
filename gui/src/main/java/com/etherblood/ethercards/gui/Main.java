@@ -2,8 +2,8 @@ package com.etherblood.ethercards.gui;
 
 import com.destrostudios.authtoken.JwtAuthentication;
 import com.destrostudios.authtoken.NoValidateJwtService;
+import com.jme3.awt.AWTErrorDialog;
 import com.jme3.system.AppSettings;
-import com.jme3.system.ErrorDialog;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -23,8 +23,7 @@ public class Main {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             t.printStackTrace(pw);
-            ErrorDialog dialog = new ErrorDialog(sw.toString());
-            dialog.setVisible(true);
+            AWTErrorDialog.showDialog(sw.toString());
         }
     }
 
@@ -63,6 +62,7 @@ public class Main {
         settings.setTitle("Ethercards");
         settings.setFrameRate(60);
         settings.setAudioRenderer(null);
+        settings.setGammaCorrection(false);
         app.setSettings(settings);
         app.setShowSettings(false);
         app.setDisplayStatView(false);

@@ -16,7 +16,7 @@ public class MyDeckBuilderDeckCardVisualizer extends SimpleDeckBuilderDeckCardVi
     private final CardImages images;
 
     public MyDeckBuilderDeckCardVisualizer(CardImages images) {
-        super(4, 0.57f, 57);
+        super(4, 0.57f, 57, false);
         this.images = images;
     }
 

@@ -1,5 +1,6 @@
 package com.etherblood.ethercards.gui;
 
+import com.destroflyer.jme3.effekseer.nativ.Effekseer;
 import com.destrostudios.authtoken.JwtAuthentication;
 import com.etherblood.ethercards.client.GameClient;
 import com.etherblood.ethercards.client.GameReplayView;
@@ -94,7 +95,7 @@ public class GameApplication extends SimpleApplication {
             presetLibrary.cards().remove("blessing_of_wisdom");
             presetLibrary.cards().remove("goblin_guide");
         }
-        stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, presetLibrary, components));
+        stateManager.attach(new MyDeckBuilderAppstate(cards, cardImages, rootNode, guiNode, context.getSettings(), presetLibrary, components));
     }
 
     @Override
@@ -114,10 +115,12 @@ public class GameApplication extends SimpleApplication {
         assetManager.registerLocator(assetsPath, FileLocator.class);
         assetManager.registerLoader(GsonLoader.class, "json");
 
+        Effekseer.initialize(stateManager, viewPort, assetManager, context.getSettings().isGammaCorrection(), false, false);
+
         stateManager.attach(new PostFilterAppstate());
         stateManager.attach(new CameraAppState());
         stateManager.attach(new ButtonAppstate());
-        stateManager.attach(new HudTextAppstate(guiNode, guiFont));
+        stateManager.attach(new HudTextAppstate(guiNode, guiFont, context.getSettings()));
         stateManager.attach(new ForestBoardAppstate(rootNode));
 
         cardImages = new CardImages(assetsPath);
@@ -174,7 +177,7 @@ public class GameApplication extends SimpleApplication {
             if (selectedOpponents == null) {
                 SelectOpponentAppstate selectOpponentAppstate = stateManager.getState(SelectOpponentAppstate.class);
                 if (selectOpponentAppstate == null) {
-                    stateManager.attach(new SelectOpponentAppstate(guiNode, assetManager));
+                    stateManager.attach(new SelectOpponentAppstate(guiNode, context.getSettings()));
                 } else if (selectOpponentAppstate.getMatchOpponents() != null) {
                     selectedOpponents = selectOpponentAppstate.getMatchOpponents();
                     stateManager.detach(selectOpponentAppstate);
@@ -190,7 +193,7 @@ public class GameApplication extends SimpleApplication {
         } else {
             stateManager.getState(HudTextAppstate.class).setText("");
             GameReplayView gameReplayService = client.getGame();
-            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService.gameReplay, cardImages, rootNode, assetsPath, gameReplayService.playerIndex));
+            stateManager.attach(new GameAppstate(client::requestMove, gameReplayService.gameReplay, cardImages, rootNode, gameReplayService.playerIndex));
             selectedLibrary = null;
             selectedOpponents = null;
 
