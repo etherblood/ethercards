@@ -11,11 +11,12 @@ curl https://destrostudios.com:8080/apps/5/updateFiles
 echo updated client files
 
 cd ${SERVER}
-bash stop.sh
+pm2 stop ethercards 2> /dev/null
 echo stopped server
 cp ${GIT}/game-server/target/game-server-*[!s].jar ${SERVER}/a-cards.jar
 rsync -rc --delete ${GIT}/game-server/target/libs ${SERVER}/
 rsync -rc --delete ${GIT}/game-server/target/assets ${SERVER}/
+mv ${GIT}/releng/ecosystem.config.js ${SERVER}/ecosystem.config.js
 echo updated server files
-bash start.sh
+pm2 start
 echo started server
