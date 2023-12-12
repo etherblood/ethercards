@@ -7,7 +7,7 @@ CLIENT=$3
 cp ${GIT}/gui/target/gui-*[!s].jar ${CLIENT}/a.jar
 rsync -rc --delete ${GIT}/gui/target/assets ${CLIENT}/
 rsync -rc --delete ${GIT}/gui/target/libs ${CLIENT}/
-curl https://destrostudios.com:8080/apps/5/updateFiles
+curl -X POST https://destrostudios.com:8080/apps/5/updateFiles
 echo updated client files
 
 cd ${SERVER}
