@@ -1,8 +1,9 @@
 package com.etherblood.ethercards.rules.templates;
 
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.rules.GameTemplates;
+
 import java.util.function.IntUnaryOperator;
 
 public interface TargetSelection {
@@ -12,7 +13,7 @@ public interface TargetSelection {
         return false;
     }
 
-    default IntList selectTargets(EntityData data, GameTemplates templates, IntUnaryOperator random, int source, IntList validTargets) {
+    default EntityList selectTargets(EntityData data, GameTemplates templates, IntUnaryOperator random, int source, EntityList validTargets) {
         // we select all targets as default, implementations may choose subsets
         assert !requiresTarget();
         if (validTargets.isEmpty()) {
@@ -26,12 +27,12 @@ public interface TargetSelection {
     }
 
     default boolean isValidTarget(EntityData data, GameTemplates templates, int source, Integer target) {
-        IntList validTargets = getValidTargets(data, templates, source);
+        EntityList validTargets = getValidTargets(data, templates, source);
         if (target == null) {
             return !requiresTarget() && validTargets.isEmpty();
         }
         return validTargets.contains(target);
     }
 
-    IntList getValidTargets(EntityData data, GameTemplates templates, int source);
+    EntityList getValidTargets(EntityData data, GameTemplates templates, int source);
 }

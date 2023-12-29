@@ -6,6 +6,7 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.updates.systems.CastSystem;
 import com.etherblood.ethercards.rules.updates.systems.UseAbilitySystem;
+
 import java.util.function.IntUnaryOperator;
 
 public class GameLoopService implements Runnable {
@@ -18,7 +19,7 @@ public class GameLoopService implements Runnable {
 
     public GameLoopService(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
         this.random = random;
         this.events = events;

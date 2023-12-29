@@ -1,7 +1,7 @@
 package com.etherblood.ethercards.templates.implementation.statmodifiers;
 
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntMap;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
@@ -19,9 +19,9 @@ public class AddOnOpponentThresholdModifier implements StatModifier {
 
     @Override
     public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int owner = data.get(self, core.OWNER);
-        IntList graveyard = data.list(core.IN_GRAVEYARD_ZONE);
+        EntityList graveyard = data.list(core.IN_GRAVEYARD_ZONE);
         if (graveyard.size() < threshold) {
             return stat;
         }

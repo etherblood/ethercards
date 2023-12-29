@@ -1,7 +1,7 @@
 package com.etherblood.ethercards.rules.updates.systems;
 
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntMap;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
@@ -9,6 +9,7 @@ import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.updates.TriggerService;
+
 import java.util.function.IntUnaryOperator;
 
 public class CastSystem {
@@ -25,12 +26,12 @@ public class CastSystem {
         this.templates = templates;
         this.random = random;
         this.events = events;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.triggerService = new TriggerService(data, templates, random, events);
     }
 
     public void run() {
-        IntList list = data.list(core.CAST_TARGET);
+        EntityList list = data.list(core.CAST_TARGET);
         if (list.isEmpty()) {
             return;
         }

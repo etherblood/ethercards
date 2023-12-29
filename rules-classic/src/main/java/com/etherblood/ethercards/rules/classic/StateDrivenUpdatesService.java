@@ -7,6 +7,7 @@ import com.etherblood.ethercards.rules.DeathOptions;
 import com.etherblood.ethercards.rules.EffectiveStatsService;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.MoveAvailabilityService;
+
 import java.util.function.IntUnaryOperator;
 
 public class StateDrivenUpdatesService {
@@ -19,7 +20,7 @@ public class StateDrivenUpdatesService {
 
     public StateDrivenUpdatesService(EntityData data, GameTemplates templates, IntUnaryOperator random, EffectiveStatsService effectiveStats) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
         this.random = random;
         this.effectiveStats = effectiveStats;
@@ -87,6 +88,7 @@ public class StateDrivenUpdatesService {
         if (candidates.isEmpty()) {
             return;
         }
-        data.set(attacker, core.ATTACK_TARGET, candidates.getRandomItem(random));
+        int index = random.applyAsInt(candidates.size());
+        data.set(attacker, core.ATTACK_TARGET, candidates.get(index));
     }
 }

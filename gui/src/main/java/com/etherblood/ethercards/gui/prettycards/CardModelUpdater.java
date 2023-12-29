@@ -8,6 +8,7 @@ import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.templates.api.DisplayCardTemplate;
 import com.etherblood.ethercards.templates.implementation.effects.SoulshiftEffect;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -117,7 +118,7 @@ public class CardModelUpdater {
     }
 
     public void updateFromData(CardModel model, GameTemplates templates, EntityData data) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int entityId = model.getEntityId();
         DisplayCardTemplate template = (DisplayCardTemplate) templates.getCard(data.get(entityId, core.CARD_TEMPLATE));
         model.setTemplate(template);

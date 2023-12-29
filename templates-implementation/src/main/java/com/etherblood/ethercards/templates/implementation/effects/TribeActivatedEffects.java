@@ -7,6 +7,7 @@ import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.templates.Tribe;
+
 import java.util.function.IntUnaryOperator;
 
 public class TribeActivatedEffects implements Effect {
@@ -21,7 +22,7 @@ public class TribeActivatedEffects implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int owner = data.get(source, core.OWNER);
         boolean tribeExists = false;
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {

@@ -2,6 +2,7 @@ package com.etherblood.ethercards.rules;
 
 import com.etherblood.ethercards.entities.ComponentMeta;
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.SimpleEntityData;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
@@ -25,6 +26,9 @@ import com.etherblood.ethercards.rules.templates.ZoneState;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.rules.updates.ZoneService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,8 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalInt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MoveService {
 
@@ -59,7 +61,7 @@ public class MoveService {
         this.data = data;
         this.templates = templates;
         this.random = random;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.backupsEnabled = backupsEnabled;
         this.validateMoves = validateMoves;
         this.eventListener = eventListener;
@@ -89,7 +91,7 @@ public class MoveService {
         data.getOptional(player, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
             switch (phase) {
                 case PlayerPhase.ATTACK -> {
-                    IntList minions = data.list(core.IN_BATTLE_ZONE);
+                    EntityList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int attacker : minions) {
                         if (!moveAvailability.canDeclareAttack(player, attacker, false)) {
                             continue;
@@ -105,7 +107,7 @@ public class MoveService {
                     result.add(new EndAttackPhase(player));
                 }
                 case PlayerPhase.BLOCK -> {
-                    IntList minions = data.list(core.IN_BATTLE_ZONE);
+                    EntityList minions = data.list(core.IN_BATTLE_ZONE);
                     for (int blocker : minions) {
                         if (!moveAvailability.canDeclareBlock(player, blocker, false)) {
                             continue;
@@ -151,7 +153,7 @@ public class MoveService {
     }
 
     private void addCastMoves(int player, int handCard, TargetSelection targeting, List<Move> result) {
-        IntList targets = targeting.getValidTargets(data, templates, handCard);
+        EntityList targets = targeting.getValidTargets(data, templates, handCard);
         if (targets.isEmpty()) {
             if (!targeting.requiresTarget()) {
                 if (moveAvailability.canCast(player, handCard, null, false)) {
@@ -179,7 +181,7 @@ public class MoveService {
     }
 
     private void addUseAbilityMoves(int player, int entity, TargetSelection targeting, List<Move> result) {
-        IntList targets = targeting.getValidTargets(data, templates, entity);
+        EntityList targets = targeting.getValidTargets(data, templates, entity);
         if (targets.isEmpty()) {
             if (!targeting.requiresTarget()) {
                 if (moveAvailability.canUseAbility(player, entity, null, false)) {
@@ -360,7 +362,7 @@ public class MoveService {
             return;
         }
         int randomHistorySize = random.getHistory().size();
-        EntityData backup = new SimpleEntityData(data.getComponents());
+        EntityData backup = new SimpleEntityData(data.getSchema());
         EntityUtil.copy(data, backup);
         LOG.trace("Created backup.");
         try {
@@ -400,7 +402,7 @@ public class MoveService {
                 }
             }
 
-            IntList playerResults = data.list(core.PLAYER_RESULT);
+            EntityList playerResults = data.list(core.PLAYER_RESULT);
             IntList winners = new IntList();
             IntList losers = new IntList();
             for (int player : playerResults) {
@@ -410,7 +412,7 @@ public class MoveService {
                     losers.add(player);
                 }
             }
-            IntList players = data.list(core.PLAYER_INDEX);
+            EntityList players = data.list(core.PLAYER_INDEX);
             if (!winners.isEmpty()) {
                 for (int player : players) {
                     if (data.has(player, core.PLAYER_RESULT)) {
@@ -494,7 +496,7 @@ public class MoveService {
                 Map<Integer, List<Effect>> triggers = template.getActiveZone(card, data).getPassive();
                 for (int triggerComponent : triggers.keySet()) {
                     if (!data.has(card, triggerComponent)) {
-                        throw new IllegalStateException("Card has unmapped " + data.getComponents().getMeta(triggerComponent).name + " trigger component.");
+                        throw new IllegalStateException("Card has unmapped " + data.getSchema().getMeta(triggerComponent).name + " trigger component.");
                     }
                 }
 
@@ -508,7 +510,7 @@ public class MoveService {
 //                }
                 ZoneState activeZone = template.getActiveZone(card, data);
                 for (Map.Entry<Integer, StatModifier> entry : activeZone.getStatModifiers().entrySet()) {
-                    ComponentMeta meta = data.getComponents().getMeta(entry.getKey());
+                    ComponentMeta meta = data.getSchema().getMeta(entry.getKey());
                     if (meta.name.endsWith("_AURA") && !data.has(card, meta.id)) {
                         throw new IllegalStateException("Entity with template name " + template.getTemplateName() + " has " + meta.name + " modifier without matching component.");
                     }

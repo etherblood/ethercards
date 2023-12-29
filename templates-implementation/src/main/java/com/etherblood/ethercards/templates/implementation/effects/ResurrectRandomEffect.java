@@ -1,14 +1,15 @@
 package com.etherblood.ethercards.templates.implementation.effects;
 
-import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
+import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.rules.updates.ZoneService;
+
 import java.util.function.IntUnaryOperator;
 
 public class ResurrectRandomEffect implements Effect {
@@ -21,7 +22,7 @@ public class ResurrectRandomEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
 
         int owner = data.get(source, core.OWNER);
         IntList candidates = new IntList();
@@ -38,7 +39,8 @@ public class ResurrectRandomEffect implements Effect {
         if (candidates.isEmpty()) {
             return;
         }
-        int resurrectMinion = candidates.getRandomItem(random);
+        int index = random.applyAsInt(candidates.size());
+        int resurrectMinion = candidates.get(index);
 
         ZoneService zoneService = new ZoneService(data, templates, random, events);
         zoneService.removeFromGraveyard(resurrectMinion);

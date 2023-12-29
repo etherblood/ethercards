@@ -13,7 +13,7 @@ public class SimpleTeamEvaluation<Move, Game extends BotGame<Move, Game>> {
             return game.resultPlayerScores();
         }
         EntityData data = game.getData();
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
 
         IntMap teamScores = new IntMap();
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {

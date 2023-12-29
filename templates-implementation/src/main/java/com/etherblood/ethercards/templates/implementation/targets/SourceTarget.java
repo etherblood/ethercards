@@ -1,11 +1,12 @@
 package com.etherblood.ethercards.templates.implementation.targets;
 
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.targeting.TargetingType;
 import com.etherblood.ethercards.rules.templates.TargetSelection;
 import com.etherblood.ethercards.templates.api.TargetPredicate;
+
 import java.util.function.IntUnaryOperator;
 
 public class SourceTarget implements TargetSelection {
@@ -19,7 +20,7 @@ public class SourceTarget implements TargetSelection {
     }
 
     @Override
-    public IntList selectTargets(EntityData data, GameTemplates templates, IntUnaryOperator random, int source, IntList validTargets) {
+    public EntityList selectTargets(EntityData data, GameTemplates templates, IntUnaryOperator random, int source, EntityList validTargets) {
         if (validTargets.isEmpty()) {
             assert !requiresTarget;
             return validTargets;
@@ -34,11 +35,11 @@ public class SourceTarget implements TargetSelection {
     }
 
     @Override
-    public IntList getValidTargets(EntityData data, GameTemplates templates, int source) {
+    public EntityList getValidTargets(EntityData data, GameTemplates templates, int source) {
         if (predicate.test(data, templates, source, source)) {
-            return new IntList(new int[]{source});
+            return new EntityList(source);
         }
-        return new IntList();
+        return EntityList.EMPTY;
     }
 
 }

@@ -1,14 +1,14 @@
 package com.etherblood.ethercards.rules.updates.systems;
 
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.ActivatedAbility;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.templates.Effect;
-import com.etherblood.ethercards.rules.updates.TriggerService;
+
 import java.util.function.IntUnaryOperator;
 
 public class UseAbilitySystem {
@@ -18,19 +18,17 @@ public class UseAbilitySystem {
     private final IntUnaryOperator random;
     private final GameEventListener events;
     private final CoreComponents core;
-    private final TriggerService triggerService;
 
     public UseAbilitySystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
         this.templates = templates;
         this.random = random;
         this.events = events;
-        this.core = data.getComponents().getModule(CoreComponents.class);
-        this.triggerService = new TriggerService(data, templates, random, events);
+        this.core = data.getSchema().getModule(CoreComponents.class);
     }
 
     public void run() {
-        IntList abilityUsers = data.list(core.USE_ABILITY_TARGET);
+        EntityList abilityUsers = data.list(core.USE_ABILITY_TARGET);
         for (int abilityUser : abilityUsers) {
             int cardTemplateId = data.get(abilityUser, core.CARD_TEMPLATE);
             int target = data.get(abilityUser, core.USE_ABILITY_TARGET);

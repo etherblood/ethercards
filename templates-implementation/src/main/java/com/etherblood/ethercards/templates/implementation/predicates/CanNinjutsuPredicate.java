@@ -9,7 +9,7 @@ public class CanNinjutsuPredicate implements TargetPredicate {
 
     @Override
     public boolean test(EntityData data, GameTemplates templates, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         assert data.has(source, core.NINJUTSU);
         int owner = data.get(source, core.OWNER);
         return data.hasValue(target, core.OWNER, owner)

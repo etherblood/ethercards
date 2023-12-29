@@ -27,12 +27,14 @@ import com.etherblood.ethercards.templates.api.setup.RawLibraryTemplate;
 import com.etherblood.ethercards.templates.api.setup.RawPlayerSetup;
 import com.etherblood.ethercards.templates.implementation.TemplateAliasMapsImpl;
 import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 
 public class TestSandbox {
@@ -69,7 +71,7 @@ public class TestSandbox {
         while (!game.isGameOver()) {
             Move move = null;
             EntityData data = game.getData();
-            CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+            CoreComponents core = data.getSchema().getModule(CoreComponents.class);
             for (int player : data.listInValueOrder(core.PLAYER_INDEX)) {
                 int index = data.get(player, core.PLAYER_INDEX);
                 if (game.isPlayerActive(player)) {

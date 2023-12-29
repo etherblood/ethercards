@@ -1,6 +1,7 @@
 package com.etherblood.ethercards.rules.updates;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.game.events.api.events.BattleEvent;
@@ -9,17 +10,18 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.EffectiveStatsService;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.PlayerResult;
+
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
 public class SystemsUtil {
 
     public static Integer nextTeam(EntityData data, int team) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int teamIndex = data.get(team, core.TEAM_INDEX);
         int bestScore = Integer.MAX_VALUE;
         Integer bestTeam = null;
-        IntList teams = data.list(core.TEAM_INDEX);
+        EntityList teams = data.list(core.TEAM_INDEX);
         for (int current : teams) {
             if (current == team) {
                 continue;
@@ -62,7 +64,7 @@ public class SystemsUtil {
     public static void fight(EntityData data, GameTemplates templates, IntUnaryOperator random, int attacker, int blocker, GameEventListener events) {
         EffectiveStatsService stats = new EffectiveStatsService(data, templates);
         events.fire(new BattleEvent(attacker, blocker));
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int attackerDamage = stats.attack(attacker);
         int blockerDamage = stats.attack(blocker);
 
@@ -100,7 +102,7 @@ public class SystemsUtil {
         if (damage <= 0) {
             return;
         }
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
 
         events.fire(new DamageEvent(target, damage));
         assert data.has(target, core.IN_BATTLE_ZONE);
@@ -123,7 +125,7 @@ public class SystemsUtil {
     }
 
     public static int createCard(EntityData data, int templateId, int owner) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int team = data.get(owner, core.TEAM);
         int card = data.createEntity();
         data.set(card, core.CARD_TEMPLATE, templateId);
@@ -133,7 +135,7 @@ public class SystemsUtil {
     }
 
     public static int createHero(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int templateId, int owner) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int hero = createMinion(data, templates, random, events, templateId, owner);
         data.set(hero, core.HERO, 1);
         //TODO: mana growth & draws should be somehow added to the player, not their hero
@@ -143,7 +145,7 @@ public class SystemsUtil {
     }
 
     public static int summonMinion(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int minionTemplate, int owner) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int minion = createMinion(data, templates, random, events, minionTemplate, owner);
         data.set(minion, core.SUMMONING_SICKNESS, 1);
         TriggerService triggerService = new TriggerService(data, templates, random, events);
@@ -158,7 +160,7 @@ public class SystemsUtil {
     }
 
     public static int heroOf(EntityData data, int player) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         assert data.has(player, core.PLAYER_INDEX);
         for (int hero : data.list(core.HERO)) {
             if (data.hasValue(hero, core.OWNER, player)) {
@@ -169,10 +171,10 @@ public class SystemsUtil {
     }
 
     public static void drawCards(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int player, int amount) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         assert data.has(player, core.PLAYER_INDEX);
         ZoneService zoneService = new ZoneService(data, templates, random, events);
-        IntList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
+        EntityList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
         IntList myLibraryCards = new IntList();
         for (int card : allLibraryCards) {
             if (data.hasValue(card, core.OWNER, player)) {
@@ -209,10 +211,10 @@ public class SystemsUtil {
     }
 
     public static void setPlayerResult(EntityData data, int player, int result) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         data.set(player, core.PLAYER_RESULT, result);
 
-        IntList teams = data.list(core.TEAM_INDEX);
+        EntityList teams = data.list(core.TEAM_INDEX);
         for (int team : teams) {
             updateTeamResult(data, team);
         }
@@ -249,7 +251,7 @@ public class SystemsUtil {
     }
 
     private static void updateTeamResult(EntityData data, int team) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         boolean allLost = true;
         for (int player : data.list(core.PLAYER_INDEX)) {
             if (data.hasValue(player, core.TEAM, team)) {
@@ -270,7 +272,7 @@ public class SystemsUtil {
     }
 
     private static void setTeamResult(EntityData data, int team, int result) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         data.set(team, core.TEAM_RESULT, result);
         for (int player : data.list(core.PLAYER_INDEX)) {
             if (data.hasValue(player, core.TEAM, team)) {

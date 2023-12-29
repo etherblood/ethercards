@@ -5,13 +5,14 @@ import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
+
 import java.util.function.IntUnaryOperator;
 
 public class BindControlEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         if (!data.has(target, core.ORIGINAL_OWNER)) {
             data.set(target, core.ORIGINAL_OWNER, data.get(target, core.OWNER));
         }

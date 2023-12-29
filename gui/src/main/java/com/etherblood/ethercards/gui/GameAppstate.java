@@ -32,6 +32,7 @@ import com.destrostudios.cardgui.transformations.relative.ConditionalRelativeTra
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedRotationTransformationSpeed;
 import com.destrostudios.cardgui.transformations.speeds.TimeBasedVectorTransformationSpeed3f;
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.events.ParticleEvent;
 import com.etherblood.ethercards.gui.arrows.ColoredConnectionArrow;
@@ -78,6 +79,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -86,9 +90,6 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GameAppstate extends AbstractAppState implements ActionListener {
 
@@ -343,9 +344,9 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private void updateBoard() {
         EntityData data = game.getData();
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         StringBuilder builder = new StringBuilder();
-        IntList players = data.list(core.PLAYER_INDEX);
+        EntityList players = data.list(core.PLAYER_INDEX);
         for (int player : players) {
             int playerIndex = data.get(player, core.PLAYER_INDEX);
             builder.append(gameReplayService.getPlayerName(playerIndex));
@@ -396,10 +397,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             endPhaseButton.setCullHint(Spatial.CullHint.Always);
         }
 
-        IntList handCards = data.list(core.IN_HAND_ZONE);
-        IntList battleCards = data.listInValueOrder(core.IN_BATTLE_ZONE);
-        IntList libraryCards = data.list(core.IN_LIBRARY_ZONE);
-        IntList graveyardCards = data.listInValueOrder(core.IN_GRAVEYARD_ZONE);
+        EntityList handCards = data.list(core.IN_HAND_ZONE);
+        EntityList battleCards = data.listInValueOrder(core.IN_BATTLE_ZONE);
+        EntityList libraryCards = data.list(core.IN_LIBRARY_ZONE);
+        EntityList graveyardCards = data.listInValueOrder(core.IN_GRAVEYARD_ZONE);
         for (int player : players) {
             PlayerZones zones = playerZones.get(player);
             IntPredicate playerFilter = x -> data.hasValue(x, core.OWNER, player);
@@ -478,7 +479,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private void updateZone(int[] cards, CardZone cardZone, Vector3f interval) {
         EntityData data = game.getData();
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         for (Card card : new ArrayList<>(cardZone.getCards())) {
             int entity = objectEntities.get(card);
             if (!data.has(entity, core.IN_LIBRARY_ZONE) && !data.has(entity, core.IN_HAND_ZONE) && !data.has(entity, core.IN_BATTLE_ZONE) && !data.has(entity, core.IN_GRAVEYARD_ZONE)) {
@@ -587,10 +588,10 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private Interactivity castInteractivity(int player, int castable) {
         EntityData data = game.getData();
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int cardTemplate = data.get(castable, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(cardTemplate);
-        IntList validTargets = template.getHand().getCast().getTarget().getValidTargets(data, game.getTemplates(), castable);
+        EntityList validTargets = template.getHand().getCast().getTarget().getValidTargets(data, game.getTemplates(), castable);
         if (validTargets.nonEmpty()) {
             return new AimToTargetInteractivity(TargetSnapMode.VALID) {
                 @Override
@@ -621,11 +622,11 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private Interactivity activatedAbilityInteractivity(int player, int entity) {
         EntityData data = game.getData();
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int cardTemplate = data.get(entity, core.CARD_TEMPLATE);
         CardTemplate template = game.getTemplates().getCard(cardTemplate);
         ActivatedAbility ability = template.getActiveZone(entity, data).getActivated();
-        IntList validTargets = ability.getTarget().getValidTargets(data, game.getTemplates(), entity);
+        EntityList validTargets = ability.getTarget().getValidTargets(data, game.getTemplates(), entity);
         if (validTargets.nonEmpty()) {
             return new AimToTargetInteractivity(TargetSnapMode.VALID) {
                 @Override
@@ -673,7 +674,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
         Card<CardModel> card = visualCards.get(myCard);
         if (card == null) {
             EntityData data = game.getData();
-            CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+            CoreComponents core = data.getSchema().getModule(CoreComponents.class);
             Card<CardModel> inner = new Card<>(new CardModel(myCard));
             card = inner;
             visualCards.put(myCard, card);
@@ -697,7 +698,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
 
     private BoardAppState initBoardGui() {
         EntityData data = game.getData();
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         board.registerVisualizer_Class(StaticSpatial.class, new StaticSpatialVisualizer());
         board.registerVisualizer(card -> card.getModel() instanceof CardModel, new MyCardVisualizer(cardImages));
         board.registerVisualizer_Class(TargetArrow.class, new SimpleTargetArrowVisualizer(SimpleTargetArrowSettings.builder()
@@ -708,7 +709,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
                 .arcHeight(0.1f)
                 .width(0.25f)
                 .build()));
-        IntList players = data.list(core.PLAYER_INDEX);
+        EntityList players = data.list(core.PLAYER_INDEX);
 
         Map<Integer, IntList> teamToPlayer = new LinkedHashMap<>();
         for (int player : players) {
@@ -747,7 +748,7 @@ public class GameAppstate extends AbstractAppState implements ActionListener {
             }
 
             EntityData data = game.getData();
-            CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+            CoreComponents core = data.getSchema().getModule(CoreComponents.class);
             data.getOptional(userControlledPlayer, core.ACTIVE_PLAYER_PHASE).ifPresent(phase -> {
                 switch (phase) {
                     case PlayerPhase.BLOCK:

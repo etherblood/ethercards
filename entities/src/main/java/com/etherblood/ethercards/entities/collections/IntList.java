@@ -1,31 +1,25 @@
 package com.etherblood.ethercards.entities.collections;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class IntList implements Iterable<Integer> {
 
     private static final int DEFAULT_CAPACITY = 8;
-    private int size = 0;
+    private int size;
     private int[] data;
+
+    public IntList(IntList list) {
+        this(list.data);
+    }
 
     public IntList(int... data) {
         this.data = Arrays.copyOf(data, Math.max(data.length, DEFAULT_CAPACITY));
         size = data.length;
-    }
-
-    public IntList() {
-        this(DEFAULT_CAPACITY);
-    }
-
-    public IntList(int capacity) {
-        data = new int[capacity];
     }
 
     public int get(int index) {
@@ -99,6 +93,18 @@ public class IntList implements Iterable<Integer> {
         size = 0;
     }
 
+    public boolean contains(int value) {
+        return indexOf(value) != -1;
+    }
+
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    public boolean nonEmpty() {
+        return size() != 0;
+    }
+
     public void sort() {
         Arrays.sort(data, 0, size);
     }
@@ -109,10 +115,6 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-    public int getRandomItem(IntUnaryOperator random) {
-        return get(random.applyAsInt(size));
-    }
-
     public IntStream stream() {
         return Arrays.stream(data, 0, size);
     }
@@ -120,6 +122,7 @@ public class IntList implements Iterable<Integer> {
     private void grow() {
         grow(Math.max(data.length * 2, DEFAULT_CAPACITY));
     }
+    
     private void grow(int targetCapacity) {
         data = Arrays.copyOf(data, targetCapacity);
     }
@@ -146,10 +149,6 @@ public class IntList implements Iterable<Integer> {
         return Arrays.copyOf(data, size);
     }
 
-    public List<Integer> boxed() {
-        return Arrays.stream(data, 0, size).boxed().collect(Collectors.toList());
-    }
-
     public void foreach(IntConsumer consumer) {
         for (int i = 0; i < size; i++) {
             consumer.accept(data[i]);
@@ -169,19 +168,6 @@ public class IntList implements Iterable<Integer> {
         set(index2, tmp);
     }
 
-    public boolean contains(int value) {
-        return indexOf(value) != -1;
-    }
-
-    public boolean isEmpty() {
-        return size() == 0;
-    }
-
-    public boolean nonEmpty() {
-        return size() != 0;
-    }
-
-    @Override
     public PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
             private int i = 0;

@@ -8,6 +8,7 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.updates.TriggerService;
+
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
@@ -15,7 +16,7 @@ public class DittoEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         if (!data.has(source, core.ORIGINAL_CARD_TEMPLATE)) {
             data.set(source, core.ORIGINAL_CARD_TEMPLATE, data.get(source, core.CARD_TEMPLATE));
         }
@@ -34,7 +35,7 @@ public class DittoEffect implements Effect {
                 core.BLOCK_TARGET,
                 core.BLOCKED,
                 core.SUMMONING_SICKNESS);
-        for (ComponentMeta meta : data.getComponents().getMetas()) {
+        for (ComponentMeta meta : data.getSchema().getMetas()) {
             if (blacklist.contains(meta.id)) {
                 continue;
             }

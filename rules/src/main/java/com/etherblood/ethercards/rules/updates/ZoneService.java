@@ -9,6 +9,7 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.templates.ZoneState;
+
 import java.util.function.IntUnaryOperator;
 
 public class ZoneService {
@@ -20,7 +21,7 @@ public class ZoneService {
 
     public ZoneService(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
         this.triggerService = new TriggerService(data, templates, random, events);
     }
@@ -96,7 +97,7 @@ public class ZoneService {
     private void clearZoneComponents(int entity) {
         //TODO: use a whitelist instead?
         IntList blacklist = new IntList(core.CARD_TEMPLATE, core.OWNER, core.TEAM, core.HERO);
-        for (ComponentMeta meta : data.getComponents().getMetas()) {
+        for (ComponentMeta meta : data.getSchema().getMetas()) {
             if (blacklist.contains(meta.id)) {
                 continue;
             }

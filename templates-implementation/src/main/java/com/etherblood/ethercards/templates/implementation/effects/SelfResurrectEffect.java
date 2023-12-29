@@ -7,13 +7,14 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.rules.updates.ZoneService;
+
 import java.util.function.IntUnaryOperator;
 
 public class SelfResurrectEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         ZoneService zoneService = new ZoneService(data, templates, random, events);
         zoneService.removeFromGraveyard(source);
         zoneService.addToBattle(source, true);

@@ -21,6 +21,7 @@ import com.etherblood.ethercards.templates.api.setup.RawGameSetup;
 import com.etherblood.ethercards.templates.api.setup.RawPlayerSetup;
 import com.etherblood.ethercards.templates.implementation.TemplateAliasMapsImpl;
 import com.google.gson.JsonElement;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Function;
@@ -79,7 +80,7 @@ public class GameReplayService {
     public synchronized void updateInstance(Game game) {
         for (int i = game.getMoves().getHistory().size(); i < replay.moves().size(); i++) {
             MoveReplay moveReplay = replay.moves().get(i);
-            for (int randomResult : moveReplay.randomResults()) {
+            for (int randomResult : moveReplay.rolls()) {
                 game.getMoves().getRandom().getHistory().add(randomResult);
             }
             game.getMoves().apply(moveReplay.move());

@@ -1,12 +1,14 @@
 package com.etherblood.ethercards.ai;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.Game;
 import com.etherblood.ethercards.rules.PlayerPhase;
 import com.etherblood.ethercards.rules.PlayerResult;
 import com.etherblood.ethercards.rules.updates.ZoneService;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -17,7 +19,7 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
 
     public BotGameAdapter(Game game) {
         this.game = game;
-        core = game.getData().getComponents().getModule(CoreComponents.class);
+        core = game.getData().getSchema().getModule(CoreComponents.class);
     }
 
     @Override
@@ -41,7 +43,7 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
             throw new IllegalStateException();
         }
         EntityData data = game.getData();
-        IntList playerResults = data.list(core.PLAYER_RESULT);
+        EntityList playerResults = data.list(core.PLAYER_RESULT);
         IntList winners = new IntList();
         IntList losers = new IntList();
         for (int player : playerResults) {
@@ -76,7 +78,7 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
             }
         }
         int team = data.get(self, core.TEAM);
-        IntList allHandCards = data.list(core.IN_HAND_ZONE);
+        EntityList allHandCards = data.list(core.IN_HAND_ZONE);
         IntList opponentHandCards = new IntList();
         for (int card : allHandCards) {
             if (!data.hasValue(card, core.TEAM, team)) {
@@ -92,7 +94,7 @@ public abstract class BotGameAdapter<T, V extends BotGameAdapter<T, V>> implemen
 
         for (int card : opponentHandCards) {
             int owner = data.get(card, core.OWNER);
-            IntList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
+            EntityList allLibraryCards = data.list(core.IN_LIBRARY_ZONE);
             IntList ownerLibraryCards = new IntList();
             for (int libraryCard : allLibraryCards) {
                 if (data.hasValue(libraryCard, core.OWNER, owner)) {

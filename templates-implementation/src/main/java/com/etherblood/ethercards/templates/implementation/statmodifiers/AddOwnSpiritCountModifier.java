@@ -11,7 +11,7 @@ public class AddOwnSpiritCountModifier implements StatModifier {
 
     @Override
     public int modify(EntityData data, GameTemplates templates, int self, int target, int stat) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int owner = data.get(self, core.OWNER);
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {
             if (data.hasValue(minion, core.OWNER, owner)) {

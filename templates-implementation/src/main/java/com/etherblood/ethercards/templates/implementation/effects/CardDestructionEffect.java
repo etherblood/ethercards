@@ -7,13 +7,14 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
+
 import java.util.function.IntUnaryOperator;
 
 public class CardDestructionEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         IntList owners = new IntList();
         IntList cards = new IntList();
         for (int card : data.list(core.IN_HAND_ZONE)) {

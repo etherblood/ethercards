@@ -1,6 +1,7 @@
 package com.etherblood.ethercards.entities;
 
 import com.etherblood.ethercards.entities.collections.IntList;
+
 import java.util.OptionalInt;
 
 public interface EntityData {
@@ -23,25 +24,25 @@ public interface EntityData {
 
     void remove(int entity, int component);
 
-    IntList list(int component);
+    EntityList list(int component);
 
-    IntList listOrdered(int component, int orderComponent);
+    EntityList listOrdered(int component, int orderComponent);
 
-    default IntList listInValueOrder(int component) {
+    default EntityList listInValueOrder(int component) {
         return listOrdered(component, component);
     }
 
-    Components getComponents();
+    Components getSchema();
 
     void clear(int component);
 
-    default IntList findByValue(int component, int value) {
+    default EntityList findByValue(int component, int value) {
         IntList result = new IntList();
         for (int entity : list(component)) {
             if (hasValue(entity, component, value)) {
                 result.add(entity);
             }
         }
-        return result;
+        return new EntityList(result);
     }
 }

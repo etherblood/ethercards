@@ -1,6 +1,7 @@
 package com.etherblood.ethercards.rules.classic;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.entities.collections.IntMap;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
@@ -11,6 +12,7 @@ import com.etherblood.ethercards.rules.PlayerPhase;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.rules.updates.ZoneService;
+
 import java.util.OptionalInt;
 import java.util.function.IntUnaryOperator;
 
@@ -27,7 +29,7 @@ public class PhaseSystem {
 
     public PhaseSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, Runnable resolveSystem) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
         this.random = random;
         this.events = events;
@@ -38,7 +40,7 @@ public class PhaseSystem {
 
     public void run() {
         while (data.list(core.ACTIVE_PLAYER_PHASE).isEmpty()) {
-            IntList activeTeams = data.list(core.ACTIVE_TEAM_PHASE);
+            EntityList activeTeams = data.list(core.ACTIVE_TEAM_PHASE);
             if (activeTeams.isEmpty()) {
                 // game over
                 return;
@@ -283,7 +285,7 @@ public class PhaseSystem {
                 SystemsUtil.drawCards(data, templates, random, events, owner, draws);
             });
         }
-        IntList activePlayers = data.list(core.ACTIVE_PLAYER_PHASE);
+        EntityList activePlayers = data.list(core.ACTIVE_PLAYER_PHASE);
         for (int player : activePlayers) {
             assert data.hasValue(player, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK);
             assert data.hasValue(player, core.TEAM, team);

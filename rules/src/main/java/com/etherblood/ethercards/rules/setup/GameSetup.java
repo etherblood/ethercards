@@ -15,7 +15,7 @@ public class GameSetup {
     public int otherPlayersHandCardCount;
 
     public void setup(EntityData data, GameTemplates templates) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
 
         int[] teams = new int[teamCount];
         for (int teamIndex = 0; teamIndex < teams.length; teamIndex++) {

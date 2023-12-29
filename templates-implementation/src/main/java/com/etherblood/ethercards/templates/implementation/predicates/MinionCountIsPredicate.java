@@ -18,7 +18,7 @@ public class MinionCountIsPredicate implements TargetPredicate {
 
     @Override
     public boolean test(EntityData data, GameTemplates templates, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         assert data.has(target, core.PLAYER_INDEX);
         int count = 0;
         for (int minion : data.list(core.IN_BATTLE_ZONE)) {

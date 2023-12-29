@@ -17,7 +17,7 @@ public class HasTribePredicate implements TargetPredicate {
 
     @Override
     public boolean test(EntityData data, GameTemplates templates, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int templateId = data.get(target, core.CARD_TEMPLATE);
         CardTemplate template = templates.getCard(templateId);
         return template.getTribes().contains(tribe);

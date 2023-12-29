@@ -2,6 +2,7 @@ package com.etherblood.ethercards.rules.templates;
 
 import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.rules.CoreComponents;
+
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class CardTemplate {
 
     public ZoneState getActiveZone(int entity, EntityData data) {
         //This method does not belong here, move it into a utility class or a service
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         if (data.has(entity, core.IN_HAND_ZONE)) {
             return getHand();
         } else if (data.has(entity, core.IN_BATTLE_ZONE)) {

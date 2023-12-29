@@ -1,21 +1,18 @@
 package com.etherblood.ethercards.rules.updates;
 
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.templates.ZoneState;
+
 import java.util.List;
 import java.util.function.IntUnaryOperator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TriggerService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TriggerService.class);
 
     private final EntityData data;
     private final CoreComponents core;
@@ -25,7 +22,7 @@ public class TriggerService {
 
     public TriggerService(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
         this.random = random;
         this.events = events;
@@ -80,7 +77,7 @@ public class TriggerService {
     }
 
     private void triggerOthers(int triggerTarget, int triggerComponent) {
-        IntList listInValueOrder = data.listInValueOrder(triggerComponent);
+        EntityList listInValueOrder = data.listInValueOrder(triggerComponent);
         for (int other : listInValueOrder) {
             if (other == triggerTarget) {
                 continue;
@@ -95,7 +92,7 @@ public class TriggerService {
     public void trigger(int triggerComponent, int self, int triggerTarget) {
         List<Effect> triggers = zoneState(self).getPassive().get(triggerComponent);
         if (triggers == null) {
-            throw new NullPointerException("Missing " + data.getComponents().getMeta(triggerComponent).name);
+            throw new NullPointerException("Missing " + data.getSchema().getMeta(triggerComponent).name);
         }
         for (Effect effect : triggers) {
             effect.apply(data, templates, random, events, self, triggerTarget);

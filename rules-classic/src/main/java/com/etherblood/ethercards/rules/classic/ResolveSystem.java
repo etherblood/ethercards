@@ -1,6 +1,7 @@
 package com.etherblood.ethercards.rules.classic;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.game.events.api.events.DeathEvent;
@@ -13,6 +14,7 @@ import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.rules.updates.ZoneService;
+
 import java.util.function.IntUnaryOperator;
 
 public class ResolveSystem implements Runnable {
@@ -27,7 +29,7 @@ public class ResolveSystem implements Runnable {
 
     public ResolveSystem(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
         this.random = random;
         this.events = events;
@@ -54,7 +56,7 @@ public class ResolveSystem implements Runnable {
     }
 
     private void death() {
-        IntList deathRequests = data.listOrdered(core.DEATH_REQUEST, core.IN_BATTLE_ZONE);
+        EntityList deathRequests = data.listOrdered(core.DEATH_REQUEST, core.IN_BATTLE_ZONE);
         if (deathRequests.isEmpty()) {
             return;
         }

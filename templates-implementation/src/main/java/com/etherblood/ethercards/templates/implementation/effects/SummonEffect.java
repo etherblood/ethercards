@@ -7,6 +7,7 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.templates.api.deserializers.filedtypes.CardId;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
+
 import java.util.function.IntUnaryOperator;
 
 public class SummonEffect implements Effect {
@@ -20,7 +21,7 @@ public class SummonEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int owner = data.get(source, core.OWNER);
         SystemsUtil.summonMinion(data, templates, random, events, minionId, owner);
     }

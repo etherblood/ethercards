@@ -4,6 +4,7 @@ import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.templates.StatModifier;
 import com.etherblood.ethercards.rules.templates.ZoneState;
+
 import java.util.OptionalInt;
 
 public class EffectiveStatsService {
@@ -14,7 +15,7 @@ public class EffectiveStatsService {
 
     public EffectiveStatsService(EntityData data, GameTemplates templates) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
     }
 

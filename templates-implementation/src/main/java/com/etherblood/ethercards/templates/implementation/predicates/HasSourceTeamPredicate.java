@@ -15,7 +15,7 @@ public class HasSourceTeamPredicate implements TargetPredicate {
 
     @Override
     public boolean test(EntityData data, GameTemplates templates, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int team = data.get(source, core.TEAM);
         return data.hasValue(target, core.TEAM, team) == hasSourceTeam;
     }

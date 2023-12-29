@@ -3,6 +3,7 @@ package com.etherblood.ethercards.rules;
 import com.etherblood.ethercards.entities.ComponentMeta;
 import com.etherblood.ethercards.entities.EntityData;
 import com.etherblood.ethercards.entities.SimpleEntityData;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -17,9 +18,9 @@ public class EntityUtil {
     }
 
     public static Map<Integer, Map<String, Integer>> toMap(EntityData data) {
-        List<ComponentMeta> orderedComponents = data.getComponents().getMetas().stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
+        List<ComponentMeta> orderedComponents = data.getSchema().getMetas().stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
         List<Integer> orderedEntities = new ArrayList<>();
-        for (ComponentMeta meta : data.getComponents().getMetas()) {
+        for (ComponentMeta meta : data.getSchema().getMetas()) {
             for (Integer entity : data.list(meta.id)) {
                 if (!orderedEntities.contains(entity)) {
                     orderedEntities.add(entity);
@@ -40,7 +41,7 @@ public class EntityUtil {
 
     public static Map<String, Integer> extractEntityComponents(EntityData data, int entity) {
         Map<String, Integer> map = new LinkedHashMap<>();
-        for (ComponentMeta component : data.getComponents().getMetas()) {
+        for (ComponentMeta component : data.getSchema().getMetas()) {
             data.getOptional(entity, component.id).ifPresent(value -> map.put(component.name, value));
         }
         return map;

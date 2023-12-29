@@ -1,12 +1,13 @@
 package com.etherblood.ethercards.templates.implementation.effects;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.Effect;
-import java.util.PrimitiveIterator;
+
 import java.util.function.IntUnaryOperator;
 
 public class PlayerDiscardEffect implements Effect {
@@ -19,20 +20,20 @@ public class PlayerDiscardEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
 
         for (int player : data.list(core.IN_HAND_ZONE)) {
-            IntList handCards = data.list(core.IN_HAND_ZONE);
-            PrimitiveIterator.OfInt iterator = handCards.iterator();
-            while (iterator.hasNext()) {
-                int card = iterator.nextInt();
-                if (!data.hasValue(card, core.OWNER, player)) {
-                    iterator.remove();
+            EntityList cards = data.list(core.IN_HAND_ZONE);
+
+            IntList ownHandCards = new IntList();
+            for (int card : cards) {
+                if (data.hasValue(card, core.OWNER, player)) {
+                    ownHandCards.add(card);
                 }
             }
-            for (int i = 0; i < value && handCards.nonEmpty(); i++) {
-                int index = random.applyAsInt(handCards.size());
-                int card = handCards.swapRemoveAt(index);
+            for (int i = 0; i < value && ownHandCards.nonEmpty(); i++) {
+                int index = random.applyAsInt(ownHandCards.size());
+                int card = ownHandCards.swapRemoveAt(index);
                 new DiscardEffect().apply(data, templates, random, events, source, card);
             }
         }

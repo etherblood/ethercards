@@ -15,7 +15,7 @@ public class HasSourceOwnerPredicate implements TargetPredicate {
 
     @Override
     public boolean test(EntityData data, GameTemplates templates, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int owner = data.get(source, core.OWNER);
         return data.hasValue(target, core.OWNER, owner) == hasSourceOwner;
     }

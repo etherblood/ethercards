@@ -12,9 +12,10 @@ public class IsAttackingPredicate implements TargetPredicate {
     public IsAttackingPredicate(boolean isAttacking) {
         this.isAttacking = isAttacking;
     }
+
     @Override
     public boolean test(EntityData data, GameTemplates templates, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         return data.has(target, core.ATTACK_TARGET) == isAttacking;
     }
 }

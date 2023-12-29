@@ -1,11 +1,12 @@
 package com.etherblood.ethercards.templates.implementation.effects;
 
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.templates.TargetSelection;
+
 import java.util.function.IntUnaryOperator;
 
 public class TargetedEffects implements Effect {
@@ -20,7 +21,7 @@ public class TargetedEffects implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        IntList availableTargets = targets.getValidTargets(data, templates, source);
+        EntityList availableTargets = targets.getValidTargets(data, templates, source);
         if (availableTargets.isEmpty()) {
             return;
         }

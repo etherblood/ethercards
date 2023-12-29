@@ -8,6 +8,7 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
 import com.etherblood.ethercards.templates.api.deserializers.filedtypes.CardId;
+
 import java.util.function.IntUnaryOperator;
 
 public class CreateCardEffect implements Effect {
@@ -23,7 +24,7 @@ public class CreateCardEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int entity = SystemsUtil.createCard(data, cardId, data.get(source, core.OWNER));
         for (int component : components) {
             data.set(entity, component, components.get(component));

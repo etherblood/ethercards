@@ -2,11 +2,12 @@ package com.etherblood.ethercards.rules;
 
 import com.etherblood.ethercards.entities.Components;
 import com.etherblood.ethercards.entities.EntityData;
-import com.etherblood.ethercards.entities.collections.IntList;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.game.events.api.GameEventListener;
-import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class Game {
 
@@ -21,7 +22,7 @@ public class Game {
         this.settings = Objects.requireNonNull(settings, "Settings must not be null.");
         this.data = Objects.requireNonNull(data);
         this.moves = Objects.requireNonNull(moves);
-        Components components = data.getComponents();
+        Components components = data.getSchema();
         core = Objects.requireNonNull(components.getModule(CoreComponents.class), "Core component module missing.");
     }
 
@@ -46,7 +47,7 @@ public class Game {
     }
 
     public int findPlayerByIndex(int playerIndex) {
-        IntList players = data.listInValueOrder(core.PLAYER_INDEX);
+        EntityList players = data.listInValueOrder(core.PLAYER_INDEX);
         int player = players.get(playerIndex);
         assert data.hasValue(player, core.PLAYER_INDEX, playerIndex);
         return player;

@@ -16,7 +16,7 @@ public class InameLifeAspectTest extends AbstractGameTest {
 
         moves.apply(new Update());
 
-        for (ComponentMeta meta : data.getComponents().getMetas()) {
+        for (ComponentMeta meta : data.getSchema().getMetas()) {
             Assertions.assertFalse(data.has(inameLifeAspect, meta.id));
         }
     }

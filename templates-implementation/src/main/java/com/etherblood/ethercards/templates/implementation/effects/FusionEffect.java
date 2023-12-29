@@ -9,6 +9,7 @@ import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.templates.Effect;
 import com.etherblood.ethercards.rules.updates.SystemsUtil;
 import com.etherblood.ethercards.templates.api.deserializers.filedtypes.CardId;
+
 import java.util.function.IntUnaryOperator;
 
 public class FusionEffect implements Effect {
@@ -28,7 +29,7 @@ public class FusionEffect implements Effect {
         if (self != triggerTarget) {
             return;
         }
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int owner = data.get(self, core.OWNER);
         if (!data.hasValue(triggerTarget, core.OWNER, owner)) {
             return;

@@ -13,7 +13,7 @@ public class MoveAvailabilityService {
 
     public MoveAvailabilityService(EntityData data, GameTemplates templates) {
         this.data = data;
-        this.core = data.getComponents().getModule(CoreComponents.class);
+        this.core = data.getSchema().getModule(CoreComponents.class);
         this.templates = templates;
         this.effectiveStats = new EffectiveStatsService(data, templates);
     }

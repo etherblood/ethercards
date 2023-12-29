@@ -1,13 +1,14 @@
 package com.etherblood.ethercards.templates.implementation.targets;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.targeting.TargetingType;
 import com.etherblood.ethercards.rules.templates.TargetSelection;
 import com.etherblood.ethercards.templates.api.TargetPredicate;
 import com.etherblood.ethercards.templates.api.deserializers.filedtypes.ComponentId;
-import java.util.PrimitiveIterator;
+
 import java.util.function.IntUnaryOperator;
 
 public class ComponentTarget implements TargetSelection {
@@ -26,19 +27,19 @@ public class ComponentTarget implements TargetSelection {
     }
 
     @Override
-    public IntList selectTargets(EntityData data, GameTemplates templates, IntUnaryOperator random, int source, IntList validTargets) {
+    public EntityList selectTargets(EntityData data, GameTemplates templates, IntUnaryOperator random, int source, EntityList validTargets) {
         if (validTargets.isEmpty()) {
             assert !requiresTarget;
             return validTargets;
         }
-        switch (select) {
-            case ALL:
-                return validTargets;
-            case ANY:
-                return new IntList(new int[]{validTargets.getRandomItem(random)});
-            default:
-                throw new AssertionError(select);
-        }
+        return switch (select) {
+            case ALL -> validTargets;
+            case ANY -> {
+                int index = random.applyAsInt(validTargets.size());
+                yield new EntityList(validTargets.get(index));
+            }
+            default -> throw new AssertionError(select);
+        };
     }
 
     @Override
@@ -47,16 +48,15 @@ public class ComponentTarget implements TargetSelection {
     }
 
     @Override
-    public IntList getValidTargets(EntityData data, GameTemplates templates, int source) {
-        IntList result = data.listInValueOrder(component);
-        PrimitiveIterator.OfInt iterator = result.iterator();
-        while (iterator.hasNext()) {
-            int target = iterator.nextInt();
-            if (!predicate.test(data, templates, source, target)) {
-                iterator.remove();
+    public EntityList getValidTargets(EntityData data, GameTemplates templates, int source) {
+        EntityList candidates = data.listInValueOrder(component);
+        IntList validTargets = new IntList();
+        for (int target : candidates) {
+            if (predicate.test(data, templates, source, target)) {
+                validTargets.add(target);
             }
         }
-        return result;
+        return new EntityList(validTargets);
     }
 
 }

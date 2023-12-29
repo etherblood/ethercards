@@ -1,18 +1,20 @@
 package com.etherblood.ethercards.rules.targeting;
 
 import com.etherblood.ethercards.entities.EntityData;
+import com.etherblood.ethercards.entities.EntityList;
 import com.etherblood.ethercards.entities.collections.IntList;
 import com.etherblood.ethercards.rules.CoreComponents;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class TargetUtil {
 
-    public static IntList findValidTargets(EntityData data, int source, TargetFilters... targets) {
+    public static EntityList findValidTargets(EntityData data, int source, TargetFilters... targets) {
         List<TargetFilters> targetTypes = Arrays.asList(targets);
         assert !targetTypes.contains(null);
         IntList availableTargets = new IntList();
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int sourceOwner = data.get(source, core.OWNER);
         if (targetTypes.contains(TargetFilters.OWN_HERO)
                 || targetTypes.contains(TargetFilters.OWN_MINION)
@@ -77,6 +79,6 @@ public class TargetUtil {
                 }
             }
         }
-        return availableTargets;
+        return new EntityList(availableTargets);
     }
 }

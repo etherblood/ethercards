@@ -22,7 +22,7 @@ public class GameDataPrinter {
 
     public GameDataPrinter(Game game) {
         this.game = game;
-        this.core = game.getData().getComponents().getModule(CoreComponents.class);
+        this.core = game.getData().getSchema().getModule(CoreComponents.class);
     }
 
     public String toMoveString(Move move) {

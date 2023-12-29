@@ -6,6 +6,7 @@ import com.etherblood.ethercards.rules.CoreComponents;
 import com.etherblood.ethercards.rules.GameTemplates;
 import com.etherblood.ethercards.rules.PlayerPhase;
 import com.etherblood.ethercards.rules.templates.Effect;
+
 import java.util.function.IntUnaryOperator;
 
 public class SourceOwnerPhaseEffects implements Effect {
@@ -20,7 +21,7 @@ public class SourceOwnerPhaseEffects implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         int sourceOwner = data.get(source, core.OWNER);
         if (data.hasValue(sourceOwner, core.ACTIVE_PLAYER_PHASE, PlayerPhase.ATTACK)) {
             for (Effect effect : attack) {

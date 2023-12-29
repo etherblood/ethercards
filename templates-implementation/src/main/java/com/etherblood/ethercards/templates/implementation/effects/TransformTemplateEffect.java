@@ -11,6 +11,7 @@ import com.etherblood.ethercards.rules.templates.CardTemplate;
 import com.etherblood.ethercards.rules.templates.ZoneState;
 import com.etherblood.ethercards.rules.updates.TriggerService;
 import com.etherblood.ethercards.templates.api.deserializers.filedtypes.CardId;
+
 import java.util.function.IntUnaryOperator;
 
 public class TransformTemplateEffect implements Effect {
@@ -24,7 +25,7 @@ public class TransformTemplateEffect implements Effect {
 
     @Override
     public void apply(EntityData data, GameTemplates templates, IntUnaryOperator random, GameEventListener events, int source, int target) {
-        CoreComponents core = data.getComponents().getModule(CoreComponents.class);
+        CoreComponents core = data.getSchema().getModule(CoreComponents.class);
         if (!data.has(target, core.ORIGINAL_CARD_TEMPLATE)) {
             data.set(target, core.ORIGINAL_CARD_TEMPLATE, data.get(target, core.CARD_TEMPLATE));
         }
@@ -47,7 +48,7 @@ public class TransformTemplateEffect implements Effect {
                 core.ATTACK_TARGET,
                 core.BLOCK_TARGET,
                 core.BLOCKED);
-        for (ComponentMeta meta : data.getComponents().getMetas()) {
+        for (ComponentMeta meta : data.getSchema().getMetas()) {
             if (blacklist.contains(meta.id)) {
                 continue;
             }
