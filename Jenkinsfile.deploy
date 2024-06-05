@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Deploy') {
             environment {
-                CLIENT = '/var/destrostudios/apps/Ethercards'
+                CLIENT = '/var/destrostudios/apps/ethercards'
             }
             steps {
                 // Server
