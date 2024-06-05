@@ -43,7 +43,7 @@ pipeline {
                 sh 'mkdir "$CLIENT"'
                 sh 'mv gui/target/assets "$CLIENT"'
                 sh 'mv gui/target/libs "$CLIENT"'
-                sh 'mv gui-0.1.0.jar "$CLIENT/a.jar"'
+                sh 'mv gui/target/gui-0.1.0.jar "$CLIENT/a.jar"'
                 sh 'curl -X POST https://destrostudios.com:8080/apps/5/updateFiles'
             }
         }
