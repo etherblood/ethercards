@@ -68,19 +68,6 @@ public class SimpleEntityData implements EntityData {
     }
 
     @Override
-<<<<<<< HEAD
-    public IntList list(int component) {
-        IntMap componentMap = component(component);
-        if (componentMap.isEmpty()) {
-            return new IntList(0);
-        }
-        IntList list = new IntList(componentMap.size());
-        componentMap.foreachKey(list::add);
-        if (list.size() > 1) {
-            list.sort();
-        }
-        return list;
-=======
     public EntityList list(int component) {
         IntMap table = tables[component];
         if (table.size() != listCache[component].size()) {
@@ -92,7 +79,6 @@ public class SimpleEntityData implements EntityData {
             listCache[component] = new EntityList(list);
         }
         return listCache[component];
->>>>>>> f29294a (Slight performance improvement by caching entity lists.)
     }
 
     @Override

@@ -1,0 +1,7 @@
+name: ethercards
+services:
+  app:
+    build:
+      dockerfile: app.Dockerfile
+    ports:
+      - "17239:17239"
