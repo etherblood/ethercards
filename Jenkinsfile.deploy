@@ -32,7 +32,7 @@ pipeline {
             }
             steps {
                 // Server
-                sh 'mv game-server/target docker'
+                sh 'mv game-server/target game-server/config.properties docker'
                 dir ('docker') {
                     sh 'docker compose build --no-cache'
                     sh 'docker compose up -d'
@@ -44,6 +44,7 @@ pipeline {
                 sh 'mv gui/target/assets "$CLIENT"'
                 sh 'mv gui/target/libs "$CLIENT"'
                 sh 'mv gui/target/gui-0.1.0.jar "$CLIENT/a.jar"'
+                sh 'mv gui/config.properties "$CLIENT"'
                 sh 'curl -X POST https://destrostudios.com:8080/apps/5/updateFiles'
             }
         }
