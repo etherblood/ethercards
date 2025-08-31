@@ -1,0 +1,40 @@
+{
+  "alias": "backpack",
+  "display": {
+    "name": "Backpack",
+    "imagePath": "192px-Backpack.png",
+    "colors": [
+      "BLUE"
+    ],
+    "description": "Draw 4 cards."
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfDiscard"
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "draw",
+              "amount": 4
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
+}

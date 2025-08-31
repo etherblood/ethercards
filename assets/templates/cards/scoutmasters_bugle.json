@@ -1,0 +1,59 @@
+{
+  "alias": "scoutmasters_bugle",
+  "display": {
+    "name": "Scoutmaster's Bugle",
+    "imagePath": "192px-Scoutmaster's_Bugle.png",
+    "colors": [
+      "RED"
+    ],
+    "description": "Gain 4 mana, summon Scoutmaster Myres for your opponent."
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 0,
+      "effects": [
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "buff",
+              "components": {
+                "MANA": 4
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWNER"
+            ]
+          }
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "summon",
+              "minionId": "scoutmaster_myres",
+              "targetAsOwner": true
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ANY",
+            "filters": [
+              "OPPONENT"
+            ]
+          }
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
+}

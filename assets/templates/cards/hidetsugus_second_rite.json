@@ -6,7 +6,7 @@
     "colors": [
       "RED"
     ],
-    "description": "If target hero has exactly 15 life, Hidetsugu's Second Rite deals 15 damage to that hero.",
+    "description": "If target hero has exactly 15 health, Hidetsugu's Second Rite deals 15 damage to that hero.",
     "flavourText": "Hidetsugu never relinquished a grudge. He let it burn within him, gathering ever greater intensity until the final moment of vengeance."
   },
   "hand": {

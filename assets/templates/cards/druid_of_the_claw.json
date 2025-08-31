@@ -6,7 +6,7 @@
     "colors": [
       "GREEN"
     ],
-    "description": "Attack phase: Summon a 4/4 Cat with Haste.\nBlock phase: Summon a 4/6 Bear with Vigilance."
+    "description": "Attack phase: Summon a 5/4 fast attacker Cat.\nBlock phase: Summon a 4/5 fast defender Bear."
   },
   "hand": {
     "cast": {

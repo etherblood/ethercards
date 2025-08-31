@@ -20,8 +20,8 @@
   "battle": {
     "components": {
       "ATTACK": 4,
-      "HEALTH": 6,
-      "VIGILANCE": true
+      "HEALTH": 5,
+      "FAST_TO_DEFEND": true
     }
   },
   "graveyard": {},

@@ -1,15 +1,19 @@
 {
-  "alias": "druid_of_the_claw_cat",
+  "alias": "whelp",
   "display": {
-    "name": "Druid of the Claw",
-    "imagePath": "Cat_Form_full.png",
+    "name": "Whelp",
+    "imagePath": "Whelp_full.jpg",
     "colors": [
-      "GREEN"
+      "RED"
     ]
   },
+  "tribes": [
+    "DRAGON",
+    "TOKEN"
+  ],
   "hand": {
     "cast": {
-      "manaCost": 5,
+      "manaCost": 1,
       "effects": [
         {
           "type": "selfSummon"
@@ -19,9 +23,8 @@
   },
   "battle": {
     "components": {
-      "ATTACK": 5,
-      "HEALTH": 4,
-      "FAST_TO_ATTACK": true
+      "ATTACK": 1,
+      "HEALTH": 1
     }
   },
   "graveyard": {},

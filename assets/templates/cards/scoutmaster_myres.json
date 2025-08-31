@@ -1,10 +1,10 @@
 {
-  "alias": "konda_lord_of_eiganjo",
+  "alias": "scoutmaster_myres",
   "display": {
-    "name": "Konda, Lord of Eiganjo",
-    "imagePath": "konda_lord_of_eiganjo.jpg",
+    "name": "Scoutmaster Myres",
+    "imagePath": "192px-Scoutmaster_face.png",
     "colors": [
-      "WHITE"
+      "BLACK"
     ]
   },
   "hand": {
@@ -19,11 +19,11 @@
   },
   "battle": {
     "components": {
-      "ATTACK": 3,
-      "HEALTH": 3,
-      "BUSHIDO": 5,
-      "VIGILANCE": true,
-      "INDESTRUCTIBLE": true
+      "ATTACK": 8,
+      "HEALTH": 8,
+      "RAGE": true,
+      "FAST_TO_ATTACK": true,
+      "TRAMPLE": true
     }
   },
   "graveyard": {},

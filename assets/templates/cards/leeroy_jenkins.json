@@ -1,0 +1,52 @@
+{
+  "alias": "leeroy_jenkins",
+  "display": {
+    "name": "Leeroy Jenkins",
+    "imagePath": "896px-Leeroy_Jenkins_full.jpg",
+    "colors": [
+      "WHITE"
+    ]
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 5,
+      "effects": [
+        {
+          "type": "selfSummon"
+        },
+        {
+          "type": "multiTrigger",
+          "amount": 2,
+          "effects": [
+            {
+              "type": "targeted",
+              "effects": [
+                {
+                  "type": "summon",
+                  "minionId": "whelp",
+                  "targetAsOwner": true
+                }
+              ],
+              "targets": {
+                "type": "simple",
+                "select": "ANY",
+                "filters": [
+                  "OPPONENT"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "battle": {
+    "components": {
+      "ATTACK": 6,
+      "HEALTH": 2,
+      "FAST_TO_ATTACK": true
+    }
+  },
+  "graveyard": {},
+  "library": {}
+}

@@ -1,0 +1,59 @@
+{
+  "alias": "cursed_skull",
+  "display": {
+    "name": "Cursed Skull",
+    "imagePath": "192px-Cursed_Skull.png",
+    "colors": [
+      "BLACK"
+    ],
+    "description": "Kill target own minion, untap all own minions."
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 2,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION"
+        ]
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "DEATH_REQUEST": 1
+          }
+        },
+        {
+          "type": "targeted",
+          "effects": [
+            {
+              "type": "debuff",
+              "components": {
+                "TIRED": 1000
+              }
+            }
+          ],
+          "targets": {
+            "type": "simple",
+            "select": "ALL",
+            "filters": [
+              "OWN_MINION"
+            ]
+          }
+        },
+        {
+          "type": "particle",
+          "alias": "flesh_to_dust"
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
+}

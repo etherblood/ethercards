@@ -1,0 +1,40 @@
+{
+  "alias": "bandages",
+  "display": {
+    "name": "Bandages",
+    "imagePath": "192px-Bandages.png",
+    "colors": [
+      "WHITE"
+    ],
+    "description": "Heal 3 health of the selected minion or hero."
+  },
+  "hand": {
+    "cast": {
+      "manaCost": 1,
+      "target": {
+        "type": "simple",
+        "requiresTarget": true,
+        "filters": [
+          "OWN_MINION",
+          "OWN_HERO",
+          "OPPONENT_MINION",
+          "OPPONENT_HERO"
+        ]
+      },
+      "effects": [
+        {
+          "type": "buff",
+          "components": {
+            "HEALTH": 3
+          }
+        },
+        {
+          "type": "selfDiscard"
+        }
+      ]
+    }
+  },
+  "battle": {},
+  "graveyard": {},
+  "library": {}
+}
