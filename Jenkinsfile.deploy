@@ -44,6 +44,7 @@ pipeline {
                 sh 'mv gui/target/assets "$CLIENT"'
                 sh 'mv gui/target/libs "$CLIENT"'
                 sh 'mv gui/target/gui-0.1.0.jar "$CLIENT/a.jar"'
+                sh 'cp -r /home/destroflyer/java/jdk-22.0.2 "$CLIENT/java"'
                 sh 'echo hostUrl=185.183.156.11 > "$CLIENT/config.properties"'
                 sh 'echo -n assets=assets/ >> "$CLIENT/config.properties"'
                 sh 'curl -X POST https://destrostudios.com:8080/apps/5/updateFiles'

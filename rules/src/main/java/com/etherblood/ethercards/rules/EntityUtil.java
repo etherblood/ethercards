@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class EntityUtil {
 
     public static void copy(EntityData source, EntityData destination) {
-        ((SimpleEntityData) destination).copyFrom(((SimpleEntityData) source));
+        ((SimpleEntityData) destination).copyFromImmutable(((SimpleEntityData) source));
     }
 
     public static Map<Integer, Map<String, Integer>> toMap(EntityData data) {

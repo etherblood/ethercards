@@ -8,11 +8,11 @@ import java.util.OptionalInt;
 
 public class SimpleEntityData implements EntityData {
 
-    private int nextId = 1;
-    private final IntMap[] tables;
-    private final Components schema;
+    protected int nextId = 1;
+    protected final IntMap[] tables;
+    protected final Components schema;
 
-    private final EntityList[] listCache;
+    protected final EntityList[] listCache;
 
     public SimpleEntityData(Components schema) {
         this.schema = schema;
@@ -114,17 +114,17 @@ public class SimpleEntityData implements EntityData {
         return schema;
     }
 
-    public void copyFrom(SimpleEntityData other) {
-        if (this == other) {
+    public void copyFromImmutable(SimpleEntityData frozenSource) {
+        if (this == frozenSource) {
             return;
         }
-        if (schema != other.schema) {
+        if (schema != frozenSource.schema) {
             throw new UnsupportedOperationException("Copy requires identical schemas");
         }
         for (int component = 0; component < tables.length; component++) {
-            tables[component].copyFrom(other.tables[component]);
-            listCache[component] = EntityList.EMPTY;
+            tables[component].copyFrom(frozenSource.tables[component]);
         }
-        nextId = other.nextId;
+        System.arraycopy(frozenSource.listCache, 0, listCache, 0, listCache.length);
+        nextId = frozenSource.nextId;
     }
 }
