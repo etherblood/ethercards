@@ -5,3 +5,4 @@ services:
       dockerfile: app.Dockerfile
     ports:
       - "17239:17239"
+    restart: always
