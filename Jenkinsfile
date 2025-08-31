@@ -14,7 +14,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'maven:3.9.6-eclipse-temurin-22-alpine'
+                    image 'maven:3.9.11-eclipse-temurin-24-alpine'
                     reuseNode true
                 }
             }
